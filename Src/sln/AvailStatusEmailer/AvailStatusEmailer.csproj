@@ -1,0 +1,303 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{EDF40B8D-8038-4C6B-8CF9-B5795BA96184}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AvailStatusEmailer</RootNamespace>
+    <AssemblyName>AvailStatusEmailer</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Assets\MailBroadCast.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Accessibility" />
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Outlook, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Office.Interop.Outlook.15.0.4797.1003\lib\net20\Microsoft.Office.Interop.Outlook.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="PresentationUI, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="ReachFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Printing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Speech" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="UIAutomationTypes" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="..\..\..\..\..\C\AsLink\Mail\OutlookHelper.cs">
+      <Link>AsLink\OutlookHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\..\C\AsLink\Serializer.cs">
+      <Link>AsLink\Serializer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\..\C\AsLink\Win32\Ext.DbContext.cs">
+      <Link>AsLink\Ext.DbContext.cs</Link>
+    </Compile>
+    <Compile Include="C:\c\AsLink\DB\DbOps.cs">
+      <Link>AsLink\DbOps.cs</Link>
+    </Compile>
+    <Compile Include="C:\c\AsLink\DB\DbSaveMsgBox.cs">
+      <Link>AsLink\DbSaveMsgBox.cs</Link>
+    </Compile>
+    <Compile Include="C:\c\AsLink\Serializer.String.cs">
+      <Link>Serializer.String.cs</Link>
+    </Compile>
+    <Compile Include="Helpers\FirstLastNameParser.cs" />
+    <Compile Include="Helpers\QStatsDbHelper.cs" />
+    <Compile Include="UniConverter.cs" />
+    <Compile Include="View\AgentAdminWindow.xaml.cs">
+      <DependentUpon>AgentAdminWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AppSettings.cs" />
+    <Compile Include="View\IsLoadingAnimo.xaml.cs">
+      <DependentUpon>IsLoadingAnimo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\LeadManager.xaml.cs">
+      <DependentUpon>LeadManager.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainSwitchboard.xaml.cs">
+      <DependentUpon>MainSwitchboard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainSwitchboardUsrCtrl.xaml.cs">
+      <DependentUpon>MainSwitchboardUsrCtrl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\OutlookToDbWindow.xaml.cs">
+      <DependentUpon>OutlookToDbWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="QStatusBroadcaster.cs" />
+    <Compile Include="test.cs" />
+    <Compile Include="View\TEntity.cs" />
+    <Page Include="View\AgentAdminWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\EmailerWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="View\EmailerWindow.xaml.cs">
+      <DependentUpon>EmailerWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="View\IsLoadingAnimo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\LeadManager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MainSwitchboard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MainSwitchboardUsrCtrl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\OutlookToDbWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Assets\Assets.zip" />
+    <None Include="packages.config" />
+    <None Include="Properties\DataSources\DalEf5.Models.Agency.datasource" />
+    <None Include="Properties\DataSources\DalEf5.Models.Campaign.datasource" />
+    <None Include="Properties\DataSources\DalEf5.Models.EHist.datasource" />
+    <None Include="Properties\DataSources\DalEf5.Models.EMail.datasource" />
+    <None Include="Properties\DataSources\DalEf5.Models.Lead.datasource" />
+    <None Include="Properties\DataSources\DalEf5.Models.LeadEmail.datasource" />
+    <None Include="Properties\DataSources\DalEf5.Models.lkuLeadStatu.datasource" />
+    <None Include="Properties\DataSources\DalEf5.Models.vEMail_Avail_Dev.datasource" />
+    <None Include="Properties\DataSources\DalEf5.Models.vEMail_Avail_Prod.datasource" />
+    <None Include="Properties\DataSources\DalEf5.Models.vEMail_UnAvl_Dev.datasource" />
+    <None Include="Properties\DataSources\DalEf5.Models.vEMail_UnAvl_Prod.datasource" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net4.8\AAV.WPF\AAV.WPF.4.8.csproj">
+      <Project>{1ce2c02f-5fa8-41ca-ac2e-ba91ab283a02}</Project>
+      <Name>AAV.WPF.4.8</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net6.0\AAV.Sys\AAV.Sys.csproj">
+      <Project>{7139da94-b8f6-45a2-a292-319c5dd1f66c}</Project>
+      <Name>AAV.Sys</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Db.QStats\Db.QStats.csproj">
+      <Project>{54bd5d24-3421-47c3-af55-d88a4af38d63}</Project>
+      <Name>Db.QStats</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Emailing\Emailing.csproj">
+      <Project>{3204a6b4-2cb3-4679-a323-857d2069786f}</Project>
+      <Name>Emailing</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WaterDroplet.wav" />
+    <Resource Include="Assets\MailBroadCast.ico" />
+    <Resource Include="Resources\AlexTiny_LinkedIn.png" />
+    <Resource Include="Assets\MailBroadCast.DeliveryFailed.ico" />
+    <Content Include="Assets\Attach.Detach.sql" />
+    <Content Include="Resources\AvailabilityStatus_AvailableNow_FreshCV.htm">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Resources\AvailabilityStatus_AvailableNow.htm">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Resources\AvailabilityStatus_Unavailable.htm">
+      <SubType>Designer</SubType>
+    </Content>
+    <Resource Include="Resources\MCSD Logo - Latest as of 2009.gif" />
+    <Resource Include="Resources\Icon1.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

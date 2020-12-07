@@ -1,0 +1,74 @@
+﻿<lnk:WindowBase xmlns:lnk="clr-namespace:AsLink"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:xPoc"
+        xmlns:DbModel="clr-namespace:Db.QStats.DbModel;assembly=Db.QStats" x:Name="wnd" x:Class="xPoc.MainWindow"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="1200" Loaded="Wnd_Loaded">
+  <lnk:WindowBase.Resources>
+    <CollectionViewSource x:Key="eMailViewSource" d:DesignSource="{d:DesignInstance {x:Type DbModel:EMail}, CreateList=True}"/>
+  </lnk:WindowBase.Resources>
+  <Grid DataContext="{StaticResource eMailViewSource}">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*"/>
+      <ColumnDefinition Width="10"/>
+      <ColumnDefinition Width="2"/>
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="68*"/>
+      <RowDefinition Height="287*"/>
+      <RowDefinition Height="64*"/>
+    </Grid.RowDefinitions>
+
+    <TextBlock x:Name="tbkTitle" Grid.Row="0" Grid.ColumnSpan="4"  />
+    <TextBlock x:Name="tbkErr"   Grid.Row="2" Grid.ColumnSpan="4"  />
+
+    <DataGrid x:Name="eMailDataGrid" RowDetailsVisibilityMode="VisibleWhenSelected" 
+              Grid.Row="1" 
+              Grid.Column="0" 
+              ItemsSource="{Binding}" EnableRowVirtualization="True" 
+              AutoGenerateColumns="False">
+      <DataGrid.Columns>
+
+        <DataGridTextColumn Header="ID"       Binding="{Binding ID}"        Width="*" />
+        <DataGridTextColumn Header="Company"  Binding="{Binding Company}"   />
+        
+        <!--
+        <DataGridTemplateColumn x:Name="addedAtColumn" Width="SizeToHeader" Header="Added At">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <DatePicker SelectedDate="{Binding AddedAt, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTextColumn x:Name="doNotNotifyOnAvailableForCampaignIDColumn" Width="SizeToHeader" Header="Do Not Notify On Available For Campaign ID" Binding="{Binding DoNotNotifyOnAvailableForCampaignID}"/>
+        <DataGridTextColumn x:Name="doNotNotifyOnOffMarketForCampaignIDColumn" Width="SizeToHeader" Header="Do Not Notify On Off Market For Campaign ID" Binding="{Binding DoNotNotifyOnOffMarketForCampaignID}"/>
+        <DataGridTextColumn x:Name="fNameColumn" Width="SizeToHeader" Header="FName" Binding="{Binding FName}"/>
+        <DataGridTextColumn x:Name="lNameColumn" Width="SizeToHeader" Header="LName" Binding="{Binding LName}"/>
+        <DataGridTemplateColumn x:Name="modifiedAtColumn" Width="SizeToHeader" Header="Modified At">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <DatePicker SelectedDate="{Binding ModifiedAt, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTextColumn x:Name="notesColumn" Width="SizeToHeader" Header="Notes" Binding="{Binding Notes}"/>
+        <DataGridTextColumn x:Name="notifyPriorityColumn" Width="SizeToHeader" Header="Notify Priority" Binding="{Binding NotifyPriority}"/>
+        <DataGridTextColumn x:Name="permBanReasonColumn" Width="SizeToHeader" Header="Perm Ban Reason" Binding="{Binding PermBanReason}"/>
+        <DataGridTextColumn x:Name="phoneColumn" Width="SizeToHeader" Header="Phone" Binding="{Binding Phone}"/>
+        <DataGridTemplateColumn x:Name="reSendAfterColumn" Width="SizeToHeader" Header="Re Send After">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <DatePicker SelectedDate="{Binding ReSendAfter, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTextColumn x:Name="totalNonStdRcvdColumn" Width="SizeToHeader" Header="Total Non Std Rcvd" Binding="{Binding TotalNonStdRcvd}"/>
+        <DataGridTextColumn x:Name="totalNonStdSentColumn" Width="SizeToHeader" Header="Total Non Std Sent" Binding="{Binding TotalNonStdSent}"/>-->
+      </DataGrid.Columns>
+    </DataGrid>
+
+  </Grid>
+</lnk:WindowBase>

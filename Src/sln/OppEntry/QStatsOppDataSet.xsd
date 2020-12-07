@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="QStatsOppDataSet" targetNamespace="http://tempuri.org/QStatsOppDataSet.xsd" xmlns:mstns="http://tempuri.org/QStatsOppDataSet.xsd" xmlns="http://tempuri.org/QStatsOppDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="QStatsConnectionString" ConnectionStringObject="" IsAppSettingsProperty="True" Modifier="Assembly" Name="QStatsConnectionString (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.OppEntry.Properties.Settings.GlobalReference.Default.QStatsConnectionString" Provider="System.Data.SqlClient">
+          </Connection>
+        </Connections>
+        <Tables>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="OppCompanyTableAdapter" GeneratorDataComponentClassName="OppCompanyTableAdapter" Name="OppCompany" UserDataComponentName="OppCompanyTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="QStatsConnectionString (Settings)" DbObjectName="QStats.dbo.OppCompany" DbObjectType="View" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="False" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="True" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="False">
+                    <CommandText>SELECT Company
+FROM  OppCompany
+ORDER BY Company</CommandText>
+                    <Parameters>
+                    </Parameters>
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="Company" DataSetColumn="Company" />
+            </Mappings>
+            <Sources>
+            </Sources>
+          </TableAdapter>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="OppContactForTableAdapter" GeneratorDataComponentClassName="OppContactForTableAdapter" Name="OppContactFor" UserDataComponentName="OppContactForTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="QStatsConnectionString (Settings)" DbObjectName="QStats.dbo.OppContactFor" DbObjectType="View" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="False" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="True" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="False">
+                    <CommandText>SELECT ID, Expr1
+FROM  OppContactFor
+ORDER BY Expr1</CommandText>
+                    <Parameters>
+                    </Parameters>
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="ID" DataSetColumn="ID" />
+              <Mapping SourceColumn="Expr1" DataSetColumn="Expr1" />
+            </Mappings>
+            <Sources>
+            </Sources>
+          </TableAdapter>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="OppLocationTableAdapter" GeneratorDataComponentClassName="OppLocationTableAdapter" Name="OppLocation" UserDataComponentName="OppLocationTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="QStatsConnectionString (Settings)" DbObjectName="QStats.dbo.OppLocation" DbObjectType="View" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="False" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="True" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="False">
+                    <CommandText>SELECT Location
+FROM  OppLocation
+ORDER BY Location</CommandText>
+                    <Parameters>
+                    </Parameters>
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="Location" DataSetColumn="Location" />
+            </Mappings>
+            <Sources>
+            </Sources>
+          </TableAdapter>
+        </Tables>
+        <Sources>
+        </Sources>
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="QStatsOppDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:Generator_UserDSName="QStatsOppDataSet" msprop:Generator_DataSetName="QStatsOppDataSet">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="OppCompany" msprop:Generator_UserTableName="OppCompany" msprop:Generator_RowDeletedName="OppCompanyRowDeleted" msprop:Generator_RowChangedName="OppCompanyRowChanged" msprop:Generator_RowClassName="OppCompanyRow" msprop:Generator_RowChangingName="OppCompanyRowChanging" msprop:Generator_RowEvArgName="OppCompanyRowChangeEvent" msprop:Generator_RowEvHandlerName="OppCompanyRowChangeEventHandler" msprop:Generator_TableClassName="OppCompanyDataTable" msprop:Generator_TableVarName="tableOppCompany" msprop:Generator_RowDeletingName="OppCompanyRowDeleting" msprop:Generator_TablePropName="OppCompany">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Company" msprop:Generator_UserColumnName="Company" msprop:Generator_ColumnVarNameInTable="columnCompany" msprop:Generator_ColumnPropNameInRow="Company" msprop:Generator_ColumnPropNameInTable="CompanyColumn">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="150" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="OppContactFor" msprop:Generator_UserTableName="OppContactFor" msprop:Generator_RowDeletedName="OppContactForRowDeleted" msprop:Generator_RowChangedName="OppContactForRowChanged" msprop:Generator_RowClassName="OppContactForRow" msprop:Generator_RowChangingName="OppContactForRowChanging" msprop:Generator_RowEvArgName="OppContactForRowChangeEvent" msprop:Generator_RowEvHandlerName="OppContactForRowChangeEventHandler" msprop:Generator_TableClassName="OppContactForDataTable" msprop:Generator_TableVarName="tableOppContactFor" msprop:Generator_RowDeletingName="OppContactForRowDeleting" msprop:Generator_TablePropName="OppContactFor">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="ID" msdata:ReadOnly="true" msdata:AutoIncrement="true" msprop:Generator_UserColumnName="ID" msprop:Generator_ColumnVarNameInTable="columnID" msprop:Generator_ColumnPropNameInRow="ID" msprop:Generator_ColumnPropNameInTable="IDColumn" type="xs:int" />
+              <xs:element name="Expr1" msdata:ReadOnly="true" msprop:Generator_UserColumnName="Expr1" msprop:Generator_ColumnVarNameInTable="columnExpr1" msprop:Generator_ColumnPropNameInRow="Expr1" msprop:Generator_ColumnPropNameInTable="Expr1Column" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="388" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="OppLocation" msprop:Generator_UserTableName="OppLocation" msprop:Generator_RowDeletedName="OppLocationRowDeleted" msprop:Generator_RowChangedName="OppLocationRowChanged" msprop:Generator_RowClassName="OppLocationRow" msprop:Generator_RowChangingName="OppLocationRowChanging" msprop:Generator_RowEvArgName="OppLocationRowChangeEvent" msprop:Generator_RowEvHandlerName="OppLocationRowChangeEventHandler" msprop:Generator_TableClassName="OppLocationDataTable" msprop:Generator_TableVarName="tableOppLocation" msprop:Generator_RowDeletingName="OppLocationRowDeleting" msprop:Generator_TablePropName="OppLocation">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Location" msprop:Generator_UserColumnName="Location" msprop:Generator_ColumnVarNameInTable="columnLocation" msprop:Generator_ColumnPropNameInRow="Location" msprop:Generator_ColumnPropNameInTable="LocationColumn" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="4000" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:OppContactFor" />
+      <xs:field xpath="mstns:ID" />
+    </xs:unique>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,76 @@
+﻿<UserControl x:Class="EF.IsLoadingAnimo" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300">
+	<UserControl.Resources>
+		<Storyboard x:Key="sbLoading">
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)" Storyboard.TargetName="pnlEllipse" RepeatBehavior="Forever" BeginTime="0:0:4" >
+				<EasingDoubleKeyFrame KeyTime="0:0:4" Value="359.99" >
+					<EasingDoubleKeyFrame.EasingFunction>
+						<ElasticEase EasingMode="EaseOut" />
+					</EasingDoubleKeyFrame.EasingFunction>
+				</EasingDoubleKeyFrame>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)" Storyboard.TargetName="tbMessage" RepeatBehavior="Forever" 
+                                                                         BeginTime="0:0:2" AutoReverse="True">
+				<EasingDoubleKeyFrame          KeyTime="0:0:2" Value="78" >
+					<EasingDoubleKeyFrame.EasingFunction>
+						<ElasticEase EasingMode="EaseIn" Springiness="10" Oscillations="0" />
+					</EasingDoubleKeyFrame.EasingFunction>
+				</EasingDoubleKeyFrame>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimation Storyboard.TargetProperty="Opacity" Storyboard.TargetName="pnlBkGrnd" From="0" To="1" Duration="0:0:2.5" />
+		</Storyboard>
+		<Storyboard x:Key="sbHide">
+			<DoubleAnimation Storyboard.TargetProperty="Opacity" Storyboard.TargetName="pnlBkGrnd" From="1"  To="0"  Duration="0:0:1.5" />
+			<DoubleAnimation Storyboard.TargetProperty="Height"  Storyboard.TargetName="pnlBkGrnd" From="99" To="0" BeginTime="0:0:1.5" Duration="0:0:.5" />
+		</Storyboard>
+	</UserControl.Resources>
+
+	<UserControl.Triggers>
+		<EventTrigger RoutedEvent="FrameworkElement.Loaded">
+			<!--<SoundPlayerAction Source="pack://application:,,,/Resources\WaterDroplet.wav" />-->
+			<!--<SoundPlayerAction Source="C:\bx\EF\EF\Resources\WaterDroplet.wav"  />-->
+			<BeginStoryboard Storyboard="{StaticResource sbLoading}"/>
+		</EventTrigger>
+	</UserControl.Triggers>
+
+	<Grid   x:Name="pnlBkGrnd"  Background="#c000" Cursor="AppStarting">
+		<Grid x:Name="pnlEllipse" RenderTransformOrigin="0.5,0.5" Width="100" Height="100">
+			<Grid.RenderTransform>
+				<TransformGroup>
+					<ScaleTransform/>
+					<SkewTransform/>
+					<RotateTransform/>
+					<TranslateTransform/>
+				</TransformGroup>
+			</Grid.RenderTransform>
+			<Ellipse HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="100" StrokeThickness="12">
+				<Ellipse.Fill>
+					<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+						<GradientStop Color="#0B66AC" Offset="0.07"/>
+						<GradientStop Color="#0B76bC" Offset="0.939"/>
+					</LinearGradientBrush>
+				</Ellipse.Fill>
+				<Ellipse.Stroke>
+					<RadialGradientBrush GradientOrigin="0.5,0.94" Center="0.5,0.94" RadiusX="1" RadiusY="1">
+						<GradientStop Color="#cef"/>
+						<GradientStop Color="#fff" Offset="0.05103"/>
+						<GradientStop Color="#0Eb4e5" Offset="0.05104"/>
+						<GradientStop Color="#0E94C5" Offset="1"/>
+					</RadialGradientBrush>
+				</Ellipse.Stroke>
+			</Ellipse>
+		</Grid>
+		<TextBlock Text="Loading..." VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#aef" FontWeight="Bold" FontSize="20" x:Name="tbMessage" RenderTransformOrigin="0.5,0.5">
+			<TextBlock.RenderTransform>
+				<TransformGroup>
+					<ScaleTransform/>
+					<SkewTransform/>
+					<RotateTransform/>
+					<TranslateTransform/>
+				</TransformGroup>
+			</TextBlock.RenderTransform>
+		</TextBlock>
+
+		<!--<TextBlock Text="{Binding InfoMessag, FallbackValue='·'}" FontSize="11" Foreground="#fff" Margin="6" />-->
+
+	</Grid>
+</UserControl>

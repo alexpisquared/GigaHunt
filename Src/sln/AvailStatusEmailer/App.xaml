@@ -1,0 +1,21 @@
+﻿<Application x:Class="AvailStatusEmailer.App" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:wcp="clr-namespace:System.Windows.Controls.Primitives;assembly=PresentationFramework" >
+  <!--
+						 StartupUri="View\MainSwitchboard.xaml">
+						 StartupUri="LeadManager.xaml">
+						 StartupUri="AgentAdminWindow.xaml">
+             StartupUri="EmailerWindow.xaml">
+						 StartupUri="zEditTest.xaml">
+-->
+  <Application.Resources>
+    <ResourceDictionary >
+      <ResourceDictionary.MergedDictionaries>
+        <!--fallback theme + designer's:-->
+        <ResourceDictionary Source="/AAV.WPF;component/ColorScheme/Theme.Color.Lite.Gray.xaml" />
+        <!--
+        <ResourceDictionary Source="/AAV.WPF;component/Base/DataGrid.Base.xaml" />
+        Allows Style="{StaticResource WindowStyle_Aav0}"  (since it is on top of the visual tree over the Window) -->
+        <ResourceDictionary Source="/AAV.WPF;component/Base/BasicDefaultsLayout.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary >
+  </Application.Resources>
+</Application>

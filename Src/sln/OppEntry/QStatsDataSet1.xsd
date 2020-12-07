@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="QStatsDataSet1" targetNamespace="http://tempuri.org/QStatsDataSet1.xsd" xmlns:mstns="http://tempuri.org/QStatsDataSet1.xsd" xmlns="http://tempuri.org/QStatsDataSet1.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="QStatsConnectionString" ConnectionStringObject="" IsAppSettingsProperty="True" Modifier="Assembly" Name="QStatsConnectionString (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.OppEntry.Properties.Settings.GlobalReference.Default.QStatsConnectionString" Provider="System.Data.SqlClient">
+          </Connection>
+        </Connections>
+        <Tables>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="OppContactViewTableAdapter" GeneratorDataComponentClassName="OppContactViewTableAdapter" Name="OppContactView" UserDataComponentName="OppContactViewTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="QStatsConnectionString (Settings)" DbObjectName="QStats.dbo.OppContactView" DbObjectType="View" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="False" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="False" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="True">
+                    <CommandText>SELECT OppId, AddedAt, LastActivityAt, Company, Location, RateAsked, ContactId, AgentCompany, Notes, Start, Term
+FROM  OppContactView
+ORDER BY LastActivityAt DESC</CommandText>
+                    <Parameters>
+                    </Parameters>
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="OppId" DataSetColumn="OppId" />
+              <Mapping SourceColumn="AddedAt" DataSetColumn="AddedAt" />
+              <Mapping SourceColumn="LastActivityAt" DataSetColumn="LastActivityAt" />
+              <Mapping SourceColumn="Company" DataSetColumn="Company" />
+              <Mapping SourceColumn="Location" DataSetColumn="Location" />
+              <Mapping SourceColumn="RateAsked" DataSetColumn="RateAsked" />
+              <Mapping SourceColumn="ContactId" DataSetColumn="ContactId" />
+              <Mapping SourceColumn="AgentCompany" DataSetColumn="AgentCompany" />
+              <Mapping SourceColumn="Notes" DataSetColumn="Notes" />
+              <Mapping SourceColumn="Start" DataSetColumn="Start" />
+              <Mapping SourceColumn="Term" DataSetColumn="Term" />
+            </Mappings>
+            <Sources>
+            </Sources>
+          </TableAdapter>
+        </Tables>
+        <Sources>
+        </Sources>
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="QStatsDataSet1" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:Generator_UserDSName="QStatsDataSet1" msprop:Generator_DataSetName="QStatsDataSet1">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="OppContactView" msprop:Generator_UserTableName="OppContactView" msprop:Generator_RowDeletedName="OppContactViewRowDeleted" msprop:Generator_RowChangedName="OppContactViewRowChanged" msprop:Generator_RowClassName="OppContactViewRow" msprop:Generator_RowChangingName="OppContactViewRowChanging" msprop:Generator_RowEvArgName="OppContactViewRowChangeEvent" msprop:Generator_RowEvHandlerName="OppContactViewRowChangeEventHandler" msprop:Generator_TableClassName="OppContactViewDataTable" msprop:Generator_TableVarName="tableOppContactView" msprop:Generator_RowDeletingName="OppContactViewRowDeleting" msprop:Generator_TablePropName="OppContactView">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="OppId" msprop:Generator_UserColumnName="OppId" msprop:Generator_ColumnVarNameInTable="columnOppId" msprop:Generator_ColumnPropNameInRow="OppId" msprop:Generator_ColumnPropNameInTable="OppIdColumn" type="xs:int" />
+              <xs:element name="AddedAt" msprop:Generator_UserColumnName="AddedAt" msprop:Generator_ColumnVarNameInTable="columnAddedAt" msprop:Generator_ColumnPropNameInRow="AddedAt" msprop:Generator_ColumnPropNameInTable="AddedAtColumn" type="xs:dateTime" />
+              <xs:element name="LastActivityAt" msprop:Generator_UserColumnName="LastActivityAt" msprop:Generator_ColumnVarNameInTable="columnLastActivityAt" msprop:Generator_ColumnPropNameInRow="LastActivityAt" msprop:Generator_ColumnPropNameInTable="LastActivityAtColumn" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="Company" msprop:Generator_UserColumnName="Company" msprop:Generator_ColumnVarNameInTable="columnCompany" msprop:Generator_ColumnPropNameInRow="Company" msprop:Generator_ColumnPropNameInTable="CompanyColumn">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="150" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Location" msprop:Generator_UserColumnName="Location" msprop:Generator_ColumnVarNameInTable="columnLocation" msprop:Generator_ColumnPropNameInRow="Location" msprop:Generator_ColumnPropNameInTable="LocationColumn" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="4000" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="RateAsked" msprop:Generator_UserColumnName="RateAsked" msprop:Generator_ColumnVarNameInTable="columnRateAsked" msprop:Generator_ColumnPropNameInRow="RateAsked" msprop:Generator_ColumnPropNameInTable="RateAskedColumn" type="xs:int" minOccurs="0" />
+              <xs:element name="ContactId" msprop:Generator_UserColumnName="ContactId" msprop:Generator_ColumnVarNameInTable="columnContactId" msprop:Generator_ColumnPropNameInRow="ContactId" msprop:Generator_ColumnPropNameInTable="ContactIdColumn" type="xs:int" />
+              <xs:element name="AgentCompany" msprop:Generator_UserColumnName="AgentCompany" msprop:Generator_ColumnVarNameInTable="columnAgentCompany" msprop:Generator_ColumnPropNameInRow="AgentCompany" msprop:Generator_ColumnPropNameInTable="AgentCompanyColumn" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="128" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Notes" msprop:Generator_UserColumnName="Notes" msprop:Generator_ColumnVarNameInTable="columnNotes" msprop:Generator_ColumnPropNameInRow="Notes" msprop:Generator_ColumnPropNameInTable="NotesColumn" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="4000" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Start" msprop:Generator_UserColumnName="Start" msprop:Generator_ColumnPropNameInRow="Start" msprop:Generator_ColumnVarNameInTable="columnStart" msprop:Generator_ColumnPropNameInTable="StartColumn" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="150" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Term" msprop:Generator_UserColumnName="Term" msprop:Generator_ColumnPropNameInRow="Term" msprop:Generator_ColumnVarNameInTable="columnTerm" msprop:Generator_ColumnPropNameInTable="TermColumn" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="150" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:OppContactView" />
+      <xs:field xpath="mstns:OppId" />
+      <xs:field xpath="mstns:ContactId" />
+    </xs:unique>
+  </xs:element>
+</xs:schema>

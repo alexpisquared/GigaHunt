@@ -1,0 +1,25 @@
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Emailer3
+{
+ internal class TextService : ITextService
+  {
+    private string _text;
+
+    public TextService(IOptions<Settings> options, ILogger<TextService> logger)
+    {
+      _text = options.Value.Text;
+
+      logger.LogInformation($"Text read from settings: '{options.Value.Text}'");
+    }
+
+    public string GetText()
+    {
+      return _text;
+    }
+  }
+}

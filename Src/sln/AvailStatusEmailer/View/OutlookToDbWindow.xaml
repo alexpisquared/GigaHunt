@@ -1,0 +1,75 @@
+﻿<lnk:WindowBase xmlns:lnk="clr-namespace:AAV.WPF.Base;assembly=AAV.WPF" x:Name="wnd" x:Class="OutlookToDbWpfApp.OutlookToDbWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                Title="Outlook To Db" Height="240" Width="1200" Loaded="onLoaded" 
+                Icon="/AvailStatusEmailer;component/Assets/MailBroadCast.DeliveryFailed.ico" 
+                xmlns:View="clr-namespace:AvailStatusEmailer.View" 
+                xmlns:AavWpfVw="clr-namespace:AAV.WPF.View;assembly=AAV.WPF"                                
+                Style="{StaticResource WindowStyle_Aav0}">
+  <lnk:WindowBase.Resources>
+    <ResourceDictionary >
+      <ResourceDictionary.MergedDictionaries>
+        <!--
+        <ResourceDictionary Source="/AAV.WPF;component/ColorScheme/Theme.Color.Lite.Gray.xaml" />
+        <ResourceDictionary Source="/AAV.WPF;component/ColorScheme/Theme.Color.Dark.Gray.xaml" />
+        -->
+        <ResourceDictionary Source="/AAV.WPF;component/Base/DataGrid.Base.xaml" />
+        <ResourceDictionary Source="/AAV.WPF;component/Base/BasicDefaultsLayout.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+      <Style TargetType="{x:Type Button}">
+        <Setter Property="Width"        Value="160"       />
+        <Setter Property="Height"       Value="35"        />
+        <Setter Property="FontWeight"   Value="SemiBold"  />
+        <Setter Property="FontSize"     Value="14"        />
+        <Setter Property="Margin"       Value="5"         />
+      </Style>
+    </ResourceDictionary>
+  </lnk:WindowBase.Resources>
+
+  <WindowChrome.WindowChrome>
+    <WindowChrome CaptionHeight="0" ResizeBorderThickness="10" />
+  </WindowChrome.WindowChrome>
+
+  <Border Style="{StaticResource BorderStyle_Aav0}" CornerRadius="6 6 3 6">
+    <Grid  x:Name="ZommablePanel" >
+      <Grid.LayoutTransform>
+        <TransformGroup>
+          <ScaleTransform ScaleX="{Binding ZV, ElementName=wnd, FallbackValue=1}" ScaleY="{Binding ZV, ElementName=wnd, FallbackValue=1}" />
+        </TransformGroup>
+      </Grid.LayoutTransform>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+
+      <TextBlock HorizontalAlignment="Right" Margin="0 -5" FontSize="43" FontFamily="Ink Free" FontWeight="ExtraBold" Foreground="#4444" Text="Outlook 2DB  " />
+
+      <StackPanel Orientation="Horizontal" x:Name="spCtlrPnl" >
+
+        <Menu Margin="0 0" Background="Transparent" x:Name="menu1" VerticalAlignment="Top">
+          <MenuItem Header="[Re] Do _Reglr"    Click="onDoReglr"   ToolTip="Check and add if new the Q folder"/>
+          <MenuItem Header="[Re] Do _Fails"    Click="onDoFails"   ToolTip="Find trg emai in Q\Fails folder and ..."/>
+          <MenuItem Header="[Re] Do La_ter"    Click="onDoLater"   ToolTip="Find trg emai in Q\ToResend folder and scan body for alt/new emails."/>
+          <MenuItem Header="[Re] Do _DoneR"    Click="onDoDoneR"   ToolTip="Scour DoneRcvd folder for missing emails in the bodies."/>
+          <MenuItem Header="Ad_vanced"                     Foreground="DarkOrange">
+            <MenuItem Header="_Update Contacts"  Click="onUpdateOutlook" ToolTip="Update Outlook contacts' bodies with notes from DB"  Foreground="DarkOrange" Tag="" />
+            <MenuItem Header="_Deleted Contacts" Click="onUpdateOutlook" ToolTip="Go through deleted contacts... "                     Foreground="DarkOrange" Tag="Deleted Items"/>
+          </MenuItem>
+        </Menu>
+
+        <View:MainSwitchboardUsrCtrl VizOu2Db="Collapsed" Margin="10 0" />
+        <AavWpfVw:ThemeSelectorUsrCtrl Grid.Column="4" x:Name="themeSelector1" VerticalAlignment="Center" Margin="10 0" />
+        
+      </StackPanel>
+
+      <Label    Grid.Row="1" x:Name="lblMetaHeader"  HorizontalAlignment="Center" Content="Meta Header" />
+      
+      <ScrollViewer Grid.Row="2" Margin="6" VerticalScrollBarVisibility="Auto" >
+        <TextBlock Name="tb1" Text="|||| WWWW" VerticalAlignment="Top" Background="#1888" FontFamily="SimSun" Padding="6"/>
+      </ScrollViewer>
+      <Rectangle Grid.Row="2" Margin="6 6 26 6" Fill="Transparent" />
+
+
+      <!-- Aug 2019: seems like leaves up in the bacground!!!       <Button Content="  _X  "     Click="onClose" Foreground="#d00" ToolTip="Close" IsCancel="True" Background="Transparent" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="-8" Height="40" Width="40" FontSize="15" Padding="0" />-->
+    </Grid>
+  </Border>
+</lnk:WindowBase>

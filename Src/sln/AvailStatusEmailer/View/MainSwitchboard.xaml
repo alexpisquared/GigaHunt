@@ -1,0 +1,62 @@
+﻿<lnk:WindowBase xmlns:lnk="clr-namespace:AAV.WPF.Base;assembly=AAV.WPF" x:Name="wnd" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="AvailStatusEmailer.MainSwitchboard" Title="Mail Switchboard" 
+                xmlns:View="clr-namespace:AvailStatusEmailer.View" 
+                xmlns:AavWpfVw="clr-namespace:AAV.WPF.View;assembly=AAV.WPF"                                
+                Style="{StaticResource WindowStyle_Aav0}" Width="366" Height="129" >
+  <lnk:WindowBase.Resources>
+    <ResourceDictionary >
+      <ResourceDictionary.MergedDictionaries>
+        <!--
+        <ResourceDictionary Source="/AAV.WPF;component/ColorScheme/Theme.Color.Lite.Gray.xaml" />
+        <ResourceDictionary Source="/AAV.WPF;component/ColorScheme/Theme.Color.Dark.Gray.xaml" />
+        -->
+        <ResourceDictionary Source="/AAV.WPF;component/Base/DataGrid.Base.xaml" />
+        <ResourceDictionary Source="/AAV.WPF;component/Base/BasicDefaultsLayout.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+      <Style TargetType="{x:Type Button}">
+        <Setter Property="Width"        Value="160"       />
+        <Setter Property="Height"       Value="35"        />
+        <Setter Property="FontWeight"   Value="SemiBold"  />
+        <Setter Property="FontSize"     Value="14"        />
+        <Setter Property="Margin"       Value="5"         />
+      </Style>
+    </ResourceDictionary>
+  </lnk:WindowBase.Resources>
+
+  <WindowChrome.WindowChrome>
+    <WindowChrome CaptionHeight="0" ResizeBorderThickness="10" />
+  </WindowChrome.WindowChrome>
+
+  <Border Style="{StaticResource BorderStyle_Aav0}" CornerRadius="10 10 2 10" BorderThickness="1">
+    <Grid x:Name="ZommablePanel" >
+      <Grid.LayoutTransform>
+        <TransformGroup>
+          <ScaleTransform ScaleX="{Binding ZV, ElementName=wnd, FallbackValue=1}" ScaleY="{Binding ZV, ElementName=wnd, FallbackValue=1}" />
+        </TransformGroup>
+      </Grid.LayoutTransform>
+
+      <TextBlock x:Name="tbver" Margin="0,-3,27,0" FontSize="5" Foreground="#4af" Text="DbRls - Ver 123" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+
+      <StackPanel VerticalAlignment="Center">
+        <View:MainSwitchboardUsrCtrl          Margin="5 40 5 5" />
+        <WrapPanel x:Name="ctrlPanelOnMarket" Margin="5" HorizontalAlignment="Right" >
+          <AavWpfVw:ThemeSelectorUsrCtrl      Margin="5" x:Name="themeSelector1" />
+          <Menu                               Margin="5" VerticalAlignment="Center" Background="Transparent" Foreground="#c80">
+            <MenuItem Header="Advanced">
+              <MenuItem Header="_DB -&gt; Outlook (!!!)" Click="onDb2Ou" />
+              <MenuItem Header="_Undelete Contacts"      Click="onUndel" />
+              <Separator/>
+              <MenuItem Header="DB Ini" Click="onDbIni"/>
+            </MenuItem>
+          </Menu>
+        </WrapPanel>
+
+        <TextBlock x:Name="tbRep" Margin="5"  MinWidth="400" VerticalAlignment="Bottom" />
+      </StackPanel>
+
+      <TextBlock x:Name="tbkTitle" Margin="0 -3 10 -20" FontSize="13" Foreground="#4af" Text="DbRls - Ver 123" HorizontalAlignment="Left"  VerticalAlignment="Bottom"/>
+
+      <Button Content="X" Click="onClose" Foreground="#c00" IsCancel="True" Width="35"  HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-7,-8,0" Background="Transparent" BorderThickness="0" />
+
+    </Grid>
+  </Border>
+</lnk:WindowBase>

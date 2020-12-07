@@ -1,0 +1,15 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="AvailStatusEmailer.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="AppSettings" Type="System.String" Scope="User">
+      <Value Profile="(Default)">AppSettings</Value>
+    </Setting>
+    <Setting Name="LastWin" Type="System.String" Scope="User">
+      <Value Profile="(Default)">"Leads"</Value>
+    </Setting>
+    <Setting Name="Setting" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+  </Settings>
+</SettingsFile>

@@ -1,0 +1,167 @@
+﻿<lnk:WindowBase xmlns:lnk="clr-namespace:AAV.WPF.Base;assembly=AAV.WPF" x:Name="wnd" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                xmlns:Models="clr-namespace:Db.QStats.DbModel;assembly=Db.QStats" mc:Ignorable="d"  x:Class="AvailStatusEmailer.EmailersendWindow" Title="EmailerWindow" Height="350" Width="1525" Loaded="onLoaded" 
+                xmlns:View="clr-namespace:AvailStatusEmailer.View" 
+                xmlns:cmn="clr-namespace:AvailStatusEmailer"
+                xmlns:AavWpfVw="clr-namespace:AAV.WPF.View;assembly=AAV.WPF"
+                Style="{StaticResource WindowStyle_Aav0}">
+  <WindowChrome.WindowChrome>
+    <WindowChrome CaptionHeight="0" ResizeBorderThickness="10" />
+  </WindowChrome.WindowChrome>
+  <lnk:WindowBase.Resources>
+    <ResourceDictionary >
+      <ResourceDictionary.MergedDictionaries>
+        <!--
+        <ResourceDictionary Source="/AAV.AsLink.WPF;component/AsLink/Theme.Color.Lite.VaporWave.xaml" />
+        <ResourceDictionary Source="/AAV.WPF;component/ColorScheme/Theme.Color.Lite.Gray.xaml" />
+        -->
+        <ResourceDictionary Source="/AAV.WPF;component/Base/DataGrid.Base.xaml" />
+        <ResourceDictionary Source="/AAV.WPF;component/Base/BasicDefaultsLayout.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+
+      <Style TargetType="FrameworkElement" >
+        <Setter Property="Control.Margin" Value="8 4" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+      </Style>
+
+      <CollectionViewSource x:Key="vsEMail_Avail" d:DesignSource="{d:DesignInstance {x:Type Models:vEMail_Avail_Prod}, CreateList=True}"/>
+      <CollectionViewSource x:Key="vsEMail_UnAvl" d:DesignSource="{d:DesignInstance {x:Type Models:vEMail_UnAvl_Prod}, CreateList=True}"/>
+
+    </ResourceDictionary>
+  </lnk:WindowBase.Resources>
+
+  <Border Style="{StaticResource BorderStyle_Aav0}" CornerRadius="10" Padding="10" >
+    <Grid >
+      <Grid x:Name="ZommablePanel" >
+        <Grid.LayoutTransform>
+          <TransformGroup>
+            <ScaleTransform ScaleX="{Binding ZV, ElementName=wnd, FallbackValue=1}" ScaleY="{Binding ZV, ElementName=wnd, FallbackValue=1}" />
+          </TransformGroup>
+        </Grid.LayoutTransform>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="11"/>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="11"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="auto"/>
+          <RowDefinition Height="*"/>
+          <RowDefinition Height="5"/>
+          <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock HorizontalAlignment="Right" Margin="0 -5" FontSize="43" FontFamily="Ink Free" FontWeight="ExtraBold" Foreground="#4e21" Text="Emailer  " Grid.ColumnSpan="3"/>
+        <TextBlock  Margin="-45,9,-33,0"                   FontSize="23" FontFamily="Ink Free" FontWeight="ExtraBold" Foreground="#ae21" Text="Emailer  " RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" HorizontalAlignment="Left">
+          <TextBlock.RenderTransform>
+            <RotateTransform Angle="-90"/>
+          </TextBlock.RenderTransform>
+        </TextBlock>
+
+        <StackPanel Grid.ColumnSpan="2" Name="ctrlPanelOnMarket" Orientation="Horizontal" VerticalAlignment="Center">
+          <Label     Content="_Filter: " Target="{Binding ElementName=tbFilter}" />
+          <TextBox   Width="80" FontSize="16" TextChanged="onFilter" Name="tbFilter" />
+          <CheckBox  Content="_Danger" Foreground="#a1f" Checked="onFilter" Unchecked="onFilter" Margin="8" x:Name="cbx_ALL_Emails" ToolTip="Ignore all the rules - search across all agents"/>
+
+          <Grid Margin="25 0">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Label    Grid.ColumnSpan="2" Content="... Lead ..."        Foreground="#1a1" HorizontalAlignment="Center" />
+            <CheckBox Grid.Row="1" Grid.Column="0" Content="Emails"     Foreground="#1a1" Checked="onFilter" Unchecked="onFilter" Margin="8" x:Name="cbxLeadEmails" />
+            <CheckBox Grid.Row="1" Grid.Column="1" Content="Companies"  Foreground="#1a1" Checked="onFilter" Unchecked="onFilter" Margin="8" x:Name="cbxLeadCompns" />
+          </Grid>
+
+
+          <Label  Content="_Top"  VerticalAlignment="Center" Target="{Binding ElementName=tbMax}"/>
+          <TextBox Text="8" Width="25" Margin="8" Name="tbMax" TextChanged="tbMax_TextChanged" />
+
+          <Button Content="top 8 rows" Margin="8" Click="btnBroadcastTopN_Click" ToolTip="Broadcast to the top N emails/agents"    x:Name="btMax" />
+          <Button Content="_Selection" Margin="8" Click="onBroadcast_Avail"      ToolTip="Broadcast to the selected emails/agents" x:Name="btSel" />
+
+          <View:MainSwitchboardUsrCtrl Margin="8 0" VizBroad="Collapsed" />
+          <Button Content="A-Editor"   Margin="8" Click="onAgentsEdit"           ToolTip="Edit agents in their window."       Background="#ff0"  BorderThickness="0" VerticalAlignment="Center" />
+          <AavWpfVw:ThemeSelectorUsrCtrl Grid.Column="4" x:Name="themeSelector1" VerticalAlignment="Center"/>
+
+          <!--<Button Content="Leads"                    Click="onLeads" Foreground="#08f" />          <Button Content="Agents"                   Click="onAgent" Foreground="#076" />          <Button Content="Outlook -> DB"            Click="onOu2Db" Foreground="#0a0" />-->
+
+          <TextBlock x:Name="tbkTitle"  HorizontalAlignment="Center" TextWrapping="Wrap" Text="Info" />
+
+        </StackPanel>
+
+        <Grid DataContext="{StaticResource vsEMail_Avail}" Grid.Column="1" Grid.Row="1" >
+          <DataGrid x:Name="vEMail_Avail_DevDataGrid" ItemsSource="{Binding}" IsEnabled="{Binding ElementName=chkIsAvailable, Path=IsChecked}" IsReadOnly="True" VerticalAlignment="Top" SelectionChanged="onSelectnChgd" RowHeight="32" >
+            <DataGrid.Columns>
+              <DataGridTextColumn Header="ID = Email"  Binding="{Binding ID}"                                            Width="180" />
+              <DataGridTextColumn Header="FName"       Binding="{Binding FName}"                                         />
+              <DataGridTextColumn Header="LName"       Binding="{Binding LName}"                                         />
+              <DataGridTextColumn Header="Company"     Binding="{Binding Company}"                                       />
+              <DataGridTextColumn Header="DNN"         Binding="{Binding DoNotNotifyForCampaignID}"                      ToolTipService.ToolTip="Do Not Notify On On-Market For Campaign ID"/>
+              <DataGridTextColumn Header="MyReplies"   Binding="{Binding MyReplies}"                                     />
+              <DataGridTextColumn Header="LastSent"    Binding="{Binding LastSentAt,    Converter={cmn:UniConverter}}"    />
+              <DataGridTextColumn Header="LastReplied" Binding="{Binding LastRepliedAt, Converter={cmn:UniConverter}}"    />
+              <DataGridTextColumn Header="Added At"    Binding="{Binding AddedAt,       Converter={cmn:UniConverter}}"    />
+              <DataGridTextColumn Header="Notes        (this is the list for AVAILABLE broadcast)" Binding="{Binding Notes}"   Width="*" FontSize="8" />
+            </DataGrid.Columns>
+          </DataGrid>
+        </Grid>
+
+        <Grid DataContext="{StaticResource vsEMail_UnAvl}" Grid.Column="1" Grid.Row="2" IsEnabled="False" >
+          <DataGrid x:Name="vEMail_UnAvl_DevDataGrid" ItemsSource="{Binding}" VerticalAlignment="Top" >
+            <DataGrid.Columns>
+              <DataGridTextColumn Header="ID = Email"                                            Binding="{Binding ID}"                                           Width="180"/>
+              <DataGridTextColumn Header="FName"                                                 Binding="{Binding FName}"                                        />
+              <DataGridTextColumn Header="LName"                                                 Binding="{Binding LName}"                                        />
+              <DataGridTextColumn Header="Company"                                               Binding="{Binding Company}"                                      />
+              <DataGridTextColumn Header="DNN"                                                   Binding="{Binding DoNotNotifyForCampaignID}"                     ToolTipService.ToolTip="Do Not Notify On Off-Market For Campaign ID"/>
+              <DataGridTextColumn Header="MyReplies"                                             Binding="{Binding MyReplies}"                                     />
+              <DataGridTextColumn Header="LastRepliedAt"                                         Binding="{Binding LastRepliedAt, Converter={cmn:UniConverter}}"   />
+              <DataGridTextColumn Header="Added At"                                              Binding="{Binding AddedAt, Converter={cmn:UniConverter}}"         />
+              <DataGridTextColumn Header="Notes    (this is the list for BUSY/TAKEN broadcast)"  Binding="{Binding Notes}"                                        Width="*"/>
+            </DataGrid.Columns>
+          </DataGrid>
+
+          <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right"  Name="ctrlPanelOffMarket">
+            <!--<Button Click="btnBroadcastTopN_UnAvl_Click"  >
+				<TextBlock Text="      Broadcast"  VerticalAlignment="Center"/>
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="Top "  VerticalAlignment="Center"/>
+						<TextBox Margin="-1" TextWrapping="Wrap" Text="10" Width="30" Height="20" Name="tbMax2" />
+					</StackPanel>
+				</Button>-->
+            <Button Content="_Unavl Selection" Click="onBroadcast_UnAvl" ToolTip="Broadcast to selected emails/agents" />
+          </StackPanel>
+
+        </Grid>
+
+        <Grid Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Name="ctrlPnl" >
+          <StackPanel Orientation='Horizontal' Name="ctrlPnlTest" HorizontalAlignment="Left">
+            <CheckBox Content="Send   _Is Available  to   " Height="16" Checked="chkIsAvailable_Checked" Unchecked="chkIsAvailable_Checked" Foreground="#d7f" IsChecked="True" x:Name="chkIsAvailable" IsEnabled="False" />
+            <ComboBox x:Name="cbMail" Width="169"                 ToolTip="Copy  'EMail FirstName'  to Clipboard and reload to see it here" Foreground="#d7f" SelectionChanged="cbMail_SelectionChanged">
+              <ComboBoxItem IsSelected="True"           >pigida@gmail.com</ComboBoxItem>
+              <ComboBoxItem                       >nadine.pigida@live.com</ComboBoxItem>
+              <ComboBoxItem                              >pigida@live.com</ComboBoxItem>
+              <ComboBoxItem                          >jingmei.li@live.com</ComboBoxItem>
+              <ComboBoxItem                    >real.jingmei.li@gmail.com</ComboBoxItem>
+            </ComboBox>
+            <TextBox x:Name="tbMail" Width="210"                  ToolTip="Copy  'EMail FirstName'  to Clipboard and reload to see it here" Foreground="#d7f" Margin="5 0" FontSize="16" Text="real.jingmei.li@gmail.com" />
+            <Button Content="Send"   Click="onSendFromCbx"        ToolTip="Copy  'EMail FirstName'  to Clipboard and reload to see it here" Foreground="#d7f" Margin="5" />
+          </StackPanel>
+
+          <StackPanel Orientation='Horizontal' HorizontalAlignment="Right">
+            <Button Content="Save"     Click="btnSave_Click" />
+            <Button Content="Fresh"    Click="onRefresh" />
+            <Button Content="Load"     Click="onReLoad" />
+            <Button Content="?Clear?"  Click="onClear" />
+          </StackPanel>
+
+        </Grid>
+      </Grid>
+      <ToggleButton Content="_Tgl"     Click="onTglTest" ToolTip="Test of visuality" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
+      <TextBlock x:Name="tbver" Margin="0 -6 0 -20" FontSize="13" Foreground="#4af" Text="DbRls - Ver 123" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+    </Grid>
+  </Border>
+</lnk:WindowBase>
