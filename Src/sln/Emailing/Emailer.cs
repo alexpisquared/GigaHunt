@@ -4,8 +4,10 @@ using AAV.WPF.Ext;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net.Mail;
 using System.Net.Mime;
+using System.Security.Principal;
 using System.Threading.Tasks;
 
 namespace Emailing
@@ -62,7 +64,8 @@ namespace Emailing
           //message.Attachments.Add(new Attachment(@"C:\Documents and Settings\Grandma\Application Data\Microsoft\Signatures\QStatusUpdate(Wrd)_files\image002.jpg"));
           //message.Attachments.Add(new Attachment(@"C:\Documents and Settings\Grandma\Application Data\Microsoft\Signatures\QStatusUpdate(Wrd)_files\image001.png"));
 
-          using (var client = new SmtpClient("smtp.office365.com", 587) { EnableSsl = true, Credentials = new System.Net.NetworkCredential("alex.pigida@outlook.com", "xkqzmaotieykzkyw") }) // https://account.live.com/proofs/Manage/additional?mkt=en-us - App passwords   Some apps ... don't support security codes for two-step verification. In these cases, you need to create an app password to sign in. Learn more about app passwords.   Create a new app password
+
+          using (var client = new SmtpClient("smtp.office365.com", 587) { EnableSsl = true, Credentials = new System.Net.NetworkCredential(GetMicrosoftAccountName(), System.IO.File.ReadAllText($"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\\1PageNote\\OutlookKeysOrSomething.txt")) }) // https://account.live.com/proofs/Manage/additional?mkt=en-us - App passwords   Some apps ... don't support security codes for two-step verification. In these cases, you need to create an app password to sign in. Learn more about app passwords.   Create a new app password
           {
             try { await client.SendMailAsync(mailMessage); } // letter does not appear in the Outlook ==> use DB to track sent messages.
             catch (Exception ex) { ex.Pop($"Error emailing to: {trgEmailAdrs}"); throw; }           //tu: add to App.cfg: <system.net><mailSettings><smtp deliveryMethod="Network" from="test@foo.com"><!--userName="pigida@aei.ca" password="oldSimple"--><!--port="25"--><network host="mail.aei.ca" defaultCredentials="true"/></smtp></mailSettings></system.net>
@@ -82,6 +85,20 @@ namespace Emailing
 
       return false;
     }
+    public static string GetMicrosoftAccountName() //todo: move it to a proper place.
+    {
+      var wi = WindowsIdentity.GetCurrent();
+      var groups = from g in wi.Groups
+                   select new SecurityIdentifier(g.Value)
+                   .Translate(typeof(NTAccount)).Value;
+
+      var msAccount = (from g in groups
+                       where g.StartsWith(@"MicrosoftAccount\")
+                       select g).FirstOrDefault();
+
+      return msAccount == null ? wi.Name : msAccount.Substring(@"MicrosoftAccount\".Length);
+    }
+
     public static async Task SendPhoto(string photoFullPath, string trgEmailAdrs)
     {
       var fi = new FileInfo(photoFullPath);
