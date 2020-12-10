@@ -22,7 +22,7 @@ namespace AvailStatusEmailer
       return wp;
     }
 
-    [Obsolete("lkjl", true)]
+    [Obsolete("Use the other one from ...", true)]
     public static void StoreWinPos(Window wdw, string key)
     {
       var wp = getWP(key);
@@ -33,7 +33,7 @@ namespace AvailStatusEmailer
       Settings.Default.AppSettings = Serializer.SaveToString(wp);
       Settings.Default.Save();
     }
-    [Obsolete("lkjl", true)]
+    [Obsolete("Use the other one from ...", true)]
     public static void StoreWinPos(Window wdw, int w)
     {
       var stgs = (string.IsNullOrEmpty(Settings.Default.AppSettings) || null == Serializer.LoadFromString<AppSettings>(Settings.Default.AppSettings) as AppSettings) ? new AppSettings() : Serializer.LoadFromString<AppSettings>(Settings.Default.AppSettings) as AppSettings;
@@ -47,7 +47,7 @@ namespace AvailStatusEmailer
       Settings.Default.AppSettings = Serializer.SaveToString(stgs);
       Settings.Default.Save();
     }
-    [Obsolete("lkjl", true)]
+    [Obsolete("Use the other one from ...", true)]
     public static void PositionWindow(Window wdw, string key)
     {
       var wp = getWP(key);
@@ -58,7 +58,7 @@ namespace AvailStatusEmailer
       wdw.Height = wp.windowHeight;
     }
 
-    [Obsolete("lkjl", true)]
+    [Obsolete("Use the other one from ...", true)]
     public static void PositionWindow(Window wdw, int w)
     {
       if (!string.IsNullOrEmpty(Settings.Default.AppSettings))
