@@ -148,8 +148,10 @@ namespace OutlookToDbWpfApp
     public static async Task<bool> CheckInsertEMailEHistAsync(A0DbContext _db, string email, string firstName, string lastName, string subject, string body, DateTime timeRecdSent, string isRcvd, string RS)
     {
       var em = await checkInsertEMailAsync(_db, email, firstName, lastName, isRcvd);
+      if (em == null) return false;
+
       await checkInsertEHistAsync(_db, subject, body, timeRecdSent, RS, em);
-      var isNew = em.AddedAt == AvailStatusEmailer.App.Now;
+      var isNew = em?.AddedAt == App.Now;
       return isNew;
     }
     async Task<TupleSubst> findInsertEmailsFromBodyAsync(string body, string firstName, string lastName, string originalSenderEmail)
@@ -163,7 +165,7 @@ namespace OutlookToDbWpfApp
         {
           var fln = OutlookHelper.figureOutFLNameFromBody(body, newEmail[i]);
           var em = await checkInsertEMailAsync(_db, newEmail[i], fln.Item1, fln.Item2, $"..from body (sender: {originalSenderEmail}). ");
-          if (!isAnyNew) isAnyNew = em.AddedAt == AvailStatusEmailer.App.Now;
+          if (!isAnyNew) isAnyNew = em?.AddedAt == App.Now;
         }
       }
 
@@ -217,7 +219,7 @@ namespace OutlookToDbWpfApp
                   var ccFLName = OutlookHelper.figureOutSenderFLName(re.Name, re.Address);
 
                   var email = await checkInsertEMailAsync(_db, re.Address, ccFLName.Item1, ccFLName.Item2, $"..was a CC of {senderEmail} on {mailItem.SentOn:y-MM-dd HH:mm}. ");
-                  isNew = email.AddedAt == AvailStatusEmailer.App.Now;
+                  isNew = email?.AddedAt == App.Now;
                   if (isNew) newEmailsAdded++;
                   report += OutlookHelper.reportLine(folderName, re.Address, isNew);
                 }
@@ -462,7 +464,7 @@ namespace OutlookToDbWpfApp
                 var ccFLName = OutlookHelper.figureOutSenderFLName(re.Name, re.Address);
 
                 var email = await checkInsertEMailAsync(_db, re.Address, ccFLName.Item1, ccFLName.Item2, $"..CC  {mailItem.SentOn:yyyy-MM-dd}  {++cnt,2}/{mailItem.Recipients.Count,-2}  by {senderEmail}. ");
-                isNew = email.AddedAt == AvailStatusEmailer.App.Now;
+                isNew = email?.AddedAt == App.Now;
                 if (isNew) newEmailsAdded++;
                 rptLine += OutlookHelper.reportLine(folderName, re.Address, isNew);
               }
@@ -521,6 +523,9 @@ namespace OutlookToDbWpfApp
     public static async Task<EMail> checkInsertEMailAsync(A0DbContext _db, string email, string firstName, string lastName, string notes)
     {
       const int maxLen = 256;
+
+      if (email.EndsWith("@msg.monster.com")) // ~ 3212846259f94b158701020f5ca8ac4e@msg.monster.com
+        return null;
 
       if (email.Length > maxLen)
         email = email.Substring(email.Length - maxLen, maxLen);
