@@ -237,7 +237,7 @@ namespace OutlookToDbWpfApp
                   report += OutlookHelper.reportLine(folderName, re.Address, isNew);
                 }
 
-                var trgFolder = mailItem.Subject.StartsWith(QStatusBroadcaster.Asu) ? deletedsFolder : sentDoneFolder; // delete Avali-ty broadcasts.
+                var trgFolder = (mailItem.Subject ?? "").StartsWith(QStatusBroadcaster.Asu) ? deletedsFolder : sentDoneFolder; // delete Avali-ty broadcasts.
                 OutlookHelper.moveIt(trgFolder, mailItem);
               }
             }

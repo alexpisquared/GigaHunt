@@ -35,7 +35,7 @@ namespace AvailStatusEmailer
     protected override void OnStartup(StartupEventArgs sea)
     {
       base.OnStartup(sea);
-      Application.Current.DispatcherUnhandledException += UnhandledExceptionHndlr.OnCurrentDispatcherUnhandledException;
+      Current.DispatcherUnhandledException += UnhandledExceptionHndlr.OnCurrentDispatcherUnhandledException;
       EventManager.RegisterClassHandler(typeof(TextBox), TextBox.GotFocusEvent, new RoutedEventHandler((s, re) => { (s as TextBox).SelectAll(); })); //tu: TextBox
       Tracer.SetupTracingOptions("AvailStatusEmailer", new TraceSwitch("OnlyUsedWhenInConfig", "This is the trace for all               messages... but who cares?   See ScrSvr for a model.") { Level = TraceLevel.Verbose }); // Trace.WriteLine(string.Format("*{0:MMdd HH:mm} The Start. CommandLine: '{1}'", AvailStatusEmailer.App._now, Environment.CommandLine));
 

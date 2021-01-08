@@ -298,10 +298,7 @@ namespace AvailStatusEmailer
           enableControls(false);
           //WindowState = System.Windows.WindowState.Minimized;
           foreach (var em in vEMail_UnAvl_DevDataGrid.SelectedItems) await QStatusBroadcaster.SendLetter_UpdateDb(false, ((vEMail_UnAvl_Prod)(em)).ID, ((vEMail_UnAvl_Prod)(em)).FName);
-          Close(); return;
-          var rl = await reLoad();
-          reFresh();
-          tbkTitle.Text = Title = string.Format(_fmt, cnt, sw.Elapsed, cnt / sw.Elapsed.TotalMinutes, rl);
+          Close(); 
         }
       }
       catch (Exception ex) { ex.Pop(); }

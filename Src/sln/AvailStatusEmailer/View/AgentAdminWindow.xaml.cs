@@ -15,7 +15,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using AAV.Sys.Helpers;
 
 namespace AgentFastAdmin
 {
@@ -219,11 +218,7 @@ namespace AgentFastAdmin
         else
           return false;
       }
-      catch (Exception ex)
-      {
-        ex.Pop();
-        return true;
-      }
+      catch (Exception ex)      {        ex.Pop();        return true;      }
     }
     [Obsolete("This one does not save if app is closing immediately")]
     public static bool CheckAskToSaveDispose_CanditdteForGlobalRepltSynch(DbContext dbx, bool dispose, Func<Task> savePlusMetadata)
@@ -245,11 +240,7 @@ namespace AgentFastAdmin
         else
           return false;
       }
-      catch (Exception ex)
-      {
-        ex.Pop();
-        return true;
-      }
+      catch (Exception ex)      {        ex.Pop();        return true;      }
     }
 
     void onLoaded(object s, RoutedEventArgs e) => load();

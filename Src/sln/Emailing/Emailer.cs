@@ -114,7 +114,7 @@ namespace Emailing
             DateTime.Now.AddDays(1).ToLongDateString(),
             DateTime.Now.AddDays(1).ToLongTimeString(),
             fi.Length / 1000),
-         new string[] { }, @"C:\c\Lgc\Mail\AvailStatusEmailer\Resources\MCSD Logo - Latest as of 2009.gif");
+         Array.Empty<string>(), @"C:\c\Lgc\Mail\AvailStatusEmailer\Resources\MCSD Logo - Latest as of 2009.gif");
       System.Threading.Thread.Sleep(1000);
 
       await Send(trgEmailAdrs,

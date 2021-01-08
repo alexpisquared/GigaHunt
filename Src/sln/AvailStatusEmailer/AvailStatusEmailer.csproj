@@ -135,9 +135,6 @@
     <Compile Include="..\..\..\..\..\C\AsLink\Win32\Ext.DbContext.cs">
       <Link>AsLink\Ext.DbContext.cs</Link>
     </Compile>
-    <Compile Include="C:\c\AsLink\DB\DbOps.cs">
-      <Link>AsLink\DbOps.cs</Link>
-    </Compile>
     <Compile Include="C:\c\AsLink\DB\DbSaveMsgBox.cs">
       <Link>AsLink\DbSaveMsgBox.cs</Link>
     </Compile>

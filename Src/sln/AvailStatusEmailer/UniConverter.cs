@@ -11,7 +11,7 @@ namespace AvailStatusEmailer
   public class UniConverter : MarkupExtension, IValueConverter
   {
     bool _IsInverted = false; public bool IsInverted { get => _IsInverted; set => _IsInverted = value; }
-    Brush 
+   readonly Brush 
       _b0 = new SolidColorBrush(Color.FromRgb(128, 128, 128)),
       _b1 = new SolidColorBrush(Color.FromRgb(80, 80, 210)),
       _b2 = new SolidColorBrush(Color.FromRgb(0, 160, 160)),
@@ -70,7 +70,7 @@ namespace AvailStatusEmailer
       }
       else if (value is bool)
       {
-        if (targetType == typeof(bool)) return (bool)value ? true : false;
+        if (targetType == typeof(bool)) return (bool)value;
         else if (targetType == typeof(Brush))
           return (bool)value ? new LinearGradientBrush(Colors.Green, Colors.LightGreen, 0) : new LinearGradientBrush(Colors.DarkRed, Colors.Red, 0);//new BrushConverter().ConvertFromString("#00ff00");
         else if (targetType == typeof(Visibility))
@@ -104,13 +104,6 @@ namespace AvailStatusEmailer
         Debug.WriteLine($"**** Unprocesssed type: {value.GetType().Name} ");
         return value;
       }
-
-      if (targetType == typeof(Visibility) && value == null)
-        return
-          //_IsInverted ? Visibility.Visible : 
-          Visibility.Collapsed;
-
-      return new LinearGradientBrush(Colors.Gray, Colors.DarkGray, 45);//		return new BrushConverter().ConvertFromString("#ff0000");
     }
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => null;
     public override object ProvideValue(IServiceProvider serviceProvider) => this;
