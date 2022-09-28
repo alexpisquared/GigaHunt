@@ -49,7 +49,7 @@ namespace AvailStatusEmailer
           @"C:\c\docs\CV\Resume - Alex Pigida - long detailed version.docx",
           @"C:\c\docs\CV\Resume - Alex Pigida - long detailed version.pdf"
         } : new string[0];
-        var avlbldate = DateTime.Today.AddDays(14);
+        var avlbldate = DateTime.Today < new DateTime(2022, 10, 15) ? new DateTime(2022, 11, 1) : DateTime.Today.AddDays(14);
         var monthPart = avlbldate.Day < 10 ? "early" : avlbldate.Day > 20 ? "late" : "mid";
         var startDate = $"{monthPart} {avlbldate:MMMM yyyy}";
 
