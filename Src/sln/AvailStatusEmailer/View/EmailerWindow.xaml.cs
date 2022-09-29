@@ -274,9 +274,9 @@ namespace AvailStatusEmailer
         else
         {
           Hide();
-          var prompt = $"Must run Outlook-to-DB lest avoid double-sending!!!\n\n Review mailbox for unprocessed letters ... or just refer to *Done folder.";
+          var prompt = $"Must run Outlook-to-DB now, to avoid double-sending!!!\n\n Review mailbox for unprocessed letters ... or just refer to *Done folder.";
           App.SpeakAsync(prompt);
-          MessageBox.Show(prompt);
+          MessageBox.Show(prompt, "SUCCESS sending all letters", MessageBoxButton.OK, MessageBoxImage.Information);
           new OutlookToDbWindow().Show();
 
           Close(); // better close-reopen for a cleaner reload: //var rl = await reLoad();          reFresh();
