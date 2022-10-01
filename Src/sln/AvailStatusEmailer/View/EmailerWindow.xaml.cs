@@ -1,11 +1,4 @@
-﻿using AAV.Sys.Helpers;
-using AAV.WPF.Ext;
-using AgentFastAdmin;
-using AsLink;
-using AvailStatusEmailer.View;
-using Db.QStats.DbModel;
-using OutlookToDbWpfApp;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.Entity;
@@ -17,13 +10,19 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
+using AAV.Sys.Helpers;
+using AAV.WPF.Ext;
+using AgentFastAdmin;
+using AsLink;
+using AvailStatusEmailer.View;
+using Db.QStats.DbModel;
+using OutlookToDbWpfApp;
 
 namespace AvailStatusEmailer
 {
   public partial class EmailersendWindow : AAV.WPF.Base.WindowBase
   {
-    const double _fractionToSend = .025;
-    const string _fmt = "Sent {0} emails in {1:h\\:mm\\:ss\\.f} at {2:N1} msg/min";
+    const double _fractionToSend = .025, _absoluteMax = 10;
     A0DbContext _db;
     CollectionViewSource _cvsEmails;
     ObservableCollection<vEMail_Avail_Prod> _obsColAvlbl;
@@ -34,7 +33,7 @@ namespace AvailStatusEmailer
     {
       InitializeComponent(); themeSelector1.ApplyTheme = ApplyTheme;
       tbver.Text = $"Db: {A0DbContext.DbNameOnly}        Ver: {AAV.Sys.Helpers.VerHelper.CurVerStr(".net 4.8")}";
-      tbFilter.Focus();
+      _ = tbFilter.Focus();
 
       Loaded += async (s, e) => { await Task.Yield(); themeSelector1.SetCurTheme(Thm); Bpr.BeepBgn3(); };
     }
@@ -54,7 +53,7 @@ namespace AvailStatusEmailer
           _leadCompns = _db.Leads.Local.Select(r => r.Agency).Distinct();             /**/  Debug.WriteLine($">>>    Loaded  LeadCo   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
           _obsColAvlbl = _db.vEMail_Avail_Prod.Local;
 
-          _cvsEmails = ((CollectionViewSource)(FindResource("vsEMail_Avail")));
+          _cvsEmails = (CollectionViewSource)FindResource("vsEMail_Avail");
           _cvsEmails.Source = null;
           populateWithSorting(_obsColAvlbl);
         }
@@ -62,14 +61,14 @@ namespace AvailStatusEmailer
         {
           await _db.vEMail_UnAvl_Prod.OrderByDescending(r => r.AddedAt).LoadAsync();
 
-          _cvsEmails = ((CollectionViewSource)(FindResource("vsEMail_UnAvl")));
+          _cvsEmails = (CollectionViewSource)FindResource("vsEMail_UnAvl");
           _cvsEmails.Source = null;
           _cvsEmails.Source = _db.vEMail_UnAvl_Prod.Local.OrderByDescending(r => r.AddedAt);
         }
 
         var ttl = chkIsAvailable.IsChecked == true ? _obsColAvlbl.Count : _db.vEMail_UnAvl_Prod.Local.Count;
 
-        btMax.Content = $"Top {(tbMax.Text = $"{(int)(ttl * _fractionToSend)}")} rows";
+        btMax.Content = $"Top {tbMax.Text = $"{(int)Math.Min(ttl * _fractionToSend, _absoluteMax)}"} rows";
         return string.Format("Total {0} unused records loaded in {1:N1}", ttl, lswTtl.Elapsed.TotalSeconds);
       }
       catch (Exception ex) { ex.Pop(); return ex.Message; }
@@ -112,13 +111,13 @@ namespace AvailStatusEmailer
                       (cbxLeadCompns.IsChecked != true || _leadCompns.Contains(r.Company)) &&
                       (
                         string.IsNullOrEmpty(srchToLwr) ||
-                        (
-                          (r.ID.ToLower().Contains(srchToLwr)) ||
+
+                          r.ID.ToLower().Contains(srchToLwr) ||
                           (r.Company != null && r.Company.ToLower().Contains(srchToLwr)) ||
                           (r.FName != null && r.FName.ToLower().Contains(srchToLwr)) ||
                           (r.LName != null && r.LName.ToLower().Contains(srchToLwr)) ||
                           (r.Notes != null && r.Notes.ToLower().Contains(srchToLwr))
-                        )
+
                       )
                     );
 
@@ -234,7 +233,7 @@ namespace AvailStatusEmailer
         else
         {
           for (var i = 0; i < cnt; i++)
-            vEMail_Avail_DevDataGrid.SelectedItems.Add(vEMail_Avail_DevDataGrid.Items[i]);
+            _ = vEMail_Avail_DevDataGrid.SelectedItems.Add(vEMail_Avail_DevDataGrid.Items[i]);
 
           onBroadcast_Avail(s, e);
         }
@@ -251,17 +250,17 @@ namespace AvailStatusEmailer
         var msg = "Failes: ";
         var antiSpamBlockListPauseInMs = 1000 + (cnt < 12 ? cnt * cnt * cnt * cnt : 14000);
 
-        App.SpeakAsync(tbkTitle.Text = $"Sending {cnt} letters. Anti Spam delay set to {(antiSpamBlockListPauseInMs * .001):N0} sec.");
+        App.SpeakAsync(tbkTitle.Text = $"Sending {cnt} letters. Anti Spam delay set to {antiSpamBlockListPauseInMs * .001:N0} sec. ETA {cnt * antiSpamBlockListPauseInMs * .001 / 60.0:N0} minutes.");
 
         enableControls(false);
         var sw = Stopwatch.StartNew();
         foreach (var em in vEMail_Avail_DevDataGrid.SelectedItems)
         {
-          var scs = await QStatusBroadcaster.SendLetter_UpdateDb(true, ((vEMail_Avail_Prod)(em)).ID, ((vEMail_Avail_Prod)(em)).FName);
+          var scs = await QStatusBroadcaster.SendLetter_UpdateDb(true, ((vEMail_Avail_Prod)em).ID, ((vEMail_Avail_Prod)em).FName);
           if (!scs)
-            msg += $"\n  {((vEMail_Avail_Prod)(em)).ID}";
+            msg += $"\n  {((vEMail_Avail_Prod)em).ID}";
 
-          tbkTitle.Text = $"{--cnt,3}) {(scs ? "Success" : "Failure")}  sending to  {((vEMail_Avail_Prod)(em)).ID} {string.Format(_fmt, cntRO - cnt, sw.Elapsed, (cntRO - cnt) / sw.Elapsed.TotalMinutes)}";
+          tbkTitle.Text = $"Done/Todo: {cntRO - cnt} / {--cnt}      msg/min so far: {(cntRO - cnt) / sw.Elapsed.TotalMinutes:N1}      Last one is:  {(scs ? "Success" : "Failure")}  sending to  {((vEMail_Avail_Prod)em).ID}";
 
           await Task.Delay(antiSpamBlockListPauseInMs);
         }
@@ -276,7 +275,7 @@ namespace AvailStatusEmailer
           Hide();
           var prompt = $"Must run Outlook-to-DB now, to avoid double-sending!!!\n\n Review mailbox for unprocessed letters ... or just refer to *Done folder.";
           App.SpeakAsync(prompt);
-          MessageBox.Show(prompt, "SUCCESS sending all letters", MessageBoxButton.OK, MessageBoxImage.Information);
+          _ = MessageBox.Show(prompt, "SUCCESS sending all letters", MessageBoxButton.OK, MessageBoxImage.Information);
           new OutlookToDbWindow().Show();
 
           Close(); // better close-reopen for a cleaner reload: //var rl = await reLoad();          reFresh();
@@ -291,14 +290,14 @@ namespace AvailStatusEmailer
       {
         var cnt = vEMail_UnAvl_DevDataGrid.SelectedItems.Count;
         var sw = Stopwatch.StartNew();
-        var lst = ""; foreach (var em in vEMail_UnAvl_DevDataGrid.SelectedItems) lst += ((vEMail_UnAvl_Prod)(em)).ID + Environment.NewLine;
+        var lst = ""; foreach (var em in vEMail_UnAvl_DevDataGrid.SelectedItems) lst += ((vEMail_UnAvl_Prod)em).ID + Environment.NewLine;
         var qsn = string.Format("Send letter to these {0} selected addresses?", vEMail_UnAvl_DevDataGrid.SelectedItems.Count);
         //if (MessageBox.Show(lst, qsn, MessageBoxButton.YesNoCancel, MessageBoxImage.Question) == MessageBoxResult.Yes)
         {
           enableControls(false);
           //WindowState = System.Windows.WindowState.Minimized;
-          foreach (var em in vEMail_UnAvl_DevDataGrid.SelectedItems) await QStatusBroadcaster.SendLetter_UpdateDb(false, ((vEMail_UnAvl_Prod)(em)).ID, ((vEMail_UnAvl_Prod)(em)).FName);
-          Close(); 
+          foreach (var em in vEMail_UnAvl_DevDataGrid.SelectedItems) _ = await QStatusBroadcaster.SendLetter_UpdateDb(false, ((vEMail_UnAvl_Prod)em).ID, ((vEMail_UnAvl_Prod)em).FName);
+          Close();
         }
       }
       catch (Exception ex) { ex.Pop(); }
@@ -308,23 +307,21 @@ namespace AvailStatusEmailer
     {
       //load(chkIsAvailable.IsChecked == true);
     }
-    void onTglTest(object s, RoutedEventArgs e) => enableControls((((ToggleButton)s).IsChecked == false));
+    void onTglTest(object s, RoutedEventArgs e) => enableControls(((ToggleButton)s).IsChecked == false);
     void onAgentsEdit(object s, RoutedEventArgs e) => new AgentAdminnWindow().Show(); // a special case for paralel acces to agents
-    void tbMax_TextChanged(object sender, TextChangedEventArgs e)
+    void tbMax_TextChanged(object s, TextChangedEventArgs e)
     {
-      if (btMax != null && int.TryParse(tbMax?.Text, out var cnt))
+      if (btMax != null && int.TryParse(tbMax?.Text, out _))
         btMax.Content = $"Top {tbMax.Text} rows";
     }
-
-    void cbMail_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    void cbMail_SelectionChanged(object s, SelectionChangedEventArgs e)
     {
       if (tbMail != null)
         tbMail.Text = ((ContentControl)e.AddedItems[0])?.Content?.ToString();
     }
-
     void onSelectnChgd(object s, SelectionChangedEventArgs e)
     {
-      var dg = ((DataGrid)s);
+      var dg = (DataGrid)s;
       tbkTitle.Text = Title = $"{dg.SelectedItems.Count} / {dg.Items.Count} selected";
       btMax.Visibility = dg.SelectedItems.Count < 3 ? Visibility.Visible : Visibility.Collapsed;
       btSel.Visibility = dg.SelectedItems.Count > 0 ? Visibility.Visible : Visibility.Collapsed;

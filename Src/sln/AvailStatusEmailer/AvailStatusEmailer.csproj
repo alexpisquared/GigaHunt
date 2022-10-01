@@ -172,6 +172,7 @@
     <Compile Include="Helpers\FirstLastNameParser.cs" />
     <Compile Include="Helpers\QStatsDbHelper.cs" />
     <Compile Include="UniConverter.cs" />
+    <Compile Include="Usings.cs" />
     <Compile Include="View\AgentAdminWindow.xaml.cs">
       <DependentUpon>AgentAdminWindow.xaml</DependentUpon>
     </Compile>
