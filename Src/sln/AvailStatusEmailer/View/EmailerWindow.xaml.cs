@@ -207,9 +207,7 @@ namespace AvailStatusEmailer
         var mail = OutlookHelper.FindEmails(text)?.FirstOrDefault();
         if (string.IsNullOrEmpty(mail)) return;
 
-        var t = text.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-        if (t.Length > 1)
-          _firstName = Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(t[1].ToLower()); // ALEX will be ALEX without .ToLower() (2020-12-03)
+        _firstName = Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase((tbName.Text ?? "Sirs").ToLower()); // ALEX will be ALEX without .ToLower() (2020-12-03)
 
         scs = await QStatusBroadcaster.SendLetter_UpdateDb(chkIsAvailable.IsChecked == true, mail, _firstName);
       }
