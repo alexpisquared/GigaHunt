@@ -99,7 +99,7 @@
 
 
         <DataGrid x:Name="eMailDataGrid" Grid.Row="1" ItemsSource="{Binding}" IsReadOnly="False" SelectionChanged="onSelectnChgd"
-                IsSynchronizedWithCurrentItem="True" RowHeight="22">
+                IsSynchronizedWithCurrentItem="True" RowHeight="22" CanUserAddRows="True">
           <DataGrid.Columns>
             <DataGridTextColumn Header="Email (id)"  Binding="{Binding ID}"             Width="4*" IsReadOnly="True"/>
             <DataGridTextColumn Header="FName"       Binding="{Binding FName}"          Width="2*" />
