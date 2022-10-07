@@ -289,7 +289,7 @@ namespace OutlookToDbWpfApp
                 }
                 else
                 {
-                  banPremanentlyInDB(ref report, ref newBansAdded, senderEmail, "Delivery failed (a)");
+                  banPremanentlyInDB(ref report, ref newBansAdded, senderEmail, "Delivery failed (a) ");
                 }
 
                 OutlookHelper.moveIt(rcvdDoneFolder, reportItem);

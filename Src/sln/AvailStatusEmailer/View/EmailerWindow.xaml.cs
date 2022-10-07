@@ -230,7 +230,7 @@ namespace AvailStatusEmailer
           App.SpeakAsync($"Unable to parse {tbMax.Text}. Aborting broadcast.");
         else
         {
-          for (var i = 0; i < cnt; i++)
+          for (var i = 0; i < cnt && i< vEMail_Avail_DevDataGrid.Items.Count; i++)
             _ = vEMail_Avail_DevDataGrid.SelectedItems.Add(vEMail_Avail_DevDataGrid.Items[i]);
 
           onBroadcast_Avail(s, e);
@@ -273,7 +273,7 @@ namespace AvailStatusEmailer
           Hide();
           var prompt = $"Must run Outlook-to-DB now, to avoid double-sending!!!\n\n Review mailbox for unprocessed letters ... or just refer to *Done folder.";
           App.SpeakAsync(prompt);
-          _ = MessageBox.Show(prompt, "SUCCESS sending all letters", MessageBoxButton.OK, MessageBoxImage.Information);
+          // _ = MessageBox.Show(prompt, "SUCCESS sending all letters", MessageBoxButton.OK, MessageBoxImage.Information);
           new OutlookToDbWindow().Show();
 
           Close(); // better close-reopen for a cleaner reload: //var rl = await reLoad();          reFresh();
