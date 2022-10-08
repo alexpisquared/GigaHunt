@@ -230,7 +230,7 @@ namespace AvailStatusEmailer
           App.SpeakAsync($"Unable to parse {tbMax.Text}. Aborting broadcast.");
         else
         {
-          for (var i = 0; i < cnt && i< vEMail_Avail_DevDataGrid.Items.Count; i++)
+          for (var i = 0; i < cnt && i < vEMail_Avail_DevDataGrid.Items.Count; i++)
             _ = vEMail_Avail_DevDataGrid.SelectedItems.Add(vEMail_Avail_DevDataGrid.Items[i]);
 
           onBroadcast_Avail(s, e);
@@ -312,6 +312,9 @@ namespace AvailStatusEmailer
       if (btMax != null && int.TryParse(tbMax?.Text, out _))
         btMax.Content = $"Top {tbMax.Text} rows";
     }
+
+    void OnGetNameFromEmail(object s, RoutedEventArgs e) => tbName.Text = new Helpers.FirstLastNameParser(((TextBox)s).Text).FirstName;
+
     void cbMail_SelectionChanged(object s, SelectionChangedEventArgs e)
     {
       if (tbMail != null)

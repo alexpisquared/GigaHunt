@@ -139,7 +139,7 @@
 
         <Grid Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Name="ctrlPnl" >
           <StackPanel Orientation='Horizontal' Name="ctrlPnlTest" HorizontalAlignment="Left">
-            <CheckBox Content="Send   _Is Available  to   " Height="16" Checked="chkIsAvailable_Checked" Unchecked="chkIsAvailable_Checked" Foreground="#d7f" IsChecked="True" x:Name="chkIsAvailable" IsEnabled="False" />
+            <CheckBox Content="'Is Available'" Height="16" Checked="chkIsAvailable_Checked" Unchecked="chkIsAvailable_Checked" Foreground="#d7f" IsChecked="True" x:Name="chkIsAvailable" IsEnabled="False" />
             <!--<ComboBox x:Name="cbMail" Width="169"                 ToolTip="Copy  'EMail FirstName'  to Clipboard and reload to see it here" Foreground="#d7f" SelectionChanged="cbMail_SelectionChanged">
               <ComboBoxItem IsSelected="True"           >pigida@gmail.com</ComboBoxItem>
               <ComboBoxItem                       >nadine.pigida@live.com</ComboBoxItem>
@@ -147,7 +147,9 @@
               <ComboBoxItem                          >jingmei.li@live.com</ComboBoxItem>
               <ComboBoxItem                    >real.jingmei.li@gmail.com</ComboBoxItem>
             </ComboBox>-->
-            <TextBox x:Name="tbMail" Width="210"                  ToolTip=""          Foreground="#fcf" Margin="5 0" FontSize="16" Text="pigida@gmail.com" />
+
+            <Label   Content="          _Mail to" Target="{Binding ElementName=tbMail}" />
+            <TextBox x:Name="tbMail" Width="210"                  ToolTip=""          Foreground="#fcf" Margin="5 0" FontSize="16" Text="pigida@gmail.com" LostFocus="OnGetNameFromEmail" />
             <TextBox x:Name="tbName" Width="110"                  ToolTip="Fist name" Foreground="#fcf" Margin="5 0" FontSize="16" Text="Sirs" />
             <Button Content="Send"   Click="onSendFromCbx"        ToolTip="Copy  'EMail FirstName'  to Clipboard and reload to see it here" Foreground="#d7f" Margin="5" />
           </StackPanel>
