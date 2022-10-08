@@ -250,6 +250,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Assets\AlexTiny_LinkedIn.pdn" />
     <None Include="Assets\Assets.zip" />
     <None Include="AvailStatusEmailer_TemporaryKey.pfx" />
     <None Include="packages.config" />
@@ -298,7 +299,14 @@
     <Resource Include="Assets\MailBroadCast.ico" />
     <Resource Include="Resources\AlexTiny_LinkedIn.png" />
     <Resource Include="Assets\MailBroadCast.DeliveryFailed.ico" />
+    <Resource Include="Assets\AlexTiny_LinkedIn.png" />
     <Content Include="Assets\Attach.Detach.sql" />
+    <Content Include="Assets\AvailabilityStatus_AvailableNow.htm" />
+    <Content Include="Assets\AvailabilityStatus_AvailableNow_FreshCV.htm" />
+    <Content Include="Assets\AvailabilityStatus_Unavailable.htm" />
+    <Resource Include="Assets\Icon1.ico" />
+    <Resource Include="Assets\MCSD Logo - Latest as of 2009.gif" />
+    <Content Include="Assets\WaterDroplet.wav" />
     <Content Include="Resources\AvailabilityStatus_AvailableNow_FreshCV.htm">
       <SubType>Designer</SubType>
     </Content>
