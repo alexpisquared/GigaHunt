@@ -114,7 +114,7 @@ namespace Emailing
             DateTime.Now.AddDays(1).ToLongDateString(),
             DateTime.Now.AddDays(1).ToLongTimeString(),
             fi.Length / 1000),
-         Array.Empty<string>(), @"C:\c\Lgc\Mail\AvailStatusEmailer\Resources\MCSD Logo - Latest as of 2009.gif");
+         Array.Empty<string>(), @"C:\g\GigaHunt\Src\sln\AvailStatusEmailer\Assets\MCSD Logo - Latest as of 2009.gif");
       System.Threading.Thread.Sleep(1000);
 
       await Send(trgEmailAdrs,
@@ -126,7 +126,7 @@ namespace Emailing
             Path.GetFileName(photoFullPath),
             DateTime.Now.ToLongDateString(),
             DateTime.Now.ToLongTimeString()),
-         new string[] { photoFullPath }, @"C:\c\Lgc\Mail\AvailStatusEmailer\Resources\MCSD Logo - Latest as of 2009.gif");
+         new string[] { photoFullPath }, @"C:\g\GigaHunt\Src\sln\AvailStatusEmailer\Assets\MCSD Logo - Latest as of 2009.gif");
       System.Threading.Thread.Sleep(1000);
     }
 

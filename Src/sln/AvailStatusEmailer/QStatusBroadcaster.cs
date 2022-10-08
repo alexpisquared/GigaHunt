@@ -36,8 +36,8 @@ namespace AvailStatusEmailer
       try
       {
         var html = //isResumeFeatureUpdate ?
-                   //$@"C:\c\Lgc\Mail\AvailStatusEmailer\Resources\AvailabilityStatus_AvailableNow_FreshCV.htm" :
-          $@"C:\c\Lgc\Mail\AvailStatusEmailer\Resources\AvailabilityStatus_{(isAvailable ? "AvailableNow" : "Unavailable")}.htm";
+                   //$@"C:\g\GigaHunt\Src\sln\AvailStatusEmailer\Assets\AvailabilityStatus_AvailableNow_FreshCV.htm" :
+          $@"C:\g\GigaHunt\Src\sln\AvailStatusEmailer\Assets\AvailabilityStatus_{(isAvailable ? "AvailableNow" : "Unavailable")}.htm";
 
         var body = new StreamReader(html).ReadToEnd();
         var subj = /*isResumeFeatureUpdate*/false ? "resume feature update" : Asu + (isAvailable ? "Open for opportunities in Toronto++" : "Unavailable");
@@ -57,7 +57,7 @@ namespace AvailStatusEmailer
           emailAddress,
           subj,
           body.Replace("{0}", nameCasing_Mc_only_so_far(firstName)).Replace("{1}", emailAddress).Replace("{2}", startDate),
-          attachmnt, @"C:\c\Lgc\Mail\AvailStatusEmailer\Resources\AlexTiny_LinkedIn.png");//@"C:\c\Lgc\Mail\AvailStatusEmailer\Resources\MCSD Logo - Latest as of 2009.gif|C:\c\Lgc\Mail\AvailStatusEmailer\Resources\linkedIn66x16.png|C:\c\Lgc\Mail\AvailStatusEmailer\Resources\AlexTiny_LinkedIn.png");
+          attachmnt, @"C:\g\GigaHunt\Src\sln\AvailStatusEmailer\Assets\AlexTiny_LinkedIn.png");//@"C:\g\GigaHunt\Src\sln\AvailStatusEmailer\Assets\MCSD Logo - Latest as of 2009.gif|C:\g\GigaHunt\Src\sln\AvailStatusEmailer\Assets\linkedIn66x16.png|C:\g\GigaHunt\Src\sln\AvailStatusEmailer\Assets\AlexTiny_LinkedIn.png");
       }
       catch (Exception ex) { ex.Pop($"{emailAddress}"); return false; }
     }
