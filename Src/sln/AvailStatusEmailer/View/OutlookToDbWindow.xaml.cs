@@ -262,7 +262,7 @@ namespace OutlookToDbWpfApp
       int ttl0 = 0, newBansAdded = 0, newEmailsAdded = 0;
       try
       {
-        var rcvdDoneFolder = _oh.GetMapiFOlder(Misc.qRcvdDone);
+        var failsDoneFolder = _oh.GetMapiFOlder(Misc.qFailsDone);
         var itemsFailes = _oh.GetItemsFromFolder(folderName);
         int prev;
         do
@@ -292,7 +292,7 @@ namespace OutlookToDbWpfApp
                   banPremanentlyInDB(ref report, ref newBansAdded, senderEmail, "Delivery failed (a) ");
                 }
 
-                OutlookHelper.moveIt(rcvdDoneFolder, reportItem);
+                OutlookHelper.moveIt(failsDoneFolder, reportItem);
               }
               else if (item is OL.MailItem mailItem)
               {
@@ -321,7 +321,7 @@ namespace OutlookToDbWpfApp
                   }
                 }
 
-                OutlookHelper.moveIt(rcvdDoneFolder, mailItem);
+                OutlookHelper.moveIt(failsDoneFolder, mailItem);
               }
               else if (Debugger.IsAttached)
                 Debugger.Break();
