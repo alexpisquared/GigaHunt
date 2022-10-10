@@ -17,7 +17,6 @@ using AsLink;
 using AvailStatusEmailer.View;
 using Db.QStats.DbModel;
 using OutlookToDbWpfApp;
-
 namespace AvailStatusEmailer
 {
   public partial class EmailersendWindow : AAV.WPF.Base.WindowBase
@@ -28,7 +27,6 @@ namespace AvailStatusEmailer
     ObservableCollection<vEMail_Avail_Prod> _obsColAvlbl;
     IEnumerable<string> _leadEmails, _leadCompns;
     string _firstName = "Sirs";
-
     public EmailersendWindow()
     {
       InitializeComponent(); themeSelector1.ApplyTheme = ApplyTheme;
@@ -130,7 +128,6 @@ namespace AvailStatusEmailer
       catch (Exception ex) { ex.Pop(); }
     }
     void populateWithSorting(IEnumerable<vEMail_Avail_Prod> rv) => _cvsEmails.Source = rv.OrderBy(r => r.LastSentAt).ThenBy(r => r.AddedAt);// <= for restarting the failed campaingn | for starting brand new campagn after a contract => .OrderByDescending(r => r.TtlSends).ThenByDescending(r => r.TtlRcvds); 
-
     void Save()
     {
       try
@@ -312,9 +309,7 @@ namespace AvailStatusEmailer
       if (btMax != null && int.TryParse(tbMax?.Text, out _))
         btMax.Content = $"Top {tbMax.Text} rows";
     }
-
     void OnGetNameFromEmail(object s, RoutedEventArgs e) => tbName.Text = new Helpers.FirstLastNameParser(((TextBox)s).Text).FirstName;
-
     void cbMail_SelectionChanged(object s, SelectionChangedEventArgs e)
     {
       if (tbMail != null)
