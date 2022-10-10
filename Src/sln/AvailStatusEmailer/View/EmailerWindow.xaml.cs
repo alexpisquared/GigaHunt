@@ -131,7 +131,7 @@ namespace AvailStatusEmailer
     }
     void populateWithSorting(IEnumerable<vEMail_Avail_Prod> rv) => _cvsEmails.Source = rv.OrderBy(r => r.LastSentAt).ThenBy(r => r.AddedAt);// <= for restarting the failed campaingn | for starting brand new campagn after a contract => .OrderByDescending(r => r.TtlSends).ThenByDescending(r => r.TtlRcvds); 
 
-    void save()
+    void Save()
     {
       try
       {
@@ -148,7 +148,7 @@ namespace AvailStatusEmailer
       }
       catch (Exception ex) { ex.Pop(); }
     }
-    void reFresh()
+    void ReFresh()
     {
       try
       {
@@ -161,7 +161,7 @@ namespace AvailStatusEmailer
       }
       catch (Exception ex) { ex.Pop(); }
     }
-    void enableControls(bool b) => ZommablePanel.IsEnabled = ctrlPanelOnMarket.IsEnabled = ctrlPanelOffMarket.IsEnabled = b;
+    void EnableControls(bool b) => ZommablePanel.IsEnabled = ctrlPanelOnMarket.IsEnabled = ctrlPanelOffMarket.IsEnabled = b;
     async void onLoaded(object s, RoutedEventArgs e)
     {
       tbkTitle.Text = Title = await reLoad();
@@ -199,7 +199,7 @@ namespace AvailStatusEmailer
       {
         Bpr.Beep1of2();
 
-        enableControls(false);
+        EnableControls(false);
 
         var text = tbMail.Text;
         if (string.IsNullOrEmpty(text)) return;
@@ -214,12 +214,12 @@ namespace AvailStatusEmailer
       finally
       {
         tbkTitle.Text = $"{(scs ? "Success" : "Failure")}  sending to  {tbMail.Text}";
-        enableControls(true);
+        EnableControls(true);
         Bpr.Beep2of2();
       }
     }
-    void btnSave_Click(object s, RoutedEventArgs e) => save();
-    void onRefresh(object s, RoutedEventArgs e) => reFresh();
+    void btnSave_Click(object s, RoutedEventArgs e) => Save();
+    void onRefresh(object s, RoutedEventArgs e) => ReFresh();
     async void onReLoad(object s, RoutedEventArgs e) => tbkTitle.Text = Title = await reLoad();
     void onClear(object s, RoutedEventArgs e) => _obsColAvlbl.Clear();
     void btnBroadcastTopN_Click(object s, RoutedEventArgs e)
@@ -250,7 +250,7 @@ namespace AvailStatusEmailer
 
         App.SpeakAsync(tbkTitle.Text = $"Sending {cnt} letters. Anti Spam delay set to {antiSpamBlockListPauseInMs * .001:N0} sec. ETA {cnt * antiSpamBlockListPauseInMs * .001 / 60.0:N0} minutes.");
 
-        enableControls(false);
+        EnableControls(false);
         var sw = Stopwatch.StartNew();
         foreach (var em in vEMail_Avail_DevDataGrid.SelectedItems)
         {
@@ -292,7 +292,7 @@ namespace AvailStatusEmailer
         var qsn = string.Format("Send letter to these {0} selected addresses?", vEMail_UnAvl_DevDataGrid.SelectedItems.Count);
         //if (MessageBox.Show(lst, qsn, MessageBoxButton.YesNoCancel, MessageBoxImage.Question) == MessageBoxResult.Yes)
         {
-          enableControls(false);
+          EnableControls(false);
           //WindowState = System.Windows.WindowState.Minimized;
           foreach (var em in vEMail_UnAvl_DevDataGrid.SelectedItems) _ = await QStatusBroadcaster.SendLetter_UpdateDb(false, ((vEMail_UnAvl_Prod)em).ID, ((vEMail_UnAvl_Prod)em).FName);
           Close();
@@ -305,7 +305,7 @@ namespace AvailStatusEmailer
     {
       //load(chkIsAvailable.IsChecked == true);
     }
-    void onTglTest(object s, RoutedEventArgs e) => enableControls(((ToggleButton)s).IsChecked == false);
+    void onTglTest(object s, RoutedEventArgs e) => EnableControls(((ToggleButton)s).IsChecked == false);
     void onAgentsEdit(object s, RoutedEventArgs e) => new AgentAdminnWindow().Show(); // a special case for paralel acces to agents
     void tbMax_TextChanged(object s, TextChangedEventArgs e)
     {
