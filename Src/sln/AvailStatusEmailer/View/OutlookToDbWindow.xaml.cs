@@ -602,12 +602,12 @@ namespace OutlookToDbWpfApp
         {
           emr.PermBanReason += (rsn + App.Now.ToString("yyyy-MM-dd"));
           emr.ModifiedAt = App.Now;
-          rv += ($"{Misc.qFail,-15}  {email,-60}\tnew reason: {rsn}\n");
+          rv += ($"{Misc.qFail,-15}  {email,-48}banned since: {rsn}\n");
           newBansAdded++;
         }
         else if (emr.PermBanReason.Contains(rsn)) // same reason already there
         {
-          rv += ($"{Misc.qFail,-15}  {email,-60}\talready banned with the same reason: {rsn}\n");
+          rv += ($"{Misc.qFail,-15}  {email,-48}banned before with the same reason: {rsn}\n");
         }
         else
         {
