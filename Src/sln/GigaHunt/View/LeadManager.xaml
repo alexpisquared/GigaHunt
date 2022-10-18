@@ -1,0 +1,207 @@
+﻿<lnk:WindowBase xmlns:lnk="clr-namespace:WpfUserControlLib.Base;assembly=WpfUserControlLib" x:Name="wnd" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:Models="clr-namespace:Db.QStats.DbModel;assembly=Db.QStats" mc:Ignorable="d" x:Class="AvailStatusEmailer.LeadManagerWindow" 
+                xmlns:cmn="clr-namespace:AvailStatusEmailer"
+                xmlns:View="clr-namespace:AvailStatusEmailer.View" 
+                xmlns:AavWpfVw="clr-namespace:WpfUserControlLib.View;assembly=WpfUserControlLib"                
+                Title="LeadManager" Height="700" Width="1200" Loaded="onLoaded" 
+                Style="{StaticResource WindowStyle_Aav0}" >
+  <WindowChrome.WindowChrome>
+    <WindowChrome CaptionHeight="0" ResizeBorderThickness="10" />
+  </WindowChrome.WindowChrome>
+  <lnk:WindowBase.Resources>
+    <ResourceDictionary >
+      <ResourceDictionary.MergedDictionaries>
+        <!--
+        <ResourceDictionary Source="/AAV.AsLink.WPF;component/AsLink/Theme.Color.Lite.VaporWave.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Lite.VaporWave.xaml" />
+        -->
+        <ResourceDictionary Source="/WpfUserControlLib;component/Base/DataGrid.Base.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/Base/BasicDefaultsLayout.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+
+      <CollectionViewSource x:Key="eMailViewSource"         d:DesignSource="{d:DesignInstance {x:Type Models:Email}, CreateList=True}"/>
+      <CollectionViewSource x:Key="lkuLeadStatuViewSource"  d:DesignSource="{d:DesignInstance {x:Type Models:lkuLeadStatu}, CreateList=True}"/>
+      <CollectionViewSource x:Key="leadViewSource"          d:DesignSource="{d:DesignInstance {x:Type Models:Lead}, CreateList=True}"/>
+    </ResourceDictionary>
+  </lnk:WindowBase.Resources>
+  <Border Style="{StaticResource BorderStyle_Aav0}" CornerRadius="10" BorderThickness="1" >
+    <Grid DataContext="{StaticResource leadViewSource}" Margin="5" x:Name="ZommablePanel" >
+      <Grid.LayoutTransform>
+        <TransformGroup>
+          <ScaleTransform ScaleX="{Binding ZV, ElementName=wnd, FallbackValue=1}" ScaleY="{Binding ZV, ElementName=wnd, FallbackValue=1}" />
+        </TransformGroup>
+      </Grid.LayoutTransform>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+
+      <Grid Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Name="ctrlPnl" >
+        <Grid.Resources>
+          <Style TargetType="Button" >
+            <Setter Property="Margin"   Value="15 0" />
+            <Setter Property="Padding"  Value="5" />
+          </Style>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock HorizontalAlignment="Right" Margin="0 -5" FontSize="43" FontFamily="Ink Free" FontWeight="ExtraBold" Foreground="#41c1" Text="Leads  " Grid.ColumnSpan="5" />
+        <TextBlock  Margin="-35,8,0,0"                       FontSize="23" FontFamily="Ink Free" FontWeight="ExtraBold" Foreground="#A1c1" Text="Leads " RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" HorizontalAlignment="Left" d:LayoutOverrides="VerticalAlignment, LeftMargin, RightMargin">
+          <TextBlock.RenderTransform>
+            <RotateTransform Angle="-90"/>
+          </TextBlock.RenderTransform>
+        </TextBlock>
+
+
+        <TextBlock  Grid.Column="3" x:Name="tbkTitle"  HorizontalAlignment="Center" TextWrapping="Wrap" Text="Info" />
+        <StackPanel Grid.ColumnSpan="4" Orientation="Horizontal" VerticalAlignment="Center" Margin="6,0">
+
+          <StackPanel Orientation="Horizontal">
+            <Label Content="_F" Target="{Binding ElementName=tbFilter}" HorizontalAlignment="Left" />
+            <TextBox Width="80" FontSize="16" TextChanged="onFilter" Name="tbFilter" />
+            <CheckBox Content="+_Closed " Checked="onFilter" Unchecked="onFilter" Name="cbInclAll" Margin="0" />
+          </StackPanel>
+
+          <Button Content="_New " Click="onAddNewLead" Foreground="#f80" ToolTip="Add _New Lead" />
+          <Button Content="_Save" Click="onSave" />
+
+          <View:MainSwitchboardUsrCtrl VizLeads="Collapsed" Margin="15 0"/>
+          <AavWpfVw:ThemeSelectorUsrCtrl Grid.Column="4" x:Name="themeSelector1"/>
+
+        </StackPanel>
+      </Grid>
+
+      <DataGrid CanUserAddRows="True" ItemsSource="{Binding}" Grid.Row="1" x:Name="dgLeads" RowHeight="21" 
+                InitializingNewItem="onInitNewItem"
+                IsReadOnly="False" Margin="-1,0,1,0">
+        <DataGrid.Resources>
+          <DataTemplate x:Key="DateTemplate" >
+          </DataTemplate>
+        </DataGrid.Resources>
+        <DataGrid.Columns>
+          <DataGridTextColumn Binding="{Binding AgentName}"       Header="Agent"  Width="Auto"/>
+          <DataGridTemplateColumn                                 Header="Agency" Width="90" SortMemberPath="Agency">
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding Agency}" Foreground="{Binding HourlyRate, Converter={cmn:UniConverter}}" FontWeight="Medium" />
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+          <DataGridTemplateColumn  Header="Rate" Width="Auto" SortMemberPath="HourlyRate">
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <TextBox Text="{Binding Path='HourlyRate'}" TextAlignment="Center" Foreground="{Binding Path='HourlyRate', Converter={cmn:UniConverter}}" FontWeight="Bold" Background="Transparent" BorderThickness="0" />
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+
+          <DataGridTextColumn Binding="{Binding RoleTitle}"       Header="Job# (role title)"		FontWeight="SemiBold" />
+          <DataGridTextColumn Binding="{Binding RoleDescription}" Header="Role Description"     Width="*"/>
+
+          <DataGridTextColumn Binding="{Binding OppCompany}"      Header="Company"   />
+          <DataGridTextColumn Binding="{Binding OppAddress}"      Header="Address"   Width="140" />
+          <DataGridTextColumn Binding="{Binding AddedAt, Converter={cmn:UniConverter}}"	Header="Added"     IsReadOnly="True" FontWeight="SemiBold" Foreground="Green" SortDirection="Ascending" />
+          <DataGridTextColumn Binding="{Binding Status}"          Header="Status"    Width="Auto" ElementStyle="{StaticResource CenterAlignStyle}"  Foreground="Blue" />
+
+          <DataGridTemplateColumn                                 Header="Act" Width="Auto">
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <Button Content="Close" Click="onCloseTheLead" Height="22" Margin="3 -4" Padding="0 -9" Foreground="{Binding Path='HourlyRate', Converter={cmn:UniConverter}}" FontWeight="Bold" />
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+
+          <!--
+          <DataGridTextColumn Binding="{Binding AgentEmailId}"    Header="Agent Email"			Width="120" IsReadOnly="True"/>
+          <DataGridTextColumn Binding="{Binding MarketVenue}"     Header="MrktVenue" Width="Auto"/>
+          <DataGridTextColumn Binding="{Binding Note}"            Header="Note"      Width="*"/>
+          <DataGridTextColumn Binding="{Binding Priority}"        Header="Priority"  Width="Auto" FontWeight="Bold" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="OrangeRed" />
+          <DataGridTextColumn Binding="{Binding OfficiallySubmittedAt, StringFormat={}{0:MMM-d}}" Header="Submitted" IsReadOnly="True" FontWeight="SemiBold" Foreground="Brown" />
+          <DataGridTextColumn Binding="{Binding InterviewedAt, Converter={cmn:UniConverter}}" Header="Intervwd"  IsReadOnly="True" FontWeight="SemiBold" Foreground="Red" />
+          -->
+
+        </DataGrid.Columns>
+      </DataGrid>
+
+      <Grid Grid.Row="2" >
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="260*"/>
+          <ColumnDefinition Width="120"/>
+          <ColumnDefinition Width="200*"/>
+          <ColumnDefinition Width="120"/>
+          <ColumnDefinition Width="100*"/>
+          <ColumnDefinition Width="120"/>
+          <ColumnDefinition Width="100"/>
+          <ColumnDefinition Width="070"/>
+          <ColumnDefinition Width="070"/>
+          <ColumnDefinition Width="8"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="5"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <AccessText Text="Agent Name"     Grid.Column="2" Grid.Row="1" />
+        <TextBlock                       Grid.Column="3" Grid.Row="1" Text="{Binding AgentName,       Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" FontSize="16"/>
+        <AccessText Text="Agency"         Grid.Column="4" Grid.Row="1" />
+        <TextBlock                       Grid.Column="5" Grid.Row="1" Text="{Binding Agency,          Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" FontSize="16"/>
+
+        <Label    Grid.Column="0" Grid.Row="1"     Target="{Binding ElementName=cbxAgentEmail}" Content="Agent E_mail" />
+        <ComboBox Grid.Column="1" Grid.Row="1" Height="22" Margin="0,2" x:Name="cbxAgentEmail"
+                  IsEditable="True" SelectionChanged="onAgentEmailSelectionChanged" 
+                  ItemsSource="{Binding Source={StaticResource eMailViewSource}}" DisplayMemberPath="ID" SelectedValuePath="ID" SelectedValue="{Binding AgentEmailId, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" >
+          <ComboBox.ItemsPanel>
+            <ItemsPanelTemplate>
+              <VirtualizingStackPanel/>
+            </ItemsPanelTemplate>
+          </ComboBox.ItemsPanel>
+        </ComboBox>
+        <AccessText Text="Job# (role title)"     Grid.Column="0" Grid.Row="2" />
+        <TextBox                         Grid.Column="1" Grid.Row="2" Text="{Binding RoleTitle,       Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Stretch" Margin="0,4" />
+        <AccessText Text="Client"				 Grid.Column="0" Grid.Row="3" />
+        <TextBox                         Grid.Column="1" Grid.Row="3" Text="{Binding OppCompany,      Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Stretch" Margin="0,4" />
+
+        <AccessText Text="Role Desc-n"    Grid.Column="2" Grid.Row="2" />
+        <TextBox                         Grid.Column="3" Grid.Row="2" Text="{Binding RoleDescription, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Stretch" Margin="0,4" />
+        <AccessText Text="Address"        Grid.Column="2" Grid.Row="3" />
+        <TextBox                         Grid.Column="3" Grid.Row="3" Text="{Binding OppAddress,      Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Stretch" Margin="0,4" />
+
+        <AccessText Text="Market _Venue"  Grid.Column="4" Grid.Row="2"  />
+        <TextBox                          Grid.Column="5" Grid.Row="2" Text="{Binding MarketVenue,     Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Stretch" Margin="0,4" />
+        <Label Content="Stat_us"          Grid.Column="4" Grid.Row="3" Target="{Binding ElementName=cbStatus}" />
+        <ComboBox                         Grid.Column="5" Grid.Row="3" DisplayMemberPath="Name" ItemsSource="{Binding Source={StaticResource lkuLeadStatuViewSource}}" SelectedValuePath="ID" SelectedValue="{Binding Status, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" Margin="0,2"  Name="cbStatus" />
+        <!--
+        <AccessText Text="Priority"       Grid.Column="6" Grid.Row="2" />      
+        <TextBox                          Grid.Column="7" Grid.Row="2" Text="{Binding Priority,        Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Stretch" Margin="0,4" />-->
+
+
+        <Label Content="A_dded"           Grid.Column="6" Grid.Row="1" Target="{Binding ElementName=dpAdAt}" />
+        <DatePicker                       Grid.Column="7" Grid.Row="1" SelectedDate="{Binding AddedAt,               Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="0,1" Width="102"  Name="dpAdAt" />
+        <Label Content="Sub_mitted"       Grid.Column="6" Grid.Row="2" Target="{Binding ElementName=dpAdAt2}" />
+        <DatePicker                       Grid.Column="7" Grid.Row="2" SelectedDate="{Binding OfficiallySubmittedAt, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="0,1" Width="102"  Name="dpAdAt2" />
+        <Label Content="_Interviewed"     Grid.Column="6" Grid.Row="3" Target="{Binding ElementName=dpAdAt3}" />
+        <DatePicker                       Grid.Column="7" Grid.Row="3" SelectedDate="{Binding InterviewedAt,         Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="0,1" Width="102"  Name="dpAdAt3" />
+
+        <Label Content="$$/_hr"          Grid.Column="8" Grid.Row="1" Target="{Binding ElementName=tbHR}" />
+        <TextBox FontSize="16"            Grid.Column="9" Grid.Row="1" Text="{Binding HourlyRate,      Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  FontWeight="ExtraBold" Foreground="{Binding Path='HourlyRate', Converter={cmn:UniConverter}}" Name="tbHR"/>
+
+        <TextBox                          Grid.Column="0" Grid.Row="5" Text="{Binding Note,                          Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" Grid.ColumnSpan="11" TextWrapping="WrapWithOverflow" VerticalAlignment="Stretch" SpellCheck.IsEnabled="True" AcceptsReturn="True" x:Name="tbxNote" />
+      </Grid>
+
+      <GridSplitter Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Margin="0 3 0 -3" Height="6" />
+
+    </Grid>
+  </Border>
+</lnk:WindowBase>

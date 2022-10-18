@@ -22,7 +22,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="..\..\..\..\..\c\AsLink\DB\DbSaveMsgBox.cs" Link="AsLink\DbSaveMsgBox.cs" />
+    <Compile Include="..\..\..\..\..\C\AsLink\Mail\OutlookHelper.cs" Link="AsLink\OutlookHelper.cs" />
+    <Compile Include="..\..\..\..\..\C\AsLink\Serializer.cs" Link="AsLink\Serializer.cs" />
     <Compile Include="..\..\..\..\..\c\AsLink\Serializer.String.cs" Link="Serializer.String.cs" />
+    <Compile Include="..\..\..\..\..\C\AsLink\Win32\Ext.DbContext.cs" Link="AsLink\Ext.DbContext.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,7 +45,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net.CI\WpfUserControlLib\WpfUserControlLib.csproj" />
     <ProjectReference Include="..\DB.QStats.Std\DB.QStats.Std.csproj" />
   </ItemGroup>
 
