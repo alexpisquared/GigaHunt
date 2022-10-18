@@ -28,11 +28,11 @@ namespace GigaHunt
         tbver.Text = $"Db: {_db.ServerDatabase()}        Ver: ???";
         if (chkIsAvailable.IsChecked == true)
         {
-          await _db.VEmailAvailProd.LoadAsync();                                    /**/  Debug.WriteLine($">>>    Loaded   EmlVw   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
+          await _db.VEmailAvailProds.LoadAsync();                                    /**/  Debug.WriteLine($">>>    Loaded   EmlVw   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
           await _db.Leads.OrderByDescending(r => r.AddedAt).LoadAsync();              /**/  Debug.WriteLine($">>>    Loaded   Leads   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
           _leadEmails = _db.Leads.Local.Select(r => r.AgentEmailId).Distinct();       /**/  Debug.WriteLine($">>>    Loaded  LeadEm   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
           _leadCompns = _db.Leads.Local.Select(r => r.Agency).Distinct();             /**/  Debug.WriteLine($">>>    Loaded  LeadCo   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
-          _obsColAvlbl = _db.VEmailAvailProd.Local;
+          _obsColAvlbl = _db.VEmailAvailProds.Local;
 
           _cvsEmails = (CollectionViewSource)FindResource("vsEMail_Avail");
           _cvsEmails.Source = null;
@@ -40,14 +40,14 @@ namespace GigaHunt
         }
         else
         {
-          await _db.VEmailUnAvlProd.OrderByDescending(r => r.AddedAt).LoadAsync();
+          await _db.VEmailUnAvlProds.OrderByDescending(r => r.AddedAt).LoadAsync();
 
           _cvsEmails = (CollectionViewSource)FindResource("vsEMail_UnAvl");
           _cvsEmails.Source = null;
-          _cvsEmails.Source = _db.VEmailUnAvlProd.Local.OrderByDescending(r => r.AddedAt);
+          _cvsEmails.Source = _db.VEmailUnAvlProds.Local.OrderByDescending(r => r.AddedAt);
         }
 
-        var ttl = chkIsAvailable.IsChecked == true ? _obsColAvlbl.Count : _db.VEmailUnAvlProd.Local.Count;
+        var ttl = chkIsAvailable.IsChecked == true ? _obsColAvlbl.Count : _db.VEmailUnAvlProds.Local.Count;
 
         btMax.Content = $"Top {tbMax.Text = $"{(int)Math.Min(ttl * _fractionToSend, _absoluteMax)}"} rows";
         return string.Format("Total {0} unused records loaded in {1:N1}", ttl, lswTtl.Elapsed.TotalSeconds);
@@ -105,7 +105,7 @@ namespace GigaHunt
         }
 
         populateWithSorting(rv);
-        tbkTitle.Text = $"Total agents/emails  {rv.Count()} / {_db.EHists.Local.Count()}  filtered in  {sw.Elapsed.TotalSeconds:N2} s.  {_db.GetDbChangesReport(3).Replace("\n", "")}";
+        tbkTitle.Text = $"Total agents/emails  {rv.Count()} / {_db.Ehists.Local.Count()}  filtered in  {sw.Elapsed.TotalSeconds:N2} s.  {_db.GetDbChangesReport(3).Replace("\n", "")}";
         sw.Stop();
       }
       catch (Exception ex) { ex.Pop(); }

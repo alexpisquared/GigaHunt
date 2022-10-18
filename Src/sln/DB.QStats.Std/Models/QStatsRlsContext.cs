@@ -45,6 +45,7 @@ namespace DB.QStats.Std.Models
 
     public static QStatsRlsContext Create() => throw new NotImplementedException();
     public object GetDbChangesReport(int v) => throw new NotImplementedException();
+    public object ServerDatabase() => throw new NotImplementedException();
     public Task TrySaveReportAsync(string v) => throw new NotImplementedException();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

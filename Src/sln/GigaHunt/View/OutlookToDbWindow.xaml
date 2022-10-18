@@ -2,7 +2,7 @@
                 Title="Outlook To Db" Height="240" Width="1200" Loaded="onLoaded" 
                 Icon="/GigaHunt;component/Assets/MailBroadCast.DeliveryFailed.ico" 
                 xmlns:View="clr-namespace:GigaHunt.View" 
-                xmlns:AavWpfVw="clr-namespace:WpfUserControlLib.View;assembly=WpfUserControlLib"                                
+                xmlns:AavWpfVw="clr-namespace:WpfUserControlLib.Views;assembly=WpfUserControlLib"                                
                 Style="{StaticResource WindowStyle_Aav0}">
   <lnk:WindowBase.Resources>
     <ResourceDictionary >

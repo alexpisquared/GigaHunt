@@ -36,7 +36,7 @@ namespace GigaHunt
       {
         var gt = timeRecdSent.AddMinutes(-5);
         var lt = timeRecdSent.AddMinutes(+5);         //var ch = isRcvd ? ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.Id) : ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.Id); if (ch.Count() < 1)
-        var eh = _db.Ehists./*Local.*/FirstOrDefault(p => p.RecivedOrSent == (isRcvd ? "R" : "S") && p.EMailID == em.Id && gt < p.EmailedAt && p.EmailedAt < lt);
+        var eh = _db.Ehists./*Local.*/FirstOrDefault(p => p.RecivedOrSent == (isRcvd ? "R" : "S") && p.EmailId == em.Id && gt < p.EmailedAt && p.EmailedAt < lt);
         if (eh == null)
         {
           var newEH = new Ehist { RecivedOrSent = (isRcvd ? "R" : "S"), Email = em, LetterBody = body, LetterSubject = subject, AddedAt = _now, Notes = note, EmailedAt = timeRecdSent };

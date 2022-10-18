@@ -2,7 +2,7 @@
                 xmlns:Models="clr-namespace:DB.QStats.Std.DbModel;assembly=DB.QStats.Std" mc:Ignorable="d"  x:Class="GigaHunt.EmailersendWindow" Title="EmailerWindow" Height="350" Width="1525" Loaded="onLoaded" 
                 xmlns:View="clr-namespace:GigaHunt.View" 
                 xmlns:cmn="clr-namespace:GigaHunt"
-                xmlns:AavWpfVw="clr-namespace:WpfUserControlLib.View;assembly=WpfUserControlLib"
+                xmlns:AavWpfVw="clr-namespace:WpfUserControlLib.Views;assembly=WpfUserControlLib"
                 Style="{StaticResource WindowStyle_Aav0}">
   <WindowChrome.WindowChrome>
     <WindowChrome CaptionHeight="0" ResizeBorderThickness="10" />
