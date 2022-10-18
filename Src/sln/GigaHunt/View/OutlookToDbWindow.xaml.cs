@@ -1,9 +1,9 @@
 ﻿using WpfUserControlLib.Ext;
 using AgentFastAdmin;
 using AsLink;
-using AvailStatusEmailer;
-using AvailStatusEmailer.View;
-using Db.QStats.DbModel;
+using GigaHunt;
+using GigaHunt.View;
+using DB.QStats.Std.DbModel;
 using System;
 using System.Data.Entity;
 using System.Diagnostics;
@@ -381,7 +381,7 @@ namespace OutlookToDbWpfApp
 
                 if (App.Now > mailItem.ReceivedTime.AddDays(10)) // bad place ... but!
                 {
-                  var fnm = _db.Emails.Find(mailItem.SenderEmailAddress)?.FName ?? OutlookHelper.figureOutSenderFLName(mailItem, mailItem.SenderEmailAddress).Item1;
+                  var fnm = _db.Emails.Find(mailItem.SenderEmailAddress)?.Fname ?? OutlookHelper.figureOutSenderFLName(mailItem, mailItem.SenderEmailAddress).Item1;
                   var scs = await QStatusBroadcaster.SendLetter_UpdateDb(true, mailItem.SenderEmailAddress, fnm);
                   if (scs)
                     OutlookHelper.moveIt(rcvdDoneFolder, mailItem);
@@ -540,7 +540,7 @@ namespace OutlookToDbWpfApp
           _db.Agencies.Add(new Agency
           {
             Id = agency.Length > maxLen ? agency.Substring(agency.Length - maxLen, maxLen) : agency,
-            AddedAt = AvailStatusEmailer.App.Now
+            AddedAt = GigaHunt.App.Now
           });
         }
 
@@ -551,7 +551,7 @@ namespace OutlookToDbWpfApp
           Fname = firstName,
           Lname = lastName,
           Notes = notes,
-          AddedAt = AvailStatusEmailer.App.Now,
+          AddedAt = GigaHunt.App.Now,
           ReSendAfter = null,
           NotifyPriority = 99
         });
@@ -567,8 +567,8 @@ namespace OutlookToDbWpfApp
       try
       {
         var gt = timeRecdSent.AddMinutes(-5);
-        var lt = timeRecdSent.AddMinutes(+5);         //var ch = isRcvd ? ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.ID) : ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.ID); if (ch.Count() < 1)
-        var eh = _db.EHists./*Local.*/FirstOrDefault(p => p.RecivedOrSent == rs && p.EMailID == em.ID && gt < p.EmailedAt && p.EmailedAt < lt);
+        var lt = timeRecdSent.AddMinutes(+5);         //var ch = isRcvd ? ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.Id) : ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.Id); if (ch.Count() < 1)
+        var eh = _db.EHists./*Local.*/FirstOrDefault(p => p.RecivedOrSent == rs && p.EMailID == em.Id && gt < p.EmailedAt && p.EmailedAt < lt);
         if (eh == null)
         {
           var newEH = new Ehist
@@ -577,7 +577,7 @@ namespace OutlookToDbWpfApp
             Email = em,
             LetterBody = string.IsNullOrEmpty(body) ? "" : body.Replace("\n\n\n", "\n\n").Replace("\n\n", "\n").Replace("\r\n\r\n\r\n", "\n\n").Replace("\r\n\r\n", "\n"),
             LetterSubject = subject,
-            AddedAt = AvailStatusEmailer.App.Now,
+            AddedAt = GigaHunt.App.Now,
             Notes = "",
             EmailedAt = timeRecdSent
           };

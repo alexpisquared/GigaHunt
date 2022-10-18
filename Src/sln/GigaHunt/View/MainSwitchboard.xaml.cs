@@ -1,11 +1,11 @@
 ﻿using AAV.Sys.Helpers;
-using AvailStatusEmailer.View;
-using Db.QStats.DbModel;
+using GigaHunt.View;
+using DB.QStats.Std.DbModel;
 using System.Data.Entity;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace AvailStatusEmailer
+namespace GigaHunt
 {
   public partial class MainSwitchboard : WpfUserControlLib.Base.WindowBase
   {
@@ -14,7 +14,7 @@ namespace AvailStatusEmailer
       InitializeComponent(); 
       themeSelector1.ApplyTheme = ApplyTheme;
 
-      tbver.Text = $"Db: {Db.QStats.DbModel.QStatsRlsContext.DbNameOnly}        Ver: ???";
+      tbver.Text = $"Db: {DB.QStats.Std.DbModel.QStatsRlsContext.DbNameOnly}        Ver: ???";
 
       Task.Run(() => QStatsRlsContext.Create().lkuLeadStatus.Load()); // preload to ini the EF for faster loads in views.
 

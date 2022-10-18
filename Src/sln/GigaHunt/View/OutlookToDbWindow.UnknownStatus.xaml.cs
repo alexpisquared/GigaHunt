@@ -1,8 +1,6 @@
 ﻿using AsLink;
-using AvailStatusEmailer.Helpers;
-using Db.QStats.DbModel;
+using GigaHunt.Helpers;
 using System;
-using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -10,13 +8,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using Outlook = Microsoft.Office.Interop.Outlook;
 
-namespace AvailStatusEmailer
+namespace GigaHunt
 {
   public partial class OutlookToDbWindowUnkn : WpfUserControlLib.Base.WindowBase
   {
     readonly QStatsRlsContext _db = QStatsRlsContext.Create();
     const string note = "note3";
-    readonly DateTime _now = AvailStatusEmailer.App.Now;
+    readonly DateTime _now = GigaHunt.App.Now;
 
     public OutlookToDbWindowUnkn() { InitializeComponent(); themeSelector1._applyTheme = ApplyTheme; }
 
@@ -24,25 +22,25 @@ namespace AvailStatusEmailer
 
     async System.Threading.Tasks.Task checkInsertEMailAndEHistAsync(string email, string flName, string subject, string body, DateTime timeRecdSent, bool isRcvd)
     {
-      //var v1 = ctx.EMails.ToList().Find(p => p.ID == email);
-      //var v2 = ctx.EMails.ToList().FirstOrDefault(p => p.ID == email);
-      //var v4 = ctx.EMails.Where(p => p.ID == email);
-      var em = _db.EMails.Find(email);
+      //var v1 = ctx.Emails.ToList().Find(p => p.Id == email);
+      //var v2 = ctx.Emails.ToList().FirstOrDefault(p => p.Id == email);
+      //var v4 = ctx.Emails.Where(p => p.Id == email);
+      var em = _db.Emails.Find(email);
       if (em == null)
       {
-        em = _db.EMails.Add(new Email { ID = email, Company = getCompanyName(email), FName = new FirstLastNameParser(flName).FirstName, LName = new FirstLastNameParser(flName).LastName, Notes = note, AddedAt = _now });
+        em = _db.Emails.Add(new Email { Id = email, Company = getCompanyName(email), Fname = new FirstLastNameParser(flName).FirstName, Lname = new FirstLastNameParser(flName).LastName, Notes = note, AddedAt = _now });
         await _db.TrySaveReportAsync("OutlookToDb.cs");
       }
       //insertEMailEHistItem(isRcvd, timeRecdSent, em, subject, body);		}		void insertEMailEHistItem(bool isRcvd, DateTime timeRecdSent, Email em, string subject, string body)		{
       try
       {
         var gt = timeRecdSent.AddMinutes(-5);
-        var lt = timeRecdSent.AddMinutes(+5);         //var ch = isRcvd ? ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.ID) : ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.ID); if (ch.Count() < 1)
-        var eh = _db.EHists./*Local.*/FirstOrDefault(p => p.RecivedOrSent == (isRcvd ? "R" : "S") && p.EMailID == em.ID && gt < p.EmailedAt && p.EmailedAt < lt);
+        var lt = timeRecdSent.AddMinutes(+5);         //var ch = isRcvd ? ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.Id) : ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.Id); if (ch.Count() < 1)
+        var eh = _db.Ehists./*Local.*/FirstOrDefault(p => p.RecivedOrSent == (isRcvd ? "R" : "S") && p.EMailID == em.Id && gt < p.EmailedAt && p.EmailedAt < lt);
         if (eh == null)
         {
-          var newEH = new EHist { RecivedOrSent = (isRcvd ? "R" : "S"), Email = em, LetterBody = body, LetterSubject = subject, AddedAt = _now, Notes = note, EmailedAt = timeRecdSent };
-          var newCH2 = _db.EHists.Add(newEH);
+          var newEH = new Ehist { RecivedOrSent = (isRcvd ? "R" : "S"), Email = em, LetterBody = body, LetterSubject = subject, AddedAt = _now, Notes = note, EmailedAt = timeRecdSent };
+          var newCH2 = _db.Ehists.Add(newEH);
         }
       }
       catch (Exception ex) { ex.Pop(); ; }
@@ -89,7 +87,7 @@ namespace AvailStatusEmailer
     }
     void loadVwSrcs(System.DateTime before)
     {
-      //((CollectionViewSource)(FindResource("eMailVwSrc"))).Source = ctx.EMails.Where(p => p.AddedAt >= before).ToList();
+      //((CollectionViewSource)(FindResource("eMailVwSrc"))).Source = ctx.Emails.Where(p => p.AddedAt >= before).ToList();
       //((CollectionViewSource)(FindResource("eMailVwSrc"))).View.MoveCurrentTo(null);
       //((CollectionViewSource)(FindResource("eHistVwSrc"))).Source = ctx.EHists.Where(p => p.AddedAt >= before).ToList();
       //((CollectionViewSource)(FindResource("eHistVwSrc"))).View.MoveCurrentTo(null);
@@ -100,8 +98,8 @@ namespace AvailStatusEmailer
       {
         var sw = Stopwatch.StartNew();
 
-        _db.EMails.Load();
-        _db.EHists.Load();
+        _db.Emails.Load();
+        _db.Ehists.Load();
 
         await outlookFolderToDbAsync(Misc.qRcvd);
         await outlookFolderToDbAsync(Misc.qSent);

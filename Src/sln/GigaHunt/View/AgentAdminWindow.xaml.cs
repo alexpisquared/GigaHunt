@@ -47,12 +47,12 @@
       var lsw = Stopwatch.StartNew();
       try
       {
-        await _db.EMails.OrderByDescending(r => r.AddedAt).OrderBy(r => r.Notes).LoadAsync(); /**/  Debug.WriteLine($">>> Loaded  EMails   {lsw.ElapsedMilliseconds,6:N0} ms");
+        await _db.Emails.OrderByDescending(r => r.AddedAt).OrderBy(r => r.Notes).LoadAsync(); /**/  Debug.WriteLine($">>> Loaded  Emails   {lsw.ElapsedMilliseconds,6:N0} ms");
         await _db.Ehists.OrderByDescending(r => r.EmailedAt).LoadAsync();                     /**/  Debug.WriteLine($">>> Loaded  Ehists   {lsw.ElapsedMilliseconds,6:N0} ms"); //tu: that seems to order results in the secondary table where there is no control of roder available. Jul-2019
         await _db.Leads.OrderByDescending(r => r.AddedAt).LoadAsync();                        /**/  Debug.WriteLine($">>> Loaded   Leads   {lsw.ElapsedMilliseconds,6:N0} ms");
         _leadEmails = _db.Leads.Local.Select(r => r.AgentEmailId).Distinct();                 /**/  Debug.WriteLine($">>> Loaded  LeadEm   {lsw.ElapsedMilliseconds,6:N0} ms");
         _leadCompns = _db.Leads.Local.Select(r => r.Agency).Distinct();                       /**/  Debug.WriteLine($">>> Loaded  LeadCo   {lsw.ElapsedMilliseconds,6:N0} ms");
-        _badEmails = _db.Database.SqlQuery<string>("Select ID from [dbo].[BadEmails]()").ToList();
+        _badEmails = _db.Database.SqlQuery<string>("Select Id from [dbo].[BadEmails]()").ToList();
 
         _isLoaded = true;
         var fsw = srchFilter();                                                               /**/  Debug.WriteLine($">>> Loaded  Filter   {lsw.ElapsedMilliseconds,6:N0} ms  ({fsw.TotalMilliseconds:N0})");
@@ -76,17 +76,17 @@
       var srchToLwr = Srch.ToLower();
       try
       {
-        var emails = _db.EMails.Local.Where(r =>
-          (cbAll.IsChecked == true || (string.IsNullOrEmpty(r.PermBanReason) && !_badEmails.Contains(r.ID))) && //todo: PermBanReason == '' still treated as BANNED!!!  HAS BEEN FIXED !!! on Sep 29, 2019.
-          (cbxLeadEmails.IsChecked != true || _leadEmails.Contains(r.ID)) &&
+        var emails = _db.Emails.Local.Where(r =>
+          (cbAll.IsChecked == true || (string.IsNullOrEmpty(r.PermBanReason) && !_badEmails.Contains(r.Id))) && //todo: PermBanReason == '' still treated as BANNED!!!  HAS BEEN FIXED !!! on Sep 29, 2019.
+          (cbxLeadEmails.IsChecked != true || _leadEmails.Contains(r.Id)) &&
           (cbxLeadCompns.IsChecked != true || _leadCompns.Contains(r.Company)) &&
           (
             string.IsNullOrEmpty(srchToLwr) ||
             (
-              (r.ID.ToLower().Contains(srchToLwr)) ||
+              (r.Id.ToLower().Contains(srchToLwr)) ||
               (r.Company != null && r.Company.ToLower().Contains(srchToLwr)) ||
-              (r.FName != null && r.FName.ToLower().Contains(srchToLwr)) ||
-              (r.LName != null && r.LName.ToLower().Contains(srchToLwr)) ||
+              (r.Fname != null && r.Fname.ToLower().Contains(srchToLwr)) ||
+              (r.Lname != null && r.Lname.ToLower().Contains(srchToLwr)) ||
               (r.Notes != null && r.Notes.ToLower().Contains(srchToLwr))
             )
           )
@@ -129,7 +129,7 @@
     public static async Task<string> SaveAndUpdateMetadata(QStatsRlsContext db)
     {
       Bpr.Beep1of2();
-      var now = AvailStatusEmailer.App.Now;
+      var now = GigaHunt.App.Now;
 
       while (true)
       {

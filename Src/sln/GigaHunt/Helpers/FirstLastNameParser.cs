@@ -1,4 +1,4 @@
-﻿namespace AvailStatusEmailer.Helpers
+﻿namespace GigaHunt.Helpers
 {
   public class FirstLastNameParser
   {

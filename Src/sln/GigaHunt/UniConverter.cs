@@ -6,7 +6,7 @@ using System.Windows.Data;
 using System.Windows.Markup;
 using System.Windows.Media;
 
-namespace AvailStatusEmailer
+namespace GigaHunt
 {
   public class UniConverter : MarkupExtension, IValueConverter
   {

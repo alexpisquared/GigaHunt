@@ -1,5 +1,5 @@
 ﻿#nullable enable
-namespace AvailStatusEmailer
+namespace GigaHunt
 {
   public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
   {
@@ -9,8 +9,6 @@ namespace AvailStatusEmailer
     ObservableCollection<VEmailAvailProd> _obsColAvlbl;
     IEnumerable<string> _leadEmails, _leadCompns;
     string _firstName = "Sirs";
-
-    public object Bpr { get; private set; }
 
     public EmailersendWindow()
     {
@@ -68,14 +66,14 @@ namespace AvailStatusEmailer
         {
           var ls = new List<VEmailAvailProd>();
 
-          foreach (var r in _db.EMails.Where(r => r.ID.Contains(srchToLwr)))
+          foreach (var r in _db.Emails.Where(r => r.Id.Contains(srchToLwr)))
           {
             ls.Add(new VEmailAvailProd
             {
-              ID = r.ID,
+              Id = r.Id,
               Company = r.Company,
-              FName = r.FName,
-              LName = r.LName,
+              Fname = r.Fname,
+              Lname = r.Lname,
               Notes = r.Notes,
               DoNotNotifyForCampaignID = r.DoNotNotifyOnAvailableForCampaignID,
               LastSentAt = r.LastSent,
@@ -90,15 +88,15 @@ namespace AvailStatusEmailer
         else
         {
           rv = _obsColAvlbl.Where(r =>
-                      (cbxLeadEmails.IsChecked != true || _leadEmails.Contains(r.ID)) &&
+                      (cbxLeadEmails.IsChecked != true || _leadEmails.Contains(r.Id)) &&
                       (cbxLeadCompns.IsChecked != true || _leadCompns.Contains(r.Company)) &&
                       (
                         string.IsNullOrEmpty(srchToLwr) ||
 
-                          r.ID.ToLower().Contains(srchToLwr) ||
+                          r.Id.ToLower().Contains(srchToLwr) ||
                           (r.Company != null && r.Company.ToLower().Contains(srchToLwr)) ||
-                          (r.FName != null && r.FName.ToLower().Contains(srchToLwr)) ||
-                          (r.LName != null && r.LName.ToLower().Contains(srchToLwr)) ||
+                          (r.Fname != null && r.Fname.ToLower().Contains(srchToLwr)) ||
+                          (r.Lname != null && r.Lname.ToLower().Contains(srchToLwr)) ||
                           (r.Notes != null && r.Notes.ToLower().Contains(srchToLwr))
 
                       )
@@ -236,11 +234,11 @@ namespace AvailStatusEmailer
         var sw = Stopwatch.StartNew();
         foreach (var em in vEMail_Avail_DevDataGrid.SelectedItems)
         {
-          var scs = await QStatusBroadcaster.SendLetter_UpdateDb(true, ((VEmailAvailProd)em).ID, ((VEmailAvailProd)em).FName);
+          var scs = await QStatusBroadcaster.SendLetter_UpdateDb(true, ((VEmailAvailProd)em).Id, ((VEmailAvailProd)em).Fname);
           if (!scs)
-            msg += $"\n  {((VEmailAvailProd)em).ID}";
+            msg += $"\n  {((VEmailAvailProd)em).Id}";
 
-          tbkTitle.Text = $"Done/Todo: {cntRO - cnt} / {--cnt}      msg/min so far: {(cntRO - cnt) / sw.Elapsed.TotalMinutes:N1}      Last one is:  {(scs ? "Success" : "Failure")}  sending to  {((VEmailAvailProd)em).ID}";
+          tbkTitle.Text = $"Done/Todo: {cntRO - cnt} / {--cnt}      msg/min so far: {(cntRO - cnt) / sw.Elapsed.TotalMinutes:N1}      Last one is:  {(scs ? "Success" : "Failure")}  sending to  {((VEmailAvailProd)em).Id}";
 
           await Task.Delay(antiSpamBlockListPauseInMs);
         }
@@ -270,13 +268,13 @@ namespace AvailStatusEmailer
       {
         var cnt = vEMail_UnAvl_DevDataGrid.SelectedItems.Count;
         var sw = Stopwatch.StartNew();
-        var lst = ""; foreach (var em in vEMail_UnAvl_DevDataGrid.SelectedItems) lst += ((VEmailUnAvlProd)em).ID + Environment.NewLine;
+        var lst = ""; foreach (var em in vEMail_UnAvl_DevDataGrid.SelectedItems) lst += ((VEmailUnAvlProd)em).Id + Environment.NewLine;
         var qsn = string.Format("Send letter to these {0} selected addresses?", vEMail_UnAvl_DevDataGrid.SelectedItems.Count);
         //if (MessageBox.Show(lst, qsn, MessageBoxButton.YesNoCancel, MessageBoxImage.Question) == MessageBoxResult.Yes)
         {
           EnableControls(false);
           //WindowState = System.Windows.WindowState.Minimized;
-          foreach (var em in vEMail_UnAvl_DevDataGrid.SelectedItems) _ = await QStatusBroadcaster.SendLetter_UpdateDb(false, ((VEmailUnAvlProd)em).ID, ((VEmailUnAvlProd)em).FName);
+          foreach (var em in vEMail_UnAvl_DevDataGrid.SelectedItems) _ = await QStatusBroadcaster.SendLetter_UpdateDb(false, ((VEmailUnAvlProd)em).Id, ((VEmailUnAvlProd)em).Fname);
           Close();
         }
       }
@@ -318,15 +316,15 @@ namespace AvailStatusEmailer
 /*
 Aug 2019: Cleaned up Company names to better match the reality of name@CO.NAME.123.com => CO.NAME.123
 
-INSERT INTO Agency                (AddedAt, ID)
-SELECT   GETDATE() AS Expr2, SUBSTRING(ID, CHARINDEX('@', ID) + 1, LEN(ID) - CHARINDEX('@', ID) - CHARINDEX('.', REVERSE(ID))) AS Expr1
+INSERT INTO Agency                (AddedAt, Id)
+SELECT   GETDATE() AS Expr2, SUBSTRING(Id, CHARINDEX('@', Id) + 1, LEN(Id) - CHARINDEX('@', Id) - CHARINDEX('.', REVERSE(Id))) AS Expr1
 FROM      Email
-GROUP BY SUBSTRING(ID, CHARINDEX('@', ID) + 1, LEN(ID) - CHARINDEX('@', ID) - CHARINDEX('.', REVERSE(ID)))
-HAVING   (SUBSTRING(ID, CHARINDEX('@', ID) + 1, LEN(ID) - CHARINDEX('@', ID) - CHARINDEX('.', REVERSE(ID))) NOT IN (SELECT   ID FROM      Agency AS Agency_1))
+GROUP BY SUBSTRING(Id, CHARINDEX('@', Id) + 1, LEN(Id) - CHARINDEX('@', Id) - CHARINDEX('.', REVERSE(Id)))
+HAVING   (SUBSTRING(Id, CHARINDEX('@', Id) + 1, LEN(Id) - CHARINDEX('@', Id) - CHARINDEX('.', REVERSE(Id))) NOT IN (SELECT   Id FROM      Agency AS Agency_1))
 
 UPDATE  Email
-SET     Company  = SUBSTRING(ID, CHARINDEX('@', ID) + 1, LEN(ID) - CHARINDEX('@', ID) - CHARINDEX('.', REVERSE(ID))) ,ModifiedAt = GETDATE()
-WHERE   Company <> SUBSTRING(ID, CHARINDEX('@', ID) + 1, LEN(ID) - CHARINDEX('@', ID) - CHARINDEX('.', REVERSE(ID)))
+SET     Company  = SUBSTRING(Id, CHARINDEX('@', Id) + 1, LEN(Id) - CHARINDEX('@', Id) - CHARINDEX('.', REVERSE(Id))) ,ModifiedAt = GETDATE()
+WHERE   Company <> SUBSTRING(Id, CHARINDEX('@', Id) + 1, LEN(Id) - CHARINDEX('@', Id) - CHARINDEX('.', REVERSE(Id)))
 
 
 
@@ -340,7 +338,7 @@ WHERE   Company <> SUBSTRING(ID, CHARINDEX('@', ID) + 1, LEN(ID) - CHARINDEX('@'
 
 Backup copy of VEmailAvailProd as of AUg 2019
 
-SELECT   TOP (100) PERCENT ID, FName, LName, Company, Phone, PermBanReason, Notes, AddedAt, DoNotNotifyOnAvailableForCampaignID AS DoNotNotifyForCampaignID,
+SELECT   TOP (100) PERCENT Id, Fname, Lname, Company, Phone, PermBanReason, Notes, AddedAt, DoNotNotifyOnAvailableForCampaignID AS DoNotNotifyForCampaignID,
                   (SELECT   MAX(CampaignStart) AS Expr1
                    FROM      dbo.Campaign) AS CurrentCampaignStart,
                   (SELECT   Id
@@ -350,25 +348,25 @@ SELECT   TOP (100) PERCENT ID, FName, LName, Company, Phone, PermBanReason, Note
                                         FROM      dbo.Campaign AS Campaign_6))) AS LastCampaignID,
                   (SELECT   COUNT(*) AS Expr1
                    FROM      dbo.EHist
-                   WHERE   (RecivedOrSent = 'S') AND (LetterBody NOT LIKE 'std%') AND (EMailID = em.ID)) AS MyReplies,
+                   WHERE   (RecivedOrSent = 'S') AND (LetterBody NOT LIKE 'std%') AND (EMailID = em.Id)) AS MyReplies,
                   (SELECT   MAX(EmailedAt) AS Expr1
                    FROM      dbo.EHist
-                   WHERE   (RecivedOrSent = 'S') AND (LetterBody NOT LIKE 'std%') AND (EMailID = em.ID)) AS LastSentAt,
+                   WHERE   (RecivedOrSent = 'S') AND (LetterBody NOT LIKE 'std%') AND (EMailID = em.Id)) AS LastSentAt,
                   (SELECT   MAX(EmailedAt) AS Expr1
                    FROM      dbo.EHist
-                   WHERE   (RecivedOrSent <> 'S') AND (LetterBody NOT LIKE 'std%') AND (EMailID = em.ID)) AS LastRepliedAt
+                   WHERE   (RecivedOrSent <> 'S') AND (LetterBody NOT LIKE 'std%') AND (EMailID = em.Id)) AS LastRepliedAt
 FROM      dbo.Email AS em
-WHERE   (ID NOT IN
-                  (SELECT   ID
+WHERE   (Id NOT IN
+                  (SELECT   Id
                    FROM      dbo.BadEmails())) AND (dbo.CurrentCampaignID() <> ISNULL(DoNotNotifyOnAvailableForCampaignID, - 1)) AND
                   ((SELECT   MAX(EmailedAt) AS LastSent
                     FROM      dbo.EHist
-                    WHERE   (RecivedOrSent = 'S') AND (EMailID = em.ID)) IS NULL) OR
-              (ID NOT IN
-                  (SELECT   ID
+                    WHERE   (RecivedOrSent = 'S') AND (EMailID = em.Id)) IS NULL) OR
+              (Id NOT IN
+                  (SELECT   Id
                    FROM      dbo.BadEmails())) AND (dbo.CurrentCampaignID() <> ISNULL(DoNotNotifyOnAvailableForCampaignID, - 1)) AND
                   ((SELECT   MAX(EmailedAt) AS LastSent
                     FROM      dbo.EHist
-                    WHERE   (RecivedOrSent = 'S') AND (EMailID = em.ID)) < dbo.CurrentCampaignStart())
+                    WHERE   (RecivedOrSent = 'S') AND (EMailID = em.Id)) < dbo.CurrentCampaignStart())
 ORDER BY AddedAt DESC
 */

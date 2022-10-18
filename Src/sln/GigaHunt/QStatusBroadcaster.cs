@@ -1,6 +1,6 @@
 using WpfUserControlLib.Ext;
-using Db.QStats.DbModel;
-//using AvailStatusEmailer.Properties;
+using DB.QStats.Std.DbModel;
+//using GigaHunt.Properties;
 using Emailing;
 using OutlookToDbWpfApp;
 using System;
@@ -9,11 +9,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AvailStatusEmailer
+namespace GigaHunt
 {
   public static class QStatusBroadcaster
   {
-    static readonly DateTime _batchNow = AvailStatusEmailer.App.Now;
+    static readonly DateTime _batchNow = GigaHunt.App.Now;
     public const string Asu = "Availability Schedule Update - ";
 
     public static async Task<bool> SendLetter_UpdateDb(bool isAvailable, string emailAdrs, string firstName)
@@ -36,8 +36,8 @@ namespace AvailStatusEmailer
       try
       {
         var html = //isResumeFeatureUpdate ?
-                   //$@"C:\g\GigaHunt\Src\sln\AvailStatusEmailer\Assets\AvailabilityStatus_AvailableNow_FreshCV.htm" :
-          $@"C:\g\GigaHunt\Src\sln\AvailStatusEmailer\Assets\AvailabilityStatus_{(isAvailable ? "AvailableNow" : "Unavailable")}.htm";
+                   //$@"C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AvailabilityStatus_AvailableNow_FreshCV.htm" :
+          $@"C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AvailabilityStatus_{(isAvailable ? "AvailableNow" : "Unavailable")}.htm";
 
         var body = new StreamReader(html).ReadToEnd();
         var subj = /*isResumeFeatureUpdate*/false ? "resume feature update" : Asu + (isAvailable ? "Open for opportunities in Toronto++" : "Unavailable");
@@ -57,7 +57,7 @@ namespace AvailStatusEmailer
           emailAddress,
           subj,
           body.Replace("{0}", nameCasing_Mc_only_so_far(firstName)).Replace("{1}", emailAddress).Replace("{2}", startDate),
-          attachmnt, @"C:\g\GigaHunt\Src\sln\AvailStatusEmailer\Assets\AlexTiny_LinkedIn.png");//@"C:\g\GigaHunt\Src\sln\AvailStatusEmailer\Assets\MCSD Logo - Latest as of 2009.gif|C:\g\GigaHunt\Src\sln\AvailStatusEmailer\Assets\linkedIn66x16.png|C:\g\GigaHunt\Src\sln\AvailStatusEmailer\Assets\AlexTiny_LinkedIn.png");
+          attachmnt, @"C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AlexTiny_LinkedIn.png");//@"C:\g\GigaHunt\Src\sln\GigaHunt\Assets\MCSD Logo - Latest as of 2009.gif|C:\g\GigaHunt\Src\sln\GigaHunt\Assets\linkedIn66x16.png|C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AlexTiny_LinkedIn.png");
       }
       catch (Exception ex) { ex.Pop($"{emailAddress}"); return false; }
     }
@@ -81,11 +81,11 @@ namespace AvailStatusEmailer
       {
         using (var db = QStatsRlsContext.Create())
         {
-          var em = db.EMails.FirstOrDefault(r => r.ID == email && r.ReSendAfter != null);
+          var em = db.Emails.FirstOrDefault(r => r.Id == email && r.ReSendAfter != null);
           if (em != null)
             em.ReSendAfter = null;
 
-          await OutlookToDbWindow.CheckInsertEMailEHistAsync(db, email, firstName, "", subject, body, timeSent, "..from std broadcast send", isRcvd ? "R" : "S"); // db.EHists.Add(new EHist { EMailID = email, RecivedOrSent = isRcvd ? "R" : "S", EmailedAt = timeSent, LetterSubject = subject, LetterBody = body, Notes = "", AddedAt = AvailStatusEmailer.App.Now });
+          await OutlookToDbWindow.CheckInsertEMailEHistAsync(db, email, firstName, "", subject, body, timeSent, "..from std broadcast send", isRcvd ? "R" : "S"); // db.EHists.Add(new EHist { EMailID = email, RecivedOrSent = isRcvd ? "R" : "S", EmailedAt = timeSent, LetterSubject = subject, LetterBody = body, Notes = "", AddedAt = GigaHunt.App.Now });
 
           return await db.SaveChangesAsync();
         }

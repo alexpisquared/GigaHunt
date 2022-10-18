@@ -1,11 +1,11 @@
 ﻿using AsLink;
-using AvailStatusEmailer.Properties;
+using GigaHunt.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 
-namespace AvailStatusEmailer
+namespace GigaHunt
 {
   public class AppSettings
   {

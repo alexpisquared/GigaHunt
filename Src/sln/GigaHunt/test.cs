@@ -1,4 +1,4 @@
-﻿namespace AvailStatusEmailer
+﻿namespace GigaHunt
 {
   abstract class C1
   {

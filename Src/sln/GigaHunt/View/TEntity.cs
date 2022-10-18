@@ -1,4 +1,4 @@
-﻿namespace AvailStatusEmailer
+﻿namespace GigaHunt
 {
   internal class TEntity
   {

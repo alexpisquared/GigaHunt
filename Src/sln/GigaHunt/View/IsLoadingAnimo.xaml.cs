@@ -8,7 +8,7 @@ namespace EF
 {
   public partial class IsLoadingAnimo : UserControl
   {
-    readonly SoundPlayer _spWater = new SoundPlayer(AvailStatusEmailer.Properties.Resources.WaterDroplet);
+    readonly SoundPlayer _spWater = new SoundPlayer(GigaHunt.Properties.Resources.WaterDroplet);
     readonly DispatcherTimer t = new DispatcherTimer();
 
     public IsLoadingAnimo()

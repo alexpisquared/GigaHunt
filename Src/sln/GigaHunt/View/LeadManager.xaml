@@ -1,6 +1,6 @@
-﻿<lnk:WindowBase xmlns:lnk="clr-namespace:WpfUserControlLib.Base;assembly=WpfUserControlLib" x:Name="wnd" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:Models="clr-namespace:Db.QStats.DbModel;assembly=Db.QStats" mc:Ignorable="d" x:Class="AvailStatusEmailer.LeadManagerWindow" 
-                xmlns:cmn="clr-namespace:AvailStatusEmailer"
-                xmlns:View="clr-namespace:AvailStatusEmailer.View" 
+﻿<lnk:WindowBase xmlns:lnk="clr-namespace:WpfUserControlLib.Base;assembly=WpfUserControlLib" x:Name="wnd" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:Models="clr-namespace:DB.QStats.Std.DbModel;assembly=DB.QStats.Std" mc:Ignorable="d" x:Class="GigaHunt.LeadManagerWindow" 
+                xmlns:cmn="clr-namespace:GigaHunt"
+                xmlns:View="clr-namespace:GigaHunt.View" 
                 xmlns:AavWpfVw="clr-namespace:WpfUserControlLib.View;assembly=WpfUserControlLib"                
                 Title="LeadManager" Height="700" Width="1200" Loaded="onLoaded" 
                 Style="{StaticResource WindowStyle_Aav0}" >
@@ -161,7 +161,7 @@
         <Label    Grid.Column="0" Grid.Row="1"     Target="{Binding ElementName=cbxAgentEmail}" Content="Agent E_mail" />
         <ComboBox Grid.Column="1" Grid.Row="1" Height="22" Margin="0,2" x:Name="cbxAgentEmail"
                   IsEditable="True" SelectionChanged="onAgentEmailSelectionChanged" 
-                  ItemsSource="{Binding Source={StaticResource eMailViewSource}}" DisplayMemberPath="ID" SelectedValuePath="ID" SelectedValue="{Binding AgentEmailId, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" >
+                  ItemsSource="{Binding Source={StaticResource eMailViewSource}}" DisplayMemberPath="Id" SelectedValuePath="Id" SelectedValue="{Binding AgentEmailId, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" >
           <ComboBox.ItemsPanel>
             <ItemsPanelTemplate>
               <VirtualizingStackPanel/>
@@ -181,7 +181,7 @@
         <AccessText Text="Market _Venue"  Grid.Column="4" Grid.Row="2"  />
         <TextBox                          Grid.Column="5" Grid.Row="2" Text="{Binding MarketVenue,     Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Stretch" Margin="0,4" />
         <Label Content="Stat_us"          Grid.Column="4" Grid.Row="3" Target="{Binding ElementName=cbStatus}" />
-        <ComboBox                         Grid.Column="5" Grid.Row="3" DisplayMemberPath="Name" ItemsSource="{Binding Source={StaticResource lkuLeadStatuViewSource}}" SelectedValuePath="ID" SelectedValue="{Binding Status, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" Margin="0,2"  Name="cbStatus" />
+        <ComboBox                         Grid.Column="5" Grid.Row="3" DisplayMemberPath="Name" ItemsSource="{Binding Source={StaticResource lkuLeadStatuViewSource}}" SelectedValuePath="Id" SelectedValue="{Binding Status, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" Margin="0,2"  Name="cbStatus" />
         <!--
         <AccessText Text="Priority"       Grid.Column="6" Grid.Row="2" />      
         <TextBox                          Grid.Column="7" Grid.Row="2" Text="{Binding Priority,        Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Stretch" Margin="0,4" />-->
