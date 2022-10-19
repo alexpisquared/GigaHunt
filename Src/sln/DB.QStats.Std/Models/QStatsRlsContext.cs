@@ -43,11 +43,10 @@ namespace DB.QStats.Std.Models
         public virtual DbSet<VPartiesIsentMyFreeStatusSinceLastCampaignStart> VPartiesIsentMyFreeStatusSinceLastCampaignStarts { get; set; } = null!;
         public virtual DbSet<VwAgencyRate> VwAgencyRates { get; set; } = null!;
 
-    public static QStatsRlsContext Create() => throw new NotImplementedException();
-    public string GetDbChangesReport(int v) => throw new NotImplementedException();
-    public object ServerDatabase() => throw new NotImplementedException();
-    public async Task<int> TrySaveReportAsync(string v) => throw new NotImplementedException();
-    public string GetDbChangesReport() => "";
+    public static QStatsRlsContext Create() => new QStatsRlsContext();
+    public string GetDbChangesReport(int v) => ("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+    public async Task<int> TrySaveReportAsync(string v) => 222222;
+    public string GetDbChangesReport() => "@@@@@@@@@@@@";
 
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

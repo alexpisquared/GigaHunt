@@ -25,7 +25,7 @@ namespace GigaHunt.View
       try
       {
         _db = QStatsRlsContext.Create();                                                   /**/  Debug.WriteLine($">>> QStatsRlsContext.Create(){lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
-        tbver.Text = $"Db: {_db.ServerDatabase()}        Ver: ???";
+        tbver.Text = $"Db: ???        Ver: ???";
         if (chkIsAvailable.IsChecked == true)
         {
           await _db.VEmailAvailProds.LoadAsync();                                    /**/  Debug.WriteLine($">>>    Loaded   EmlVw   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
