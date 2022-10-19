@@ -25,7 +25,6 @@ The column 'dbo.SecurityGroups.Active'        would normally be mapped to a non-
 
 #2021-05-21
 Scaffold-DbContext "Server=.\SqlExpRess;Database=QStatsRls;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -force
-Scaffold-DbContext   "Server=mtDEVsqldb;Database=QStatsRls;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -force
 #2021-06-29
 ##From CLI:
 1. must install EF:  dotnet tool install --global dotnet-ef

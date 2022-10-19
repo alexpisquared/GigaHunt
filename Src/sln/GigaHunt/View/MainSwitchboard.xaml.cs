@@ -9,7 +9,7 @@ namespace GigaHunt.View
       InitializeComponent();
       themeSelector1.ThemeApplier = ApplyTheme;
 
-      tbver.Text = $"Db: {DB.QStats.Std.Models.QStatsRlsContext.DbNameOnly}        Ver: ???";
+      tbver.Text = $"Db: ???        Ver: ???";
 
 
 #if DEBUG_

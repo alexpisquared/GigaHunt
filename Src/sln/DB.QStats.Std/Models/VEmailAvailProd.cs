@@ -14,8 +14,7 @@ namespace DB.QStats.Std.Models
         public string? Notes { get; set; }
         public DateTime AddedAt { get; set; }
         public int? DoNotNotifyForCampaignId { get; set; }
-    public object DoNotNotifyForCampaignID { get; set; }
-    public DateTime? CurrentCampaignStart { get; set; }
+        public DateTime? CurrentCampaignStart { get; set; }
         public int? LastCampaignId { get; set; }
         public int? MyReplies { get; set; }
         public DateTime? LastSentAt { get; set; }

@@ -13,7 +13,7 @@ namespace GigaHunt.View
     public EmailersendWindow()
     {
       InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme;
-      tbver.Text = $"Db: {QStatsRlsContext.DbNameOnly}        Ver: ???";
+      tbver.Text = $"Db: ???        Ver: ???";
       _ = tbFilter.Focus();
 
       Loaded += async (s, e) => { await Task.Yield(); themeSelector1.SetCurThemeToMenu(Thm); Bpr.BeepBgn3(); };
@@ -75,7 +75,7 @@ namespace GigaHunt.View
               Fname = r.Fname,
               Lname = r.Lname,
               Notes = r.Notes,
-              DoNotNotifyForCampaignID = r.DoNotNotifyOnAvailableForCampaignId,
+              DoNotNotifyForCampaignId = r.DoNotNotifyOnAvailableForCampaignId,
               LastSentAt = r.LastSent,
               LastRepliedAt = r.LastRcvd,
               AddedAt = r.AddedAt,

@@ -16,8 +16,7 @@ namespace DB.QStats.Std.Models
         {
         }
 
-    public static object DbNameOnly { get; set; } // aav
-    public virtual DbSet<Agency> Agencies { get; set; } = null!;
+        public virtual DbSet<Agency> Agencies { get; set; } = null!;
         public virtual DbSet<AgencyOrg> AgencyOrgs { get; set; } = null!;
         public virtual DbSet<Campaign> Campaigns { get; set; } = null!;
         public virtual DbSet<ContactForBroadcastView> ContactForBroadcastViews { get; set; } = null!;
@@ -43,18 +42,12 @@ namespace DB.QStats.Std.Models
         public virtual DbSet<VPartiesIsentMyFreeStatusSinceLastCampaignStart> VPartiesIsentMyFreeStatusSinceLastCampaignStarts { get; set; } = null!;
         public virtual DbSet<VwAgencyRate> VwAgencyRates { get; set; } = null!;
 
-    public static QStatsRlsContext Create() => new QStatsRlsContext();
-    public string GetDbChangesReport(int v) => ("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-    public async Task<int> TrySaveReportAsync(string v) => 222222;
-    public string GetDbChangesReport() => "@@@@@@@@@@@@";
-
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=.\\SqlExpRess;Database=QStatsDbg;Trusted_Connection=True;");
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Server=.\\SqlExpRess;Database=QStatsRls;Trusted_Connection=True;");
             }
         }
 
