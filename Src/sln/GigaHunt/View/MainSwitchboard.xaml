@@ -6,7 +6,7 @@
     <ResourceDictionary >
       <ResourceDictionary.MergedDictionaries>
         <!--
-        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Lite.Gray.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Dark.Google.xaml" />
         <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Dark.Gray.xaml" />
         -->
         <ResourceDictionary Source="/WpfUserControlLib;component/Base/DataGrid.Base.xaml" />
