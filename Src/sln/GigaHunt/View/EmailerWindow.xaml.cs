@@ -46,7 +46,7 @@ namespace GigaHunt.View
 
           _cvsEmails = (CollectionViewSource)FindResource("vsEMail_UnAvl");
           _cvsEmails.Source = null;
-          _cvsEmails.Source = _db.VEmailUnAvlProds.Local.OrderByDescending(r => r.AddedAt);
+          _cvsEmails.Source = _db.VEmailUnAvlProds.Local.ToBindingList().OrderByDescending(r => r.AddedAt);
         }
 
         var ttl = chkIsAvailable.IsChecked == true ? _db.VEmailAvailProds.Local.Count : _db.VEmailUnAvlProds.Local.Count;

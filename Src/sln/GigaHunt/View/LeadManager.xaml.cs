@@ -103,7 +103,7 @@ public partial class LeadManagerWindow : WpfUserControlLib.Base.WindowBase
 
   void filterLeads(string filter, bool includeClosed = false)
   {
-    _leadViewSource.Source = _db.Leads.Local.Where(r =>
+    _leadViewSource.Source = _db.Leads.Local.ToBindingList().Where(r =>
       (includeClosed || r.CampaignId == _thisCampaign && r.Status != "Closed" && r.Status != "Dead")
       &&
       (string.IsNullOrEmpty(filter) || r.AgentEmail != null && (r.AgentEmail.Id.Contains(filter) || r.AgentEmail.Fname.Contains(filter)))

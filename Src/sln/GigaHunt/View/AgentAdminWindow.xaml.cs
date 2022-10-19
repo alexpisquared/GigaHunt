@@ -96,7 +96,7 @@ namespace AgentFastAdmin
       var srchToLwr = Srch.ToLower();
       try
       {
-        var emails = _db.Emails.Local.Where(r =>
+        var emails = _db.Emails.Local.ToBindingList().Where(r =>
           (cbAll.IsChecked == true || (string.IsNullOrEmpty(r.PermBanReason) && !_badEmails.Contains(r.Id))) && //todo: PermBanReason == '' still treated as BANNED!!!  HAS BEEN FIXED !!! on Sep 29, 2019.
           (cbxLeadEmails.IsChecked != true || _leadEmails.Contains(r.Id)) &&
           (cbxLeadCompns.IsChecked != true || _leadCompns.Contains(r.Company)) &&
