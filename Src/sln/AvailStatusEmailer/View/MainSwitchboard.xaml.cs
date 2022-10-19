@@ -1,7 +1,10 @@
 ﻿using AAV.Sys.Helpers;
+using AAV.WPF.Ext;
 using AvailStatusEmailer.View;
 using Db.QStats.DbModel;
+using System;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -11,14 +14,30 @@ namespace AvailStatusEmailer
   {
     public MainSwitchboard()
     {
-      InitializeComponent(); 
+      InitializeComponent();
       themeSelector1.ApplyTheme = ApplyTheme;
 
       tbver.Text = $"Db: {Db.QStats.DbModel.A0DbContext.DbNameOnly}        Ver: {AAV.Sys.Helpers.VerHelper.CurVerStr(".net 4.8")}";
 
-      Task.Run(() => A0DbContext.Create().lkuLeadStatus.Load()); // preload to ini the EF for faster loads in views.
 
-      Loaded += async (s, e) => { await Task.Yield(); themeSelector1.SetCurTheme(Thm); Bpr.BeepBgn3(); };
+      Loaded += async (s, e) =>
+      {
+        _ = Task.Run(() =>
+        {
+          try
+          {
+            var sw = Stopwatch.StartNew();
+            A0DbContext.Create().lkuLeadStatus.Load();
+            Trace.WriteLine($"../> preloaded in {sw.Elapsed.TotalSeconds,6:N1}s   (Net4: Cold Start 11s, next 5s)");
+            Bpr.BeepBgn3();
+          }
+          catch (Exception ex) { ex.Pop(); }
+        }); // preload to ini the EF for faster loads in views.
+        
+        await Task.Yield();
+        themeSelector1.SetCurTheme(Thm);
+        Bpr.BeepBgn3();
+      };
 
 #if DEBUG_
       if (checkNewEmail)

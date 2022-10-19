@@ -1,4 +1,6 @@
 ﻿
+using GigaHunt.View;
+
 namespace GigaHunt.AsLink;
 class Misc { public const string qRcvd = "Q", qSent = "Sent Items", qSentDone = "Sent Items/_DbDoneSent", qDltd = "Deleted Items", qFail = "Q/Fails", qFailsDone = "Q/FailsDone", qRcvdDone = "Q/_DbDoneRcvd", qLate = "Q/ToReSend"/*, qVOld = "Q/VeryOld"*/; }
 
@@ -138,7 +140,7 @@ public class OutlookHelper
   }
   public string SyncDbToOutlook(QStatsRlsContext db, string folderName = null)
   {
-    //AAV.Sys.Helpers.Bpr.Beep1of2();
+    //AAV.Sys.Helpers.BPR.Beep1of2();
     var q = db.Emails.Where(r => string.IsNullOrEmpty(r.PermBanReason)
                             && r.Id.Contains("@")
                             && !r.Id.Contains("=")
@@ -155,7 +157,7 @@ public class OutlookHelper
       AddUpdateOutlookContact(em);
     }
 
-    Bpr.Beep2of2();
+    BPR.Beep2of2();
     return string.Format("\r\nTotal Outlook: {0} added, {1} updated / out of {2} eligibles. \r\n", _addedCount, _updatedCount, ttl);
   }
   public void AddUpdateOutlookContact(Email em)

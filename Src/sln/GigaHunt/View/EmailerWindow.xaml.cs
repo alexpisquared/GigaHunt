@@ -1,4 +1,6 @@
 ﻿#nullable enable
+using GigaHunt.View;
+
 namespace GigaHunt.View
 {
   public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
@@ -16,7 +18,7 @@ namespace GigaHunt.View
       tbver.Text = $"Db: ???        Ver: ???";
       _ = tbFilter.Focus();
 
-      Loaded += async (s, e) => { await Task.Yield(); themeSelector1.SetCurThemeToMenu(Thm); Bpr.BeepBgn3(); };
+      Loaded += async (s, e) => { await Task.Yield(); themeSelector1.SetCurThemeToMenu(Thm); BPR.AppStart(); };
     }
     async Task<string> reLoad()
     {
@@ -177,7 +179,7 @@ namespace GigaHunt.View
       var scs = false;
       try
       {
-        Bpr.Beep1of2();
+        BPR.Beep1of2();
 
         EnableControls(false);
 
@@ -195,7 +197,7 @@ namespace GigaHunt.View
       {
         tbkTitle.Text = $"{(scs ? "Success" : "Failure")}  sending to  {tbMail.Text}";
         EnableControls(true);
-        Bpr.Beep2of2();
+        BPR.Beep2of2();
       }
     }
     void btnSave_Click(object s, RoutedEventArgs e) => Save();
@@ -220,7 +222,7 @@ namespace GigaHunt.View
     }
     async void onBroadcast_Avail(object s, RoutedEventArgs e)
     {
-      Bpr.BeepClk();
+      BPR.BeepClk();
       try
       {
         var cnt = vEMail_Avail_DevDataGrid.SelectedItems.Count;
@@ -279,7 +281,7 @@ namespace GigaHunt.View
         }
       }
       catch (Exception ex) { ex.Pop(); }
-      finally { WindowState = System.Windows.WindowState.Normal; Bpr.BeepDone(); }
+      finally { WindowState = System.Windows.WindowState.Normal; BPR.BeepDone(); }
     }
     void chkIsAvailable_Checked(object s, RoutedEventArgs e)
     {

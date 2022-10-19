@@ -29,3 +29,4 @@ global using OutlookToDbWpfApp;
 global using WpfUserControlLib.Extensions;
 global using WpfUserControlLib.Helpers;
 global using OL = Microsoft.Office.Interop.Outlook;
+global using AmbienceLib;

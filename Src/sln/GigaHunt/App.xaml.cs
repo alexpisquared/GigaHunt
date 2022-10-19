@@ -45,12 +45,12 @@ public partial class App : Application
   {
     base.OnExit(e);
     Settings.Default.Save();
-    //AAV.Sys.Helpers.Bpr.BeepEnd3();
+    //AAV.Sys.Helpers.BPR.BeepEnd3();
     App.Current.Shutdown();
 #if VerboseTracing
 			Trace.WriteLine(string.Format("*{0:MMdd HH:mm} The End. Took {1:hh\\:mm\\:ss}.", GigaHunt.App._now, SW.Elapsed));
     //SysLgr: _sl.LogSessionEnd();
 #endif
   }
-  protected override void OnSessionEnding(SessionEndingCancelEventArgs e) => base.OnSessionEnding(e); /*Bpr.BeepEnd3();*/
+  protected override void OnSessionEnding(SessionEndingCancelEventArgs e) => base.OnSessionEnding(e); /*BPR.BeepEnd3();*/
 }

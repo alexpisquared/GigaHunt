@@ -1,11 +1,11 @@
-﻿namespace GigaHunt;
-
-internal class Bpr
+﻿namespace GigaHunt.View;
+internal class BPR
 {
-  internal static void Beep1of2() => Trace.WriteLine("beep");
-  internal static void Beep2of2() => Trace.WriteLine("beep");
-  internal static void BeepBgn3() => Trace.WriteLine("beep");
-  internal static void BeepClk() => Trace.WriteLine("beep");
-  internal static void BeepDone() => Trace.WriteLine("beep");
-  internal static void BeepShort() => Trace.WriteLine("beep");
+  static readonly Bpr _b = new();
+  internal static void Beep1of2() => _b.Start();
+  internal static void Beep2of2() => _b.Finish();
+  internal static void AppStart() => _b.AppStart();
+  internal static void BeepDone() => _b.AppFinish();
+  internal static void BeepClk() => _b.Click();
+  internal static void BeepShort() => _b.Tick();
 }

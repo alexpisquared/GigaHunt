@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using GigaHunt.View;
+using Microsoft.Data.SqlClient;
 
 namespace AgentFastAdmin
 {
@@ -44,7 +45,7 @@ namespace AgentFastAdmin
       await CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(_db, false, saveAndUpdateMetadata); // keep it for future misstreatments.
       //ctrlPnl.IsEnabled = false;
 
-      //AAV.Sys.Helpers.Bpr.Beep1of2();
+      //AAV.Sys.Helpers.BPR.Beep1of2();
 
       var lsw = Stopwatch.StartNew();
       try
@@ -82,14 +83,14 @@ namespace AgentFastAdmin
         App.SpeakAsync("Loaded.");
       }
       catch (Exception ex) { ex.Pop(); }
-      finally { ctrlPnl.IsEnabled = true; Bpr.Beep2of2(); tbFilter.Focus(); }
+      finally { ctrlPnl.IsEnabled = true; BPR.Beep2of2(); tbFilter.Focus(); }
     }
     public TimeSpan srchFilter(int max = 10)
     {
       if (!_isLoaded)
         return TimeSpan.Zero;
 
-      Bpr.BeepShort();
+      BPR.BeepShort();
       ctrlPnl.IsEnabled = false;
       var sw = Stopwatch.StartNew();
       var srchToLwr = Srch.ToLower();
@@ -147,7 +148,7 @@ namespace AgentFastAdmin
     Task<string> saveAndUpdateMetadata() => SaveAndUpdateMetadata(_db);
     public static async Task<string> SaveAndUpdateMetadata(QStatsRlsContext db)
     {
-      Bpr.Beep1of2();
+      BPR.Beep1of2();
       var now = GigaHunt.App.Now;
 
       while (true)
@@ -195,7 +196,7 @@ namespace AgentFastAdmin
             case MessageBoxResult.Cancel: return "Cancelled";// tbkTitle.Text;
           }
         }
-        finally { Bpr.Beep2of2(); }
+        finally { BPR.Beep2of2(); }
 
         return "*******------------********+++++++++++";
       }
@@ -266,7 +267,7 @@ namespace AgentFastAdmin
     void onNxt(object s, RoutedEventArgs e) => _cvsEmailsVwSrc.View.MoveCurrentToNext();
     void onOLk(object s, RoutedEventArgs e)
     {
-      Bpr.BeepClk();
+      BPR.BeepClk();
       if (_cvsEmailsVwSrc.View.CurrentItem is Email em)
         new OutlookHelper().AddUpdateOutlookContact(em);
       else
@@ -280,7 +281,7 @@ namespace AgentFastAdmin
       {
         try
         {
-          Bpr.BeepClk();
+          BPR.BeepClk();
           foreach (Email em in eMailDataGrid.SelectedItems)
           {
             //foreach (var lead in em.Leads) _db.Leads.Local.Remove(lead); // if there were leads - DO NOT DELETE!!!

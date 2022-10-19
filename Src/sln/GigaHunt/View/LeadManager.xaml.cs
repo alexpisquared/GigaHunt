@@ -26,8 +26,8 @@ public partial class LeadManagerWindow : WpfUserControlLib.Base.WindowBase
       _db.Emails.Load();
 
       filterLeads(tbFilter.Text, cbInclAll.IsChecked == true);
-      _leadViewSourcL.Source = _db.LkuLeadStatuses.Local;
-      _leadViewSourcE.Source = _db.Emails.Local;
+      _leadViewSourcL.Source = _db.LkuLeadStatuses.Local.ToBindingList();
+      _leadViewSourcE.Source = _db.Emails.Local.ToBindingList();
 
       tbkTitle.Text = Title = string.Format("Total rows leadds {0} + emails {1} loaded in {2:N1}s.", _db.Leads.Local.Count(), _db.Emails.Local.Count(), sw.Elapsed.TotalSeconds);
 

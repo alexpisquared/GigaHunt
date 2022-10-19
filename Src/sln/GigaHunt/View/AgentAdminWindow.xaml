@@ -9,11 +9,14 @@
   <lnk:WindowBase.Resources>
     <ResourceDictionary >
       <ResourceDictionary.MergedDictionaries>
-        <!--<ResourceDictionary Source="/AAV.AsLink.WPF;component/AsLink/Theme.Color.Lite.VaporWave.xaml" />
-        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Dark.Google.xaml" />
-        -->
-        <ResourceDictionary Source="/WpfUserControlLib;component/Base/DataGrid.Base.xaml" />
         <ResourceDictionary Source="/WpfUserControlLib;component/Base/BasicDefaultsLayout.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/Base/Anime.Base.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/Anime/SmartOpacityToggleAnimStyle.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/Anime/IsObsoleteBurronStyle.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/Base/ComboBox.Base.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/Base/DataGrid.Base.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/Base/DataGrid.Anime.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Dark.Google.xaml" />
       </ResourceDictionary.MergedDictionaries>
 
       <Style TargetType="FrameworkElement" >
@@ -22,7 +25,7 @@
       </Style>
 
       <CollectionViewSource x:Key="eMailViewSource" d:DesignSource="{d:DesignInstance {x:Type Models:Email}, CreateList=True}"/>
-      <CollectionViewSource x:Key="eMailEHistsViewSource" Source="{Binding EHists, Source={StaticResource eMailViewSource}}"/>
+      <CollectionViewSource x:Key="eMailEHistsViewSource" Source="{Binding Ehists, Source={StaticResource eMailViewSource}}"/>
     </ResourceDictionary>
   </lnk:WindowBase.Resources>
   <WindowChrome.WindowChrome>
@@ -78,11 +81,8 @@
 
         <Button  Content="Max 50"  Click="onMoreHistCounts" VerticalAlignment="Center" Margin="32 8" ToolTip="Set max to 50 (from 10) on filter results" Foreground="#f00" HorizontalAlignment="Right" />
         <View1:ThemeSelectorUsrCtrl x:Name="themeSelector1" />
-        <TextBlock x:Name="tbkTitle"  TextWrapping="Wrap" Text="Info"  />
+        <TextBlock x:Name="tbkTitle" TextWrapping="Wrap" Text="Info" Foreground="#888" />
       </StackPanel>
-
-
-
 
       <Grid Grid.Row="1" DataContext="{StaticResource eMailViewSource}">
         <Grid.ColumnDefinitions>
@@ -105,8 +105,8 @@
             <DataGridTextColumn Header="Fname"       Binding="{Binding Fname}"          Width="2*" />
             <DataGridTextColumn Header="Lname"       Binding="{Binding Lname}"          Width="1*" />
             <DataGridTextColumn Header="Company"     Binding="{Binding Company}"        Width="1*" />
-            <DataGridTextColumn Header="!Avail"      Binding="{Binding DoNotNotifyOnAvailableForCampaignID}"      IsReadOnly="False" ElementStyle="{StaticResource CenterAlignStyle}" />
-            <DataGridTextColumn Header="!OffMt"      Binding="{Binding DoNotNotifyOnOffMarketForCampaignID}"      IsReadOnly="False" ElementStyle="{StaticResource CenterAlignStyle}" />
+            <DataGridTextColumn Header="!Avail"      Binding="{Binding DoNotNotifyOnAvailableForCampaignId}"      IsReadOnly="False" ElementStyle="{StaticResource CenterAlignStyle}" />
+            <DataGridTextColumn Header="!OffMt"      Binding="{Binding DoNotNotifyOnOffMarketForCampaignId}"      IsReadOnly="False" ElementStyle="{StaticResource CenterAlignStyle}" />
             <DataGridTextColumn Header="PermBan"     Binding="{Binding PermBanReason}"  Foreground="#c00" />
             <DataGridTextColumn Header="Notes"       Binding="{Binding Notes}"          Width="2*" FontSize="8"   />
             <DataGridTextColumn Header="ResndAftr"   Binding="{Binding ReSendAfter, StringFormat=\{0:yy-MM-dd\}}" IsReadOnly="True"  />
@@ -120,7 +120,8 @@
 
         <DataGrid x:Name="eHistsDataGrid" Grid.Column="2" ItemsSource="{Binding Source={StaticResource eMailEHistsViewSource}}" Grid.Row="1" RowHeight="42" IsReadOnly="True" Margin="0" HeadersVisibility="Column">
           <DataGrid.Columns>
-            <DataGridTextColumn Header="Emailed" Binding="{Binding EmailedAt, Converter={cmn:UniConverter}}" SortDirection="Descending" ToolTipService.ToolTip="{Binding EmailedAt, StringFormat=\{0:yyyy-MMM-dd\}}"  />
+            <DataGridTextColumn Header="Emailed" Binding="{Binding EmailedAt, Converter={cmn:UniConverter}}" SortDirection="Descending"  />
+            <!--ToolTipService.ToolTip="{Binding EmailedAt, StringFormat=\{0:yyyy-MMM-dd\}}"-->
             <DataGridTextColumn Header="R-S"     Binding="{Binding RecivedOrSent}"  ElementStyle="{StaticResource CenterAlignStyle}" />
             <DataGridTextColumn Header="Subject" Binding="{Binding LetterSubject}"  Width="120" />
             <DataGridTextColumn Header="Body"    Binding="{Binding LetterBody}"     Width="3*"  FontSize="8" Foreground="#6b1" />
@@ -181,9 +182,9 @@
           <TextBox                           Grid.Column="1" Grid.Row="3" Text="{Binding NotifyPriority, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}"  />
 
           <Button Content="_DNN Avl"         Grid.Column="2" Grid.Row="3" Click="onDNN" Margin="5 0" ToolTip="Do Not Notify - Available for this Camp-n" HorizontalAlignment="Right" />
-          <TextBox                           Grid.Column="3" Grid.Row="3" Text="{Binding DoNotNotifyOnAvailableForCampaignID, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}"  />
+          <TextBox                           Grid.Column="3" Grid.Row="3" Text="{Binding DoNotNotifyOnAvailableForCampaignId, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}"  />
           <AccessText Text="DNN OffMarkt"      Grid.Column="4" Grid.Row="3" />
-          <TextBox                           Grid.Column="5" Grid.Row="3" Text="{Binding DoNotNotifyOnOffMarketForCampaignID, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}"  />
+          <TextBox                           Grid.Column="5" Grid.Row="3" Text="{Binding DoNotNotifyOnOffMarketForCampaignId, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}"  />
 
           <Label Content="_Notes"           Grid.Column="0" Grid.Row="4" Target="{Binding ElementName=tbAN}" />
           <TextBox                           Grid.Column="1" Grid.Row="4" Text="{Binding Notes, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}" VerticalAlignment="Stretch" Grid.ColumnSpan="5" x:Name="tbAN" AcceptsReturn="True"/>
