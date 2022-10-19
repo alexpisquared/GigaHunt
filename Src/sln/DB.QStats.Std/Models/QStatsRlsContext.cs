@@ -44,9 +44,11 @@ namespace DB.QStats.Std.Models
         public virtual DbSet<VwAgencyRate> VwAgencyRates { get; set; } = null!;
 
     public static QStatsRlsContext Create() => throw new NotImplementedException();
-    public object GetDbChangesReport(int v) => throw new NotImplementedException();
+    public string GetDbChangesReport(int v) => throw new NotImplementedException();
     public object ServerDatabase() => throw new NotImplementedException();
-    public Task TrySaveReportAsync(string v) => throw new NotImplementedException();
+    public async Task<int> TrySaveReportAsync(string v) => throw new NotImplementedException();
+    public string GetDbChangesReport() => "";
+
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

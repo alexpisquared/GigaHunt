@@ -8,7 +8,7 @@ public partial class LeadManagerWindow : WpfUserControlLib.Base.WindowBase
 
   public LeadManagerWindow()
   {
-    InitializeComponent(); themeSelector1.ApplyTheme = ApplyTheme;
+    InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme;
 
     _thisCampaign = _db.Campaigns.Max(r => r.Id);
 
@@ -26,12 +26,12 @@ public partial class LeadManagerWindow : WpfUserControlLib.Base.WindowBase
       _db.Emails.Load();
 
       filterLeads(tbFilter.Text, cbInclAll.IsChecked == true);
-      _leadViewSourcL.Source = _db.lkuLeadStatus.Local;
+      _leadViewSourcL.Source = _db.LkuLeadStatuses.Local;
       _leadViewSourcE.Source = _db.Emails.Local;
 
       tbkTitle.Text = Title = string.Format("Total rows leadds {0} + emails {1} loaded in {2:N1}s.", _db.Leads.Local.Count(), _db.Emails.Local.Count(), sw.Elapsed.TotalSeconds);
 
-      themeSelector1.SetCurTheme(Thm);
+      themeSelector1.SetCurThemeToMenu(Thm);
     }
     catch (Exception ex) { ex.Pop(); }
 
@@ -56,22 +56,22 @@ public partial class LeadManagerWindow : WpfUserControlLib.Base.WindowBase
     dynamic lead = _leadViewSource.View.CurrentItem;
     if (lead == null) return;
 
-    //dynamic agent = ((DB.QStats.Std.DbModel.Email)(((object[])(e.AddedItems))[0]));
+    //dynamic agent = ((DB.QStats.Std.Models.Email)(((object[])(e.AddedItems))[0]));
 
-    var c = ((DB.QStats.Std.DbModel.Email)((object[])e.AddedItems)[0]).Company;
+    var c = ((DB.QStats.Std.Models.Email)((object[])e.AddedItems)[0]).Company;
     if (!string.IsNullOrEmpty(c) && lead?.Agency != c) lead.Agency = c;
 
-    var n = ((DB.QStats.Std.DbModel.Email)((object[])e.AddedItems)[0]).Fname;
+    var n = ((DB.QStats.Std.Models.Email)((object[])e.AddedItems)[0]).Fname;
     if (!string.IsNullOrEmpty(n) && lead.AgentName != n) lead.AgentName = n;
   }
   void onFilter(object s, RoutedEventArgs e) => filterLeads(tbFilter.Text, cbInclAll.IsChecked == true);
   void onCloseTheLead(object s, RoutedEventArgs e)
   {
-    Debug.WriteLine("{0} - {1}", ((DB.QStats.Std.DbModel.Lead)dgLeads.SelectedItem).AgentName, ((DB.QStats.Std.DbModel.Lead)dgLeads.SelectedItem).Status);
+    Debug.WriteLine("{0} - {1}", ((DB.QStats.Std.Models.Lead)dgLeads.SelectedItem).AgentName, ((DB.QStats.Std.Models.Lead)dgLeads.SelectedItem).Status);
 
-    ((DB.QStats.Std.DbModel.Lead)dgLeads.SelectedItem).Status = "Closed";
+    ((DB.QStats.Std.Models.Lead)dgLeads.SelectedItem).Status = "Closed";
 
-    Debug.WriteLine("{0} - {1} \n", ((DB.QStats.Std.DbModel.Lead)dgLeads.SelectedItem).AgentName, ((DB.QStats.Std.DbModel.Lead)dgLeads.SelectedItem).Status);
+    Debug.WriteLine("{0} - {1} \n", ((DB.QStats.Std.Models.Lead)dgLeads.SelectedItem).AgentName, ((DB.QStats.Std.Models.Lead)dgLeads.SelectedItem).Status);
   }
   void onAddNewLead(object s, RoutedEventArgs e)
   {
@@ -106,7 +106,7 @@ public partial class LeadManagerWindow : WpfUserControlLib.Base.WindowBase
     _leadViewSource.Source = _db.Leads.Local.Where(r =>
       (includeClosed || r.CampaignId == _thisCampaign && r.Status != "Closed" && r.Status != "Dead")
       &&
-      (string.IsNullOrEmpty(filter) || r.Email != null && (r.Email.Id.Contains(filter) || r.Email.Fname.Contains(filter)))
+      (string.IsNullOrEmpty(filter) || r.AgentEmail != null && (r.AgentEmail.Id.Contains(filter) || r.AgentEmail.Fname.Contains(filter)))
     ).OrderBy(r => r.AddedAt);
 
     //todo: changes the status to Active: 

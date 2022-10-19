@@ -1,22 +1,22 @@
 ﻿#nullable enable
-namespace GigaHunt
+namespace GigaHunt.View
 {
   public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
   {
     const double _fractionToSend = .025, _absoluteMax = 25;
     QStatsRlsContext _db;
     CollectionViewSource _cvsEmails;
-    ObservableCollection<VEmailAvailProd> _obsColAvlbl;
+    //ObservableCollection<VEmailAvailProd> _obsColAvlbl;
     IEnumerable<string> _leadEmails, _leadCompns;
     string _firstName = "Sirs";
 
     public EmailersendWindow()
     {
-      InitializeComponent(); themeSelector1.ApplyTheme = ApplyTheme;
+      InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme;
       tbver.Text = $"Db: {QStatsRlsContext.DbNameOnly}        Ver: ???";
       _ = tbFilter.Focus();
 
-      Loaded += async (s, e) => { await Task.Yield(); themeSelector1.SetCurTheme(Thm); Bpr.BeepBgn3(); };
+      Loaded += async (s, e) => { await Task.Yield(); themeSelector1.SetCurThemeToMenu(Thm); Bpr.BeepBgn3(); };
     }
     async Task<string> reLoad()
     {
@@ -32,11 +32,11 @@ namespace GigaHunt
           await _db.Leads.OrderByDescending(r => r.AddedAt).LoadAsync();              /**/  Debug.WriteLine($">>>    Loaded   Leads   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
           _leadEmails = _db.Leads.Local.Select(r => r.AgentEmailId).Distinct();       /**/  Debug.WriteLine($">>>    Loaded  LeadEm   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
           _leadCompns = _db.Leads.Local.Select(r => r.Agency).Distinct();             /**/  Debug.WriteLine($">>>    Loaded  LeadCo   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
-          _obsColAvlbl = _db.VEmailAvailProds.Local;
+          //_obsColAvlbl = _db.VEmailAvailProds.Local;
 
           _cvsEmails = (CollectionViewSource)FindResource("vsEMail_Avail");
           _cvsEmails.Source = null;
-          populateWithSorting(_obsColAvlbl);
+          populateWithSorting(_db.VEmailAvailProds.Local);
         }
         else
         {
@@ -47,7 +47,7 @@ namespace GigaHunt
           _cvsEmails.Source = _db.VEmailUnAvlProds.Local.OrderByDescending(r => r.AddedAt);
         }
 
-        var ttl = chkIsAvailable.IsChecked == true ? _obsColAvlbl.Count : _db.VEmailUnAvlProds.Local.Count;
+        var ttl = chkIsAvailable.IsChecked == true ? _db.VEmailAvailProds.Local.Count : _db.VEmailUnAvlProds.Local.Count;
 
         btMax.Content = $"Top {tbMax.Text = $"{(int)Math.Min(ttl * _fractionToSend, _absoluteMax)}"} rows";
         return string.Format("Total {0} unused records loaded in {1:N1}", ttl, lswTtl.Elapsed.TotalSeconds);
@@ -75,7 +75,7 @@ namespace GigaHunt
               Fname = r.Fname,
               Lname = r.Lname,
               Notes = r.Notes,
-              DoNotNotifyForCampaignID = r.DoNotNotifyOnAvailableForCampaignID,
+              DoNotNotifyForCampaignID = r.DoNotNotifyOnAvailableForCampaignId,
               LastSentAt = r.LastSent,
               LastRepliedAt = r.LastRcvd,
               AddedAt = r.AddedAt,
@@ -87,7 +87,7 @@ namespace GigaHunt
         }
         else
         {
-          rv = _obsColAvlbl.Where(r =>
+          rv = _db.VEmailAvailProds.Local.Where(r =>
                       (cbxLeadEmails.IsChecked != true || _leadEmails.Contains(r.Id)) &&
                       (cbxLeadCompns.IsChecked != true || _leadCompns.Contains(r.Company)) &&
                       (
@@ -201,7 +201,7 @@ namespace GigaHunt
     void btnSave_Click(object s, RoutedEventArgs e) => Save();
     void onRefresh(object s, RoutedEventArgs e) => ReFresh();
     async void onReLoad(object s, RoutedEventArgs e) => tbkTitle.Text = Title = await reLoad();
-    void onClear(object s, RoutedEventArgs e) => _obsColAvlbl.Clear();
+    void onClear(object s, RoutedEventArgs e) => _db.VEmailAvailProds.Local.Clear();
     void btnBroadcastTopN_Click(object s, RoutedEventArgs e)
     {
       try

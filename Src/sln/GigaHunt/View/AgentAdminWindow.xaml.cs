@@ -1,4 +1,6 @@
-﻿namespace AgentFastAdmin
+﻿using Microsoft.Data.SqlClient;
+
+namespace AgentFastAdmin
 {
   public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
   {
@@ -10,7 +12,7 @@
 
     public AgentAdminnWindow()
     {
-      InitializeComponent(); themeSelector1.ApplyTheme = ApplyTheme;
+      InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme;
       //tbver.Text = $"Db: {QStatsRlsContext.DbNameOnly}        Ver: ???";
       //tbver.Text = $"Db: {_db.ServerDatabase()}        Ver: ???";
       _cvsEmailsVwSrc = ((CollectionViewSource)(FindResource("eMailViewSource")));
@@ -42,7 +44,7 @@
       await CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(_db, false, saveAndUpdateMetadata); // keep it for future misstreatments.
       //ctrlPnl.IsEnabled = false;
 
-      AAV.Sys.Helpers.Bpr.Beep1of2();
+      //AAV.Sys.Helpers.Bpr.Beep1of2();
 
       var lsw = Stopwatch.StartNew();
       try
@@ -52,14 +54,31 @@
         await _db.Leads.OrderByDescending(r => r.AddedAt).LoadAsync();                        /**/  Debug.WriteLine($">>> Loaded   Leads   {lsw.ElapsedMilliseconds,6:N0} ms");
         _leadEmails = _db.Leads.Local.Select(r => r.AgentEmailId).Distinct();                 /**/  Debug.WriteLine($">>> Loaded  LeadEm   {lsw.ElapsedMilliseconds,6:N0} ms");
         _leadCompns = _db.Leads.Local.Select(r => r.Agency).Distinct();                       /**/  Debug.WriteLine($">>> Loaded  LeadCo   {lsw.ElapsedMilliseconds,6:N0} ms");
-        _badEmails = _db.Database.SqlQuery<string>("Select Id from [dbo].[BadEmails]()").ToList();
+        _badEmails = await CreateCommand("Select Id from [dbo].[BadEmails]()", _db.Database.GetConnectionString() ?? "??");
+
+        async Task<List<string>> CreateCommand(string queryString, string connectionString)
+        {
+          List<string> rv = new();
+          using (SqlConnection connection = new SqlConnection(connectionString))
+          {
+            SqlCommand command = new SqlCommand(queryString, connection);
+            connection.Open();
+            SqlDataReader reader = await command.ExecuteReaderAsync();
+            while (reader.Read())
+            {
+              rv.Add(reader[0]?.ToString() ?? "??");
+            }
+          }
+
+          return rv;
+        }
 
         _isLoaded = true;
         var fsw = srchFilter();                                                               /**/  Debug.WriteLine($">>> Loaded  Filter   {lsw.ElapsedMilliseconds,6:N0} ms  ({fsw.TotalMilliseconds:N0})");
 
         //tu: sub table  ...maybe: .Include(c => c.Ehists).Load();
 
-        themeSelector1.SetCurTheme(Thm);
+        themeSelector1.SetCurThemeToMenu(Thm);
         App.SpeakAsync("Loaded.");
       }
       catch (Exception ex) { ex.Pop(); }
@@ -181,7 +200,7 @@
         return "*******------------********+++++++++++";
       }
     }
-    public static async Task<bool> CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(DbContext dbx, bool dispose, Func<Task> savePlusMetadata)
+    public static async Task<bool> CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(QStatsRlsContext dbx, bool dispose, Func<Task> savePlusMetadata)
     {
       try
       {
@@ -200,10 +219,10 @@
         else
           return false;
       }
-      catch (Exception ex)      {        ex.Pop();        return true;      }
+      catch (Exception ex) { ex.Pop(); return true; }
     }
     [Obsolete("This one does not save if app is closing immediately")]
-    public static bool CheckAskToSaveDispose_CanditdteForGlobalRepltSynch(DbContext dbx, bool dispose, Func<Task> savePlusMetadata)
+    public static bool CheckAskToSaveDispose_CanditdteForGlobalRepltSynch(QStatsRlsContext dbx, bool dispose, Func<Task> savePlusMetadata)
     {
       try
       {
@@ -222,7 +241,7 @@
         else
           return false;
       }
-      catch (Exception ex)      {        ex.Pop();        return true;      }
+      catch (Exception ex) { ex.Pop(); return true; }
     }
 
     void onLoaded(object s, RoutedEventArgs e) => load();

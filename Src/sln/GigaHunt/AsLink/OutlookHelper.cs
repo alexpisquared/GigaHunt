@@ -1,28 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Net.Mail;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using GigaHunt.Helpers;
-
-using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Net.Mail;
-using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using AgentFastAdmin;
-using AsLink;
-using GigaHunt.Helpers;
-using OL = Microsoft.Office.Interop.Outlook;
-
-
+﻿
 namespace GigaHunt.AsLink;
 class Misc { public const string qRcvd = "Q", qSent = "Sent Items", qSentDone = "Sent Items/_DbDoneSent", qDltd = "Deleted Items", qFail = "Q/Fails", qFailsDone = "Q/FailsDone", qRcvdDone = "Q/_DbDoneRcvd", qLate = "Q/ToReSend"/*, qVOld = "Q/VeryOld"*/; }
 
@@ -41,7 +17,7 @@ public class OutlookHelper
     {
       _olApp = new OL.Application();
 
-      MyStore = "alex.pigida@outlook.com";
+      MyStore = _olApp.Session.Stores["alex.pigida@outlook.com"];
       _contactsFolder = MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderContacts);        // this.Application.GetNamespace("MAPI").GetDefaultFolder(OL.OlDefaultFolders.olFolderContacts);                //_deletedsFolder = _store.GetDefaultFolder(OL.OlDefaultFolders.olFolderDeletedItems);
     }
     catch (COMException ex) { ex.Pop("I think this is it... (ap: Jun`20)"); }
@@ -139,7 +115,7 @@ public class OutlookHelper
       while (i != null)
       {
         i.Display(true);
-        i = _contactsFolder.Items.FindNext();
+        i = (OL.ContactItem)_contactsFolder.Items.FindNext();
       }
     }
     catch (Exception ex) { ex.Pop(lastName); throw; }
@@ -169,7 +145,7 @@ public class OutlookHelper
                             && !r.Id.Contains("reply")
                             && !r.Id.Contains("'")
                             && !r.Id.Contains("+")
-                            && r.EHists.Count(e => string.Compare(e.RecivedOrSent, "S", true) == 0 && !string.IsNullOrEmpty(e.LetterBody) && e.LetterBody.Length > 96) > _customLetersSentThreshold); //at least 2 letters sent (1 could be just an unanswered reply on their broadcast)
+                            && r.Ehists.Count(e => string.Compare(e.RecivedOrSent, "S", true) == 0 && !string.IsNullOrEmpty(e.LetterBody) && e.LetterBody.Length > 96) > _customLetersSentThreshold); //at least 2 letters sent (1 could be just an unanswered reply on their broadcast)
 
     var ttl = q.Count();
     Debug.WriteLine("\r\n{0} eligible email contacts found", ttl);
@@ -252,7 +228,7 @@ public class OutlookHelper
         _updatedCount++;
       }
 
-      i = _contactsFolder.Items.FindNext();
+      i = (OL.ContactItem)_contactsFolder.Items.FindNext();
     }
   }
   void createFromDbOutlookContact(Email em)
@@ -275,7 +251,7 @@ public class OutlookHelper
       q.Count(),
       q.Min(e => e.EmailedAt),
       q.Max(e => e.EmailedAt),
-      t == null ? "" : (t.LetterBody.Length > 222 ? (t.LetterBody.Substring(0, 222) + " ...") : t.LetterBody));
+      t == null ? "" : (t.LetterBody.Length > 222 ? (t.LetterBody[..222] + " ...") : t.LetterBody));
 
     //i.Display(true);
 
@@ -292,7 +268,7 @@ public class OutlookHelper
 
     foreach (var o in folder.Items) //.Where(r => r==r))
     {
-      if (o is OL.ContactItem)          /**/{ var i = o as OL.ContactItem; Debug.WriteLine($"C {i.FirstName,16}\t{i.LastName,-16}\t{i.Email1Address,24}\t{i.Subject,-48}\t{(string.IsNullOrWhiteSpace(i.Body) ? "·" : (i.Body.Length > 50 ? i.Body.Substring(0, 50) : i.Body))}\t{i.Account}"); }
+      if (o is OL.ContactItem)          /**/{ var i = o as OL.ContactItem; Debug.WriteLine($"C {i.FirstName,16}\t{i.LastName,-16}\t{i.Email1Address,24}\t{i.Subject,-48}\t{(string.IsNullOrWhiteSpace(i.Body) ? "·" : (i.Body.Length > 50 ? i.Body[..50] : i.Body))}\t{i.Account}"); }
       else if (o is OL.MailItem)        /**/{ var i = o as OL.MailItem; Debug.WriteLine($"M {i.To,-32}\t{i.Subject,-48}\t"); }
       else if (o is OL.AppointmentItem) /**/{ var i = o as OL.AppointmentItem; Debug.WriteLine($"M {i.Subject,-48}\t"); }
       else if (o is OL.MeetingItem)     /**/{ var i = o as OL.MeetingItem; Debug.WriteLine($"M {i.Subject,-48}\t"); }
@@ -338,7 +314,7 @@ public class OutlookHelper
       return;
     }
 
-    if (!string.IsNullOrWhiteSpace(ci.Body)) Debug.WriteLine($"{(string.IsNullOrWhiteSpace(ci.Body) ? "·" : (ci.Body.Length > 50 ? ci.Body.Substring(0, 50) : ci.Body))}"); // <= strange thing: all bodies are empty.
+    if (!string.IsNullOrWhiteSpace(ci.Body)) Debug.WriteLine($"{(string.IsNullOrWhiteSpace(ci.Body) ? "·" : (ci.Body.Length > 50 ? ci.Body[..50] : ci.Body))}"); // <= strange thing: all bodies are empty.
 
     var phone = $"{ci.HomeTelephoneNumber} {ci.PrimaryTelephoneNumber} {ci.BusinessTelephoneNumber} {ci.Business2TelephoneNumber} {ci.MobileTelephoneNumber}".Replace("(", "").Replace(")", "-").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Trim();
     var agency = /*!string.IsNullOrWhiteSpace(ci.CompanyName) ? ci.CompanyName : */GetCompanyName(emailId);
@@ -350,7 +326,7 @@ public class OutlookHelper
         AddedAt = App.Now
       });
 
-    Debug.WriteLine($"{emailId,32}\t{ci.FirstName,17} {ci.LastName,-21}\t{ci.JobTitle,-80}\t{phone}\t{(string.IsNullOrWhiteSpace(ci.Body) ? "·" : (ci.Body.Length > 50 ? ci.Body.Substring(0, 50) : ci.Body))}");
+    Debug.WriteLine($"{emailId,32}\t{ci.FirstName,17} {ci.LastName,-21}\t{ci.JobTitle,-80}\t{phone}\t{(string.IsNullOrWhiteSpace(ci.Body) ? "·" : (ci.Body.Length > 50 ? ci.Body[..50] : ci.Body))}");
 
     addUpdateBassedOnGoodEmailId(ci, db, emailId, phone, agency, srcFolder);
   }
@@ -452,8 +428,8 @@ public class OutlookHelper
 
   public static (string, string) figureOutSenderFLName(string fln, string email)
   {
-    if (fln == null ||
-      fln == "Marketing- SharedMB" // randstad on behalf of case
+    if (fln is null or
+      "Marketing- SharedMB" // randstad on behalf of case
       )
     {
       var hlp = new FirstLastNameParser(email);
@@ -467,7 +443,7 @@ public class OutlookHelper
 
     var idx = fln.IndexOf('@');
     if (idx > 0)
-      fln = fln.Substring(0, idx);
+      fln = fln[..idx];
 
     var flnArray = fln.Split(_delim, StringSplitOptions.RemoveEmptyEntries);
     if (flnArray.Length == 1)
@@ -488,7 +464,7 @@ public class OutlookHelper
     body = body.ToLower();
     email = email.ToLower();
     var idx = body.IndexOf(email);
-    var words = body.Substring(0, idx).Split(_delim, StringSplitOptions.RemoveEmptyEntries);
+    var words = body[..idx].Split(_delim, StringSplitOptions.RemoveEmptyEntries);
     var len = words.Length;
     if (len > 5)
     {
@@ -522,7 +498,7 @@ public class OutlookHelper
     var pc = reportItem.Body.ToLower().IndexOf("please contact");
     if (pc > 0)
     {
-      var words = reportItem.Body.Substring(startIndex: pc).Split(new[] { ' ', '.', ',' }, StringSplitOptions.RemoveEmptyEntries);
+      var words = reportItem.Body[pc..].Split(new[] { ' ', '.', ',' }, StringSplitOptions.RemoveEmptyEntries);
       return (words[2], words[3]);
     }
 
@@ -548,13 +524,13 @@ public class OutlookHelper
     var b = emailAddress.IndexOf('@');
     if (b > 0 && a < b)
     {
-      var c = emailAddress.Substring(a, b - a);
+      var c = emailAddress[a..b];
       var d = emailAddress.Replace(c, "");
       return d;
     }
     else
     {
-      var c = emailAddress.Substring(0, a);
+      var c = emailAddress[..a];
       return c;
     }
   }
@@ -579,7 +555,7 @@ public class OutlookHelper
       Debug.Write($"==> {ww}: ");
 
       var pa = item.PropertyAccessor;
-      object prop = pa.GetProperty($"http://schemas.microsoft.com/mapi/proptag/{ww}");
+      var prop = pa.GetProperty($"http://schemas.microsoft.com/mapi/proptag/{ww}");
 
       if (prop is byte[])
       {
@@ -608,7 +584,7 @@ public class OutlookHelper
     var i2 = b.IndexOf(s2, i1);
     if (i2 < 0) return null;
     if (i2 < i1) return null;
-    var em = b.Substring(i1, i2 - i1);
+    var em = b[i1..i2];
     return em;
   }
 

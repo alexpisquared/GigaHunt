@@ -1,13 +1,4 @@
-using WpfUserControlLib.Ext;
-using DB.QStats.Std.DbModel;
-//using GigaHunt.Properties;
 using Emailing;
-using OutlookToDbWpfApp;
-using System;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace GigaHunt
 {

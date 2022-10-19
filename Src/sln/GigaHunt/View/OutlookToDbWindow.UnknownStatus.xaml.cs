@@ -1,14 +1,6 @@
-﻿using AsLink;
-using GigaHunt.Helpers;
-using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using System.Windows;
-using Outlook = Microsoft.Office.Interop.Outlook;
+﻿using Outlook = Microsoft.Office.Interop.Outlook;
 
-namespace GigaHunt
+namespace GigaHunt.View
 {
   public partial class OutlookToDbWindowUnkn : WpfUserControlLib.Base.WindowBase
   {
@@ -16,7 +8,7 @@ namespace GigaHunt
     const string note = "note3";
     readonly DateTime _now = GigaHunt.App.Now;
 
-    public OutlookToDbWindowUnkn() { InitializeComponent(); themeSelector1._applyTheme = ApplyTheme; }
+    public OutlookToDbWindowUnkn() { InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme; }
 
     async void onLoadedAsync(object s, RoutedEventArgs e) => await btnRefreshDbFromOutlookAsync();
 
@@ -28,7 +20,7 @@ namespace GigaHunt
       var em = _db.Emails.Find(email);
       if (em == null)
       {
-        em = _db.Emails.Add(new Email { Id = email, Company = getCompanyName(email), Fname = new FirstLastNameParser(flName).FirstName, Lname = new FirstLastNameParser(flName).LastName, Notes = note, AddedAt = _now });
+        em = _db.Emails.Add(new Email { Id = email, Company = getCompanyName(email), Fname = new FirstLastNameParser(flName).FirstName, Lname = new FirstLastNameParser(flName).LastName, Notes = note, AddedAt = _now }).Entity;
         await _db.TrySaveReportAsync("OutlookToDb.cs");
       }
       //insertEMailEHistItem(isRcvd, timeRecdSent, em, subject, body);		}		void insertEMailEHistItem(bool isRcvd, DateTime timeRecdSent, Email em, string subject, string body)		{

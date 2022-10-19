@@ -6,4 +6,6 @@ internal class Bpr
   internal static void Beep2of2() => throw new NotImplementedException();
   internal static void BeepBgn3() => throw new NotImplementedException();
   internal static void BeepClk() => throw new NotImplementedException();
+  internal static void BeepDone() => throw new NotImplementedException();
+  internal static void BeepShort() => throw new NotImplementedException();
 }

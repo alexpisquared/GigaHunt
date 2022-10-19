@@ -1,24 +1,19 @@
-﻿using AAV.Sys.Helpers;
-using GigaHunt.View;
-using DB.QStats.Std.DbModel;
-using System.Data.Entity;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using GigaHunt.AsLink;
 
-namespace GigaHunt
+namespace GigaHunt.View
 {
   public partial class MainSwitchboard : WpfUserControlLib.Base.WindowBase
   {
     public MainSwitchboard()
     {
       InitializeComponent(); 
-      themeSelector1.ApplyTheme = ApplyTheme;
+      themeSelector1.ThemeApplier = ApplyTheme;
 
-      tbver.Text = $"Db: {DB.QStats.Std.DbModel.QStatsRlsContext.DbNameOnly}        Ver: ???";
+      tbver.Text = $"Db: {DB.QStats.Std.Models.QStatsRlsContext.DbNameOnly}        Ver: ???";
 
-      Task.Run(() => QStatsRlsContext.Create().lkuLeadStatus.Load()); // preload to ini the EF for faster loads in views.
+      Task.Run(() => QStatsRlsContext.Create().LkuLeadStatuses.Load()); // preload to ini the EF for faster loads in views.
 
-      Loaded += async (s, e) => { await Task.Yield(); themeSelector1.SetCurTheme(Thm); Bpr.BeepBgn3(); };
+      Loaded += async (s, e) => { await Task.Yield(); themeSelector1.SetCurThemeToMenu(Thm); Bpr.BeepBgn3(); };
 
 #if DEBUG_
       if (checkNewEmail)
@@ -33,6 +28,6 @@ namespace GigaHunt
 
     void onDb2Ou(object s, RoutedEventArgs e) => tbkTitle.Text = Title = tbRep.Text = new OutlookHelper().SyncDbToOutlook(QStatsRlsContext.Create());
     async void onUndel(object s, RoutedEventArgs e) => tbkTitle.Text = Title = tbRep.Text = await new OutlookHelper().OutlookUndeleteContactsAsync(QStatsRlsContext.Create());
-    void onDbIni(object s, RoutedEventArgs e) => DBInitializer.SetDbInitializer();
+    void onDbIni(object s, RoutedEventArgs e) { } //  => DBInitializer.SetDbInitializer();
   }
 }

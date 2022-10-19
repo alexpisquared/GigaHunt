@@ -1,4 +1,6 @@
-﻿namespace GigaHunt;
+﻿using GigaHunt.View;
+
+namespace GigaHunt;
 public partial class App : Application
 {
   public static DateTime Now = DateTime.Now;
