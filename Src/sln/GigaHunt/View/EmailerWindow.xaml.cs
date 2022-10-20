@@ -26,7 +26,9 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
       tbver.Text = $"Db: ???        Ver: ???";
       if (chkIsAvailable.IsChecked == true)
       {
-        _db.Database.SetCommandTimeout(150);
+        _db.Database.SetCommandTimeout(300);
+
+        new SpeechSynthesizer().SpeakAsync("Thiss could take a while: cold start runs minutes...");
 
         await _db.VEmailAvailProds.LoadAsync();                                     /**/  Debug.WriteLine($">>>    Loaded   EmlVw   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
         await _db.Leads.OrderByDescending(r => r.AddedAt).LoadAsync();              /**/  Debug.WriteLine($">>>    Loaded   Leads   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
@@ -36,7 +38,7 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
 
         _cvsEmails = (CollectionViewSource)FindResource("vsEMail_Avail");
         _cvsEmails.Source = null;
-        populateWithSorting(_db.VEmailAvailProds.Local);
+        populateWithSorting(_db.VEmailAvailProds.Local.ToBindingList());
       }
       else
       {

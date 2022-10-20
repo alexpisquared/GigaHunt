@@ -4,6 +4,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+/*
 ALTER FUNCTION [dbo].[BadEmails] () -- last edit: Sep 29`19
 RETURNS TABLE  
 AS  
@@ -49,11 +50,11 @@ RETURN
 go
 select getdate() Date ,   Count(*) BadEmlCount  from [BadEmails]() 
 go
-/*
-Date				BadEmlCount
-2019-08-14	1965 
-2019-09-29	2308
-*/
+
+-- Date				BadEmlCount
+-- 2019-08-14	1965 
+-- 2019-09-29	2308
+
 ALTER FUNCTION CurrentCampaignStart () --IF OBJECT_ID (N'CurrentCampaignStart', N'FN') IS NOT NULL    DROP FUNCTION CurrentCampaignStart;  GO
 RETURNS datetime --WITH EXECUTE AS CALLER  
 AS  
@@ -88,13 +89,13 @@ GO
 ALTER VIEW [dbo].[vEMail_Avail_Prod]
 AS
   SELECT TOP (100) PERCENT
-    ID, FName, LName, Company, Phone, PermBanReason, Notes, AddedAt, DoNotNotifyOnAvailableForCampaignID AS DoNotNotifyForCampaignID,
+    ISNULL(ROW_NUMBER() OVER (ORDER BY AddedAt desc), 0)                                                                      AS RowNumberForEfId,
+    ID, FName, LName, Company, Phone, PermBanReason, Notes, AddedAt, DoNotNotifyOnAvailableForCampaignID                      AS DoNotNotifyForCampaignID,
     (SELECT MAX(CampaignStart) FROM dbo.Campaign)                                                                             AS CurrentCampaignStart,
     (SELECT Id FROM dbo.Campaign WHERE (CampaignStart = (SELECT MAX(CampaignStart) FROM dbo.Campaign AS Campaign_6)))         AS LastCampaignID,
     (SELECT COUNT(*)       FROM dbo.EHist WHERE (RecivedOrSent = 'S') AND (LetterBody NOT LIKE 'std%') AND (EMailID = em.ID)) AS MyReplies,
     (SELECT MAX(EmailedAt) FROM dbo.EHist WHERE (RecivedOrSent = 'S') AND (LetterBody NOT LIKE 'std%') AND (EMailID = em.ID)) AS LastSentAt,
     (SELECT MAX(EmailedAt) FROM dbo.EHist WHERE (RecivedOrSent<> 'S') AND (LetterBody NOT LIKE 'std%') AND (EMailID = em.ID)) AS LastRepliedAt,
-
     (SELECT COUNT(*)       FROM dbo.EHist WHERE (RecivedOrSent = 'S')                                  AND (EMailID = em.ID)) AS TtlSends,
     (SELECT COUNT(*)       FROM dbo.EHist WHERE (RecivedOrSent = 'R')                                  AND (EMailID = em.ID)) AS TtlRcvds
   FROM dbo.EMail AS em
@@ -123,10 +124,8 @@ SELECT
   dbo.IsNotifiedForCurCmpgn('nadine.pigida@outlook.com')                         AS 'notified already - nadine.pigida@ou'
 GO
 
-
-select top(7) *             from [dbo].[vEMail_Avail_Prod] ORDER BY LastSentAt --DESC -- where ReSendAfter IS NOT NULL --AND ReSendAfter < GETDATE() -- PermBanReason IS NOT NULL  -- //Company = 'umca'
-
-
+CREATE NONCLUSTERED INDEX EmailerViewAcceleratorIndex ON dbo.EHist (EMailID, RecivedOrSent) -- solves 8 min cold start for the vEMail_Avail_Prod view!!!
+*/
 
 --INSERT INTO EMail                                                (ID, FName, LName, Company, Phone, PermBanReason, DoNotNotifyOnAvailableForCampaignID, DoNotNotifyOnOffMarketForCampaignID,                          Notes, NotifyPriority, ReSendAfter, AddedAt, ModifiedAt)
 SELECT     REPLACE(REPLACE(ID, '@bullhorn.com', ''), '=', '@') AS ID, FName, LName, Company, Phone, PermBanReason, DoNotNotifyOnAvailableForCampaignID, DoNotNotifyOnOffMarketForCampaignID, 'from ''' + ID + '''' AS Notes, NotifyPriority, ReSendAfter, AddedAt, ModifiedAt
@@ -135,3 +134,7 @@ WHERE     (ID LIKE '%=%@bullhorn.com%') AND (NOT EXISTS
                       (SELECT     ID, FName, LName, Company, Phone, PermBanReason, DoNotNotifyOnAvailableForCampaignID, DoNotNotifyOnOffMarketForCampaignID, Notes, NotifyPriority, ReSendAfter, AddedAt, ModifiedAt
                        FROM        EMail AS EMail_1
                        WHERE     (ID = REPLACE(REPLACE(e1.ID, '@bullhorn.com', ''), '=', '@'))))
+
+-- this takes 8 min!!!!!!!
+select top(7) * from [dbo].[vEMail_Avail_Prod] --ORDER BY LastSentAt --DESC -- where ReSendAfter IS NOT NULL --AND ReSendAfter < GETDATE() -- PermBanReason IS NOT NULL  -- //Company = 'umca'
+

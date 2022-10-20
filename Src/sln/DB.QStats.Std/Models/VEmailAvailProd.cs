@@ -5,6 +5,7 @@ namespace DB.QStats.Std.Models
 {
     public partial class VEmailAvailProd
     {
+        public long RowNumberForEfId { get; set; }
         public string Id { get; set; } = null!;
         public string? Fname { get; set; }
         public string? Lname { get; set; }
