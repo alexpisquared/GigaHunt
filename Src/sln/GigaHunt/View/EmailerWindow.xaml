@@ -88,7 +88,7 @@
 
           <!--<Button Content="Leads"                    Click="onLeads" Foreground="#08f" />          <Button Content="Agents"                   Click="onAgent" Foreground="#076" />          <Button Content="Outlook -> DB"            Click="onOu2Db" Foreground="#0a0" />-->
 
-          <TextBlock x:Name="tbkTitle"  HorizontalAlignment="Center" TextWrapping="Wrap" Text="Info" />
+          <TextBlock x:Name="tbkTitle" Foreground="#1af"  HorizontalAlignment="Center" TextWrapping="Wrap" Text="Info" />
 
         </StackPanel>
 

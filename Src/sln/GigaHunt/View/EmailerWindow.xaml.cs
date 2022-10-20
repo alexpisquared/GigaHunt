@@ -3,14 +3,16 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
 {
   const double _fractionToSend = .025, _absoluteMax = 25;
   QStatsRlsContext _db;
-  CollectionViewSource _cvsEmails;
+  CollectionViewSource _cvsEmails = new();
   //ObservableCollection<VEmailAvailProd> _obsColAvlbl;
-  IEnumerable<string> _leadEmails, _leadCompns;
+  IEnumerable<string>? _leadEmails, _leadCompns;
   string _firstName = "Sirs";
 
   public EmailersendWindow()
   {
     InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme;
+
+    _db = QStatsRlsContext.Create();
     tbver.Text = $"Db: ???        Ver: ???";
     _ = tbFilter.Focus();
 
@@ -22,7 +24,6 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
     var lsw = Stopwatch.StartNew();
     try
     {
-      _db = QStatsRlsContext.Create();                                              /**/  Debug.WriteLine($">>> QStatsRlsContext.Create(){lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
       tbver.Text = $"Db: ???        Ver: ???";
       if (chkIsAvailable.IsChecked == true)
       {
@@ -32,9 +33,8 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
 
         await _db.VEmailAvailProds.LoadAsync();                                     /**/  Debug.WriteLine($">>>    Loaded   EmlVw   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
         await _db.Leads.OrderByDescending(r => r.AddedAt).LoadAsync();              /**/  Debug.WriteLine($">>>    Loaded   Leads   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
-        _leadEmails = _db.Leads.Local.Select(r => r.AgentEmailId).Distinct();       /**/  Debug.WriteLine($">>>    Loaded  LeadEm   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
-        _leadCompns = _db.Leads.Local.Select(r => r.Agency).Distinct();             /**/  Debug.WriteLine($">>>    Loaded  LeadCo   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
-        //_obsColAvlbl = _db.VEmailAvailProds.Local;
+        _leadEmails = _db.Leads.Local.Select(r => r.AgentEmailId ?? "").Distinct(); /**/  Debug.WriteLine($">>>    Loaded  LeadEm   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
+        _leadCompns = _db.Leads.Local.Select(r => r.Agency ?? "").Distinct();       /**/  Debug.WriteLine($">>>    Loaded  LeadCo   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
 
         _cvsEmails = (CollectionViewSource)FindResource("vsEMail_Avail");
         _cvsEmails.Source = null;
@@ -161,7 +161,7 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
               var text = Clipboard.GetText();
               if (string.IsNullOrEmpty(text)) return;
 
-              var mail = OutlookHelper.FindEmails(text)?.FirstOrDefault();
+              var mail = OutlookHelper6.FindEmails(text)?.FirstOrDefault();
               if (string.IsNullOrEmpty(mail)) return;
 
               var t = text.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
@@ -186,7 +186,7 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
       var text = tbMail.Text;
       if (string.IsNullOrEmpty(text)) return;
 
-      var mail = OutlookHelper.FindEmails(text)?.FirstOrDefault();
+      var mail = OutlookHelper6.FindEmails(text)?.FirstOrDefault();
       if (string.IsNullOrEmpty(mail)) return;
 
       _firstName = Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase((tbName.Text ?? "Sirs").ToLower()); // ALEX will be ALEX without .ToLower() (2020-12-03)
@@ -298,7 +298,7 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
   void cbMail_SelectionChanged(object s, SelectionChangedEventArgs e)
   {
     if (tbMail != null)
-      tbMail.Text = ((ContentControl)e.AddedItems[0])?.Content?.ToString();
+      tbMail.Text = (e.AddedItems[0] as ContentControl)?.Content?.ToString();
   }
   void onSelectnChgd(object s, SelectionChangedEventArgs e)
   {

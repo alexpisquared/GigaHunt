@@ -53,8 +53,8 @@ namespace AgentFastAdmin
         await _db.Emails.OrderByDescending(r => r.AddedAt).OrderBy(r => r.Notes).LoadAsync(); /**/  Debug.WriteLine($">>> Loaded  Emails   {lsw.ElapsedMilliseconds,6:N0} ms");
         await _db.Ehists.OrderByDescending(r => r.EmailedAt).LoadAsync();                     /**/  Debug.WriteLine($">>> Loaded  Ehists   {lsw.ElapsedMilliseconds,6:N0} ms"); //tu: that seems to order results in the secondary table where there is no control of roder available. Jul-2019
         await _db.Leads.OrderByDescending(r => r.AddedAt).LoadAsync();                        /**/  Debug.WriteLine($">>> Loaded   Leads   {lsw.ElapsedMilliseconds,6:N0} ms");
-        _leadEmails = _db.Leads.Local.Select(r => r.AgentEmailId).Distinct();                 /**/  Debug.WriteLine($">>> Loaded  LeadEm   {lsw.ElapsedMilliseconds,6:N0} ms");
-        _leadCompns = _db.Leads.Local.Select(r => r.Agency).Distinct();                       /**/  Debug.WriteLine($">>> Loaded  LeadCo   {lsw.ElapsedMilliseconds,6:N0} ms");
+        _leadEmails = _db.Leads.Local.Select(r => r.AgentEmailId ?? "").Distinct();           /**/  Debug.WriteLine($">>> Loaded  LeadEm   {lsw.ElapsedMilliseconds,6:N0} ms");
+        _leadCompns = _db.Leads.Local.Select(r => r.Agency ?? "").Distinct();                 /**/  Debug.WriteLine($">>> Loaded  LeadCo   {lsw.ElapsedMilliseconds,6:N0} ms");
         _badEmails = await CreateCommand("Select Id from [dbo].[BadEmails]()", _db.Database.GetConnectionString() ?? "??");
 
         async Task<List<string>> CreateCommand(string queryString, string connectionString)
@@ -269,7 +269,7 @@ namespace AgentFastAdmin
     {
       BPR.BeepClk();
       if (_cvsEmailsVwSrc.View.CurrentItem is Email em)
-        new OutlookHelper().AddUpdateOutlookContact(em);
+        new OutlookHelper6().AddUpdateOutlookContact(em);
       else
         App.SpeakAsync("Unable to UpdateContactByEmail since current item is not email.");
     }
@@ -306,7 +306,10 @@ namespace AgentFastAdmin
       try
       {
         if (e.AddedItems.Count > 0)
-          fillExtProp(e.AddedItems[0] as Email);
+        {
+          if (e.AddedItems[0] as Email is not null)
+            fillExtProp(e.AddedItems[0] as Email ?? throw new ArgumentNullException(nameof(e), "#########%%%%%%%%"));
+        }
 
         //too often: doInfoPendingSave();
       }

@@ -2,7 +2,7 @@
 
 public partial class MainSwitchboardUsrCtrl : UserControl
 {
-  public Window ContainerWindow => _owner ??= this.FindParentWindow(); Window _owner;
+  public Window ContainerWindow => _owner ??= this.FindParentWindow(); Window? _owner;
   void popIt_modal(Window popWind, string lastWin) { ContainerWindow.Hide(); _ = popWind.ShowDialog(); ContainerWindow.Show(); Settings.Default.LastWin = lastWin; }
   void popIt(Window popWind, string lastWin) { ContainerWindow.Hide(); popWind.Show(); ContainerWindow.Close(); Settings.Default.LastWin = lastWin; }
 

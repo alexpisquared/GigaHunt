@@ -1,5 +1,4 @@
-﻿using AsLink;
-using GigaHunt.Properties;
+﻿using GigaHunt.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,7 +75,7 @@ namespace GigaHunt
 
   public class WindowPlace
   {
-    public string WinName { get; set; }
+    public string? WinName { get; set; }
     public double windowLeft = 200;
     public double windowTop = 200;
     public double windowWidth = 960;

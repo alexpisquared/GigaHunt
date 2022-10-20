@@ -14,7 +14,7 @@ namespace AvailStatusEmailer
   public partial class App : Application
   {
     public static DateTime Now = DateTime.Now;
-    static SpeechSynthesizer _synth = null; static SpeechSynthesizer Synth
+    static SpeechSynthesizer _synth; static SpeechSynthesizer Synth
     {
       get
       {

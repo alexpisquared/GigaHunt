@@ -13,8 +13,8 @@ namespace Emailing
 {
   public class Emailer
   {
-    public static async Task<bool> Send(string trgEmailAdrs, string msgSubject, string msgBody, string[] attachedFilenames = null, string signatureImage = null) => await Send(cFrom, trgEmailAdrs, msgSubject, msgBody, attachedFilenames, signatureImage);
-    public static async Task<bool> Send(string from, string trgEmailAdrs, string msgSubject, string msgBody, string[] attachedFilenames = null, string signatureImage = null)
+    public static async Task<bool> Send(string trgEmailAdrs, string msgSubject, string msgBody, string[]? attachedFilenames = null, string? signatureImage = null) => await Send(cFrom, trgEmailAdrs, msgSubject, msgBody, attachedFilenames, signatureImage);
+    public static async Task<bool> Send(string from, string trgEmailAdrs, string msgSubject, string msgBody, string[]? attachedFilenames = null, string? signatureImage = null)
     {
       var sw = Stopwatch.StartNew();
       try

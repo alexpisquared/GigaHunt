@@ -42,7 +42,7 @@ namespace Emailer3
       await _host.StartAsync();
 
       var mainWindow = _host.Services.GetService<MainWindow>();
-      mainWindow.Show();
+      mainWindow?.Show();
     }
 
     async void Application_Exit(object sender, ExitEventArgs e)

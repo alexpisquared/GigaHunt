@@ -83,7 +83,7 @@
 
         <Button  Content="Max 50"  Click="onMoreHistCounts" VerticalAlignment="Center" Margin="32 8" ToolTip="Set max to 50 (from 10) on filter results" Foreground="#f00" HorizontalAlignment="Right" />
         <View1:ThemeSelectorUsrCtrl x:Name="themeSelector1" />
-        <TextBlock x:Name="tbkTitle" TextWrapping="Wrap" Text="Info" Foreground="#888" />
+        <TextBlock x:Name="tbkTitle" Foreground="#1af" TextWrapping="Wrap" Text="Info" />
       </StackPanel>
 
       <Grid Grid.Row="1" DataContext="{StaticResource eMailViewSource}">

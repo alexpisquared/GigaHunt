@@ -59,7 +59,7 @@
         </TextBlock>
 
 
-        <TextBlock  Grid.Column="3" x:Name="tbkTitle"  HorizontalAlignment="Center" TextWrapping="Wrap" Text="Info" />
+        <TextBlock  Grid.Column="3" x:Name="tbkTitle" Foreground="#1af"  HorizontalAlignment="Center" TextWrapping="Wrap" Text="Info" />
         <StackPanel Grid.ColumnSpan="4" Orientation="Horizontal" VerticalAlignment="Center" Margin="6,0">
 
           <StackPanel Orientation="Horizontal">

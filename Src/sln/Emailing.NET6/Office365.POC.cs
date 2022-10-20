@@ -39,7 +39,7 @@ namespace Emailing
     private static void SendCompletedCallback(object sender, AsyncCompletedEventArgs e)
     {
       // Get the message we sent
-      var msg = (MailMessage)e.UserState;
+      var msg = e.UserState as MailMessage;
 
       if (e.Cancelled)
       {

@@ -1,10 +1,6 @@
-﻿
-using GigaHunt.View;
-
-namespace GigaHunt.AsLink;
+﻿namespace GigaHunt.AsLink;
 class Misc { public const string qRcvd = "Q", qSent = "Sent Items", qSentDone = "Sent Items/_DbDoneSent", qDltd = "Deleted Items", qFail = "Q/Fails", qFailsDone = "Q/FailsDone", qRcvdDone = "Q/_DbDoneRcvd", qLate = "Q/ToReSend"/*, qVOld = "Q/VeryOld"*/; }
-
-public class OutlookHelper
+public class OutlookHelper6
 {
   readonly OL.Application _olApp;
   readonly OL.MAPIFolder _contactsFolder;
@@ -13,7 +9,7 @@ public class OutlookHelper
   int _updatedCount, _addedCount;
   const string _regexEmailPattern = @"\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*"; // //var r = new Regex(@"/\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}\b/");         \b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b  <== http://www.regular-expressions.info/email.html
 
-  public OutlookHelper()
+  public OutlookHelper6()
   {
     try
     {
@@ -48,7 +44,7 @@ public class OutlookHelper
     }
     catch (Exception ex) { ex.Pop(@"Q\Fails"); throw; }
   }
-  public OL.Items GetItemsFromFolder(string folderPath, string messageClass = null) // IPM.Note, REPORT.IPM.Note.NDR
+  public OL.Items GetItemsFromFolder(string folderPath, string? messageClass = null) // IPM.Note, REPORT.IPM.Note.NDR
   {
     try
     {
@@ -138,7 +134,7 @@ public class OutlookHelper
     }
     catch (Exception ex) { ex.Pop("!!! MUST RUN OUTLOOK TO WORK !!!"); throw; }
   }
-  public string SyncDbToOutlook(QStatsRlsContext db, string folderName = null)
+  public string SyncDbToOutlook(QStatsRlsContext db, string? folderName = null)
   {
     //AAV.Sys.Helpers.BPR.Beep1of2();
     var q = db.Emails.Where(r => string.IsNullOrEmpty(r.PermBanReason)
@@ -292,9 +288,9 @@ public class OutlookHelper
 
     foreach (var o in folder.Items)
     {
-      if (o is OL.ContactItem)
+      if (o is OL.ContactItem item)
       {
-        addUpdateToDb(o as OL.ContactItem, QStatsRlsContext, srcFolder);
+        addUpdateToDb(item, QStatsRlsContext, srcFolder);
       }
     }
   }
