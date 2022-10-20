@@ -9,10 +9,6 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
   protected override void OnClosing(System.ComponentModel.CancelEventArgs e) => base.OnClosing(e); /*DialogResult = _newEmailsAdded > 0;*/
   async void onLoaded(object s, RoutedEventArgs e)
   {
-#if DEBUG_
-    await onDoReglr_();      //_oh.FindContactByEmail("jingmei.li@live.com");
-    await Task.Yield();
-#else
     var qF = _oh.GetItemsFromFolder(Misc.qFail).Count;
     var qR = _oh.GetItemsFromFolder(Misc.qRcvd).Count;
     var qS = _oh.GetItemsFromFolder(Misc.qSent).Count;
@@ -52,7 +48,6 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
         App.SpeakAsync("Finished Outlook-to-database processing.");
       }
     }
-#endif
   }
 
   void onClose(object s, RoutedEventArgs e) => Close();
