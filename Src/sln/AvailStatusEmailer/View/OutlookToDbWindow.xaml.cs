@@ -24,9 +24,6 @@ namespace OutlookToDbWpfApp
     protected override void OnClosing(System.ComponentModel.CancelEventArgs e) => base.OnClosing(e); /*DialogResult = _newEmailsAdded > 0;*/
     async void onLoaded(object s = null, RoutedEventArgs e = null)
     {
-#if DEBUG
-      await onDoReglr_();      //_oh.FindContactByEmail("jingmei.li@live.com");
-#else
       var qF = _oh.GetItemsFromFolder(Misc.qFail).Count;
       var qR = _oh.GetItemsFromFolder(Misc.qRcvd).Count;
       var qS = _oh.GetItemsFromFolder(Misc.qSent).Count;
@@ -46,9 +43,13 @@ namespace OutlookToDbWpfApp
         tb1.Text = $"Total {ttl} new items found (including {qL} OOF). Total sent/rcvd: {qSD} / {qRD} already.\n\n";
         App.SpeakAsync(tb1.Text);
 
+        var sw = Stopwatch.StartNew();
         await _db.EMails.LoadAsync();
+        App.SpeakAsync($"Emails loaded in {sw.Elapsed.TotalSeconds} sec.");
+
+        sw = Stopwatch.StartNew();
         await _db.EHists.LoadAsync();
-        App.SpeakAsync("DB Loaded.");
+        App.SpeakAsync($"EHists loaded in {sw.Elapsed.TotalSeconds} sec.");
 
         await onDoReglr_();
         await onDoFails_();
@@ -66,7 +67,6 @@ namespace OutlookToDbWpfApp
           App.SpeakAsync("Finished Outlook-to-database processing.");
         }
       }
-#endif
     }
 
     void onClose(object s = null, RoutedEventArgs e = null) => Close();

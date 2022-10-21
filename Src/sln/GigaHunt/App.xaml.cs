@@ -28,11 +28,11 @@ public partial class App : Application
     switch (sea.Args.Length > 0 ? sea.Args[0] : "Menu0") // Settings.Default.LastWin
     {
       default: break; //Something is not right with this one - 2020-11
-      case "Menu0": try { Msb.ShowDialog();                /**/ } catch { Debug.Write("Ignoring for now ...\n"); } goto default;
-      case "Leads": try { new LeadManagerWindow().ShowDialog(); } catch { Debug.Write("Ignoring for now ...\n"); } goto case "Menu0";
-      case "Agnts": try { new AgentAdminnWindow().ShowDialog(); } catch { Debug.Write("Ignoring for now ...\n"); } goto case "Menu0";
-      case "Broad": try { new EmailersendWindow().ShowDialog(); } catch { Debug.Write("Ignoring for now ...\n"); } goto case "Menu0";
-      case "OutDb": try { new OutlookToDbWindow().ShowDialog(); } catch { Debug.Write("Ignoring for now ...\n"); } goto case "Menu0";
+      case "Menu0": try { Msb.ShowDialog();                /**/ } catch { Write("Ignoring for now ...\n"); } goto default;
+      case "Leads": try { new LeadManagerWindow().ShowDialog(); } catch { Write("Ignoring for now ...\n"); } goto case "Menu0";
+      case "Agnts": try { new AgentAdminnWindow().ShowDialog(); } catch { Write("Ignoring for now ...\n"); } goto case "Menu0";
+      case "Broad": try { new EmailersendWindow().ShowDialog(); } catch { Write("Ignoring for now ...\n"); } goto case "Menu0";
+      case "OutDb": try { new OutlookToDbWindow().ShowDialog(); } catch { Write("Ignoring for now ...\n"); } goto case "Menu0";
     }
 #endif
 #if FIXED //Something is not right with this one - 2020-11

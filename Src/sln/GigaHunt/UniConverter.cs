@@ -101,7 +101,7 @@ namespace GigaHunt
       }
       else
       {
-        Debug.WriteLine($"**** Unprocesssed type: {value.GetType().Name} ");
+        WriteLine($"**** Unprocesssed type: {value.GetType().Name} ");
         return value;
       }
     }

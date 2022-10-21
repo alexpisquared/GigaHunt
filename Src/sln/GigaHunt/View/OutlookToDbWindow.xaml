@@ -7,20 +7,10 @@
   <lnk:WindowBase.Resources>
     <ResourceDictionary >
       <ResourceDictionary.MergedDictionaries>
-        <!--
-        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Lite.Gray.xaml" />
-        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Dark.Gray.xaml" />
-        -->
-        <ResourceDictionary Source="/WpfUserControlLib;component/Base/DataGrid.Base.xaml" />
         <ResourceDictionary Source="/WpfUserControlLib;component/Base/BasicDefaultsLayout.xaml" />
       </ResourceDictionary.MergedDictionaries>
-      <Style TargetType="{x:Type Button}">
-        <Setter Property="Width"        Value="160"       />
-        <Setter Property="Height"       Value="35"        />
-        <Setter Property="FontWeight"   Value="SemiBold"  />
-        <Setter Property="FontSize"     Value="14"        />
-        <Setter Property="Margin"       Value="5"         />
-      </Style>
+
+      <Style TargetType="{x:Type TextBlock}"  BasedOn="{StaticResource TbkVCenteredInfoClr}" />
     </ResourceDictionary>
   </lnk:WindowBase.Resources>
 
@@ -41,7 +31,7 @@
         <RowDefinition Height="*"/>
       </Grid.RowDefinitions>
 
-      <TextBlock HorizontalAlignment="Right" Margin="0 -5" FontSize="43" FontFamily="Ink Free" FontWeight="ExtraBold" Foreground="#4444" Text="Outlook 2DB  " />
+      <TextBlock HorizontalAlignment="Right" Margin="0 -5" FontSize="43" FontFamily="Ink Free" FontWeight="ExtraBold" Foreground="#4f44" Text="Outlook 2DB  " />
 
       <StackPanel Orientation="Horizontal" x:Name="spCtlrPnl" >
 
@@ -64,7 +54,7 @@
       <Label    Grid.Row="1" x:Name="lblMetaHeader"  HorizontalAlignment="Center" Content="Meta Header" />
       
       <ScrollViewer Grid.Row="2" Margin="6" VerticalScrollBarVisibility="Auto" >
-        <TextBlock Name="tb1" Text="|||| WWWW" VerticalAlignment="Top" Background="#1888" FontFamily="SimSun" Padding="6"/>
+        <TextBlock Name="tb1" Text="|||| WWWW |||| WWWW |||| WWWW |||| WWWW " VerticalAlignment="Top" Background="#1888" FontFamily="SimSun" Padding="6"/>
       </ScrollViewer>
       <Rectangle Grid.Row="2" Margin="6 6 26 6" Fill="Transparent" />
 

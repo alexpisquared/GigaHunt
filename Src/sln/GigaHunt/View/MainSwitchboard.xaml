@@ -5,20 +5,11 @@
   <lnk:WindowBase.Resources>
     <ResourceDictionary >
       <ResourceDictionary.MergedDictionaries>
-        <!--
-        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Dark.Google.xaml" />
-        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Dark.Gray.xaml" />
-        -->
-        <ResourceDictionary Source="/WpfUserControlLib;component/Base/DataGrid.Base.xaml" />
         <ResourceDictionary Source="/WpfUserControlLib;component/Base/BasicDefaultsLayout.xaml" />
       </ResourceDictionary.MergedDictionaries>
-      <Style TargetType="{x:Type Button}">
-        <Setter Property="Width"        Value="160"       />
-        <Setter Property="Height"       Value="35"        />
-        <Setter Property="FontWeight"   Value="SemiBold"  />
-        <Setter Property="FontSize"     Value="14"        />
-        <Setter Property="Margin"       Value="5"         />
-      </Style>
+
+      <Style TargetType="{x:Type TextBlock}"  BasedOn="{StaticResource TbkVCenteredInfoClr}" />
+
     </ResourceDictionary>
   </lnk:WindowBase.Resources>
 

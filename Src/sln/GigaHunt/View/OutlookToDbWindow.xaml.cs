@@ -26,11 +26,15 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
     else
     {
       tb1.Text = $"Total {ttl} new items found (including {qL} OOF). Total sent/rcvd: {qSD} / {qRD} already.\n\n";
-      App.SpeakAsync(tb1.Text);
+      App.SpeakAsync("Loading DB");
 
+      var sw = Stopwatch.StartNew();
       await _db.Emails.LoadAsync();
-      await _db.Ehists.LoadAsync();
-      App.SpeakAsync("DB Loaded.");
+      App.SpeakAsync($"Emails loaded in {sw.Elapsed.TotalSeconds:N0} sec.");
+
+      //sw = Stopwatch.StartNew();
+      //await _db.Ehists.LoadAsync();
+      //App.SpeakAsync($"EHists loaded in {sw.Elapsed.TotalSeconds:N0} sec.");
 
       await onDoReglr_();
       await onDoFails_();
@@ -68,10 +72,10 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
 
       var rowsAdded = await _db.TrySaveReportAsync("OutlookToDb.cs");
       tb1.Text += rv;
-      Debug.WriteLine(rv);
+      WriteLine(rv);
       loadVwSrcs(App.Now);
     }
-    catch (Exception ex) { ex.Pop(); }
+    catch (System.Exception ex) { ex.Pop(); }
     finally { spCtlrPnl.IsEnabled = true; }
   }
   async void onDoFails(object s, RoutedEventArgs e) => await onDoFails_();
@@ -85,7 +89,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
       var rv = await outlookFolderToDb_FailsAsync(Misc.qFail);
       var rowsAdded = await _db.TrySaveReportAsync("OutlookToDb.cs");
       tb1.Text += rv;
-      Debug.WriteLine(rv);
+      WriteLine(rv);
       loadVwSrcs(App.Now);
     }
     catch (Exception ex) { ex.Pop(); }
@@ -102,10 +106,10 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
       var rv = await outlookFolderToDb_LaterAsync(Misc.qLate);
       var rowsAdded = await _db.TrySaveReportAsync("OutlookToDb.cs");
       tb1.Text += rv;
-      Debug.WriteLine(rv);
+      WriteLine(rv);
       loadVwSrcs(App.Now);
     }
-    catch (Exception ex) { ex.Pop(); }
+    catch (System.Exception ex) { ex.Pop(); }
     finally { spCtlrPnl.IsEnabled = true; }
   }
   async void onDoDoneR(object s, RoutedEventArgs e) => await onDoDoneR_();
@@ -119,10 +123,10 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
       var rv = await outlookFolderToDb_DoneRAsync(Misc.qRcvdDone);
       var rowsAdded = await _db.TrySaveReportAsync("OutlookToDb.cs");
       tb1.Text += rv;
-      Debug.WriteLine(rv);
+      WriteLine(rv);
       loadVwSrcs(App.Now);
     }
-    catch (Exception ex) { ex.Pop(); }
+    catch (System.Exception ex) { ex.Pop(); }
     finally { spCtlrPnl.IsEnabled = true; }
   }
 
@@ -167,7 +171,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
       var items = _oh.GetItemsFromFolder(folderName, "IPM.Note");
       ttl = items.Count;
 
-      Debug.WriteLine($"\n ****** {items.Count,4}   IPM.Note   items in  {folderName}:");
+      WriteLine($"\n ****** {items.Count,4}   IPM.Note   items in  {folderName}:");
       do
       {
         foreach (OL.MailItem mailItem in items)
@@ -194,7 +198,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
                 }
               }
 
-              Debug.Write($"\n{ttl,2})  rcvd: {mailItem.ReceivedTime:yyyy-MMM-dd}  {senderEmail,-40}     {mailItem.Recipients.Count} rcpnts: (");
+              Write($"\n{ttl,2})  rcvd: {mailItem.ReceivedTime:yyyy-MMM-dd}  {senderEmail,-40}     {mailItem.Recipients.Count} rcpnts: (");
               foreach (OL.Recipient re in mailItem.Recipients)
               {
                 var ccFLName = OutlookHelper6.figureOutSenderFLName(re.Name, re.Address);
@@ -223,7 +227,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
               OutlookHelper6.moveIt(trgFolder, mailItem);
             }
           }
-          catch (Exception ex) { ex.Pop($"senderEmail: {mailItem?.SenderEmailAddress}. Report: {report}."); }
+          catch (System.Exception ex) { ex.Pop($"senderEmail: {mailItem?.SenderEmailAddress}. Report: {report}."); }
         } // for
 #if DEBUG
       } while (false);
@@ -234,8 +238,8 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
       _newEmailsAdded += newEmailsAdded;
       report += OutlookHelper6.reportSectionTtl(folderName, cnt, newEmailsAdded);
     }
-    catch (Exception ex) { ex.Pop(); }
-    finally { Debug.WriteLine(""); }
+    catch (System.Exception ex) { ex.Pop(); }
+    finally { WriteLine(""); }
 
     return report;
   }
@@ -315,7 +319,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
         itemsFailes = _oh.GetItemsFromFolder(folderName);
       } while (prev != itemsFailes.Count);
     }
-    catch (Exception ex) { ex.Pop(); }
+    catch (System.Exception ex) { ex.Pop(); }
 
     _newEmailsAdded += newEmailsAdded;
     report += OutlookHelper6.reportSectionTtl(folderName, ttl0, newBansAdded, newEmailsAdded);
@@ -441,7 +445,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
               rptLine += $"body\t{senderEmail,40}  {mailItem.CreationTime:yyyy-MM-dd}  {mailItem.Subject,-80}{oneLineAndTrunkate(mailItem.Body)}   ";
             }
 
-            Debug.Write($"\n{ttl,2})  rcvd: {mailItem.ReceivedTime:yyyy-MMM-dd}  {senderEmail,-40}     {mailItem.Recipients.Count} rcpnts: (");
+            Write($"\n{ttl,2})  rcvd: {mailItem.ReceivedTime:yyyy-MMM-dd}  {senderEmail,-40}     {mailItem.Recipients.Count} rcpnts: (");
             var cnt = 0;
             foreach (OL.Recipient re in mailItem.Recipients)
             {
@@ -463,9 +467,9 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
           else if (item is OL.MobileItem itm5)       /**/ { tb1.Text += $" ? Mobile      {itm5.CreationTime:yyyy-MM-dd} {itm5.Subject} \t {oneLineAndTrunkate(itm5.Body)} \r\n"; }
           else if (item is OL.NoteItem itm6)         /**/ { tb1.Text += $" ? Note        {itm6.CreationTime:yyyy-MM-dd} {itm6.Subject} \t {oneLineAndTrunkate(itm6.Body)} \r\n"; }
           else if (item is OL.TaskItem itm7)         /**/ { tb1.Text += $" ? Task        {itm7.CreationTime:yyyy-MM-dd} {itm7.Subject} \t {oneLineAndTrunkate(itm7.Body)} \r\n"; }
-          else if (Debugger.IsAttached) { Debug.WriteLine($"AP: not procesed OL_type: {item.GetType().Name}"); Debugger.Break(); } else throw new Exception("AP: Review this case of missing type: must be something worth processing.");
+          else if (Debugger.IsAttached) { WriteLine($"AP: not procesed OL_type: {item.GetType().Name}"); Debugger.Break(); } else throw new Exception("AP: Review this case of missing type: must be something worth processing.");
 
-          Debug.WriteLine($"{rptLine}");
+          WriteLine($"{rptLine}");
         }
         catch (Exception ex) { ex.Pop($":{senderEmail}."); }
 
@@ -519,14 +523,22 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
     {
       var agency = OutlookHelper6.GetCompanyName(email);
 
-      if (_db.Agencies.FirstOrDefault(r => string.Compare(r.Id, agency, true) == 0) == null)
+      try
       {
-        _ = _db.Agencies.Add(new Agency
+        var r2 = _db.Agencies.Any(r => r.Id.Equals(agency.ToLower()));
+        var r3 = _db.Agencies.Any(r => r.Id.Equals(agency.ToUpper()));
+
+        if (!_db.Agencies.Any(r => r.Id.Equals(agency))) //i think db is set to be case ignore:  , StringComparison.InvariantCultureIgnoreCase)) )
         {
-          Id = agency.Length > maxLen ? agency.Substring(agency.Length - maxLen, maxLen) : agency,
-          AddedAt = GigaHunt.App.Now
-        });
+          _ = _db.Agencies.Add(new Agency
+          {
+            Id = agency.Length > maxLen ? agency.Substring(agency.Length - maxLen, maxLen) : agency,
+            AddedAt = GigaHunt.App.Now
+          });
+        }
       }
+      catch (Exception ex) { ex.Pop("."); }
+
 
       em = _db.Emails.Add(new Email
       {
@@ -552,7 +564,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
     {
       var gt = timeRecdSent.AddMinutes(-5);
       var lt = timeRecdSent.AddMinutes(+5);         //var ch = isRcvd ? ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.Id) : ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.Id); if (ch.Count() < 1)
-      var eh = _db.Ehists./*Local.*/FirstOrDefault(p => p.RecivedOrSent == rs && p.EmailId == em.Id && gt < p.EmailedAt && p.EmailedAt < lt);
+      var eh = _db.Ehists.FirstOrDefault(p => p.RecivedOrSent == rs && p.EmailId == em.Id && gt < p.EmailedAt && p.EmailedAt < lt);
       if (eh == null)
       {
         var newEH = new Ehist
@@ -611,7 +623,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
   {
     try
     {
-      Debug.Write($"==> {key}: ");
+      Write($"==> {key}: ");
 
       var pa = item.PropertyAccessor;
       var url = $"http://schemas.microsoft.com/mapi/proptag/{key}";
@@ -625,26 +637,26 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
       if (prop is byte[])
       {
         var snd = pa.BinaryToString(prop);
-        Debug.Write($"  === snd: {snd.Replace("\n", "-LF-").Replace("\r", "-CR-")}");
+        Write($"  === snd: {snd.Replace("\n", "-LF-").Replace("\r", "-CR-")}");
 
         var s = item.Session.GetAddressEntryFromID(snd);
-        Debug.Write($"  *** GetExchangeDistributionList(): {s.GetExchangeDistributionList().ToString().Replace("\n", "-LF-").Replace("\r", "-CR-")}"); //.PrimarySmtpAddress;
-        Debug.Write($"  *** Address: {s.Address}"); //.PrimarySmtpAddress;
+        Write($"  *** GetExchangeDistributionList(): {s.GetExchangeDistributionList().ToString().Replace("\n", "-LF-").Replace("\r", "-CR-")}"); //.PrimarySmtpAddress;
+        Write($"  *** Address: {s.Address}"); //.PrimarySmtpAddress;
       }
       else
       {
-        Debug.Write($"==> {prop.GetType().Name}  {prop.ToString().Replace("\n", "-LF-").Replace("\r", "-CR-")}");
+        Write($"==> {prop.GetType().Name}  {prop.ToString().Replace("\n", "-LF-").Replace("\r", "-CR-")}");
       }
     }
-    catch (Exception ex) { Debug.Write($"  !!! ex: {ex.Message.Replace("\n", "-LF-").Replace("\r", "-CR-")}"); }
+    catch (Exception ex) { Write($"  !!! ex: {ex.Message.Replace("\n", "-LF-").Replace("\r", "-CR-")}"); }
 
-    Debug.WriteLine($"^^^^^^^^^^^^^^^^^^^^^^^^^");
+    WriteLine($"^^^^^^^^^^^^^^^^^^^^^^^^^");
   }
   static void testAllKeys(OL.ReportItem item) // body for report item ...is hard to find; need more time, but really, who cares. // Aug 2019
   {
     if (item.Body.Length > 0)
     {
-      Debug.WriteLine($"\n\n@@@ Body: {item.Body}");
+      WriteLine($"\n\n@@@ Body: {item.Body}");
       item.SaveAs(@"C:\temp\NDR.txt");
     }
 
@@ -735,7 +747,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
     testOneKey(item, "0x34140102", true); // "PR_MDB_PROVIDER"
     testOneKey(item, "0x80660102", true); // "RemoteEID"
 
-    Debug.WriteLine($"++++++++++++++++++++++++++++++++++++++ --------------------\n");
+    WriteLine($"++++++++++++++++++++++++++++++++++++++ --------------------\n");
   }
 }
 /* Cache of https://stackoverflow.com/questions/25253442/non-delivery-reports-and-vba-script-in-outlook-2010

@@ -67,11 +67,11 @@ public partial class LeadManagerWindow : WpfUserControlLib.Base.WindowBase
   void onFilter(object s, RoutedEventArgs e) => filterLeads(tbFilter.Text, cbInclAll.IsChecked == true);
   void onCloseTheLead(object s, RoutedEventArgs e)
   {
-    Debug.WriteLine("{0} - {1}", ((DB.QStats.Std.Models.Lead)dgLeads.SelectedItem).AgentName, ((DB.QStats.Std.Models.Lead)dgLeads.SelectedItem).Status);
+    WriteLine($"{((DB.QStats.Std.Models.Lead)dgLeads.SelectedItem).AgentName} _{((DB.QStats.Std.Models.Lead)dgLeads.SelectedItem).Status}" );
 
     ((DB.QStats.Std.Models.Lead)dgLeads.SelectedItem).Status = "Closed";
 
-    Debug.WriteLine("{0} - {1} \n", ((DB.QStats.Std.Models.Lead)dgLeads.SelectedItem).AgentName, ((DB.QStats.Std.Models.Lead)dgLeads.SelectedItem).Status);
+    WriteLine($"{((DB.QStats.Std.Models.Lead)dgLeads.SelectedItem).AgentName} _{((DB.QStats.Std.Models.Lead)dgLeads.SelectedItem).Status} \n" );
   }
   void onAddNewLead(object s, RoutedEventArgs e)
   {

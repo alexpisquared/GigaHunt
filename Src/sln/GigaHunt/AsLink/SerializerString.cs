@@ -22,10 +22,7 @@ public static partial class Serializer
     }
     catch (Exception ex)
     {
-      Debug.WriteLine("\n::>{0}\n\n::>{1}\n", ex.Message,
-        ex.InnerException == null ? "" :
-        ex.InnerException.InnerException == null ? "\n::>" + ex.InnerException.Message :
-        ex.InnerException.InnerException.InnerException == null ? "\n::>" + ex.InnerException.InnerException.Message : "\n::>" + ex.InnerException.InnerException.InnerException.Message);
+      WriteLine($"\n::>{ex.Message}\n\n::>{(ex.InnerException == null ? "" : ex.InnerException.InnerException == null ? "\n::>" + ex.InnerException.Message : ex.InnerException.InnerException.InnerException == null ? "\n::>" + ex.InnerException.InnerException.Message : "\n::>" + ex.InnerException.InnerException.InnerException.Message)}\n");
 
       return Activator.CreateInstance(typeof(T)); //		???		throw;  Watch it !!!!!
     }

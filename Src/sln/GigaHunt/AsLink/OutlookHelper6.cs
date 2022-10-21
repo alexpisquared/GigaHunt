@@ -39,7 +39,7 @@ public class OutlookHelper6
     {
       var folder = MyStore.GetRootFolder().Folders[Misc.qRcvd].Folders[@"Fails"] as OL.Folder;
       var itemss = folder.Items.Restrict("[MessageClass] = 'REPORT.IPM.Note.NDR'");
-      Debug.WriteLine($"***        Fails: {itemss.Count}");
+      WriteLine($"***        Fails: {itemss.Count}");
       return itemss;
     }
     catch (Exception ex) { ex.Pop(@"Q\Fails"); throw; }
@@ -51,7 +51,7 @@ public class OutlookHelper6
       var folder = GetMapiFOlder(folderPath);
 
       var itemss = messageClass == null ? folder.Items : folder.Items.Restrict($"[MessageClass] = '{messageClass}'");
-      //...Debug.WriteLine($" *** {folderPath,24}: {itemss.Count}");
+      //...WriteLine($" *** {folderPath,24}: {itemss.Count}");
       return itemss;
     }
     catch (Exception ex) { ex.Pop(@"Q\Fails"); throw; }
@@ -93,7 +93,7 @@ public class OutlookHelper6
 
     var rep =      //db.TrySaveReport(); // 
       db.GetDbChangesReport();
-    Debug.WriteLine($"{rep}");
+    WriteLine($"{rep}");
 
     Task<string> saveAndUpdateMetadata()
     {
@@ -146,7 +146,7 @@ public class OutlookHelper6
                             && r.Ehists.Count(e => string.Compare(e.RecivedOrSent, "S", true) == 0 && !string.IsNullOrEmpty(e.LetterBody) && e.LetterBody.Length > 96) > _customLetersSentThreshold); //at least 2 letters sent (1 could be just an unanswered reply on their broadcast)
 
     var ttl = q.Count();
-    Debug.WriteLine("\r\n{0} eligible email contacts found", ttl);
+    WriteLine($"\r\n{ttl} eligible email contacts found");
     _addedCount = _updatedCount = 0;
     foreach (var em in q)
     {
@@ -262,29 +262,29 @@ public class OutlookHelper6
   }
   void dbgListAllCOntacts(OL.MAPIFolder folder)
   {
-    Debug.WriteLine($"Folder {folder.Name} has total {folder.Items.Count} items: ");
+    WriteLine($"Folder {folder.Name} has total {folder.Items.Count} items: ");
 
     foreach (var o in folder.Items) //.Where(r => r==r))
     {
-      if (o is OL.ContactItem)          /**/{ var i = o as OL.ContactItem; Debug.WriteLine($"C {i.FirstName,16}\t{i.LastName,-16}\t{i.Email1Address,24}\t{i.Subject,-48}\t{(string.IsNullOrWhiteSpace(i.Body) ? "·" : (i.Body.Length > 50 ? i.Body[..50] : i.Body))}\t{i.Account}"); }
-      else if (o is OL.MailItem)        /**/{ var i = o as OL.MailItem; Debug.WriteLine($"M {i.To,-32}\t{i.Subject,-48}\t"); }
-      else if (o is OL.AppointmentItem) /**/{ var i = o as OL.AppointmentItem; Debug.WriteLine($"M {i.Subject,-48}\t"); }
-      else if (o is OL.MeetingItem)     /**/{ var i = o as OL.MeetingItem; Debug.WriteLine($"M {i.Subject,-48}\t"); }
-      else if (o is OL.TaskItem)        /**/{ var i = o as OL.TaskItem; Debug.WriteLine($"M {i.Body,-48}\t"); }
+      if (o is OL.ContactItem)          /**/{ var i = o as OL.ContactItem; WriteLine($"C {i.FirstName,16}\t{i.LastName,-16}\t{i.Email1Address,24}\t{i.Subject,-48}\t{(string.IsNullOrWhiteSpace(i.Body) ? "·" : (i.Body.Length > 50 ? i.Body[..50] : i.Body))}\t{i.Account}"); }
+      else if (o is OL.MailItem)        /**/{ var i = o as OL.MailItem; WriteLine($"M {i.To,-32}\t{i.Subject,-48}\t"); }
+      else if (o is OL.AppointmentItem) /**/{ var i = o as OL.AppointmentItem; WriteLine($"M {i.Subject,-48}\t"); }
+      else if (o is OL.MeetingItem)     /**/{ var i = o as OL.MeetingItem; WriteLine($"M {i.Subject,-48}\t"); }
+      else if (o is OL.TaskItem)        /**/{ var i = o as OL.TaskItem; WriteLine($"M {i.Body,-48}\t"); }
       else
       {
         foreach (PropertyDescriptor descrip in TypeDescriptor.GetProperties(o))
         {
-          Debug.Write($" {descrip.Name}"); // if (descrip.Name == "Subject") { foreach (PropertyDescriptor descrip2 in TypeDescriptor.GetProperties(descrip)) { if (descrip2.Name == "sub attribute Name") { } } }
+          Write($" {descrip.Name}"); // if (descrip.Name == "Subject") { foreach (PropertyDescriptor descrip2 in TypeDescriptor.GetProperties(descrip)) { if (descrip2.Name == "sub attribute Name") { } } }
         }
 
-        Debug.Write($"\n");
+        Write($"\n");
       }
     }
   }
   void undeleteContacts(OL.MAPIFolder folder, QStatsRlsContext QStatsRlsContext, string srcFolder)
   {
-    Debug.WriteLine($"Folder {folder.Name} has total {folder.Items.Count} items: ");
+    WriteLine($"Folder {folder.Name} has total {folder.Items.Count} items: ");
 
     foreach (var o in folder.Items)
     {
@@ -308,11 +308,11 @@ public class OutlookHelper6
     else if (!string.IsNullOrWhiteSpace(ci.LastName))                                               /**/{ emailId = $"__UnKnwn__.{ci.LastName}@__UnKnwn__.com"; }
     else
     {
-      Debug.WriteLine($"******************");
+      WriteLine($"******************");
       return;
     }
 
-    if (!string.IsNullOrWhiteSpace(ci.Body)) Debug.WriteLine($"{(string.IsNullOrWhiteSpace(ci.Body) ? "·" : (ci.Body.Length > 50 ? ci.Body[..50] : ci.Body))}"); // <= strange thing: all bodies are empty.
+    if (!string.IsNullOrWhiteSpace(ci.Body)) WriteLine($"{(string.IsNullOrWhiteSpace(ci.Body) ? "·" : (ci.Body.Length > 50 ? ci.Body[..50] : ci.Body))}"); // <= strange thing: all bodies are empty.
 
     var phone = $"{ci.HomeTelephoneNumber} {ci.PrimaryTelephoneNumber} {ci.BusinessTelephoneNumber} {ci.Business2TelephoneNumber} {ci.MobileTelephoneNumber}".Replace("(", "").Replace(")", "-").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Trim();
     var agency = /*!string.IsNullOrWhiteSpace(ci.CompanyName) ? ci.CompanyName : */GetCompanyName(emailId);
@@ -324,7 +324,7 @@ public class OutlookHelper6
         AddedAt = App.Now
       });
 
-    Debug.WriteLine($"{emailId,32}\t{ci.FirstName,17} {ci.LastName,-21}\t{ci.JobTitle,-80}\t{phone}\t{(string.IsNullOrWhiteSpace(ci.Body) ? "·" : (ci.Body.Length > 50 ? ci.Body[..50] : ci.Body))}");
+    WriteLine($"{emailId,32}\t{ci.FirstName,17} {ci.LastName,-21}\t{ci.JobTitle,-80}\t{phone}\t{(string.IsNullOrWhiteSpace(ci.Body) ? "·" : (ci.Body.Length > 50 ? ci.Body[..50] : ci.Body))}");
 
     addUpdateBassedOnGoodEmailId(ci, db, emailId, phone, agency, srcFolder);
   }
@@ -466,7 +466,7 @@ public class OutlookHelper6
     var len = words.Length;
     if (len > 5)
     {
-      Debug.Write($">>> {words[len - 5]} {words[len - 4]}    {words[len - 3]} {words[len - 2]}    {words[len - 1]}    <= '{email}' ");
+      Write($">>> {words[len - 5]} {words[len - 4]}    {words[len - 3]} {words[len - 2]}    {words[len - 1]}    <= '{email}' ");
 
       if (new[] { "at", "-", "@", "<" }.Contains(words[len - 1]))
       {
@@ -481,11 +481,11 @@ public class OutlookHelper6
       else
       if (new[] { "<mailto", "addresses" }.Contains(words[len - 1]))
       {
-        Debug.WriteLine($" ignore this !!!");
+        WriteLine($" ignore this !!!");
       }
       else
       if (Debugger.IsAttached)
-        Debug.WriteLine($" ignore this ???");
+        WriteLine($" ignore this ???");
     }
 
     var hlp = new FirstLastNameParser(email);
@@ -550,7 +550,7 @@ public class OutlookHelper6
   {
     try
     {
-      Debug.Write($"==> {ww}: ");
+      Write($"==> {ww}: ");
 
       var pa = item.PropertyAccessor;
       var prop = pa.GetProperty($"http://schemas.microsoft.com/mapi/proptag/{ww}");
@@ -558,21 +558,21 @@ public class OutlookHelper6
       if (prop is byte[])
       {
         var snd = pa.BinaryToString(prop);
-        Debug.Write($"=== snd: {snd}");
+        Write($"=== snd: {snd}");
 
         var s = item.Session.GetAddressEntryFromID(snd);
-        Debug.Write($"*** GetExchangeDistributionList(): {s.GetExchangeDistributionList()}"); //.PrimarySmtpAddress;
-        Debug.Write($"*** Address: {s.Address}"); //.PrimarySmtpAddress;
+        Write($"*** GetExchangeDistributionList(): {s.GetExchangeDistributionList()}"); //.PrimarySmtpAddress;
+        Write($"*** Address: {s.Address}"); //.PrimarySmtpAddress;
       }
       //else if (sndr is byte[]) { }
       else
       {
-        Debug.Write($"==> {prop.GetType().Name}  {prop}");
+        Write($"==> {prop.GetType().Name}  {prop}");
       }
     }
-    catch (Exception ex) { Debug.Write($"!!! {ex.Message}"); }
+    catch (Exception ex) { Write($"!!! {ex.Message}"); }
 
-    Debug.WriteLine($"^^^^^^^^^^^^^^^^^^^^^^^^^");
+    WriteLine($"^^^^^^^^^^^^^^^^^^^^^^^^^");
   }
   public static string getStringBetween(string b, string s1, string s2)
   {
@@ -609,7 +609,7 @@ public class OutlookHelper6
 
     if (email == null || !email.Contains("@")) return new string[0];
 
-    if (!email.Contains("@")) Debug.Write("");
+    if (!email.Contains("@")) Write("");
     if (email.Contains("<")) email = email.Replace("<", "");
     if (email.Contains(">")) email = email.Replace(">", "");
     if (email.Contains(" ")) email = email.Split(' ')[0];

@@ -31,10 +31,10 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
 
         new SpeechSynthesizer().SpeakAsync("Thiss could take a while: cold start runs minutes...");
 
-        await _db.VEmailAvailProds.LoadAsync();                                     /**/  Debug.WriteLine($">>>    Loaded   EmlVw   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
-        await _db.Leads.OrderByDescending(r => r.AddedAt).LoadAsync();              /**/  Debug.WriteLine($">>>    Loaded   Leads   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
-        _leadEmails = _db.Leads.Local.Select(r => r.AgentEmailId ?? "").Distinct(); /**/  Debug.WriteLine($">>>    Loaded  LeadEm   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
-        _leadCompns = _db.Leads.Local.Select(r => r.Agency ?? "").Distinct();       /**/  Debug.WriteLine($">>>    Loaded  LeadCo   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
+        await _db.VEmailAvailProds.LoadAsync();                                     /**/  WriteLine($">>>    Loaded   EmlVw   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
+        await _db.Leads.OrderByDescending(r => r.AddedAt).LoadAsync();              /**/  WriteLine($">>>    Loaded   Leads   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
+        _leadEmails = _db.Leads.Local.Select(r => r.AgentEmailId ?? "").Distinct(); /**/  WriteLine($">>>    Loaded  LeadEm   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
+        _leadCompns = _db.Leads.Local.Select(r => r.Agency ?? "").Distinct();       /**/  WriteLine($">>>    Loaded  LeadCo   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
 
         _cvsEmails = (CollectionViewSource)FindResource("vsEMail_Avail");
         _cvsEmails.Source = null;

@@ -55,10 +55,10 @@ namespace GigaHunt.View
           {
             var email = folderName != Misc.qRcvd && item.Recipients.Count > 0 ? item.Recipients[item.Recipients.Count].Address : item.SenderEmailAddress;
             var ename = folderName != Misc.qRcvd && item.Recipients.Count > 0 ? item.Recipients[item.Recipients.Count].Name : item.SenderName;
-            Debug.Write(string.Format("\n{0,4})  {1}  {2,-32}{3,-32}{4,-32}{5}", cnt--, item.ReceivedTime.ToString("yyyy-MMM-dd"), ename, email, item.SentOnBehalfOfName, item.Recipients.Count));  //
-            foreach (Outlook.Recipient re in item.Recipients) Debug.Write(string.Format("\n{0,52}{1}", "", re.Address));
+            Write(string.Format("\n{0,4})  {1}  {2,-32}{3,-32}{4,-32}{5}", cnt--, item.ReceivedTime.ToString("yyyy-MMM-dd"), ename, email, item.SentOnBehalfOfName, item.Recipients.Count));  //
+            foreach (Outlook.Recipient re in item.Recipients) Write(string.Format("\n{0,52}{1}", "", re.Address));
 
-            if (cnt == 55) Debug.Write("");
+            if (cnt == 55) Write("");
 
             if (folderName == Misc.qRcvd)
             {
@@ -75,7 +75,7 @@ namespace GigaHunt.View
         }
       }
       catch (Exception ex) { ex.Pop(); ; }
-      finally { Debug.WriteLine(""); }
+      finally { WriteLine(""); }
     }
     void loadVwSrcs(System.DateTime before)
     {
@@ -98,7 +98,7 @@ namespace GigaHunt.View
 
         var rowsAdded = await _db.TrySaveReportAsync("OutlookToDb.cs");
         tb1.Text = tbkTitle.Text = Title = string.Format("{0} rows added to EHist in {1:N1} sec (~15)", rowsAdded, sw.ElapsedMilliseconds * .001);
-        Debug.WriteLine(Title);
+        WriteLine(Title);
         loadVwSrcs(_now);
       }
       catch (Exception ex) { ex.Pop(); ; }

@@ -1,6 +1,5 @@
 ﻿global using System;
 global using System.Collections.Generic;
-global using System.Collections.ObjectModel;
 global using System.ComponentModel;
 global using System.Data;
 global using System.Diagnostics;
@@ -17,17 +16,22 @@ global using System.Windows;
 global using System.Windows.Controls;
 global using System.Windows.Controls.Primitives;
 global using System.Windows.Data;
+global using System.Xml.Serialization;
 global using AgentFastAdmin;
+global using AmbienceLib;
 global using DB.QStats.Std.Models;
+global using EF.DbHelper.Lib;
 global using GigaHunt;
 global using GigaHunt.AsLink;
 global using GigaHunt.Helpers;
 global using GigaHunt.Properties;
+global using GigaHunt.View;
+global using Microsoft.Data.SqlClient;
 global using Microsoft.EntityFrameworkCore;
 global using OutlookToDbWpfApp;
 global using WpfUserControlLib.Extensions;
 global using WpfUserControlLib.Helpers;
 global using OL = Microsoft.Office.Interop.Outlook;
-global using AmbienceLib;
-global using GigaHunt.View;
-global using System.Xml.Serialization;
+global using static System.Diagnostics.Trace;
+global using Microsoft.EntityFrameworkCore; // <== instead of  System.Data.Entity  or System.InvalidOperationException: The source IQueryable doesn't implement IDbAsyncEnumerable. Only sources that implement IDbAsyncEnumerable can be used for Entity Framework asynchronous operations. For more details see http://go.microsoft.com/fwlink/?LinkId=287068. ==> https://stackoverflow.com/questions/26296091/idbasyncenumerable-not-implemented ==> use 
+//obal using System.Text.Json; //tu: new and very performant Json lib (Dec 2021)
