@@ -14,7 +14,7 @@
         <ResourceDictionary Source="/WpfUserControlLib;component/Base/BasicDefaultsLayout.xaml" />
       </ResourceDictionary.MergedDictionaries>
 
-      <Style TargetType="{x:Type TextBlock}"  BasedOn="{StaticResource TbkVCenteredInfoClr}" />
+      <!-- DO NOT uncomment: prevents buttons, etc. from Foreground Clr: <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TbkVCenteredInfoClr}" />-->
 
       <CollectionViewSource x:Key="eMailViewSource"         d:DesignSource="{d:DesignInstance {x:Type Models:Email}, CreateList=True}"/>
       <CollectionViewSource x:Key="lkuLeadStatuViewSource"  d:DesignSource="{d:DesignInstance {x:Type Models:lkuLeadStatu}, CreateList=True}"/>
@@ -69,7 +69,7 @@
           <Button Content="_New " Click="onAddNewLead" Foreground="#f80" ToolTip="Add _New Lead" />
           <Button Content="_Save" Click="onSave" />
 
-          <View:MainSwitchboardUsrCtrl VizLeads="Collapsed" Margin="15 0"/>
+          <View:MainSwitchboardUsrCtrl Width="68" VizLeads="Collapsed" Margin="15 0"/>
           <AavWpfVw:ThemeSelectorUsrCtrl Grid.Column="4" x:Name="themeSelector1"/>
 
         </StackPanel>

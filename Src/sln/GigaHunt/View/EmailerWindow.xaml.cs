@@ -4,7 +4,6 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
   const double _fractionToSend = .025, _absoluteMax = 25;
   QStatsRlsContext _db;
   CollectionViewSource _cvsEmails = new();
-  //ObservableCollection<VEmailAvailProd> _obsColAvlbl;
   IEnumerable<string>? _leadEmails, _leadCompns;
   string _firstName = "Sirs";
 
@@ -28,8 +27,6 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
       if (chkIsAvailable.IsChecked == true)
       {
         _db.Database.SetCommandTimeout(300);
-
-        new SpeechSynthesizer().SpeakAsync("Thiss could take a while: cold start runs minutes...");
 
         await _db.VEmailAvailProds.LoadAsync();                                     /**/  WriteLine($">>>    Loaded   EmlVw   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
         await _db.Leads.OrderByDescending(r => r.AddedAt).LoadAsync();              /**/  WriteLine($">>>    Loaded   Leads   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();

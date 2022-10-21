@@ -74,7 +74,7 @@
           <CheckBox Grid.Row="1" Grid.Column="1" Content="Companies"  Foreground="#1a1" Checked="onFilter" Unchecked="onFilter" Margin="8" x:Name="cbxLeadCompns" />
         </Grid>
 
-        <View:MainSwitchboardUsrCtrl Margin="10" VizAgent="Collapsed" />
+        <View:MainSwitchboardUsrCtrl Width="68" Margin="10" VizAgent="Collapsed" />
 
         <Button  Content="_Save"   Click="onSave"      VerticalAlignment="Center" Margin="8" />
         <!--        <Button Content="Quit"  Click="onQuit" IsEnabled="False" />        -->

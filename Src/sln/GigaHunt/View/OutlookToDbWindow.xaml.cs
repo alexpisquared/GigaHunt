@@ -473,7 +473,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
         }
         catch (Exception ex) { ex.Pop($":{senderEmail}."); }
 
-        lblMetaHeader.Content = $" ... found / current / ttl:  {newEmailsAdded} / {++ttlProcessed:N0} / {ttl:N0} ...";
+        lblMetaHeader.Content = $" ... found / current / ttl:  {newEmailsAdded} / {++ttlProcessed:N0} / {ttl:N0} ... ";
 
         if (ttlProcessed % 10 == 0) await Task.Delay(10); else await Task.Yield();
       }

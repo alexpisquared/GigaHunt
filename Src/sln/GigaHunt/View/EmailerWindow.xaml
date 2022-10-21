@@ -14,7 +14,7 @@
         <ResourceDictionary Source="/WpfUserControlLib;component/Base/BasicDefaultsLayout.xaml" />
       </ResourceDictionary.MergedDictionaries>
 
-      <Style TargetType="{x:Type TextBlock}"  BasedOn="{StaticResource TbkVCenteredInfoClr}" />
+      <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TbkVCenteredInfoClr}" />
 
       <Style TargetType="FrameworkElement" >
         <Setter Property="Control.Margin" Value="8 4" />
@@ -76,11 +76,10 @@
 
           <Label  Content="_Top"  VerticalAlignment="Center" Target="{Binding ElementName=tbMax}"/>
           <TextBox Text="8" Width="25" Margin="8" Name="tbMax" TextChanged="tbMax_TextChanged" />
+          <Button Content="top 8 rows" Margin="8" Click="btnBroadcastTopN_Click" ToolTip="Broadcast to the top N emails/agents"    x:Name="btMax" Height="30" />
+          <Button Content="_Selection" Margin="8" Click="onBroadcast_Avail"      ToolTip="Broadcast to the selected emails/agents" x:Name="btSel" Height="30" />
 
-          <Button Content="top 8 rows" Margin="8" Click="btnBroadcastTopN_Click" ToolTip="Broadcast to the top N emails/agents"    x:Name="btMax" />
-          <Button Content="_Selection" Margin="8" Click="onBroadcast_Avail"      ToolTip="Broadcast to the selected emails/agents" x:Name="btSel" />
-
-          <View:MainSwitchboardUsrCtrl Margin="8 0" VizBroad="Collapsed" />
+          <View:MainSwitchboardUsrCtrl Width="68" Margin="8 0" VizBroad="Collapsed" />
           <Button Content="A-Editor"   Margin="8" Click="onAgentsEdit"           ToolTip="Edit agents in their window."       Background="#ff0"  BorderThickness="0" VerticalAlignment="Center" />
           <AavWpfVw:ThemeSelectorUsrCtrl Grid.Column="4" x:Name="themeSelector1" VerticalAlignment="Center"/>
 
@@ -97,7 +96,7 @@
               <DataGridTextColumn Header="Fname"       Binding="{Binding Fname}"                                         />
               <DataGridTextColumn Header="Lname"       Binding="{Binding Lname}"                                         />
               <DataGridTextColumn Header="Company"     Binding="{Binding Company}"                                       />
-              <DataGridTextColumn Header="DNN"         Binding="{Binding DoNotNotifyForCampaignID}"                      ToolTipService.ToolTip="Do Not Notify On On-Market For Campaign Id"/>
+              <DataGridTextColumn Header="DNN"         Binding="{Binding DoNotNotifyForCampaignId}"                      ToolTipService.ToolTip="Do Not Notify On On-Market For Campaign Id"/>
               <DataGridTextColumn Header="MyReplies"   Binding="{Binding MyReplies}"                                     />
               <DataGridTextColumn Header="LastSent"    Binding="{Binding LastSentAt,    Converter={cmn:UniConverter}}"    />
               <DataGridTextColumn Header="LastReplied" Binding="{Binding LastRepliedAt, Converter={cmn:UniConverter}}"    />
@@ -114,7 +113,7 @@
               <DataGridTextColumn Header="Fname"                                                 Binding="{Binding Fname}"                                        />
               <DataGridTextColumn Header="Lname"                                                 Binding="{Binding Lname}"                                        />
               <DataGridTextColumn Header="Company"                                               Binding="{Binding Company}"                                      />
-              <DataGridTextColumn Header="DNN"                                                   Binding="{Binding DoNotNotifyForCampaignID}"                     ToolTipService.ToolTip="Do Not Notify On Off-Market For Campaign Id"/>
+              <DataGridTextColumn Header="DNN"                                                   Binding="{Binding DoNotNotifyForCampaignId}"                     ToolTipService.ToolTip="Do Not Notify On Off-Market For Campaign Id"/>
               <DataGridTextColumn Header="MyReplies"                                             Binding="{Binding MyReplies}"                                     />
               <DataGridTextColumn Header="LastRepliedAt"                                         Binding="{Binding LastRepliedAt, Converter={cmn:UniConverter}}"   />
               <DataGridTextColumn Header="Added At"                                              Binding="{Binding AddedAt, Converter={cmn:UniConverter}}"         />

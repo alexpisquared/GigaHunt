@@ -5,20 +5,21 @@
         <!--
         <Setter Property="BorderThickness"    Value="0"         />
         <Setter Property="Margin"             Value="0 2"       />
-        <Setter Property="Background"         Value="Transparent"      />
-        <Setter Property="Height"             Value="25"        />-->
+        -->
+        <Setter Property="Foreground"         Value="#0f0"     />
+        <Setter Property="FontStyle"          Value="Oblique"   />
         <Setter Property="FontWeight"         Value="SemiBold"  />
-        <Setter Property="FontSize"           Value="12"        />
-        <Setter Property="Width"              Value="72"        />
+        <Setter Property="Height"             Value="22"        />
+        <Setter Property="Width"              Value="68"        />
       </Style>
     </ResourceDictionary>
   </UserControl.Resources>
 
-  <Menu Background="Transparent">
-    <MenuItem Header="_Agents"  x:Name="btnAgent" Click="onAgent" Foreground="#076" Visibility="{Binding ElementName=ths, Path=VizAgent}" />
-    <MenuItem Header="_Leads"   x:Name="btnLeads" Click="onLeads" Foreground="#08f" Visibility="{Binding ElementName=ths, Path=VizLeads}" />
-    <MenuItem Header="_Emailr"  x:Name="btnBroad" Click="onBroad" Foreground="#a08" Visibility="{Binding ElementName=ths, Path=VizBroad}" />
-    <MenuItem Header="_Out>DB"  x:Name="btnOu2Db" Click="onOu2Db" Foreground="#0a0" Visibility="{Binding ElementName=ths, Path=VizOu2Db}" />
+  <Menu Background="Transparent" Foreground="Red">
+    <MenuItem Header="_Agents"  x:Name="btnAgent" Click="onAgent" Foreground="#990" Visibility="{Binding ElementName=ths, Path=VizAgent}" />
+    <MenuItem Header="_Leads"   x:Name="btnLeads" Click="onLeads" Foreground="#04d" Visibility="{Binding ElementName=ths, Path=VizLeads}" />
+    <MenuItem Header="_Emailr"  x:Name="btnBroad" Click="onBroad" Foreground="#908" Visibility="{Binding ElementName=ths, Path=VizBroad}" />
+    <MenuItem Header="_Out>DB"  x:Name="btnOu2Db" Click="onOu2Db" Foreground="#080" Visibility="{Binding ElementName=ths, Path=VizOu2Db}" />
   </Menu>
 
 </UserControl>
