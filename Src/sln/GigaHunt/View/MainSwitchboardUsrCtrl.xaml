@@ -1,19 +1,6 @@
-﻿<UserControl x:Class="GigaHunt.View.MainSwitchboardUsrCtrl" x:Name="ths"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:GigaHunt.View"
-             mc:Ignorable="d" >
+﻿<UserControl x:Class="GigaHunt.View.MainSwitchboardUsrCtrl" x:Name="ths" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d" >
   <UserControl.Resources>
     <ResourceDictionary >
-      <ResourceDictionary.MergedDictionaries>
-        <!--<ResourceDictionary Source="/AAV.AsLink.WPF;component/AsLink/Theme.Color.Lite.VaporWave.xaml" />
-        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Dark.Google.xaml" />
-        <ResourceDictionary Source="/WpfUserControlLib;component/Base/DataGrid.Base.xaml" />
-        -->
-        <ResourceDictionary Source="/WpfUserControlLib;component/Base/BasicDefaultsLayout.xaml" />
-      </ResourceDictionary.MergedDictionaries>
       <Style TargetType="MenuItem">
         <!--
         <Setter Property="BorderThickness"    Value="0"         />
@@ -26,16 +13,12 @@
       </Style>
     </ResourceDictionary>
   </UserControl.Resources>
-  <!--<Border CornerRadius="4" BorderThickness="1" BorderBrush="#4888" >
-    <StackPanel Orientation="Horizontal" Margin="2">-->
 
-  <Menu Background="Transparent" VerticalAlignment="Top">
+  <Menu Background="Transparent">
     <MenuItem Header="_Agents"  x:Name="btnAgent" Click="onAgent" Foreground="#076" Visibility="{Binding ElementName=ths, Path=VizAgent}" />
     <MenuItem Header="_Leads"   x:Name="btnLeads" Click="onLeads" Foreground="#08f" Visibility="{Binding ElementName=ths, Path=VizLeads}" />
     <MenuItem Header="_Emailr"  x:Name="btnBroad" Click="onBroad" Foreground="#a08" Visibility="{Binding ElementName=ths, Path=VizBroad}" />
     <MenuItem Header="_Out>DB"  x:Name="btnOu2Db" Click="onOu2Db" Foreground="#0a0" Visibility="{Binding ElementName=ths, Path=VizOu2Db}" />
   </Menu>
 
-  <!--</StackPanel>
-  </Border>-->
 </UserControl>

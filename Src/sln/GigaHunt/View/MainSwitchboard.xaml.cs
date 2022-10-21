@@ -5,7 +5,6 @@ public partial class MainSwitchboard : WpfUserControlLib.Base.WindowBase
   {
     InitializeComponent();
     themeSelector1.ThemeApplier = ApplyTheme;
-    tbver.Text = $"Db: ???        Ver: ???";
   }
   void OnLoaded(object sender, RoutedEventArgs e)
   {
@@ -25,7 +24,7 @@ public partial class MainSwitchboard : WpfUserControlLib.Base.WindowBase
     BPR.AppStart();
   }
   void onClose(object s, RoutedEventArgs e) { Close(); Application.Current.Shutdown(); }
-  void onDb2Ou(object s, RoutedEventArgs e) => tbkTitle.Text = Title = tbRep.Text = new OutlookHelper6().SyncDbToOutlook(QStatsRlsContext.Create());
-  async void onUndel(object s, RoutedEventArgs e) => tbkTitle.Text = Title = tbRep.Text = await new OutlookHelper6().OutlookUndeleteContactsAsync(QStatsRlsContext.Create());
+  void onDb2Ou(object s, RoutedEventArgs e) => tbkTitle.Text = Title = new OutlookHelper6().SyncDbToOutlook(QStatsRlsContext.Create());
+  async void onUndel(object s, RoutedEventArgs e) => tbkTitle.Text = Title = await new OutlookHelper6().OutlookUndeleteContactsAsync(QStatsRlsContext.Create());
   void onDbIni(object s, RoutedEventArgs e) { } //  => DBInitializer.SetDbInitializer();
 }
