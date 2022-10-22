@@ -69,9 +69,6 @@
           <Button Content="_New " Click="onAddNewLead" Foreground="#f80" ToolTip="Add _New Lead" />
           <Button Content="_Save" Click="onSave" />
 
-          <View:MainSwitchboardUsrCtrl Width="68" VizLeads="Collapsed" Margin="15 0"/>
-          <AavWpfVw:ThemeSelectorUsrCtrl Grid.Column="4" x:Name="themeSelector1"/>
-
         </StackPanel>
       </Grid>
 
@@ -192,13 +189,19 @@
         <Label Content="_Interviewed"     Grid.Column="6" Grid.Row="3" Target="{Binding ElementName=dpAdAt3}" />
         <DatePicker                       Grid.Column="7" Grid.Row="3" SelectedDate="{Binding InterviewedAt,         Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="0,1" Width="102"  Name="dpAdAt3" />
 
-        <Label Content="$$/_hr"          Grid.Column="8" Grid.Row="1" Target="{Binding ElementName=tbHR}" />
+        <Label Content="$$/_hr"           Grid.Column="8" Grid.Row="1" Target="{Binding ElementName=tbHR}" />
         <TextBox FontSize="16"            Grid.Column="9" Grid.Row="1" Text="{Binding HourlyRate,      Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  FontWeight="ExtraBold" Foreground="{Binding Path='HourlyRate', Converter={cmn:UniConverter}}" Name="tbHR"/>
 
         <TextBox                          Grid.Column="0" Grid.Row="5" Text="{Binding Note,                          Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" Grid.ColumnSpan="11" TextWrapping="WrapWithOverflow" VerticalAlignment="Stretch" SpellCheck.IsEnabled="True" AcceptsReturn="True" x:Name="tbxNote" />
       </Grid>
 
       <GridSplitter Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Margin="0 3 0 -3" Height="6" />
+
+
+      <TextBlock x:Name="tbver" Margin="0 -6 100 0" FontSize="13" Text="DbRls - Ver 123" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="#4af" />
+      <AavWpfVw:ThemeSelectorUsrCtrl x:Name="themeSelector1" Margin="100 20"      HorizontalAlignment="Right" VerticalAlignment="Top" />
+      <View:MainSwitchboardUsrCtrl Width="68" Margin="18 -8" VizLeads="Collapsed" HorizontalAlignment="Right" VerticalAlignment="Top" />
+      <Button Content="X" Click="OnClose" BorderThickness="0" Width="16"          HorizontalAlignment="Right" VerticalAlignment="Top" IsCancel="True" Padding="2" Margin="-8" FontSize="10" Foreground="#c00" />
 
     </Grid>
   </Border>

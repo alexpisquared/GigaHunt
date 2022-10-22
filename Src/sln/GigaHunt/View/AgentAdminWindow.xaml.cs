@@ -30,7 +30,7 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     try
     {
       var emails = _db.Emails.Local.ToBindingList().Where(r =>
-        (cbAll.IsChecked == true || (string.IsNullOrEmpty(r.PermBanReason) && !_badEmails.Contains(r.Id))) && //todo: PermBanReason == '' still treated as BANNED!!!  HAS BEEN FIXED !!! on Sep 29, 2019.
+        (cbAll.IsChecked == true || (string.IsNullOrEmpty(r.PermBanReason) && _badEmails is not null && !_badEmails.Contains(r.Id))) && //todo: PermBanReason == '' still treated as BANNED!!!  HAS BEEN FIXED !!! on Sep 29, 2019.
         (cbxLeadEmails.IsChecked != true || _leadEmails?.Contains(r.Id) == true) &&
         (cbxLeadCompns.IsChecked != true || _leadCompns?.Contains(r.Company) == true) &&
         (

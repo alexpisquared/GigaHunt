@@ -33,13 +33,13 @@ public class OutlookHelper6
     }
     catch (Exception ex) { ex.Pop(folder); throw; }
   }
-  public OL.Items GetDeliveryFailedItems()
+  public OL.Items? GetDeliveryFailedItems()
   {
     try
     {
-      var folder = MyStore.GetRootFolder().Folders[Misc.qRcvd].Folders[@"Fails"] as OL.Folder;
-      var itemss = folder.Items.Restrict("[MessageClass] = 'REPORT.IPM.Note.NDR'");
-      WriteLine($"***        Fails: {itemss.Count}");
+      var folder = MyStore?.GetRootFolder().Folders[Misc.qRcvd].Folders[@"Fails"] as OL.Folder;
+      var itemss = folder?.Items.Restrict("[MessageClass] = 'REPORT.IPM.Note.NDR'");
+      WriteLine($"***        Fails: {itemss?.Count}");
       return itemss;
     }
     catch (Exception ex) { ex.Pop(@"Q\Fails"); throw; }
@@ -49,30 +49,32 @@ public class OutlookHelper6
     try
     {
       var folder = GetMapiFOlder(folderPath);
+      ArgumentNullException.ThrowIfNull(folder, "folder is nul @@@@@@@@@@@@@@@");
 
-      var itemss = messageClass == null ? folder.Items : folder.Items.Restrict($"[MessageClass] = '{messageClass}'");
-      //...WriteLine($" *** {folderPath,24}: {itemss.Count}");
+      var itemss = messageClass == null ? folder.Items : folder?.Items.Restrict($"[MessageClass] = '{messageClass}'");      //...WriteLine($" *** {folderPath,24}: {itemss.Count}");
+      ArgumentNullException.ThrowIfNull(itemss, "itemss is nul @@@@@@@@@@@@@@@");
+      
       return itemss;
     }
     catch (Exception ex) { ex.Pop(@"Q\Fails"); throw; }
   }
-  public OL.Items GetToResendItems()
+  public OL.Items? GetToResendItems()
   {
     try
     {
-      var folder = MyStore.GetRootFolder().Folders[Misc.qRcvd].Folders[@"ToReSend"] as OL.Folder;
-      var itemss = folder.Items.Restrict("[MessageClass] = 'IPM.Note'");
+      var folder = MyStore?.GetRootFolder().Folders[Misc.qRcvd].Folders[@"ToReSend"] as OL.Folder;
+      var itemss = folder?.Items.Restrict("[MessageClass] = 'IPM.Note'");
       return itemss;
     }
     catch (Exception ex) { ex.Pop(@"Q\ToReSend"); throw; }
   }
-  public OL.MAPIFolder GetMapiFOlder(string folderPath)
+  public OL.MAPIFolder? GetMapiFOlder(string folderPath)
   {
     var folderParts = folderPath.Split(new char[] { '\\', '/' }, StringSplitOptions.RemoveEmptyEntries);
-    var folder = MyStore.GetRootFolder();
+    var folder = MyStore?.GetRootFolder();
     for (var i = 0; i < folderParts.Length; i++)
     {
-      folder = folder.Folders[folderParts[i]] as OL.Folder;
+      folder = folder?.Folders[folderParts[i]] as OL.Folder;
     }
 
     return folder;
@@ -83,11 +85,14 @@ public class OutlookHelper6
     App.SpeakAsync("Synchronous action... usually takes 5 minutes.");
 
     var sw = Stopwatch.StartNew();
+    
     db.Emails.Load();
     db.Agencies.Load();
 
-    undeleteContacts(MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderContacts), db, "Contacts");
-    undeleteContacts(MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderDeletedItems), db, "Deleted Items");
+    ArgumentNullException.ThrowIfNull(MyStore, "MyStore is nul @@@@@@@@@@@@@@@");
+
+    UndeleteContacts(MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderContacts), db, "Contacts");
+    UndeleteContacts(MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderDeletedItems), db, "Deleted Items");
 
     App.SpeakAsync($"All done. Took {sw.Elapsed.TotalMinutes:N1} minutes.");
 
@@ -109,6 +114,7 @@ public class OutlookHelper6
   {
     try
     {
+      ArgumentNullException.ThrowIfNull(_contactsFolder, "_contactsFolder is nul @@@@@@@@@@@@@@@");
       var i = (OL.ContactItem)_contactsFolder.Items.Find(string.Format("[LastName]='{0}'", lastName)); // ..Format("[FirstName]='{0}' and [LastName]='{1}'", firstName, lastName));
       while (i != null)
       {
@@ -129,20 +135,22 @@ public class OutlookHelper6
       //  contact = contactsFolder.Items.FindNext();
       //}
 
-      dbgListAllCOntacts(MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderContacts));
-      dbgListAllCOntacts(MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderDeletedItems));
+      ArgumentNullException.ThrowIfNull(MyStore, "MyStore is nul @@@@@@@@@@@@@@@");
+
+      DbgListAllCOntacts(MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderContacts));
+      DbgListAllCOntacts(MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderDeletedItems));
     }
     catch (Exception ex) { ex.Pop("!!! MUST RUN OUTLOOK TO WORK !!!"); throw; }
   }
-  public string SyncDbToOutlook(QStatsRlsContext db, string? folderName = null)
+  public string SyncDbToOutlook(QStatsRlsContext db)
   {
     //AAV.Sys.Helpers.BPR.Beep1of2();
     var q = db.Emails.Where(r => string.IsNullOrEmpty(r.PermBanReason)
                             && r.Id.Contains("@")
-                            && !r.Id.Contains("=")
+                            && !r.Id.Contains('=')
                             && !r.Id.Contains("reply")
-                            && !r.Id.Contains("'")
-                            && !r.Id.Contains("+")
+                            && !r.Id.Contains('\'')
+                            && !r.Id.Contains('+')
                             && r.Ehists.Count(e => string.Compare(e.RecivedOrSent, "S", true) == 0 && !string.IsNullOrEmpty(e.LetterBody) && e.LetterBody.Length > 96) > _customLetersSentThreshold); //at least 2 letters sent (1 could be just an unanswered reply on their broadcast)
 
     var ttl = q.Count();
@@ -160,29 +168,29 @@ public class OutlookHelper6
   {
     try
     {
-      var i = (OL.ContactItem)_contactsFolder.Items.Find(string.Format("[Email1Address]='{0}' or [Email2Address]='{0}' or [Email3Address]='{0}' ", em.Id));
+      var i = (OL.ContactItem?)_contactsFolder?.Items.Find(string.Format("[Email1Address]='{0}' or [Email2Address]='{0}' or [Email3Address]='{0}' ", em.Id));
       if (i != null)
       {
-        mergeDbDataToOutlookContact(em, ref i, "by Email");
+        MergeDbDataToOutlookContact(em, ref i, "by Email");
         return;
       }
 
-      if (!string.IsNullOrWhiteSpace(em.Fname) && !string.IsNullOrWhiteSpace(em.Lname) && _contactsFolder.Items.Find(string.Format("[FirstName]='{0}' and [LastName]='{1}'", em.Fname, em.Lname)) != null)
+      if (!string.IsNullOrWhiteSpace(em.Fname) && !string.IsNullOrWhiteSpace(em.Lname) && _contactsFolder?.Items.Find(string.Format("[FirstName]='{0}' and [LastName]='{1}'", em.Fname, em.Lname)) != null)
       {
         i = (OL.ContactItem)_contactsFolder.Items.Find(string.Format("[FirstName]='{0}' and [LastName]='{1}'", em.Fname, em.Lname));
         if (i != null)
         {
-          mergeDbDataToOutlookContact(em, ref i, "by Name");
+          MergeDbDataToOutlookContact(em, ref i, "by Name");
           return;
         }
       }
 
-      createFromDbOutlookContact(em);
+      CreateFromDbOutlookContact(em);
     }
     catch (Exception ex) { ex.Pop("!!! MUST RUN OUTLOOK TO WORK !!!"); throw; }
   }
 
-  void mergeDbDataToOutlookContact(Email em, ref OL.ContactItem i, string msg)
+  void MergeDbDataToOutlookContact(Email em, ref OL.ContactItem i, string msg)
   {
     bool changed;
     while (i != null)
@@ -226,11 +234,14 @@ public class OutlookHelper6
         _updatedCount++;
       }
 
+      ArgumentNullException.ThrowIfNull(_contactsFolder, "contactsFolder is nul @@@@@@@@@@@@@@@");
+
       i = (OL.ContactItem)_contactsFolder.Items.FindNext();
     }
   }
-  void createFromDbOutlookContact(Email em)
+  void CreateFromDbOutlookContact(Email em)
   {
+    ArgumentNullException.ThrowIfNull(_olApp, "olApp is nul @@@@@@@@@@@@@@@");
     var i = (OL.ContactItem)_olApp.CreateItem(OL.OlItemType.olContactItem);
     i.Email1Address = em.Id;
     if (!string.IsNullOrWhiteSpace(em.Fname))    /**/ i.FirstName = em.Fname;
@@ -249,7 +260,7 @@ public class OutlookHelper6
       q.Count(),
       q.Min(e => e.EmailedAt),
       q.Max(e => e.EmailedAt),
-      t == null ? "" : (t.LetterBody.Length > 222 ? (t.LetterBody[..222] + " ...") : t.LetterBody));
+      t == null ? "" : (t.LetterBody?.Length > 222 ? (t.LetterBody[..222] + " ...") : t.LetterBody));
 
     //i.Display(true);
 
@@ -260,17 +271,18 @@ public class OutlookHelper6
     i.Save();
     _addedCount++;
   }
-  void dbgListAllCOntacts(OL.MAPIFolder folder)
+
+  static void DbgListAllCOntacts(OL.MAPIFolder folder)
   {
     WriteLine($"Folder {folder.Name} has total {folder.Items.Count} items: ");
 
     foreach (var o in folder.Items) //.Where(r => r==r))
     {
-      if (o is OL.ContactItem)          /**/{ var i = o as OL.ContactItem; WriteLine($"C {i.FirstName,16}\t{i.LastName,-16}\t{i.Email1Address,24}\t{i.Subject,-48}\t{(string.IsNullOrWhiteSpace(i.Body) ? "·" : (i.Body.Length > 50 ? i.Body[..50] : i.Body))}\t{i.Account}"); }
-      else if (o is OL.MailItem)        /**/{ var i = o as OL.MailItem; WriteLine($"M {i.To,-32}\t{i.Subject,-48}\t"); }
-      else if (o is OL.AppointmentItem) /**/{ var i = o as OL.AppointmentItem; WriteLine($"M {i.Subject,-48}\t"); }
-      else if (o is OL.MeetingItem)     /**/{ var i = o as OL.MeetingItem; WriteLine($"M {i.Subject,-48}\t"); }
-      else if (o is OL.TaskItem)        /**/{ var i = o as OL.TaskItem; WriteLine($"M {i.Body,-48}\t"); }
+      if (o is OL.ContactItem)          /**/{ var i = o as OL.ContactItem;    /**/ WriteLine($"C {i?.FirstName,16}\t{i?.LastName,-16}\t{i?.Email1Address,24}\t{i?.Subject,-48}\t{(string.IsNullOrWhiteSpace(i?.Body) ? "·" : (i?.Body.Length > 50 ? i?.Body[..50] : i?.Body))}\t{i?.Account}"); }
+      else if (o is OL.MailItem)        /**/{ var i = o as OL.MailItem;       /**/ WriteLine($"M {i?.To,-32}\t{i?.Subject,-48}\t"); }
+      else if (o is OL.AppointmentItem) /**/{ var i = o as OL.AppointmentItem;/**/ WriteLine($"M {i?.Subject,-48}\t"); }
+      else if (o is OL.MeetingItem)     /**/{ var i = o as OL.MeetingItem;    /**/ WriteLine($"M {i?.Subject,-48}\t"); }
+      else if (o is OL.TaskItem)        /**/{ var i = o as OL.TaskItem;       /**/ WriteLine($"M {i?.Body,-48}\t"); }
       else
       {
         foreach (PropertyDescriptor descrip in TypeDescriptor.GetProperties(o))
@@ -282,7 +294,7 @@ public class OutlookHelper6
       }
     }
   }
-  void undeleteContacts(OL.MAPIFolder folder, QStatsRlsContext QStatsRlsContext, string srcFolder)
+  void UndeleteContacts(OL.MAPIFolder folder, QStatsRlsContext QStatsRlsContext, string srcFolder)
   {
     WriteLine($"Folder {folder.Name} has total {folder.Items.Count} items: ");
 
@@ -290,12 +302,12 @@ public class OutlookHelper6
     {
       if (o is OL.ContactItem item)
       {
-        addUpdateToDb(item, QStatsRlsContext, srcFolder);
+        AddUpdateToDb(item, QStatsRlsContext, srcFolder);
       }
     }
   }
 
-  void addUpdateToDb(OL.ContactItem ci, QStatsRlsContext db, string srcFolder)
+  void AddUpdateToDb(OL.ContactItem ci, QStatsRlsContext db, string srcFolder)
   {
     const int maxLen = 256;
 
@@ -326,7 +338,7 @@ public class OutlookHelper6
 
     WriteLine($"{emailId,32}\t{ci.FirstName,17} {ci.LastName,-21}\t{ci.JobTitle,-80}\t{phone}\t{(string.IsNullOrWhiteSpace(ci.Body) ? "·" : (ci.Body.Length > 50 ? ci.Body[..50] : ci.Body))}");
 
-    addUpdateBassedOnGoodEmailId(ci, db, emailId, phone, agency, srcFolder);
+    AddUpdateBassedOnGoodEmailId(ci, db, emailId, phone, agency, srcFolder);
   }
   public static string GetCompanyName(string email)
   {
@@ -341,7 +353,7 @@ public class OutlookHelper6
     return cmpny;
   }
 
-  void addUpdateBassedOnGoodEmailId(OL.ContactItem ci, QStatsRlsContext db, string emailId, string phone, string agency, string srcFolder)
+  void AddUpdateBassedOnGoodEmailId(OL.ContactItem ci, QStatsRlsContext db, string emailId, string phone, string agency, string srcFolder)
   {
     var an = $"-={srcFolder}-Add=-{ci.JobTitle}·{ci.Body}¦";
     var em = db.Emails.Local.FirstOrDefault(r => emailId.Equals(r.Id, StringComparison.OrdinalIgnoreCase));
@@ -387,8 +399,8 @@ public class OutlookHelper6
     }
   }
 
-  public static string figureOutSenderEmail(OL.MailItem mailItem) => !string.IsNullOrEmpty(mailItem.Sender?.Address) && mailItem.Sender.Address.Contains("@") ? mailItem.Sender.Address :
-                      !string.IsNullOrEmpty(mailItem.SenderEmailAddress) && mailItem.SenderEmailAddress.Contains("=") && mailItem.SenderEmailAddress.Contains("@") ? RemoveBadEmailParts(mailItem.SenderEmailAddress) :
+  public static string FigureOutSenderEmail(OL.MailItem mailItem) => !string.IsNullOrEmpty(mailItem.Sender?.Address) && mailItem.Sender.Address.Contains('@') ? mailItem.Sender.Address :
+                      !string.IsNullOrEmpty(mailItem.SenderEmailAddress) && mailItem.SenderEmailAddress.Contains("=") && mailItem.SenderEmailAddress.Contains('@') ? RemoveBadEmailParts(mailItem.SenderEmailAddress) :
                       !string.IsNullOrEmpty(mailItem.SenderEmailAddress) && mailItem.SenderEmailAddress.Contains("@") ? mailItem.SenderEmailAddress :
                       !string.IsNullOrEmpty(mailItem.SentOnBehalfOfName) && mailItem.SentOnBehalfOfName.Contains("@") ? mailItem.SentOnBehalfOfName :
                       mailItem.SenderEmailAddress;

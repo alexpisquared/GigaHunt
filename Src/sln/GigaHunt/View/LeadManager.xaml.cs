@@ -59,10 +59,10 @@ public partial class LeadManagerWindow : WpfUserControlLib.Base.WindowBase
     //dynamic agent = ((DB.QStats.Std.Models.Email)(((object[])(e.AddedItems))[0]));
 
     var c = ((DB.QStats.Std.Models.Email)((object[])e.AddedItems)[0]).Company;
-    if (!string.IsNullOrEmpty(c) && lead?.Agency != c) lead.Agency = c;
+    if (!string.IsNullOrEmpty(c) && lead.Agency != c) (lead ?? throw new ArgumentNullException("@@@####@@@")).Agency = c;
 
     var n = ((DB.QStats.Std.Models.Email)((object[])e.AddedItems)[0]).Fname;
-    if (!string.IsNullOrEmpty(n) && lead.AgentName != n) lead.AgentName = n;
+    if (!string.IsNullOrEmpty(n) && lead.AgentName != n) (lead ?? throw new ArgumentNullException("@@@####@@@")).AgentName = n;
   }
   void onFilter(object s, RoutedEventArgs e) => filterLeads(tbFilter.Text, cbInclAll.IsChecked == true);
   void onCloseTheLead(object s, RoutedEventArgs e)
@@ -106,7 +106,7 @@ public partial class LeadManagerWindow : WpfUserControlLib.Base.WindowBase
     _leadViewSource.Source = _db.Leads.Local.ToBindingList().Where(r =>
       (includeClosed || r.CampaignId == _thisCampaign && r.Status != "Closed" && r.Status != "Dead")
       &&
-      (string.IsNullOrEmpty(filter) || r.AgentEmail != null && (r.AgentEmail.Id.Contains(filter) || r.AgentEmail.Fname.Contains(filter)))
+      (string.IsNullOrEmpty(filter) || r.AgentEmail != null && (r.AgentEmail.Id.Contains(filter) || r.AgentEmail.Fname?.Contains(filter) == true))
     ).OrderBy(r => r.AddedAt);
 
     //todo: changes the status to Active: 
@@ -137,4 +137,5 @@ public partial class LeadManagerWindow : WpfUserControlLib.Base.WindowBase
     foreach (var row in _db.ChangeTracker.Entries().Where(e => e.State == EntityState.Modified))
       ((Lead)row.Entity).ModifiedAt = GigaHunt.App.Now;
   }
+  void OnClose(object s, RoutedEventArgs e) { Close(); Application.Current.Shutdown(); }
 }

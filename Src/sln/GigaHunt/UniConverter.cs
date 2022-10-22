@@ -105,7 +105,7 @@ namespace GigaHunt
         return value;
       }
     }
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => null;
+    public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => null;
     public override object ProvideValue(IServiceProvider serviceProvider) => this;
     public UniConverter() { }
   }

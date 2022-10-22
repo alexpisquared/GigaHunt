@@ -241,7 +241,7 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
       var sw = Stopwatch.StartNew();
       foreach (var em in vEMail_Avail_DevDataGrid.SelectedItems)
       {
-        var scs = await QStatusBroadcaster.SendLetter_UpdateDb(true, ((VEmailAvailProd)em).Id, ((VEmailAvailProd)em).Fname);
+        var scs = await QStatusBroadcaster.SendLetter_UpdateDb(true, ((VEmailAvailProd)em).Id, ((VEmailAvailProd)em).Fname??"....");
         if (!scs)
           msg += $"\n  {((VEmailAvailProd)em).Id}";
 
@@ -281,7 +281,7 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
       {
         EnableControls(false);
         //WindowState = System.Windows.WindowState.Minimized;
-        foreach (var em in vEMail_UnAvl_DevDataGrid.SelectedItems) _ = await QStatusBroadcaster.SendLetter_UpdateDb(false, ((VEmailUnAvlProd)em).Id, ((VEmailUnAvlProd)em).Fname);
+        foreach (var em in vEMail_UnAvl_DevDataGrid.SelectedItems) _ = await QStatusBroadcaster.SendLetter_UpdateDb(false, ((VEmailUnAvlProd)em).Id, ((VEmailUnAvlProd)em).Fname??".....");
         Close();
       }
     }
