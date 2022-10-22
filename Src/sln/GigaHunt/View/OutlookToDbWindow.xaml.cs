@@ -54,7 +54,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
     }
   }
 
-  void onClose(object s, RoutedEventArgs e) => Close();
+  void OnClose(object s, RoutedEventArgs e) { Close(); Application.Current.Shutdown(); }
 
   void onUpdateOutlook(object s, RoutedEventArgs e) => tb1.Text += _oh.SyncDbToOutlook(_db, Tag.ToString());
 

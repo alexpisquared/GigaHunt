@@ -36,7 +36,7 @@
         <AavWpfVw:ThemeSelectorUsrCtrl      x:Name="themeSelector1" />
       </Menu>
 
-      <Button Content="X" Click="onClose" Foreground="#c00" IsCancel="True" Width="16"  HorizontalAlignment="Right" VerticalAlignment="Top" Margin="-5" Background="Transparent" BorderThickness="0" FontSize="10" />
+      <Button Content="X" Click="OnClose" Foreground="#c00" IsCancel="True" Width="16" Padding="2" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="-5" Background="Transparent" BorderThickness="0" FontSize="10" />
 
     </Grid>
   </Border>

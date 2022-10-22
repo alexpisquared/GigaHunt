@@ -314,4 +314,5 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     catch (Exception ex) { ex.Pop(); }
   }
   async void onSave(object s, RoutedEventArgs e) => tbkTitle.Text = await SaveAndUpdateMetadata(_db);
+  void OnClose(object s, RoutedEventArgs e) { Close(); Application.Current.Shutdown(); }
 }

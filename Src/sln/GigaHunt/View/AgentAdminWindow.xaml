@@ -81,8 +81,6 @@
           <MenuItem Header="Quit"   IsEnabled="False" />
         </Menu>
 
-        <View:MainSwitchboardUsrCtrl Width="68" Margin="10 0" VizAgent="Collapsed" />
-        <View1:ThemeSelectorUsrCtrl x:Name="themeSelector1" />
         <TextBlock x:Name="tbkTitle" Foreground="#1af" TextWrapping="Wrap" Text="Info" />
       </StackPanel>
 
@@ -222,7 +220,10 @@
 
       </Grid>
 
-      <TextBlock x:Name="tbver" Margin="0 -6 0 -20" FontSize="13" Foreground="#4af" Text="DbRls - Ver 123" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+      <TextBlock x:Name="tbver" Margin="0 -6 100 0" FontSize="13" Text="DbRls - Ver 123" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="#4af" />
+      <View1:ThemeSelectorUsrCtrl x:Name="themeSelector1" Margin="100 20"      HorizontalAlignment="Right" VerticalAlignment="Top" />
+      <View:MainSwitchboardUsrCtrl Width="68" Margin="18 -8" VizBroad="Collapsed" HorizontalAlignment="Right" VerticalAlignment="Top" />
+      <Button Content="X" Click="OnClose" BorderThickness="0" Width="16"          HorizontalAlignment="Right" VerticalAlignment="Top" IsCancel="True" Padding="2" Margin="-8" FontSize="10" Foreground="#c00" />
     </Grid>
   </Border>
 </lnk:WindowBase>

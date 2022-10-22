@@ -7,7 +7,6 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
   IEnumerable<string>? _leadEmails, _leadCompns;
   string _firstName = "Sirs";
   bool _isLoaded = false;
-
   public EmailersendWindow()
   {
     InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme;
@@ -314,6 +313,7 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
     btMax.Visibility = dg.SelectedItems.Count < 3 ? Visibility.Visible : Visibility.Collapsed;
     btSel.Visibility = dg.SelectedItems.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
   }
+  void OnClose(object s, RoutedEventArgs e) { Close(); Application.Current.Shutdown(); }
 }
 ///todo: convey the automatinnes of the message:
 ///		...

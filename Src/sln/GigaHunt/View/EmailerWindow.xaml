@@ -47,8 +47,6 @@
           <RowDefinition Height="5"/>
           <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-
-        <TextBlock HorizontalAlignment="Right" Margin="0 -5" FontSize="43" FontFamily="Ink Free" FontWeight="ExtraBold" Foreground="#4e21" Text="Emailer  " Grid.ColumnSpan="3"/>
         <TextBlock  Margin="-45,9,-33,0"                   FontSize="23" FontFamily="Ink Free" FontWeight="ExtraBold" Foreground="#ae21" Text="Emailer  " RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" HorizontalAlignment="Left">
           <TextBlock.RenderTransform>
             <RotateTransform Angle="-90"/>
@@ -80,9 +78,6 @@
           <Button Content="top 8 rows"   Margin="4" Click="OnBroadcastTopN" ToolTip="Broadcast to the top N emails/agents"    Height="30" x:Name="btMax" />
           <Button Content="_Selection"   Margin="4" Click="OnBroadcastSlct" ToolTip="Broadcast to the selected emails/agents" Height="30" x:Name="btSel" />
           <Button Content="Agent Editor" Margin="4" Click="onAgentsEdit"    ToolTip="paralel acces to agents"                 Height="30" />
-
-          <View:MainSwitchboardUsrCtrl Width="68" Margin="8 0" VizBroad="Collapsed" />
-          <AavWpfVw:ThemeSelectorUsrCtrl x:Name="themeSelector1" VerticalAlignment="Center" Width="83" />
 
           <!--<Button Content="Leads"                    Click="onLeads" Foreground="#08f" />          <Button Content="Agents"                   Click="onAgent" Foreground="#076" />          <Button Content="Outlook -> DB"            Click="onOu2Db" Foreground="#0a0" />-->
 
@@ -162,7 +157,11 @@
         </Grid>
       </Grid>
       <ToggleButton Content="_Tgl"     Click="onTglTest" ToolTip="Test of visuality" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
-      <TextBlock x:Name="tbver" Margin="0 -6 0 -20" FontSize="13" Foreground="#4af" Text="DbRls - Ver 123" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+
+      <TextBlock x:Name="tbver" Margin="0 -6 100 0" FontSize="13" Text="DbRls - Ver 123" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="#4af" />
+      <AavWpfVw:ThemeSelectorUsrCtrl x:Name="themeSelector1" Margin="100 20"      HorizontalAlignment="Right" VerticalAlignment="Top" />
+      <View:MainSwitchboardUsrCtrl Width="68" Margin="18 -8" VizBroad="Collapsed" HorizontalAlignment="Right" VerticalAlignment="Top" />
+      <Button Content="X" Click="OnClose" BorderThickness="0" Width="16"          HorizontalAlignment="Right" VerticalAlignment="Top" IsCancel="True" Padding="2" Margin="-8" FontSize="10" Foreground="#c00" />
     </Grid>
   </Border>
 </lnk:WindowBase>
