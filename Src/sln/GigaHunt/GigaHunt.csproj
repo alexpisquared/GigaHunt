@@ -32,15 +32,9 @@
 
   <ItemGroup>
     <!--<PackageReference Include="Interop.Microsoft.Office.Interop.Outlook.dllv16" Version="1.0.0" />-->
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.10">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="Microsoft.Office.Core" />
-    <PackageReference Include="Microsoft.Office.Excel" Version="14.0.4760.1000" />
     <PackageReference Include="Microsoft.Office.Interop.Outlook" Version="15.0.4797.1004" />
     <PackageReference Include="MicrosoftOfficeCore" Version="15.0.0" />
-    <PackageReference Include="MSOffice.Interop" Version="16.0.55555" />
   </ItemGroup>
 
   <ItemGroup>
