@@ -1,5 +1,5 @@
 ﻿<lnk:WindowBase xmlns:lnk="clr-namespace:WpfUserControlLib.Base;assembly=WpfUserControlLib" x:Name="wnd" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-                xmlns:Models="clr-namespace:DB.QStats.Std.Models;assembly=DB.QStats.Std" mc:Ignorable="d"  x:Class="GigaHunt.View.EmailersendWindow" Title="EmailerWindow" Height="350" Width="1525" Loaded="onLoaded" 
+                xmlns:Models="clr-namespace:DB.QStats.Std.Models;assembly=DB.QStats.Std" mc:Ignorable="d"  x:Class="GigaHunt.View.EmailersendWindow" Title="EmailerWindow" Height="250" Width="1525" Loaded="onLoaded" 
                 xmlns:View="clr-namespace:GigaHunt.View" 
                 xmlns:cmn="clr-namespace:GigaHunt"
                 xmlns:AavWpfVw="clr-namespace:WpfUserControlLib.Views;assembly=WpfUserControlLib"
@@ -14,6 +14,7 @@
         <ResourceDictionary Source="/WpfUserControlLib;component/Base/BasicDefaultsLayout.xaml" />
       </ResourceDictionary.MergedDictionaries>
 
+      <Style TargetType="{x:Type TextBox}"   BasedOn="{StaticResource tbxRW}" />
       <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TbkVCenteredInfoClr}" />
 
       <Style TargetType="FrameworkElement" >
@@ -55,22 +56,22 @@
         </TextBlock>
 
         <StackPanel Grid.ColumnSpan="2" Name="ctrlPanelOnMarket" Orientation="Horizontal" VerticalAlignment="Center">
-          <Label     Content="_Filter: " Target="{Binding ElementName=tbFilter}" />
-          <TextBox   Width="80" FontSize="16" TextChanged="onFilter" Name="tbFilter" />
+          <Label Content="_Find" Target="{Binding ElementName=tbFilter}" />
+          <TextBox Width="120" FontSize="16"          x:Name="tbFilter" Text="{Binding Srch, Delay=300, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
           <CheckBox  Content="_Danger" Foreground="#f30" Checked="onFilter" Unchecked="onFilter" Margin="8" x:Name="cbx_ALL_Emails" ToolTip="Ignore all the rules - search across all agents"/>
 
-          <Grid Margin="25 0">
+          <Grid Margin="0">
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="*"/>
               <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-              <RowDefinition Height="auto"/>
-              <RowDefinition Height="auto"/>
+              <RowDefinition />
+              <RowDefinition />
             </Grid.RowDefinitions>
-            <Label    Grid.ColumnSpan="2" Content="Only Lead:"         Foreground="#1a1" HorizontalAlignment="Center" />
-            <CheckBox Grid.Row="1" Grid.Column="0" Content="Emails"    Foreground="#1a1" Checked="onFilter" Unchecked="onFilter" Margin="8" x:Name="cbxLeadEmails" />
-            <CheckBox Grid.Row="1" Grid.Column="1" Content="Companies" Foreground="#1a1" Checked="onFilter" Unchecked="onFilter" Margin="8" x:Name="cbxLeadCompns" />
+            <Label    Grid.ColumnSpan="2"          Content="Leads Only:" Foreground="#1a1" HorizontalAlignment="Center" />
+            <CheckBox Grid.Row="1" Grid.Column="0" Content="Emails"      Foreground="#1a1" Checked="onFilter" Unchecked="onFilter" Margin="8" x:Name="cbxLeadEmails" />
+            <CheckBox Grid.Row="1" Grid.Column="1" Content="Companies"   Foreground="#1a1" Checked="onFilter" Unchecked="onFilter" Margin="8" x:Name="cbxLeadCompns" />
           </Grid>
 
 
@@ -90,18 +91,18 @@
         </StackPanel>
 
         <Grid DataContext="{StaticResource vsEMail_Avail}" Grid.Column="1" Grid.Row="1" >
-          <DataGrid x:Name="vEMail_Avail_DevDataGrid" ItemsSource="{Binding}" IsEnabled="{Binding ElementName=chkIsAvailable, Path=IsChecked}" IsReadOnly="True" VerticalAlignment="Top" SelectionChanged="onSelectnChgd" RowHeight="32" >
+          <DataGrid x:Name="vEMail_Avail_DevDataGrid" ItemsSource="{Binding}" IsEnabled="{Binding ElementName=chkIsAvailable, Path=IsChecked}" IsReadOnly="True" VerticalAlignment="Top" SelectionChanged="onSelectnChgd" >
             <DataGrid.Columns>
-              <DataGridTextColumn Header="Id = Email"  Binding="{Binding Id}"                                            Width="180" />
-              <DataGridTextColumn Header="Fname"       Binding="{Binding Fname}"                                         />
-              <DataGridTextColumn Header="Lname"       Binding="{Binding Lname}"                                         />
-              <DataGridTextColumn Header="Company"     Binding="{Binding Company}"                                       />
-              <DataGridTextColumn Header="DNN"         Binding="{Binding DoNotNotifyForCampaignId}"                      ToolTipService.ToolTip="Do Not Notify On On-Market For Campaign Id"/>
-              <DataGridTextColumn Header="MyReplies"   Binding="{Binding MyReplies}"                                     />
-              <DataGridTextColumn Header="LastSent"    Binding="{Binding LastSentAt,    Converter={cmn:UniConverter}}"    />
-              <DataGridTextColumn Header="LastReplied" Binding="{Binding LastRepliedAt, Converter={cmn:UniConverter}}"    />
-              <DataGridTextColumn Header="Added At"    Binding="{Binding AddedAt,       Converter={cmn:UniConverter}}"    />
-              <DataGridTextColumn Header="Notes        (this is the list for AVAILABLE broadcast)" Binding="{Binding Notes}"   Width="*" FontSize="8" />
+              <DataGridTextColumn Header=" Id = Email"  Binding="{Binding Id}"                                          Width="180" />
+              <DataGridTextColumn Header=" Fname"       Binding="{Binding Fname}"                                       />
+              <DataGridTextColumn Header=" Lname"       Binding="{Binding Lname}"                                       />
+              <DataGridTextColumn Header=" Company"     Binding="{Binding Company}"                                     />
+              <DataGridTextColumn Header=" DNN"         Binding="{Binding DoNotNotifyForCampaignId}"                    ToolTipService.ToolTip="Do Not Notify On On-Market For Campaign Id"/>
+              <DataGridTextColumn Header=" Added At"    Binding="{Binding AddedAt,       Converter={cmn:UniConverter}}" />
+              <DataGridTextColumn Header=" LastSent"    Binding="{Binding LastSentAt,    Converter={cmn:UniConverter}}" />
+              <DataGridTextColumn Header=" LastReplied" Binding="{Binding LastRepliedAt, Converter={cmn:UniConverter}}" />
+              <DataGridTextColumn Header=" MyRplyCnt"   Binding="{Binding MyReplies}"    Width="62"                     />
+              <DataGridTextColumn Header=" Notes"       Binding="{Binding Notes}"   Width="*" FontSize="9"              />
             </DataGrid.Columns>
           </DataGrid>
         </Grid>

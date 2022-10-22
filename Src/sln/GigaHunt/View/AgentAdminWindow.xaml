@@ -4,7 +4,10 @@
                 xmlns:View="clr-namespace:GigaHunt.View" 
                 xmlns:View1="clr-namespace:WpfUserControlLib.Views;assembly=WpfUserControlLib" 
                 xmlns:Models="clr-namespace:DB.QStats.Std.Models;assembly=DB.QStats.Std"
-                Style="{StaticResource WindowStyle_Aav0}" Title="AgentAdminWindow" Height="400" Width="1600" Loaded="onLoaded">
+                Style="{StaticResource WindowStyle_Aav0}" Title="AgentAdminWindow" Height="350" Width="1600" Loaded="onLoaded">
+  <WindowChrome.WindowChrome>
+    <WindowChrome CaptionHeight="0" ResizeBorderThickness="10" />
+  </WindowChrome.WindowChrome>
   <lnk:WindowBase.Resources>
     <ResourceDictionary >
       <ResourceDictionary.MergedDictionaries>
@@ -23,15 +26,13 @@
         <Setter Property="VerticalAlignment" Value="Center" />
       </Style>
 
-      <Style TargetType="{x:Type TextBox}"      BasedOn="{StaticResource tbxRW}" />
+      <Style TargetType="{x:Type TextBox}"   BasedOn="{StaticResource tbxRW}" />
+      <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TbkVCenteredInfoClr}" />
 
       <CollectionViewSource x:Key="eMailViewSource" d:DesignSource="{d:DesignInstance {x:Type Models:Email}, CreateList=True}"/>
       <CollectionViewSource x:Key="eMailEHistsViewSource" Source="{Binding Ehists, Source={StaticResource eMailViewSource}}"/>
     </ResourceDictionary>
   </lnk:WindowBase.Resources>
-  <WindowChrome.WindowChrome>
-    <WindowChrome CaptionHeight="0" ResizeBorderThickness="10" />
-  </WindowChrome.WindowChrome>
   <Border Style="{StaticResource BorderStyle_Aav0}" CornerRadius="10" Padding="10">
     <Grid x:Name="ZommablePanel" >
       <Grid.LayoutTransform>
@@ -52,26 +53,26 @@
       </TextBlock>
 
       <StackPanel Orientation="Horizontal" x:Name="ctrlPnl">
-        <Label Content="_Filter" Target="{Binding ElementName=tbFilter}" />
-        <TextBox Width="184" FontSize="22"            x:Name="tbFilter" Text="{Binding Srch, Delay=300, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <Label Content="_Find" Target="{Binding ElementName=tbFilter}" />
+        <TextBox Width="120" FontSize="16"          x:Name="tbFilter" Text="{Binding Srch, Delay=300, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
           <CheckBox Content="_+ Banned"   Checked="onFilter" Unchecked="onFilter" Margin="4" x:Name="cbAll" />
           <CheckBox Content="_+ Notes "   Checked="onFilter" Unchecked="onFilter" Margin="4" x:Name="cbNtA" />
         </StackPanel>
 
-        <Grid Margin="5 0">
+        <Grid Margin="0">
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
           </Grid.ColumnDefinitions>
           <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition />
+            <RowDefinition />
           </Grid.RowDefinitions>
-          <Label    Grid.ColumnSpan="2" Content="... Lead ..."        Foreground="#1a1" HorizontalAlignment="Center" />
-          <CheckBox Grid.Row="1" Grid.Column="0" Content="Emails"     Foreground="#1a1" Checked="onFilter" Unchecked="onFilter" Margin="8" x:Name="cbxLeadEmails" />
-          <CheckBox Grid.Row="1" Grid.Column="1" Content="Companies"  Foreground="#1a1" Checked="onFilter" Unchecked="onFilter" Margin="8" x:Name="cbxLeadCompns" />
+          <Label    Grid.ColumnSpan="2"          Content="Leads Only:" Foreground="#1a1" HorizontalAlignment="Center" />
+          <CheckBox Grid.Row="1" Grid.Column="0" Content="Emails"      Foreground="#1a1" Checked="onFilter" Unchecked="onFilter" Margin="8" x:Name="cbxLeadEmails" />
+          <CheckBox Grid.Row="1" Grid.Column="1" Content="Companies"   Foreground="#1a1" Checked="onFilter" Unchecked="onFilter" Margin="8" x:Name="cbxLeadCompns" />
         </Grid>
 
         <Menu Width="88" Foreground="#aaa" >
@@ -146,17 +147,13 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
           </Grid.RowDefinitions>
 
           <Label Content="E_mail (Id)"      Grid.Column="0" Grid.Row="0" />
           <TextBox                          Grid.Column="1" Grid.Row="0" Text="{Binding Id, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}" />
           <Label Content="Modified At"      Grid.Column="4" Grid.Row="0" />
           <TextBlock                        Grid.Column="5" Grid.Row="0" Text="{Binding ModifiedAt}" />
-          <Button                           Grid.Column="5" Grid.Row="0" Content="Del" Click="onDel" ToolTip="onDel ... ?????~~~~!!! " Foreground="#f00" HorizontalAlignment="Right" />
+          <Button                           Grid.Column="5" Grid.Row="0" Content="Del" Click="onDel" ToolTip="onDel ... ?????~~~~!!! " Foreground="#f00" HorizontalAlignment="Right" Margin="0" />
 
           <Label Content="First Name"       Grid.Column="0" Grid.Row="1" />
           <TextBox                          Grid.Column="1" Grid.Row="1" Text="{Binding Fname, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}"  />
@@ -166,18 +163,17 @@
           <TextBox                          Grid.Column="5" Grid.Row="1" Text="{Binding Company, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}"  />
 
           <Label Content="Perm Ban Reason"  Grid.Column="0" Grid.Row="2" Target="{Binding ElementName=tbPbr}" />
-          <Button                           Grid.Column="1" Grid.Row="2" Content="!agn"  Tag="Not an Agent"         HorizontalAlignment="Left" Height="26" Click="onPBR" Margin="00,4,0,5"  Width="48" ToolTip="Set PBR to 'Not an Agent'" />
-          <Button                           Grid.Column="1" Grid.Row="2" Content="faild" Tag="Delivery has failed"  HorizontalAlignment="Left" Height="26" Click="onPBR" Margin="50,4,0,5"  Width="48" ToolTip="Set PBR to 'Delivery has failed'" />
-          <Button                           Grid.Column="1" Grid.Row="2" Content="peer"  Tag="Peer"                 HorizontalAlignment="Left" Height="26" Click="onPBR" Margin="100,4,0,5" Width="48" ToolTip="Set PBR to 'Peer'" />
-          <TextBox                          Grid.Column="1" Grid.Row="2" Text="{Binding PermBanReason, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}" x:Name="tbPbr" HorizontalAlignment="Stretch" Margin="150,8,0,9" />
-          <!--<Button                            Grid.Column="1" Grid.Row="2" Content="FLD"  Tag="{Binding ElementName=tbPbr, Path=Text}"          Height="26" Click="onPBR" Margin="48,4,0,5" Padding="6 -3" ToolTip="Set PBR to text on the left" HorizontalAlignment="Right" />-->
-
-          <Button                           Grid.Column="2" Grid.Row="2" Content="Ne_xt" x:Name="bt227" Height="26" Click="onNxt" Margin="6,4,0,5" ToolTip="Update Outlook" HorizontalAlignment="Left" />
-          <Button                           Grid.Column="2" Grid.Row="2" Content="OLk"   x:Name="bt222" Height="26" Click="onOLk" Margin="57,4,71,5" ToolTip="Update Outlook" d:LayoutOverrides="Width" />
+          <Button                           Grid.Column="1" Grid.Row="2" Content="!agn"  Tag="Not an Agent"         HorizontalAlignment="Left" Height="26" Click="onPBR" Margin="00,0,0,0"  Width="48" ToolTip="Set PBR to 'Not an Agent'" />
+          <Button                           Grid.Column="1" Grid.Row="2" Content="faild" Tag="Delivery has failed"  HorizontalAlignment="Left" Height="26" Click="onPBR" Margin="50,0,0,0"  Width="48" ToolTip="Set PBR to 'Delivery has failed'" />
+          <Button                           Grid.Column="1" Grid.Row="2" Content="peer"  Tag="Peer"                 HorizontalAlignment="Left" Height="26" Click="onPBR" Margin="100,0,0,0" Width="48" ToolTip="Set PBR to 'Peer'" />
+          <TextBox                          Grid.Column="1" Grid.Row="2" Text="{Binding PermBanReason, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}" x:Name="tbPbr" HorizontalAlignment="Stretch" Margin="150,0,0,0" />
+          <!--ton                           Grid.Column="1" Grid.Row="2" Content="FLD"  Tag="{Binding ElementName=tbPbr, Path=Text}"           Height="26" Click="onPBR" Margin="48,0,0,0"  Padding="3" ToolTip="Set PBR to text on the left" HorizontalAlignment="Right" />-->
+          <Button                           Grid.Column="2" Grid.Row="2" Content="ne_xt" x:Name="bt227"             HorizontalAlignment="Left" Height="26" Click="onNxt" Margin="2,0,0,0"   Width="48" ToolTip="Update Outlook" Padding="0" />
+          <Button                           Grid.Column="2" Grid.Row="2" Content="OLk"   x:Name="bt222"             HorizontalAlignment="Left" Height="26" Click="onOLk" Margin="52,0,71,0" Width="48" ToolTip="Update Outlook" />
           <Label Content="   Phone"         Grid.Column="2" Grid.Row="2" />
           <TextBox                          Grid.Column="3" Grid.Row="2" Text="{Binding Phone, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}" />
           <Label Content="_Re-send after"   Grid.Column="4" Grid.Row="2" Target="{Binding ElementName=tbRa}" />
-          <DatePicker                       Grid.Column="5" Grid.Row="2" SelectedDate="{Binding ReSendAfter, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}"  x:Name="tbRa" />
+          <DatePicker                       Grid.Column="5" Grid.Row="2" SelectedDate="{Binding ReSendAfter, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}"  x:Name="tbRa" BorderThickness="0" />
 
           <Label Content="Priority"         Grid.Column="0" Grid.Row="3" />
           <TextBox                          Grid.Column="1" Grid.Row="3" Text="{Binding NotifyPriority, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}"  />
@@ -188,7 +184,7 @@
           <TextBox                          Grid.Column="5" Grid.Row="3" Text="{Binding DoNotNotifyOnOffMarketForCampaignId, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}"  />
 
           <Label Content="_Notes"           Grid.Column="0" Grid.Row="4" Target="{Binding ElementName=tbAN}" />
-          <TextBox                          Grid.Column="1" Grid.Row="4" Text="{Binding Notes, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}" VerticalAlignment="Stretch" Grid.ColumnSpan="5" x:Name="tbAN" AcceptsReturn="True"/>
+          <TextBox                          Grid.Column="1" Grid.Row="4" Text="{Binding Notes, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}" VerticalAlignment="Stretch" Grid.ColumnSpan="5" x:Name="tbAN" AcceptsReturn="True" MinHeight="42" />
 
         </Grid>
         <Grid x:Name="grid2" Margin="0" Grid.Column="2" DataContext="{StaticResource eMailEHistsViewSource}" Grid.Row="3" >

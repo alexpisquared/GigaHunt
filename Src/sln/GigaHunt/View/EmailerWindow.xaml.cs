@@ -6,6 +6,7 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
   CollectionViewSource _cvsEmails = new();
   IEnumerable<string>? _leadEmails, _leadCompns;
   string _firstName = "Sirs";
+  bool _isLoaded = false;
 
   public EmailersendWindow()
   {
@@ -15,48 +16,21 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
     tbver.Text = $"Db: ???        Ver: ???";
     _ = tbFilter.Focus();
 
-    Loaded += async (s, e) => { await Task.Yield(); themeSelector1.SetCurThemeToMenu(Thm); BPR.AppStart(); };
+    Loaded += async (s, e) => { await Task.Yield(); themeSelector1.SetCurThemeToMenu(Thm); BPR.AppStart(); _isLoaded = true; };
+    DataContext = this;
   }
-  async Task<string> reLoad()
+  public static readonly DependencyProperty SrchProperty = DependencyProperty.Register("Srch", typeof(string), typeof(EmailersendWindow), new PropertyMetadata("", SrchCallback)); public string Srch { get => (string)GetValue(SrchProperty); set => SetValue(SrchProperty, value); }
+  static void SrchCallback(DependencyObject d, DependencyPropertyChangedEventArgs e) => (d as EmailersendWindow)?.SrchFilter();
+  public TimeSpan SrchFilter(int max = 10)
   {
-    var lswTtl = Stopwatch.StartNew();
-    var lsw = Stopwatch.StartNew();
-    try
-    {
-      tbver.Text = $"Db: ???        Ver: ???";
-      if (chkIsAvailable.IsChecked == true)
-      {
-        _db.Database.SetCommandTimeout(300);
+    if (!_isLoaded)
+      return TimeSpan.Zero;
 
-        await _db.VEmailAvailProds.LoadAsync();                                     /**/  WriteLine($">>>    Loaded   EmlVw   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
-        await _db.Leads.OrderByDescending(r => r.AddedAt).LoadAsync();              /**/  WriteLine($">>>    Loaded   Leads   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
-        _leadEmails = _db.Leads.Local.Select(r => r.AgentEmailId ?? "").Distinct(); /**/  WriteLine($">>>    Loaded  LeadEm   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
-        _leadCompns = _db.Leads.Local.Select(r => r.Agency ?? "").Distinct();       /**/  WriteLine($">>>    Loaded  LeadCo   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
-
-        _cvsEmails = (CollectionViewSource)FindResource("vsEMail_Avail");
-        _cvsEmails.Source = null;
-        populateWithSorting(_db.VEmailAvailProds.Local.ToBindingList());
-      }
-      else
-      {
-        await _db.VEmailUnAvlProds.OrderByDescending(r => r.AddedAt).LoadAsync();
-
-        _cvsEmails = (CollectionViewSource)FindResource("vsEMail_UnAvl");
-        _cvsEmails.Source = null;
-        _cvsEmails.Source = _db.VEmailUnAvlProds.Local.ToBindingList().OrderByDescending(r => r.AddedAt);
-      }
-
-      var ttl = chkIsAvailable.IsChecked == true ? _db.VEmailAvailProds.Local.Count : _db.VEmailUnAvlProds.Local.Count;
-
-      btMax.Content = $"Top {tbMax.Text = $"{(int)Math.Min(ttl * _fractionToSend, _absoluteMax)}"} rows";
-      return string.Format("Total {0} unused records loaded in {1:N1}", ttl, lswTtl.Elapsed.TotalSeconds);
-    }
-    catch (Exception ex) { ex.Pop(); return ex.Message; }
-  }
-  void filter()
-  {
+    BPR.BeepShort();
+    ctrlPnl.IsEnabled = false;
     var sw = Stopwatch.StartNew();
-    var srchToLwr = tbFilter.Text.ToLower();
+    var srchToLwr = Srch.ToLower();
+
     try
     {
       IEnumerable<VEmailAvailProd> rv;
@@ -105,6 +79,45 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
       sw.Stop();
     }
     catch (Exception ex) { ex.Pop(); }
+    finally { ctrlPnl.IsEnabled = true; }
+
+    return sw.Elapsed;
+  }
+  async Task<string> reLoad()
+  {
+    var lswTtl = Stopwatch.StartNew();
+    var lsw = Stopwatch.StartNew();
+    try
+    {
+      tbver.Text = $"Db: ???        Ver: ???";
+      if (chkIsAvailable.IsChecked == true)
+      {
+        _db.Database.SetCommandTimeout(300);
+
+        await _db.VEmailAvailProds.LoadAsync();                                     /**/  WriteLine($">>>    Loaded   EmlVw   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
+        await _db.Leads.OrderByDescending(r => r.AddedAt).LoadAsync();              /**/  WriteLine($">>>    Loaded   Leads   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
+        _leadEmails = _db.Leads.Local.Select(r => r.AgentEmailId ?? "").Distinct(); /**/  WriteLine($">>>    Loaded  LeadEm   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
+        _leadCompns = _db.Leads.Local.Select(r => r.Agency ?? "").Distinct();       /**/  WriteLine($">>>    Loaded  LeadCo   {lsw.ElapsedMilliseconds,6:N0} ms"); lsw = Stopwatch.StartNew();
+
+        _cvsEmails = (CollectionViewSource)FindResource("vsEMail_Avail");
+        _cvsEmails.Source = null;
+        populateWithSorting(_db.VEmailAvailProds.Local.ToBindingList());
+      }
+      else
+      {
+        await _db.VEmailUnAvlProds.OrderByDescending(r => r.AddedAt).LoadAsync();
+
+        _cvsEmails = (CollectionViewSource)FindResource("vsEMail_UnAvl");
+        _cvsEmails.Source = null;
+        _cvsEmails.Source = _db.VEmailUnAvlProds.Local.ToBindingList().OrderByDescending(r => r.AddedAt);
+      }
+
+      var ttl = chkIsAvailable.IsChecked == true ? _db.VEmailAvailProds.Local.Count : _db.VEmailUnAvlProds.Local.Count;
+
+      btMax.Content = $"Top {tbMax.Text = $"{(int)Math.Min(ttl * _fractionToSend, _absoluteMax)}"} rows";
+      return string.Format("Total {0} unused records loaded in {1:N1}", ttl, lswTtl.Elapsed.TotalSeconds);
+    }
+    catch (Exception ex) { ex.Pop(); return ex.Message; }
   }
   void populateWithSorting(IEnumerable<VEmailAvailProd> rv) => _cvsEmails.Source = rv.OrderBy(r => r.LastSentAt).ThenBy(r => r.AddedAt);// <= for restarting the failed campaingn | for starting brand new campagn after a contract => .OrderByDescending(r => r.TtlSends).ThenByDescending(r => r.TtlRcvds); 
   void Save()
@@ -138,7 +151,6 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
     catch (Exception ex) { ex.Pop(); }
   }
   void EnableControls(bool b) => ZommablePanel.IsEnabled = ctrlPanelOnMarket.IsEnabled = ctrlPanelOffMarket.IsEnabled = b;
-  void onFilter(object sender, RoutedEventArgs e) => filter();
   async void onLoaded(object s, RoutedEventArgs e)
   {
     tbkTitle.Text = Title = await reLoad();
@@ -282,13 +294,14 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
     //load(chkIsAvailable.IsChecked == true);
   }
   void onTglTest(object s, RoutedEventArgs e) => EnableControls(((ToggleButton)s).IsChecked == false);
-  void onAgentsEdit(object s, RoutedEventArgs e) => new AgentAdminnWindow().Show(); // a special case for paralel acces to agents
+  void onAgentsEdit(object s, RoutedEventArgs e) => new EmailersendWindow().Show(); // a special case for paralel acces to agents
   void tbMax_TextChanged(object s, TextChangedEventArgs e)
   {
     if (btMax != null && int.TryParse(tbMax?.Text, out _))
       btMax.Content = $"Top {tbMax.Text} rows";
   }
   void OnGetNameFromEmail(object s, RoutedEventArgs e) => tbName.Text = new Helpers.FirstLastNameParser(((TextBox)s).Text).FirstName;
+  void onFilter(object sender, RoutedEventArgs e) => SrchFilter();
   void cbMail_SelectionChanged(object s, SelectionChangedEventArgs e)
   {
     if (tbMail != null)
