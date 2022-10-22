@@ -130,12 +130,12 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
     finally { spCtlrPnl.IsEnabled = true; }
   }
 
-  public static async Task<bool> CheckInsertEMailEHistAsync(QStatsRlsContext _db, string email, string firstName, string lastName, string subject, string body, DateTime timeRecdSent, string isRcvd, string RS)
+  public static async Task<bool> CheckInsertEMailEHistAsync(QStatsRlsContext _db, string email, string firstName, string lastName, string? subject, string? body, DateTime? timeRecdSent, string isRcvd, string RS)
   {
     var em = await checkInsertEMailAsync(_db, email, firstName, lastName, isRcvd);
     if (em == null) return false;
 
-    await checkInsertEHistAsync(_db, subject, body, timeRecdSent, RS, em);
+    await checkInsertEHistAsync(_db, subject, body, timeRecdSent ?? DateTime.Now, RS, em);
     var isNew = em?.AddedAt == App.Now;
     return isNew;
   }
@@ -156,7 +156,11 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
 
     return new TupleSubst { HasNewEmails = isAnyNew, newEmails = newEmail };
   }
-  class TupleSubst { public bool HasNewEmails { get; set; } public string[] newEmails { get; set; } }
+  class TupleSubst
+  {
+    public bool HasNewEmails { get; set; }
+    public string[]? newEmails { get; set; }
+  }
 
   async Task<string> outlookFolderToDb_ReglrAsync(string folderName)
   {
@@ -217,7 +221,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
               {
                 var senderFLNme = OutlookHelper6.figureOutSenderFLName(re.Name, re.Address);
 
-                var isNew = await CheckInsertEMailEHistAsync(_db, re.Address, senderFLNme.Item1, senderFLNme.Item2, mailItem.Subject, mailItem.Body, mailItem.ReceivedTime, $"..from Sent folder. ", "S");
+                var isNew = await CheckInsertEMailEHistAsync(_db, re.Address, senderFLNme.Item1, senderFLNme.Item2, mailItem?.Subject, mailItem?.Body, mailItem.ReceivedTime, $"..from Sent folder. ", "S");
                 if (isNew) { newEmailsAdded++; }
 
                 report += OutlookHelper6.reportLine(folderName, re.Address, isNew);
@@ -557,7 +561,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
 
     return em;
   }
-  public static async Task checkInsertEHistAsync(QStatsRlsContext _db, string subject, string body, DateTime timeRecdSent, string rs, Email em)
+  public static async Task checkInsertEHistAsync(QStatsRlsContext _db, string? subject, string? body, DateTime timeRecdSent, string rs, Email em)
   {
     //insertEMailEHistItem(isRcvd, timeRecdSent, em, subject, body);		}		void insertEMailEHistItem(bool isRcvd, DateTime timeRecdSent, Email em, string subject, string body)		{
     try
@@ -640,12 +644,12 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
         Write($"  === snd: {snd.Replace("\n", "-LF-").Replace("\r", "-CR-")}");
 
         var s = item.Session.GetAddressEntryFromID(snd);
-        Write($"  *** GetExchangeDistributionList(): {s.GetExchangeDistributionList().ToString().Replace("\n", "-LF-").Replace("\r", "-CR-")}"); //.PrimarySmtpAddress;
+        Write($"  *** GetExchangeDistributionList(): {s.GetExchangeDistributionList().ToString()?.Replace("\n", "-LF-").Replace("\r", "-CR-")}"); //.PrimarySmtpAddress;
         Write($"  *** Address: {s.Address}"); //.PrimarySmtpAddress;
       }
       else
       {
-        Write($"==> {prop.GetType().Name}  {prop.ToString().Replace("\n", "-LF-").Replace("\r", "-CR-")}");
+        Write($"==> {prop.GetType().Name}  {prop.ToString()?.Replace("\n", "-LF-").Replace("\r", "-CR-")}");
       }
     }
     catch (Exception ex) { Write($"  !!! ex: {ex.Message.Replace("\n", "-LF-").Replace("\r", "-CR-")}"); }

@@ -19,7 +19,7 @@ namespace GigaHunt
       _b4 = new SolidColorBrush(Color.FromRgb(180, 80, 80)),
       _b5 = new SolidColorBrush(Color.FromRgb(200, 200, 011));
 
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
       if (value is int v)
       {

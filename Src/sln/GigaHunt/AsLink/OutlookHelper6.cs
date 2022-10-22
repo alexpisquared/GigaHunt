@@ -2,8 +2,8 @@
 class Misc { public const string qRcvd = "Q", qSent = "Sent Items", qSentDone = "Sent Items/_DbDoneSent", qDltd = "Deleted Items", qFail = "Q/Fails", qFailsDone = "Q/FailsDone", qRcvdDone = "Q/_DbDoneRcvd", qLate = "Q/ToReSend"/*, qVOld = "Q/VeryOld"*/; }
 public class OutlookHelper6
 {
-  readonly OL.Application _olApp;
-  readonly OL.MAPIFolder _contactsFolder;
+  readonly OL.Application? _olApp;
+  readonly OL.MAPIFolder? _contactsFolder;
   readonly int _customLetersSentThreshold = 3; // to become an Outlook contact, must have at least 3 letters sent.
   static readonly char[] _delim = new[] { ' ', '.', ',', ':', ';', '\r', '\n', '\'', '"', '_' };
   int _updatedCount, _addedCount;
@@ -22,13 +22,13 @@ public class OutlookHelper6
     catch (Exception ex) { ex.Pop(); throw; }
   }
 
-  public OL.Store MyStore { get; }
-  public OL.Items GetItemsFromFolder(string folder, int old)
+  public OL.Store? MyStore { get; }
+  public OL.Items? GetItemsFromFolder(string folder, int old)
   {
     try
     {
-      var folder0 = MyStore.GetRootFolder().Folders[folder] as OL.Folder;
-      var items = folder0.Items.Restrict("[MessageClass] = 'IPM.Note'");
+      var folder0 = MyStore?.GetRootFolder().Folders[folder] as OL.Folder;
+      var items = folder0?.Items.Restrict("[MessageClass] = 'IPM.Note'");
       return items;
     }
     catch (Exception ex) { ex.Pop(folder); throw; }
@@ -424,7 +424,7 @@ public class OutlookHelper6
     }
   }
 
-  public static (string, string) figureOutSenderFLName(string fln, string email)
+  public static (string, string) figureOutSenderFLName(string? fln, string email)
   {
     if (fln is null or
       "Marketing- SharedMB" // randstad on behalf of case
@@ -574,7 +574,7 @@ public class OutlookHelper6
 
     WriteLine($"^^^^^^^^^^^^^^^^^^^^^^^^^");
   }
-  public static string getStringBetween(string b, string s1, string s2)
+  public static string? GetStringBetween(string b, string s1, string s2)
   {
     var i1 = b.IndexOf(s1);
     if (i1 < 0) return null;
@@ -588,10 +588,10 @@ public class OutlookHelper6
 
   public static string[] findEmails_OLD(string body)
   {
-    var email = getStringBetween(body, "Recipient(s):\r\n\t<", ">\r\n");
-    email ??= getStringBetween(body, "Recipient(s):\r\n\t", "\r\n");
-    email ??= getStringBetween(body, "To: ", "\r\n");
-    email ??= getStringBetween(body, "<", ">");
+    var email = GetStringBetween(body, "Recipient(s):\r\n\t<", ">\r\n");
+    email ??= GetStringBetween(body, "Recipient(s):\r\n\t", "\r\n");
+    email ??= GetStringBetween(body, "To: ", "\r\n");
+    email ??= GetStringBetween(body, "<", ">");
     //if (email == null) email = item.SentOnBehalfOfName;
     //if (email == null) continue;
     //if (!email.Contains("@")) email = item.SenderEmailAddress;

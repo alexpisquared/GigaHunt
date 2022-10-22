@@ -47,8 +47,8 @@ namespace GigaHunt.View
       try
       {
         var outlkFolder = new Outlook.Application().Session.Stores["pigida@hotmail.com"].GetRootFolder().Folders[folderName] as Outlook.Folder;
-        var items = outlkFolder.Items.Restrict("[MessageClass] = 'IPM.Note'");
-        var cnt = items.Count;
+        var items = outlkFolder?.Items.Restrict("[MessageClass] = 'IPM.Note'");
+        var cnt = items?.Count;
         foreach (Outlook.MailItem item in items)
         {
           try

@@ -4,8 +4,8 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
 {
   readonly QStatsRlsContext _db = QStatsRlsContext.Create();
   readonly CollectionViewSource _cvsEmailsVwSrc;
-  IEnumerable<string> _leadEmails, _leadCompns;
-  List<string> _badEmails;
+  IEnumerable<string>? _leadEmails, _leadCompns;
+  List<string>? _badEmails;
   bool _isLoaded = false;
   public AgentAdminnWindow()
   {
@@ -31,8 +31,8 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     {
       var emails = _db.Emails.Local.ToBindingList().Where(r =>
         (cbAll.IsChecked == true || (string.IsNullOrEmpty(r.PermBanReason) && !_badEmails.Contains(r.Id))) && //todo: PermBanReason == '' still treated as BANNED!!!  HAS BEEN FIXED !!! on Sep 29, 2019.
-        (cbxLeadEmails.IsChecked != true || _leadEmails.Contains(r.Id)) &&
-        (cbxLeadCompns.IsChecked != true || _leadCompns.Contains(r.Company)) &&
+        (cbxLeadEmails.IsChecked != true || _leadEmails?.Contains(r.Id) == true) &&
+        (cbxLeadCompns.IsChecked != true || _leadCompns?.Contains(r.Company) == true) &&
         (
           string.IsNullOrEmpty(srchToLwr) ||
 
@@ -120,8 +120,8 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     catch (Exception ex) { ex.Pop(); }
     finally { ctrlPnl.IsEnabled = true; BPR.Beep2of2(); _ = tbFilter.Focus(); }
   }
-  void doInfoTimedFilter(Stopwatch sw, IOrderedEnumerable<Email> ems) => tbkTitle.Text = $"{(tbkTitle.ToolTip = $"Total agents/emails  {ems.Count():N0}   filtered in  {sw.Elapsed.TotalSeconds:N2} s.  \n{_db.GetDbChangesReport(8)}").ToString().Replace("\n", "")}";
-  void doInfoPendingSave() => tbkTitle.Text = $"{(tbkTitle.ToolTip = $"  {_db.GetDbChangesReport(32)}").ToString().Replace("\n", "")}";
+  void doInfoTimedFilter(Stopwatch sw, IOrderedEnumerable<Email> ems) => tbkTitle.Text = $"{(tbkTitle.ToolTip = $"Total agents/emails  {ems.Count():N0}   filtered in  {sw.Elapsed.TotalSeconds:N2} s.  \n{_db.GetDbChangesReport(8)}").ToString()?.Replace("\n", "")}";
+  void doInfoPendingSave() => tbkTitle.Text = $"{(tbkTitle.ToolTip = $"  {_db.GetDbChangesReport(32)}").ToString()?.Replace("\n", "")}";
   void fillExtProp(Email em)
   {
     var sends = em.Ehists.Where(r => r.RecivedOrSent == "S");
@@ -156,7 +156,7 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
           {
             var agencyCompany = ((Email)row.Entity).Company;
 
-            if (db.Agencies.FirstOrDefault(r => string.Compare(r.Id, agencyCompany, true) == 0) == null)
+            if (agencyCompany is not null && db.Agencies.FirstOrDefault(r => string.Compare(r.Id, agencyCompany, true) == 0) == null)
             {
               _ = db.Agencies.Add(new Agency { Id = agencyCompany, AddedAt = now });
             }
@@ -181,7 +181,7 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
       catch (Exception ex)
       {
         //if (bKeepShowingMoveError)
-        switch (MessageBox.Show(string.Format("Error in {0}.{1}():\n\n{2}\n\nRetry?\nYes - keep showing\nNo - skip showing\nCancel - Cancel operation", MethodInfo.GetCurrentMethod().DeclaringType.Name, MethodInfo.GetCurrentMethod().Name,
+        switch (MessageBox.Show(string.Format("Error in {0}.{1}():\n\n{2}\n\nRetry?\nYes - keep showing\nNo - skip showing\nCancel - Cancel operation", MethodBase.GetCurrentMethod()?.DeclaringType?.Name, MethodBase.GetCurrentMethod()?.Name,
           ex.InnerException == null ? ex.Message :
           ex.InnerException.InnerException == null ? ex.InnerException.Message :
           ex.InnerException.InnerException.Message), "Exception ", MessageBoxButton.YesNoCancel, MessageBoxImage.Error))
