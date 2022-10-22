@@ -7,7 +7,6 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
   IEnumerable<string> _leadEmails, _leadCompns;
   List<string> _badEmails;
   bool _isLoaded = false;
-
   public AgentAdminnWindow()
   {
     InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme;
@@ -36,7 +35,6 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
   }
   public static readonly DependencyProperty SrchProperty = DependencyProperty.Register("Srch", typeof(string), typeof(AgentAdminnWindow), new PropertyMetadata("", srchCallback)); public string Srch { get => (string)GetValue(SrchProperty); set => SetValue(SrchProperty, value); }
   static void srchCallback(DependencyObject d, DependencyPropertyChangedEventArgs e) => (d as AgentAdminnWindow).srchFilter();
-
   public async void load()
   {
     _ = await CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(_db, false, saveAndUpdateMetadata); // keep it for future misstreatments.

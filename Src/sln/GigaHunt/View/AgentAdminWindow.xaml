@@ -52,8 +52,8 @@
       </TextBlock>
 
       <StackPanel Orientation="Horizontal" x:Name="ctrlPnl">
-        <Label Content="_Filter"      Target="{Binding ElementName=tbFilter}" />
-        <TextBox x:Name="tbFilter" Width="184" FontSize="22" Text="{Binding Srch, Delay=033, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <Label Content="_Filter" Target="{Binding ElementName=tbFilter}" />
+        <TextBox Width="184" FontSize="22"            x:Name="tbFilter" Text="{Binding Srch, Delay=300, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
           <CheckBox Content="_+ Banned"   Checked="onFilter" Unchecked="onFilter" Margin="4" x:Name="cbAll" />
@@ -74,12 +74,13 @@
           <CheckBox Grid.Row="1" Grid.Column="1" Content="Companies"  Foreground="#1a1" Checked="onFilter" Unchecked="onFilter" Margin="8" x:Name="cbxLeadCompns" />
         </Grid>
 
-        <View:MainSwitchboardUsrCtrl Width="68" Margin="10" VizAgent="Collapsed" />
+        <Menu Width="88" Foreground="#aaa" >
+          <MenuItem Header="_Save"  Click="onSave"           />
+          <MenuItem Header="Max 50" Click="onMoreHistCounts" ToolTip="Set max to 50 (from 10) on filter results" />
+          <MenuItem Header="Quit"   IsEnabled="False" />
+        </Menu>
 
-        <Button  Content="_Save"   Click="onSave"      VerticalAlignment="Center" Margin="8" />
-        <!--        <Button Content="Quit"  Click="onQuit" IsEnabled="False" />        -->
-
-        <Button  Content="Max 50"  Click="onMoreHistCounts" VerticalAlignment="Center" Margin="32 8" ToolTip="Set max to 50 (from 10) on filter results" Foreground="#f00" HorizontalAlignment="Right" />
+        <View:MainSwitchboardUsrCtrl Width="68" Margin="10 0" VizAgent="Collapsed" />
         <View1:ThemeSelectorUsrCtrl x:Name="themeSelector1" />
         <TextBlock x:Name="tbkTitle" Foreground="#1af" TextWrapping="Wrap" Text="Info" />
       </StackPanel>
@@ -101,20 +102,20 @@
         <DataGrid x:Name="eMailDataGrid" Grid.Row="1" ItemsSource="{Binding}" IsReadOnly="False" SelectionChanged="onSelectnChgd"
                 IsSynchronizedWithCurrentItem="True" RowHeight="22" CanUserAddRows="True">
           <DataGrid.Columns>
-            <DataGridTextColumn Header="Email (id)"  Binding="{Binding Id}"             Width="4*" IsReadOnly="True"/>
-            <DataGridTextColumn Header="Fname"       Binding="{Binding Fname}"          Width="2*" />
-            <DataGridTextColumn Header="Lname"       Binding="{Binding Lname}"          Width="1*" />
-            <DataGridTextColumn Header="Company"     Binding="{Binding Company}"        Width="1*" />
-            <DataGridTextColumn Header="!Avail"      Binding="{Binding DoNotNotifyOnAvailableForCampaignId}"      IsReadOnly="False" ElementStyle="{StaticResource CenterAlignStyle}" />
-            <DataGridTextColumn Header="!OffMt"      Binding="{Binding DoNotNotifyOnOffMarketForCampaignId}"      IsReadOnly="False" ElementStyle="{StaticResource CenterAlignStyle}" />
-            <DataGridTextColumn Header="PermBan"     Binding="{Binding PermBanReason}"  Foreground="#c00" />
-            <DataGridTextColumn Header="Notes"       Binding="{Binding Notes}"          Width="2*" FontSize="8"   />
-            <DataGridTextColumn Header="ResndAftr"   Binding="{Binding ReSendAfter, StringFormat=\{0:yy-MM-dd\}}" IsReadOnly="True"  />
-            <DataGridTextColumn Header="Added"       Binding="{Binding AddedAt,  Converter={cmn:UniConverter}}"   IsReadOnly="True"  />
-            <DataGridTextColumn Header="Sent"        Binding="{Binding LastSent, Converter={cmn:UniConverter}}"   IsReadOnly="True"  />
-            <DataGridTextColumn Header="Rcvd"        Binding="{Binding LastRcvd, Converter={cmn:UniConverter}}"   IsReadOnly="True"  />
-            <DataGridTextColumn Header="Sent"        Binding="{Binding Ttl_Sent}"       IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#01e" />
-            <DataGridTextColumn Header="Rcvd"        Binding="{Binding Ttl_Rcvd}"       IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#1b1" />
+            <DataGridTextColumn Header=" Email (id)"  Binding="{Binding Id}"             IsReadOnly="True"/>
+            <DataGridTextColumn Header=" Fname"       Binding="{Binding Fname}"           />
+            <DataGridTextColumn Header=" Lname"       Binding="{Binding Lname}"           />
+            <DataGridTextColumn Header=" Company"     Binding="{Binding Company}"         />
+            <DataGridTextColumn Header=" !Avail"      Binding="{Binding DoNotNotifyOnAvailableForCampaignId}"      IsReadOnly="False" ElementStyle="{StaticResource CenterAlignStyle}" />
+            <DataGridTextColumn Header=" !OffMt"      Binding="{Binding DoNotNotifyOnOffMarketForCampaignId}"      IsReadOnly="False" ElementStyle="{StaticResource CenterAlignStyle}" />
+            <DataGridTextColumn Header=" PermBan"     Binding="{Binding PermBanReason}"  Foreground="#c00" />
+            <DataGridTextColumn Header=" ResndAftr"   Binding="{Binding ReSendAfter, StringFormat=\{0:yy-MM-dd\}}" IsReadOnly="True"  />
+            <DataGridTextColumn Header=" Added"       Binding="{Binding AddedAt,  Converter={cmn:UniConverter}}"   IsReadOnly="True"  />
+            <DataGridTextColumn Header=" Sent"        Binding="{Binding LastSent, Converter={cmn:UniConverter}}"   IsReadOnly="True"  />
+            <DataGridTextColumn Header=" Rcvd"        Binding="{Binding LastRcvd, Converter={cmn:UniConverter}}"   IsReadOnly="True"  />
+            <DataGridTextColumn Header=" Sent"        Binding="{Binding Ttl_Sent}"       IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#01e" />
+            <DataGridTextColumn Header=" Rcvd"        Binding="{Binding Ttl_Rcvd}"       IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#1b1" />
+            <DataGridTextColumn Header=" Notes"       Binding="{Binding Notes}"          FontSize="8" Width="*"  />
           </DataGrid.Columns>
         </DataGrid>
 

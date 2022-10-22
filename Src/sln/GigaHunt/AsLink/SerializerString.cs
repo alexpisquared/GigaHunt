@@ -3,29 +3,15 @@ public static partial class Serializer
 {
   public static string SaveToString(object o)
   {
-    var sb = new StringBuilder();
-    using (var sw = new StringWriter(sb))
-      new XmlSerializer(o.GetType()).Serialize(sw, o);
-    return sb.ToString();
+    var stringBuilder = new StringBuilder();
+    using var stringWriter = new StringWriter(stringBuilder);
+    new XmlSerializer(o.GetType()).Serialize(stringWriter, o);
+    return stringBuilder.ToString();
   }
 
-  public static object LoadFromString<T>(string str)
+  public static object? LoadFromString<T>(string str)
   {
-    try
-    {
-      using var streamReader = new StringReader(str);
-      var o = (T)new XmlSerializer(typeof(T)).Deserialize(streamReader); //TU: DEserialise from a stream
-#if WPF
-					streamReader.Close();
-#endif
-      return o;
-    }
-    catch (Exception ex)
-    {
-      WriteLine($"\n::>{ex.Message}\n\n::>{(ex.InnerException == null ? "" : ex.InnerException.InnerException == null ? "\n::>" + ex.InnerException.Message : ex.InnerException.InnerException.InnerException == null ? "\n::>" + ex.InnerException.InnerException.Message : "\n::>" + ex.InnerException.InnerException.InnerException.Message)}\n");
-
-      return Activator.CreateInstance(typeof(T)); //		???		throw;  Watch it !!!!!
-    }
+    using var streamReader = new StringReader(str);
+    return new XmlSerializer(typeof(T)).Deserialize(streamReader); //TU: DEserialise from a stream       ||  return Activator.CreateInstance(typeof(T)); //		???		throw;  Watch it !!!!!
   }
-  public static object? LoadFromStringMin<T>(string str) => (T)new XmlSerializer(typeof(T)).Deserialize(new StringReader(str));
 }

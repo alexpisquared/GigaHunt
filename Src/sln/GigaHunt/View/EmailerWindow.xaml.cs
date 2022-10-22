@@ -2,7 +2,7 @@
 public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
 {
   const double _fractionToSend = .025, _absoluteMax = 25;
-  QStatsRlsContext _db;
+  readonly QStatsRlsContext _db;
   CollectionViewSource _cvsEmails = new();
   IEnumerable<string>? _leadEmails, _leadCompns;
   string _firstName = "Sirs";
@@ -87,8 +87,8 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
       else
       {
         rv = _db.VEmailAvailProds.Local.Where(r =>
-                    (cbxLeadEmails.IsChecked != true || _leadEmails.Contains(r.Id)) &&
-                    (cbxLeadCompns.IsChecked != true || _leadCompns.Contains(r.Company)) &&
+                    (cbxLeadEmails.IsChecked != true || (_leadEmails ?? throw new ArgumentNullException("SSSSSSSSSSSS")).Contains(r.Id)) &&
+                    (cbxLeadCompns.IsChecked != true || (_leadCompns ?? throw new ArgumentNullException("SSSSSSSSSSSS")).Contains(r.Company)) &&
                     (
                       string.IsNullOrEmpty(srchToLwr) ||
 
@@ -97,10 +97,7 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
                         (r.Fname != null && r.Fname.ToLower().Contains(srchToLwr)) ||
                         (r.Lname != null && r.Lname.ToLower().Contains(srchToLwr)) ||
                         (r.Notes != null && r.Notes.ToLower().Contains(srchToLwr))
-
-                    )
-                  );
-
+                    ));
       }
 
       populateWithSorting(rv);
@@ -141,13 +138,14 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
     catch (Exception ex) { ex.Pop(); }
   }
   void EnableControls(bool b) => ZommablePanel.IsEnabled = ctrlPanelOnMarket.IsEnabled = ctrlPanelOffMarket.IsEnabled = b;
+  void onFilter(object sender, RoutedEventArgs e) => filter();
   async void onLoaded(object s, RoutedEventArgs e)
   {
     tbkTitle.Text = Title = await reLoad();
 
     if (Environment.GetCommandLineArgs().Length > 1 && Environment.GetCommandLineArgs()[1] == "Broad")
     {
-      btnBroadcastTopN_Click(s, e);
+      OnBroadcastTopN(s, e);
     }
 
     if (!Clipboard.ContainsText()) return;
@@ -170,7 +168,6 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
     }
     catch (Exception ex) { ex.Pop(); }
   }
-  void onFilter(object s, EventArgs e) => filter();
   async void onSendFromCbx(object s, RoutedEventArgs e)
   {
     var scs = false;
@@ -201,7 +198,7 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
   void onRefresh(object s, RoutedEventArgs e) => ReFresh();
   async void onReLoad(object s, RoutedEventArgs e) => tbkTitle.Text = Title = await reLoad();
   void onClear(object s, RoutedEventArgs e) => _db.VEmailAvailProds.Local.Clear();
-  void btnBroadcastTopN_Click(object s, RoutedEventArgs e)
+  void OnBroadcastTopN(object s, RoutedEventArgs e)
   {
     try
     {
@@ -212,12 +209,12 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
         for (var i = 0; i < cnt && i < vEMail_Avail_DevDataGrid.Items.Count; i++)
           _ = vEMail_Avail_DevDataGrid.SelectedItems.Add(vEMail_Avail_DevDataGrid.Items[i]);
 
-        onBroadcast_Avail(s, e);
+        OnBroadcastSlct(s, e);
       }
     }
     catch (Exception ex) { ex.Pop(); }
   }
-  async void onBroadcast_Avail(object s, RoutedEventArgs e)
+  async void OnBroadcastSlct(object s, RoutedEventArgs e)
   {
     BPR.BeepClk();
     try

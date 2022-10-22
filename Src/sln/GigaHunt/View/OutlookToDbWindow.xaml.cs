@@ -508,11 +508,11 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
 
     return false;
   }
-  public static async Task<Email> checkInsertEMailAsync(QStatsRlsContext _db, string email, string firstName, string lastName, string notes)
+  public static async Task<Email?> checkInsertEMailAsync(QStatsRlsContext _db, string email, string firstName, string lastName, string notes)
   {
     const int maxLen = 256;
 
-    if (email.EndsWith("@msg.monster.com")) // ~ 3212846259f94b158701020f5ca8ac4e@msg.monster.com
+    if (email.EndsWith("@msg.monster.com") && email.Length > 46) // ~ 3212846259f94b158701020f5ca8ac4e@msg.monster.com
       return null;
 
     if (email.Length > maxLen)

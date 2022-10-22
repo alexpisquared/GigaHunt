@@ -57,7 +57,7 @@
         <StackPanel Grid.ColumnSpan="2" Name="ctrlPanelOnMarket" Orientation="Horizontal" VerticalAlignment="Center">
           <Label     Content="_Filter: " Target="{Binding ElementName=tbFilter}" />
           <TextBox   Width="80" FontSize="16" TextChanged="onFilter" Name="tbFilter" />
-          <CheckBox  Content="_Danger" Foreground="#a1f" Checked="onFilter" Unchecked="onFilter" Margin="8" x:Name="cbx_ALL_Emails" ToolTip="Ignore all the rules - search across all agents"/>
+          <CheckBox  Content="_Danger" Foreground="#f30" Checked="onFilter" Unchecked="onFilter" Margin="8" x:Name="cbx_ALL_Emails" ToolTip="Ignore all the rules - search across all agents"/>
 
           <Grid Margin="25 0">
             <Grid.ColumnDefinitions>
@@ -68,20 +68,20 @@
               <RowDefinition Height="auto"/>
               <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            <Label    Grid.ColumnSpan="2" Content="... Lead ..."        Foreground="#1a1" HorizontalAlignment="Center" />
-            <CheckBox Grid.Row="1" Grid.Column="0" Content="Emails"     Foreground="#1a1" Checked="onFilter" Unchecked="onFilter" Margin="8" x:Name="cbxLeadEmails" />
-            <CheckBox Grid.Row="1" Grid.Column="1" Content="Companies"  Foreground="#1a1" Checked="onFilter" Unchecked="onFilter" Margin="8" x:Name="cbxLeadCompns" />
+            <Label    Grid.ColumnSpan="2" Content="Only Lead:"         Foreground="#1a1" HorizontalAlignment="Center" />
+            <CheckBox Grid.Row="1" Grid.Column="0" Content="Emails"    Foreground="#1a1" Checked="onFilter" Unchecked="onFilter" Margin="8" x:Name="cbxLeadEmails" />
+            <CheckBox Grid.Row="1" Grid.Column="1" Content="Companies" Foreground="#1a1" Checked="onFilter" Unchecked="onFilter" Margin="8" x:Name="cbxLeadCompns" />
           </Grid>
 
 
           <Label  Content="_Top"  VerticalAlignment="Center" Target="{Binding ElementName=tbMax}"/>
-          <TextBox Text="8" Width="25" Margin="8" Name="tbMax" TextChanged="tbMax_TextChanged" />
-          <Button Content="top 8 rows" Margin="8" Click="btnBroadcastTopN_Click" ToolTip="Broadcast to the top N emails/agents"    x:Name="btMax" Height="30" />
-          <Button Content="_Selection" Margin="8" Click="onBroadcast_Avail"      ToolTip="Broadcast to the selected emails/agents" x:Name="btSel" Height="30" />
+          <TextBox Text="8" Width="25"   Margin="4" Name="tbMax" TextChanged="tbMax_TextChanged" />
+          <Button Content="top 8 rows"   Margin="4" Click="OnBroadcastTopN" ToolTip="Broadcast to the top N emails/agents"    Height="30" x:Name="btMax" />
+          <Button Content="_Selection"   Margin="4" Click="OnBroadcastSlct" ToolTip="Broadcast to the selected emails/agents" Height="30" x:Name="btSel" />
+          <Button Content="Agent Editor" Margin="4" Click="onAgentsEdit"    ToolTip="paralel acces to agents"                 Height="30" />
 
           <View:MainSwitchboardUsrCtrl Width="68" Margin="8 0" VizBroad="Collapsed" />
-          <Button Content="A-Editor"   Margin="8" Click="onAgentsEdit"           ToolTip="Edit agents in their window."       Background="#ff0"  BorderThickness="0" VerticalAlignment="Center" />
-          <AavWpfVw:ThemeSelectorUsrCtrl Grid.Column="4" x:Name="themeSelector1" VerticalAlignment="Center"/>
+          <AavWpfVw:ThemeSelectorUsrCtrl x:Name="themeSelector1" VerticalAlignment="Center" Width="83" />
 
           <!--<Button Content="Leads"                    Click="onLeads" Foreground="#08f" />          <Button Content="Agents"                   Click="onAgent" Foreground="#076" />          <Button Content="Outlook -> DB"            Click="onOu2Db" Foreground="#0a0" />-->
 
