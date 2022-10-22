@@ -47,7 +47,7 @@
           <RowDefinition Height="5"/>
           <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <TextBlock  Margin="-45,9,-33,0"                   FontSize="23" FontFamily="Ink Free" FontWeight="ExtraBold" Foreground="#ae21" Text="Emailer  " RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" HorizontalAlignment="Left">
+        <TextBlock  Margin="-42,11,-33,0"                   FontSize="23" FontFamily="Ink Free" FontWeight="ExtraBold" Foreground="#ae21" Text="Emailer  " RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" HorizontalAlignment="Left">
           <TextBlock.RenderTransform>
             <RotateTransform Angle="-90"/>
           </TextBlock.RenderTransform>
@@ -73,7 +73,7 @@
           </Grid>
 
 
-          <Label  Content="_Top"  VerticalAlignment="Center" Target="{Binding ElementName=tbMax}"/>
+          <Label  Content="_Top" Target="{Binding ElementName=tbMax}" x:Name="lbMax" />
           <TextBox Text="8" Width="25"   Margin="4" Name="tbMax" TextChanged="tbMax_TextChanged" />
           <Button Content="top 8 rows"   Margin="4" Click="OnBroadcastTopN" ToolTip="Broadcast to the top N emails/agents"    Height="30" x:Name="btMax" />
           <Button Content="_Selection"   Margin="4" Click="OnBroadcastSlct" ToolTip="Broadcast to the selected emails/agents" Height="30" x:Name="btSel" />

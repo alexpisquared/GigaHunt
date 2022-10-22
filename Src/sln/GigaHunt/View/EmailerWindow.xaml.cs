@@ -310,7 +310,7 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
   {
     var dg = (DataGrid)s;
     tbkTitle.Text = Title = $"{dg.SelectedItems.Count} / {dg.Items.Count} selected";
-    btMax.Visibility = dg.SelectedItems.Count < 3 ? Visibility.Visible : Visibility.Collapsed;
+    lbMax.Visibility = tbMax.Visibility = btMax.Visibility = dg.SelectedItems.Count < 2 ? Visibility.Visible : Visibility.Collapsed;
     btSel.Visibility = dg.SelectedItems.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
   }
   void OnClose(object s, RoutedEventArgs e) { Close(); Application.Current.Shutdown(); }

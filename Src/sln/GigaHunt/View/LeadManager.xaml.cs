@@ -121,7 +121,6 @@ public partial class LeadManagerWindow : WpfUserControlLib.Base.WindowBase
 
     var rowsSawed = await _db.TrySaveReportAsync("LeadManager.cs");
     tbkTitle.Text = Title = string.Format("{0} rows saved", rowsSawed);
-    Thread.Sleep(111);
     return Title;
   }
   void setProperValuesToNewRecords()

@@ -14,7 +14,8 @@
         <ResourceDictionary Source="/WpfUserControlLib;component/Base/BasicDefaultsLayout.xaml" />
       </ResourceDictionary.MergedDictionaries>
 
-      <!-- DO NOT uncomment: prevents buttons, etc. from Foreground Clr: <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TbkVCenteredInfoClr}" />-->
+      <Style TargetType="{x:Type TextBox}"   BasedOn="{StaticResource tbxRW}" />
+      <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TbkVCenteredInfoClr}" />
 
       <CollectionViewSource x:Key="eMailViewSource"         d:DesignSource="{d:DesignInstance {x:Type Models:Email}, CreateList=True}"/>
       <CollectionViewSource x:Key="lkuLeadStatuViewSource"  d:DesignSource="{d:DesignInstance {x:Type Models:lkuLeadStatu}, CreateList=True}"/>
@@ -36,12 +37,6 @@
       </Grid.RowDefinitions>
 
       <Grid Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Name="ctrlPnl" >
-        <Grid.Resources>
-          <Style TargetType="Button" >
-            <Setter Property="Margin"   Value="15 0" />
-            <Setter Property="Padding"  Value="5" />
-          </Style>
-        </Grid.Resources>
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="Auto"/>
           <ColumnDefinition Width="*"/>
@@ -49,13 +44,11 @@
           <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock HorizontalAlignment="Right" Margin="0 -5" FontSize="43" FontFamily="Ink Free" FontWeight="ExtraBold" Foreground="#41c1" Text="Leads  " Grid.ColumnSpan="5" />
-        <TextBlock  Margin="-35,8,0,0"                       FontSize="23" FontFamily="Ink Free" FontWeight="ExtraBold" Foreground="#A1c1" Text="Leads " RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" HorizontalAlignment="Left" d:LayoutOverrides="VerticalAlignment, LeftMargin, RightMargin">
+        <TextBlock  Margin="-41,11,0,0" FontSize="23" FontFamily="Ink Free" FontWeight="ExtraBold" Foreground="#A1c1" Text="Leads " RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" HorizontalAlignment="Left" d:LayoutOverrides="VerticalAlignment, LeftMargin, RightMargin">
           <TextBlock.RenderTransform>
             <RotateTransform Angle="-90"/>
           </TextBlock.RenderTransform>
         </TextBlock>
-
 
         <TextBlock  Grid.Column="3" x:Name="tbkTitle" Foreground="#1af"  HorizontalAlignment="Center" TextWrapping="Wrap" Text="Info" />
         <StackPanel Grid.ColumnSpan="4" Orientation="Horizontal" VerticalAlignment="Center" Margin="6,0">
