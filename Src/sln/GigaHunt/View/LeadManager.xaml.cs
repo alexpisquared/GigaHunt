@@ -8,7 +8,7 @@ public partial class LeadManagerWindow : WpfUserControlLib.Base.WindowBase
 
   public LeadManagerWindow()
   {
-    InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme;
+    InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme;    tbver.Text = DevOps.IsDbg ? @"DBG" : "rls";
 
     _thisCampaign = _db.Campaigns.Max(r => r.Id);
 

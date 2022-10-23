@@ -218,10 +218,10 @@
 
       </Grid>
 
-      <TextBlock x:Name="tbver" Margin="0 -6 100 0" FontSize="13" Text="DbRls - Ver 123" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="#4af" />
+      <TextBlock x:Name="tbver" Margin="0 -6 100 0" FontSize="13" Text="ver" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="#4af" />
       <View1:ThemeSelectorUsrCtrl x:Name="themeSelector1" Margin="100 20"      HorizontalAlignment="Right" VerticalAlignment="Top" />
       <View:MainSwitchboardUsrCtrl Width="68" Margin="18 -8" VizAgent="Collapsed" HorizontalAlignment="Right" VerticalAlignment="Top" />
-      <Button Content="X" Click="OnClose" BorderThickness="0" Width="16"          HorizontalAlignment="Right" VerticalAlignment="Top" IsCancel="True" Padding="2" Margin="-5" FontSize="10" Foreground="#c00" />
+      <Button Content="X" Click="OnClose" BorderThickness="0" Width="22"          HorizontalAlignment="Right" VerticalAlignment="Top" IsCancel="True" Padding="2" Margin="-5" FontSize="14" Foreground="#c00" />
     </Grid>
   </Border>
 </lnk:WindowBase>

@@ -1,5 +1,4 @@
 ﻿namespace AgentFastAdmin;
-
 public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
 {
   readonly QStatsRlsContext _db = QStatsRlsContext.Create();
@@ -9,7 +8,8 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
   bool _isLoaded = false;
   public AgentAdminnWindow()
   {
-    InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme;
+    InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme;    tbver.Text = DevOps.IsDbg ? @"DBG" : "rls";
+
     //tbver.Text = $"Db: {QStatsRlsContext.DbNameOnly}        Ver: ???";
     //tbver.Text = $"Db: {_db.ServerDatabase()}        Ver: ???";
     _cvsEmailsVwSrc = (CollectionViewSource)FindResource("eMailViewSource");

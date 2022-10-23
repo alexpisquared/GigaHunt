@@ -5,7 +5,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
   readonly QStatsRlsContext _db = QStatsRlsContext.Create();
   int _newEmailsAdded = 0;
 
-  public OutlookToDbWindow() { InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme; }
+  public OutlookToDbWindow() { InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme; tbver.Text = DevOps.IsDbg ? @"DBG" : "rls"; }
   protected override void OnClosing(System.ComponentModel.CancelEventArgs e) => base.OnClosing(e); /*DialogResult = _newEmailsAdded > 0;*/
   async void onLoaded(object s, RoutedEventArgs e)
   {

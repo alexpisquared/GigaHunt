@@ -1,7 +1,7 @@
 ﻿namespace GigaHunt.View;
 public partial class MainSwitchboard : WpfUserControlLib.Base.WindowBase
 {
-  public MainSwitchboard()  {    InitializeComponent();    themeSelector1.ThemeApplier = ApplyTheme;  }
+  public MainSwitchboard()  {    InitializeComponent();    themeSelector1.ThemeApplier = ApplyTheme; tbver.Text = DevOps.IsDbg ? @"DBG" : "rls"; }
   void OnLoaded(object s, RoutedEventArgs e)
   {
     _ = Task.Run(() =>
@@ -19,8 +19,8 @@ public partial class MainSwitchboard : WpfUserControlLib.Base.WindowBase
     themeSelector1.SetCurThemeToMenu(Thm);
     BPR.AppStart();
   }
-  void onDb2Ou(object s, RoutedEventArgs e) => tbkTitle.Text = Title = new OutlookHelper6().SyncDbToOutlook(QStatsRlsContext.Create());
-  async void onUndel(object s, RoutedEventArgs e) => tbkTitle.Text = Title = await new OutlookHelper6().OutlookUndeleteContactsAsync(QStatsRlsContext.Create());
+  void onDb2Ou(object s, RoutedEventArgs e) => tbver.Text = Title = new OutlookHelper6().SyncDbToOutlook(QStatsRlsContext.Create());
+  async void onUndel(object s, RoutedEventArgs e) => tbver.Text = Title = await new OutlookHelper6().OutlookUndeleteContactsAsync(QStatsRlsContext.Create());
   void onDbIni(object s, RoutedEventArgs e) { } //  => DBInitializer.SetDbInitializer();
   void OnClose(object s, RoutedEventArgs e) { Close(); Application.Current.Shutdown(); }
 }

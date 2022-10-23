@@ -35,3 +35,4 @@ global using WpfUserControlLib.Helpers;
 global using static System.Diagnostics.Trace;
 global using OL = Microsoft.Office.Interop.Outlook;
 //obal using System.Text.Json; //tu: new and very performant Json lib (Dec 2021)
+global using StandardLib.Helpers;

@@ -9,10 +9,10 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
   bool _isLoaded = false;
   public EmailersendWindow()
   {
-    InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme;
+    InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme;    tbver.Text = DevOps.IsDbg ? @"DBG" : "rls";
 
     _db = QStatsRlsContext.Create();
-    tbver.Text = $"Db: ???        Ver: ???";
+
     _ = tbFilter.Focus();
 
     Loaded += async (s, e) => { await Task.Yield(); themeSelector1.SetCurThemeToMenu(Thm); BPR.AppStart(); _isLoaded = true; };
