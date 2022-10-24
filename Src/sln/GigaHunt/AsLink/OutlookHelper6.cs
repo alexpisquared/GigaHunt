@@ -144,7 +144,7 @@ public class OutlookHelper6
   }
   public string SyncDbToOutlook(QStatsRlsContext db)
   {
-    //AAV.Sys.Helpers.BPR.Beep1of2();
+    //AAV.Sys.Helpers.BPR.Start();
     var q = db.Emails.Where(r => string.IsNullOrEmpty(r.PermBanReason)
                             && r.Id.Contains("@")
                             && !r.Id.Contains('=')
@@ -161,7 +161,7 @@ public class OutlookHelper6
       AddUpdateOutlookContact(em);
     }
 
-    BPR.Beep2of2();
+    BPR.Finish();
     return string.Format("\r\nTotal Outlook: {0} added, {1} updated / out of {2} eligibles. \r\n", _addedCount, _updatedCount, ttl);
   }
   public void AddUpdateOutlookContact(Email em)

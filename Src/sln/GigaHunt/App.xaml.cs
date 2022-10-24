@@ -1,6 +1,4 @@
-﻿using GigaHunt.View;
-
-namespace GigaHunt;
+﻿namespace GigaHunt;
 public partial class App : Application
 {
   public static DateTime Now = DateTime.Now;
@@ -52,5 +50,4 @@ public partial class App : Application
     //SysLgr: _sl.LogSessionEnd();
 #endif
   }
-  protected override void OnSessionEnding(SessionEndingCancelEventArgs e) => base.OnSessionEnding(e); /*BPR.BeepEnd3();*/
 }

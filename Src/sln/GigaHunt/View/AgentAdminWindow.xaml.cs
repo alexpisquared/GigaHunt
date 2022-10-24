@@ -78,15 +78,13 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
   public async void load()
   {
     _ = await CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(_db, false, saveAndUpdateMetadata); // keep it for future misstreatments.
-    //ctrlPnl.IsEnabled = false;
-
-    //AAV.Sys.Helpers.BPR.Beep1of2();
+    ctrlPnl.IsEnabled = false;
 
     var lsw = Stopwatch.StartNew();
     try
     {
       await _db.Emails.OrderByDescending(r => r.AddedAt).OrderBy(r => r.Notes).LoadAsync(); /**/  WriteLine($">>> Loaded  Emails   {lsw.ElapsedMilliseconds,6:N0} ms");
-      await _db.Ehists.OrderByDescending(r => r.EmailedAt).LoadAsync();                     /**/  WriteLine($">>> Loaded  Ehists   {lsw.ElapsedMilliseconds,6:N0} ms"); //tu: that seems to order results in the secondary table where there is no control of roder available. Jul-2019
+      //ait _db.Ehists.OrderByDescending(r => r.EmailedAt).LoadAsync();                     /**/  WriteLine($">>> Loaded  Ehists   {lsw.ElapsedMilliseconds,6:N0} ms"); //tu: that seems to order results in the secondary table where there is no control of roder available. Jul-2019
       await _db.Leads.OrderByDescending(r => r.AddedAt).LoadAsync();                        /**/  WriteLine($">>> Loaded   Leads   {lsw.ElapsedMilliseconds,6:N0} ms");
       _leadEmails = _db.Leads.Local.Select(r => r.AgentEmailId ?? "").Distinct();           /**/  WriteLine($">>> Loaded  LeadEm   {lsw.ElapsedMilliseconds,6:N0} ms");
       _leadCompns = _db.Leads.Local.Select(r => r.Agency ?? "").Distinct();                 /**/  WriteLine($">>> Loaded  LeadCo   {lsw.ElapsedMilliseconds,6:N0} ms");
@@ -112,13 +110,11 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
       _isLoaded = true;
       var fsw = SrchFilter();                                                               /**/  WriteLine($">>> Loaded  Filter   {lsw.ElapsedMilliseconds,6:N0} ms  ({fsw.TotalMilliseconds:N0})");
 
-      //tu: sub table  ...maybe: .Include(c => c.Ehists).Load();
-
       themeSelector1.SetCurThemeToMenu(Thm);
       App.SpeakAsync("Loaded.");
     }
     catch (Exception ex) { ex.Pop(); }
-    finally { ctrlPnl.IsEnabled = true; BPR.Beep2of2(); _ = tbFilter.Focus(); }
+    finally { ctrlPnl.IsEnabled = true; _ = tbFilter.Focus(); }
   }
   void doInfoTimedFilter(Stopwatch sw, IOrderedEnumerable<Email> ems) => tbkTitle.Text = $"{(tbkTitle.ToolTip = $"Total agents/emails  {ems.Count():N0}   filtered in  {sw.Elapsed.TotalSeconds:N2} s.  \n{_db.GetDbChangesReport(8)}").ToString()?.Replace("\n", "")}";
   void doInfoPendingSave() => tbkTitle.Text = $"{(tbkTitle.ToolTip = $"  {_db.GetDbChangesReport(32)}").ToString()?.Replace("\n", "")}";
@@ -143,7 +139,7 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
   Task<string> saveAndUpdateMetadata() => SaveAndUpdateMetadata(_db);
   public static async Task<string> SaveAndUpdateMetadata(QStatsRlsContext db)
   {
-    BPR.Beep1of2();
+    BPR.Start();
     var now = GigaHunt.App.Now;
 
     while (true)
@@ -191,7 +187,7 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
           case MessageBoxResult.Cancel: return "Cancelled";// tbkTitle.Text;
         }
       }
-      finally { BPR.Beep2of2(); }
+      finally { BPR.Finish(); }
 
       return "*******------------********+++++++++++";
     }
@@ -284,7 +280,7 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
           collectionModified_ReEnumerate:
           foreach (var ehst in em.Ehists)
           {
-            _ = _db.Ehists.Local.Remove(ehst);
+            _ = _db.Ehists.Remove(ehst);
             goto collectionModified_ReEnumerate;
           }
 

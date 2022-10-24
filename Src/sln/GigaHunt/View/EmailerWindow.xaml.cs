@@ -184,7 +184,7 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
     var scs = false;
     try
     {
-      BPR.Beep1of2();
+      BPR.Start();
 
       EnableControls(false);
 
@@ -202,7 +202,7 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
     {
       tbkTitle.Text = $"{(scs ? "Success" : "Failure")}  sending to  {tbMail.Text}";
       EnableControls(true);
-      BPR.Beep2of2();
+      BPR.Finish();
     }
   }
   void btnSave_Click(object s, RoutedEventArgs e) => Save();
@@ -286,7 +286,7 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
       }
     }
     catch (Exception ex) { ex.Pop(); }
-    finally { WindowState = System.Windows.WindowState.Normal; BPR.BeepDone(); }
+    finally { WindowState = WindowState.Normal; BPR.AppFinish(); }
   }
   void chkIsAvailable_Checked(object s, RoutedEventArgs e)
   {
