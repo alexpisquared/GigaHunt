@@ -8,7 +8,7 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
   bool _isLoaded = false;
   public AgentAdminnWindow()
   {
-    InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme;    tbver.Text = DevOps.IsDbg ? @"DBG" : "rls";
+    InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme; tbver.Text = DevOps.IsDbg ? @"DBG" : "rls";
 
     //tbver.Text = $"Db: {QStatsRlsContext.DbNameOnly}        Ver: ???";
     //tbver.Text = $"Db: {_db.ServerDatabase()}        Ver: ???";
@@ -58,23 +58,7 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     return sw.Elapsed;
   }
 
-  protected override async void OnClosing(System.ComponentModel.CancelEventArgs ea)
-  {
-    base.OnClosing(ea);
-
-    ea.Cancel = await CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(_db, true, saveAndUpdateMetadata); // sync did NOT save !!! Oct2019
-
-    //todo: Async gives the error below:
-    //      Task.Run(async () => ea.Cancel = await CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(_db, true, saveAndUpdateMetadata)).Wait(); //tu: waiting await from synch!!!!!!!
-    //      --Logging only:
-    //      System.Windows.Data Error: 2 : Cannot find governing FrameworkElement or FrameworkContentElement for target element. BindingExpression:Path = EmailedAt; DataItem = null; target element is 'DataGridTextColumn'(HashCode = 20852350); target property is 'ToolTip'(type 'Object')
-    //
-    //19.08.06 16:01:56 > InvalidOperationException at C:\C\AAV\WpfUserControlLib\Extension\Ext.Exception.Pop.cs(11): Pop()
-    //  - Collection was modified; enumeration operation may not execute.
-    //
-    //19.08.06 16:01:59 > CurrentDispatcherUnhandledException: s: Dispatcher. - One or more errors occurred.
-    //-The calling thread must be STA, because many UI components require this.
-  }
+  protected override async void OnClosing(System.ComponentModel.CancelEventArgs ea) { base.OnClosing(ea); ea.Cancel = await CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(_db, true, saveAndUpdateMetadata); }
   public async void load()
   {
     _ = await CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(_db, false, saveAndUpdateMetadata); // keep it for future misstreatments.
@@ -84,7 +68,7 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     try
     {
       await _db.Emails.OrderByDescending(r => r.AddedAt).OrderBy(r => r.Notes).LoadAsync(); /**/  WriteLine($">>> Loaded  Emails   {lsw.ElapsedMilliseconds,6:N0} ms");
-      //ait _db.Ehists.OrderByDescending(r => r.EmailedAt).LoadAsync();                     /**/  WriteLine($">>> Loaded  Ehists   {lsw.ElapsedMilliseconds,6:N0} ms"); //tu: that seems to order results in the secondary table where there is no control of roder available. Jul-2019
+      await _db.Ehists.OrderByDescending(r => r.EmailedAt).LoadAsync();                     /**/  WriteLine($">>> Loaded  Ehists   {lsw.ElapsedMilliseconds,6:N0} ms"); //tu: that seems to order results in the secondary table where there is no control of roder available. Jul-2019
       await _db.Leads.OrderByDescending(r => r.AddedAt).LoadAsync();                        /**/  WriteLine($">>> Loaded   Leads   {lsw.ElapsedMilliseconds,6:N0} ms");
       _leadEmails = _db.Leads.Local.Select(r => r.AgentEmailId ?? "").Distinct();           /**/  WriteLine($">>> Loaded  LeadEm   {lsw.ElapsedMilliseconds,6:N0} ms");
       _leadCompns = _db.Leads.Local.Select(r => r.Agency ?? "").Distinct();                 /**/  WriteLine($">>> Loaded  LeadCo   {lsw.ElapsedMilliseconds,6:N0} ms");
