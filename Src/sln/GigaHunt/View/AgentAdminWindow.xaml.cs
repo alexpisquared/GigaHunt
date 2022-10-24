@@ -41,7 +41,6 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
             (r.Fname != null && r.Fname.ToLower().Contains(srchToLwr)) ||
             (r.Lname != null && r.Lname.ToLower().Contains(srchToLwr)) ||
             (r.Notes != null && r.Notes.ToLower().Contains(srchToLwr))
-
         )
       ).OrderByDescending(r => r.AddedAt);
 
