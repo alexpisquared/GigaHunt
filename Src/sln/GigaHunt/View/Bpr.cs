@@ -6,6 +6,7 @@ internal class BPR
   internal static void Finish() => _b.Finish();
   internal static void AppStart() => _b.AppStart();
   internal static void AppFinish() => _b.AppFinish();
+  internal static async Task AppFinishAsync() => await _b.AppFinishAsync();
   internal static void BeepClk() => _b.Click();
   internal static void BeepShort() => _b.Tick();
 }

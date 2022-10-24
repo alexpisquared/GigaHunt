@@ -58,7 +58,7 @@
 
       <TextBlock x:Name="tbver" Margin="0 -6 100 -20" FontSize="13" Foreground="#4af" Text="ver" HorizontalAlignment="Right" VerticalAlignment="Top"/>
       <AavWpfVw:ThemeSelectorUsrCtrl x:Name="themeSelector1" Margin="100 0" HorizontalAlignment="Right" VerticalAlignment="Center" />
-      <View:MainSwitchboardUsrCtrl Width="68" Margin="18 -8" VizOu2Db="Collapsed" HorizontalAlignment="Right" VerticalAlignment="Top" />
+      <View:MainSwitchboardUsrCtrl Width="78" Margin="18 -3" VizOu2Db="Collapsed" HorizontalAlignment="Right" VerticalAlignment="Top" />
       <Button Content="X" Click="OnClose" BorderThickness="0" HorizontalAlignment="Right" VerticalAlignment="Top" IsCancel="True" Width="22" Padding="2" Margin="-5" FontSize="14" Foreground="#c00" />
     </Grid>
   </Border>
