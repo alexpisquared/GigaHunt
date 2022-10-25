@@ -17,10 +17,10 @@
   </UserControl.Resources>
 
   <WrapPanel>
-    <Button Content="_Agents"  x:Name="btnAgent" Click="onAgent" Foreground="#990" Visibility="{Binding ElementName=ths, Path=VizAgent}" />
-    <Button Content="_Leads"   x:Name="btnLeads" Click="onLeads" Foreground="#04d" Visibility="{Binding ElementName=ths, Path=VizLeads}" />
-    <Button Content="_Emailr"  x:Name="btnBroad" Click="onBroad" Foreground="#908" Visibility="{Binding ElementName=ths, Path=VizBroad}" />
-    <Button Content="_Out>DB"  x:Name="btnOu2Db" Click="onOu2Db" Foreground="#080" Visibility="{Binding ElementName=ths, Path=VizOu2Db}" />
+    <Button Content="_Agents"  x:Name="btnAgent" Click="onAgent" Foreground="{DynamicResource AgntButtonForeground}" Visibility="{Binding ElementName=ths, Path=VizAgent}" />
+    <Button Content="_Leads"   x:Name="btnLeads" Click="onLeads" Foreground="{DynamicResource LeadButtonForeground}" Visibility="{Binding ElementName=ths, Path=VizLeads}" />
+    <Button Content="_Emailr"  x:Name="btnBroad" Click="onBroad" Foreground="{DynamicResource EmlrButtonForeground}" Visibility="{Binding ElementName=ths, Path=VizBroad}" />
+    <Button Content="_Out>DB"  x:Name="btnOu2Db" Click="onOu2Db" Foreground="{DynamicResource OuDbButtonForeground}" Visibility="{Binding ElementName=ths, Path=VizOu2Db}" />
   </WrapPanel>
 
 </UserControl>

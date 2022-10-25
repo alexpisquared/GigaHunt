@@ -9,6 +9,10 @@
         <ResourceDictionary Source="/WpfUserControlLib;component/Base/DataGrid.Base.xaml" />
         Allows Style="{StaticResource WindowStyle_Aav0}"  (since it is on top of the visual tree over the Window) -->
       </ResourceDictionary.MergedDictionaries>
+      <SolidColorBrush x:Key="AgntButtonForeground" Color="#aa0"/>
+      <SolidColorBrush x:Key="LeadButtonForeground" Color="#06f"/>
+      <SolidColorBrush x:Key="EmlrButtonForeground" Color="#e08"/>
+      <SolidColorBrush x:Key="OuDbButtonForeground" Color="#0a0"/>
     </ResourceDictionary >
   </Application.Resources>
 </Application>

@@ -32,9 +32,16 @@
         <RowDefinition Height="*"/>
       </Grid.RowDefinitions>
 
+      <TextBlock  Margin="-35,25,0,0"                       FontSize="23" FontFamily="Ink Free" FontWeight="ExtraBold" Foreground="{DynamicResource OuDbButtonForeground}" Text="Ou=>Db " RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" HorizontalAlignment="Left">
+        <TextBlock.RenderTransform>
+          <RotateTransform Angle="-90"/>
+        </TextBlock.RenderTransform>
+      </TextBlock>
+
+
       <StackPanel Orientation="Horizontal" x:Name="spCtlrPnl" >
 
-        <Menu Margin="0 0" Background="Transparent" x:Name="menu1" VerticalAlignment="Center">
+        <Menu Margin="20 0" Background="Transparent" x:Name="menu1" VerticalAlignment="Center">
           <MenuItem Header="[Re] Do _Reglr"    Click="onDoReglr"   ToolTip="Check and add if new the Q folder"/>
           <MenuItem Header="[Re] Do _Fails"    Click="onDoFails"   ToolTip="Find trg emai in Q\Fails folder and ..."/>
           <MenuItem Header="[Re] Do La_ter"    Click="onDoLater"   ToolTip="Find trg emai in Q\ToResend folder and scan body for alt/new emails."/>
