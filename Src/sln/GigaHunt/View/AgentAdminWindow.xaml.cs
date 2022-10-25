@@ -60,6 +60,8 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
   protected override async void OnClosing(System.ComponentModel.CancelEventArgs ea) { base.OnClosing(ea); ea.Cancel = await CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(_db, true, SaveAndUpdateMetadata); }
   public async void Load()
   {
+    themeSelector1.SetCurThemeToMenu(Thm);
+
     _ = await CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(_db, false, SaveAndUpdateMetadata); // keep it for future misstreatments.
     ctrlPnl.IsEnabled = false;
 
@@ -92,9 +94,6 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
 
       _isLoaded = true;
       var fsw = SrchFilter();                                                               /**/  WriteLine($">>> Loaded  Filter   {lsw.ElapsedMilliseconds,6:N0} ms  ({fsw.TotalMilliseconds:N0})");
-
-      themeSelector1.SetCurThemeToMenu(Thm);
-      App.SpeakAsync("Loaded.");
     }
     catch (Exception ex) { ex.Pop(); }
     finally { ctrlPnl.IsEnabled = true; _ = tbFilter.Focus(); }
