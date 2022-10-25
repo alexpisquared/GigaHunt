@@ -17,9 +17,16 @@ public class UniConverter : MarkupExtension, IValueConverter
 
   public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
   {
-    if (value is int valInt)
+    if (value is int valInt && targetType == typeof(Brush))
     {
-      return valInt < 60 ? _b0 : valInt < 70 ? _b6 : valInt < 80 ? _b7 : valInt < 90 ? _b8 : valInt < 100 ? _b9 : _bA;
+      const int min = 80, max = 106;
+      if (min < valInt && valInt < max) // corp rate
+      {
+        byte rgb = (byte)((byte)255.0 * (valInt - min) / (max - min));
+        return new SolidColorBrush(Color.FromRgb(rgb, (byte)(0 / 1), (byte)(256 - 255)));
+      }
+      else
+        return value;
     }
     else if (value is string valStr)
     {

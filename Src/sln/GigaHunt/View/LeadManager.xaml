@@ -64,7 +64,7 @@
         </StackPanel>
       </Grid>
 
-      <DataGrid CanUserAddRows="True" ItemsSource="{Binding}" Grid.Row="1" x:Name="dgLeads" RowHeight="21" InitializingNewItem="onInitNewItem" IsReadOnly="False" Margin="-1,0,1,0">
+      <DataGrid CanUserAddRows="True" ItemsSource="{Binding}" Grid.Row="1" x:Name="dgLeads" InitializingNewItem="onInitNewItem" IsReadOnly="False" Margin="4">
         <DataGrid.Resources>
           <DataTemplate x:Key="DateTemplate" >
           </DataTemplate>
@@ -74,14 +74,14 @@
           <DataGridTemplateColumn                                 Header="Agency" Width="90" SortMemberPath="Agency">
             <DataGridTemplateColumn.CellTemplate>
               <DataTemplate>
-                <TextBlock Text="{Binding Agency}" Foreground="{Binding HourlyRate, Converter={cmn:UniConverter}}" FontWeight="Medium" />
+                <TextBlock Text="{Binding Agency}"          Foreground="{Binding HourlyRate, Converter={cmn:UniConverter}}" />
               </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
           </DataGridTemplateColumn>
           <DataGridTemplateColumn  Header="Rate" Width="Auto" SortMemberPath="HourlyRate">
             <DataGridTemplateColumn.CellTemplate>
               <DataTemplate>
-                <TextBox Text="{Binding Path='HourlyRate'}" TextAlignment="Center" Foreground="{Binding Path='HourlyRate', Converter={cmn:UniConverter}}" FontWeight="Bold" Background="Transparent" BorderThickness="0" />
+                <TextBox Text="{Binding Path='HourlyRate'}" Foreground="{Binding Path='HourlyRate', Converter={cmn:UniConverter}}" FontWeight="Bold" Background="Transparent" BorderThickness="0" TextAlignment="Center" />
               </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
           </DataGridTemplateColumn>
@@ -97,7 +97,7 @@
           <DataGridTemplateColumn                                 Header="Act" Width="Auto">
             <DataGridTemplateColumn.CellTemplate>
               <DataTemplate>
-                <Button Content="Close" Click="onCloseTheLead" Height="22" Margin="3 -4" Padding="0 -9" Foreground="{Binding Path='HourlyRate', Converter={cmn:UniConverter}}" FontWeight="Bold" />
+                <Button Content="Close" Click="onCloseTheLead" Height="20" Margin="3 -4" Padding="3 -9" Foreground="{Binding Path='HourlyRate', Converter={cmn:UniConverter}}" FontWeight="SemiBold" />
               </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
           </DataGridTemplateColumn>
