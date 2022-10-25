@@ -44,11 +44,11 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
         )
       ).OrderByDescending(r => r.AddedAt);
 
-      foreach (var em in emails) { fillExtProp(em); if (--max < 0) break; }
+      foreach (var em in emails) { FillExtProp(em); if (--max < 0) break; }
 
       _cvsEmailsVwSrc.Source = emails;
 
-      doInfoTimedFilter(sw, emails);
+      DoInfoTimedFilter(sw, emails);
       sw.Stop();
     }
     catch (Exception ex) { ex.Pop(); }
@@ -57,10 +57,10 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     return sw.Elapsed;
   }
 
-  protected override async void OnClosing(System.ComponentModel.CancelEventArgs ea) { base.OnClosing(ea); ea.Cancel = await CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(_db, true, saveAndUpdateMetadata); }
-  public async void load()
+  protected override async void OnClosing(System.ComponentModel.CancelEventArgs ea) { base.OnClosing(ea); ea.Cancel = await CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(_db, true, SaveAndUpdateMetadata); }
+  public async void Load()
   {
-    _ = await CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(_db, false, saveAndUpdateMetadata); // keep it for future misstreatments.
+    _ = await CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(_db, false, SaveAndUpdateMetadata); // keep it for future misstreatments.
     ctrlPnl.IsEnabled = false;
 
     var lsw = Stopwatch.StartNew();
@@ -99,9 +99,10 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     catch (Exception ex) { ex.Pop(); }
     finally { ctrlPnl.IsEnabled = true; _ = tbFilter.Focus(); }
   }
-  void doInfoTimedFilter(Stopwatch sw, IOrderedEnumerable<Email> ems) => tbkTitle.Text = $"{(tbkTitle.ToolTip = $"Total agents/emails  {ems.Count():N0}   filtered in  {sw.Elapsed.TotalSeconds:N2} s.  \n{_db.GetDbChangesReport(8)}").ToString()?.Replace("\n", "")}";
-  void doInfoPendingSave() => tbkTitle.Text = $"{(tbkTitle.ToolTip = $"  {_db.GetDbChangesReport(32)}").ToString()?.Replace("\n", "")}";
-  void fillExtProp(Email em)
+  void DoInfoTimedFilter(Stopwatch sw, IOrderedEnumerable<Email> ems) => tbkTitle.Text = $"{(tbkTitle.ToolTip = $"Total agents/emails  {ems.Count():N0}   filtered in  {sw.Elapsed.TotalSeconds:N2} s.  \n{_db.GetDbChangesReport(8)}").ToString()?.Replace("\n", "")}";
+  void DoInfoPendingSave() => tbkTitle.Text = $"{(tbkTitle.ToolTip = $"  {_db.GetDbChangesReport(32)}").ToString()?.Replace("\n", "")}";
+
+  static void FillExtProp(Email em)
   {
     var sends = em.Ehists.Where(r => r.RecivedOrSent == "S");
     var rcvds = em.Ehists.Where(r => r.RecivedOrSent == "R");
@@ -119,7 +120,7 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     }
   }
 
-  Task<string> saveAndUpdateMetadata() => SaveAndUpdateMetadata(_db);
+  Task<string> SaveAndUpdateMetadata() => SaveAndUpdateMetadata(_db);
   public static async Task<string> SaveAndUpdateMetadata(QStatsRlsContext db)
   {
     BPR.Start();
@@ -131,25 +132,25 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
       {
         foreach (var row in db.ChangeTracker.Entries().Where(e => e.State == EntityState.Added))
         {
-          if (row.Entity is Email) // sanity check
+          if (row.Entity is Email email) // sanity check
           {
-            var agencyCompany = ((Email)row.Entity).Company;
+            var agencyCompany = email.Company;
 
             if (agencyCompany is not null && db.Agencies.FirstOrDefault(r => string.Compare(r.Id, agencyCompany, true) == 0) == null)
             {
               _ = db.Agencies.Add(new Agency { Id = agencyCompany, AddedAt = now });
             }
 
-            ((Email)row.Entity).AddedAt = now;
-            ((Email)row.Entity).NotifyPriority = 99;
+            email.AddedAt = now;
+            email.NotifyPriority = 99;
           }
         }
 
         foreach (var row in db.ChangeTracker.Entries().Where(e => e.State == EntityState.Modified))
         {
-          if (row.Entity is Email) // sanity check
+          if (row.Entity is Email email) // sanity check
           {
-            ((Email)row.Entity).ModifiedAt = now;
+            email.ModifiedAt = now;
           }
         }
 
@@ -219,11 +220,11 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     catch (Exception ex) { ex.Pop(); return true; }
   }
 
-  void onLoaded(object s, RoutedEventArgs e) => load();
-  void onFilter(object s, RoutedEventArgs e) => SrchFilter();
-  void onMoreHistCounts(object s, RoutedEventArgs e) => SrchFilter(50);
-  void onPBR(object s, RoutedEventArgs e) { tbPbr.Text += $" {((Button)s).Tag} - {DateTime.Today:yyyy-MM-dd}. "; onNxt(s, e); }
-  void onDNN(object s, RoutedEventArgs e)
+  void OnLoaded(object s, RoutedEventArgs e) => Load();
+  void OnFilter(object s, RoutedEventArgs e) => SrchFilter();
+  void OnMoreHistCounts(object s, RoutedEventArgs e) => SrchFilter(50);
+  void OnPBR(object s, RoutedEventArgs e) { tbPbr.Text += $" {((Button)s).Tag} - {DateTime.Today:yyyy-MM-dd}. "; OnNxt(s, e); }
+  void OnDNN(object s, RoutedEventArgs e)
   {
     var i = 0;
     var curCampaignID = _db.Campaigns.Max(r => r.Id);
@@ -235,11 +236,11 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     }
 
     App.SpeakAsync($"{i} records updated");
-    onNxt(s, e);
-    doInfoPendingSave();
+    OnNxt(s, e);
+    DoInfoPendingSave();
   }
-  void onNxt(object s, RoutedEventArgs e) => _cvsEmailsVwSrc.View.MoveCurrentToNext();
-  void onOLk(object s, RoutedEventArgs e)
+  void OnNxt(object s, RoutedEventArgs e) => _cvsEmailsVwSrc.View.MoveCurrentToNext();
+  void OnOLk(object s, RoutedEventArgs e)
   {
     BPR.BeepClk();
     if (_cvsEmailsVwSrc.View.CurrentItem is Email em)
@@ -247,7 +248,7 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     else
       App.SpeakAsync("Unable to UpdateContactByEmail since current item is not email.");
   }
-  void onDel(object s, RoutedEventArgs e)
+  void OnDel(object s, RoutedEventArgs e)
   {
     App.SpeakAsync("Are you sure?");
 
@@ -271,20 +272,20 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
         }
 
         CollectionViewSource.GetDefaultView(eMailDataGrid.ItemsSource).Refresh(); //tu: refresh bound datagrid
-        doInfoPendingSave();
+        DoInfoPendingSave();
         App.SpeakAsync("Deleted the selected rows and all the foreign keyed records.");
       }
       catch (Exception ex) { ex.Pop(); }
     }
   }
-  void onSelectnChgd(object s, SelectionChangedEventArgs e)
+  void OnSelectnChgd(object s, SelectionChangedEventArgs e)
   {
     try
     {
       if (e.AddedItems.Count > 0)
       {
         if (e.AddedItems[0] as Email is not null)
-          fillExtProp(e.AddedItems[0] as Email ?? throw new ArgumentNullException(nameof(e), "#########%%%%%%%%"));
+          FillExtProp(e.AddedItems[0] as Email ?? throw new ArgumentNullException(nameof(e), "#########%%%%%%%%"));
       }
 
       //too often: doInfoPendingSave();
@@ -292,6 +293,6 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     catch (NotSupportedException ex) { ex.Pop("Ignore"); }
     catch (Exception ex) { ex.Pop(); }
   }
-  async void onSave(object s, RoutedEventArgs e) => tbkTitle.Text = await SaveAndUpdateMetadata(_db);
+  async void OnSave(object s, RoutedEventArgs e) => tbkTitle.Text = await SaveAndUpdateMetadata(_db);
   void OnClose(object s, RoutedEventArgs e) { Close(); Application.Current.Shutdown(); }
 }
