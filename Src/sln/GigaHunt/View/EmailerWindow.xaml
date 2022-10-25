@@ -47,15 +47,15 @@
           <RowDefinition Height="5"/>
           <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <TextBlock  Margin="-42,11,-33,0"                   FontSize="23" FontFamily="Ink Free" FontWeight="ExtraBold" Foreground="#ae21" Text="Emailer  " RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" HorizontalAlignment="Left">
+        <TextBlock  Margin="-38,15,-33,0"                   FontSize="23" FontFamily="Ink Free" FontWeight="ExtraBold" Foreground="#ae21" Text="Emailer  " RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" HorizontalAlignment="Left">
           <TextBlock.RenderTransform>
             <RotateTransform Angle="-90"/>
           </TextBlock.RenderTransform>
         </TextBlock>
 
         <StackPanel Grid.ColumnSpan="2" Name="ctrlPanelOnMarket" Orientation="Horizontal" VerticalAlignment="Center">
-          <Label Content="_Find" Target="{Binding ElementName=tbFilter}" />
-          <TextBox Width="120" FontSize="16"          x:Name="tbFilter" Text="{Binding Srch, Delay=300, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+          <Label Content="      _F" Target="{Binding ElementName=tbFilter}" />
+          <TextBox Width="120" FontSize="16"              x:Name="tbFilter" Text="{Binding Srch, Delay=300, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
           <CheckBox  Content="_Danger" Foreground="#f30" Checked="onFilter" Unchecked="onFilter" Margin="8" x:Name="cbx_ALL_Emails" ToolTip="Ignore all the rules - search across all agents"/>
 
           <Grid Margin="0">

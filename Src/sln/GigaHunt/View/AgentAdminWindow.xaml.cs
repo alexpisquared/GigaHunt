@@ -182,34 +182,11 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     {
       if (dbx.ChangeTracker.Entries().Any(e => e.State is EntityState.Added or EntityState.Modified or EntityState.Deleted))
       {
-        App.SpeakAsync($"Would you like to save the changes? \r\n\n{dbx.GetDbChangesReport()}");
-
-        switch (MessageBox.Show($"Would you like to save the changes? \r\n\n{dbx.GetDbChangesReport()}", "Unsaved changes detected", MessageBoxButton.YesNoCancel, MessageBoxImage.Question))
+        App.SpeakAsync("Would you like to save the changes?");
+        switch (MessageBox.Show($"{dbx.GetDbChangesReport()}", "Would you like to save the changes?", MessageBoxButton.YesNoCancel, MessageBoxImage.Question))
         {
           default:
           case MessageBoxResult.Yes: await savePlusMetadata(); if (dispose) dbx.Dispose(); return false;
-          case MessageBoxResult.No: if (dispose) dbx.Dispose(); return false;
-          case MessageBoxResult.Cancel: return true;
-        }
-      }
-      else
-        return false;
-    }
-    catch (Exception ex) { ex.Pop(); return true; }
-  }
-  [Obsolete("This one does not save if app is closing immediately")]
-  public static bool CheckAskToSaveDispose_CanditdteForGlobalRepltSynch(QStatsRlsContext dbx, bool dispose, Func<Task> savePlusMetadata)
-  {
-    try
-    {
-      if (dbx.ChangeTracker.Entries().Any(e => e.State is EntityState.Added or EntityState.Modified or EntityState.Deleted))
-      {
-        App.SpeakAsync($"Would you like to save the changes? \r\n\n{dbx.GetDbChangesReport()}");
-
-        switch (MessageBox.Show($"Would you like to save the changes? \r\n\n{dbx.GetDbChangesReport()}", "Unsaved changes detected", MessageBoxButton.YesNoCancel, MessageBoxImage.Question))
-        {
-          default:
-          case MessageBoxResult.Yes: _ = savePlusMetadata(); if (dispose) dbx.Dispose(); return false;
           case MessageBoxResult.No: if (dispose) dbx.Dispose(); return false;
           case MessageBoxResult.Cancel: return true;
         }

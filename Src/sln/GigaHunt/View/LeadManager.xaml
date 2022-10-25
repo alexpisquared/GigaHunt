@@ -2,8 +2,7 @@
                 xmlns:cmn="clr-namespace:GigaHunt"
                 xmlns:View="clr-namespace:GigaHunt.View" 
                 xmlns:AavWpfVw="clr-namespace:WpfUserControlLib.Views;assembly=WpfUserControlLib"                
-                Title="LeadManager" Height="700" Width="1200" Loaded="onLoaded" 
-                Style="{StaticResource WindowStyle_Aav0}" >
+                Title="LeadManager" Height="700" Width="1200" Loaded="onLoaded" Style="{StaticResource WindowStyle_Aav0}" >
   <WindowChrome.WindowChrome>
     <WindowChrome CaptionHeight="0" ResizeBorderThickness="10" />
   </WindowChrome.WindowChrome>
@@ -44,7 +43,7 @@
           <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock  Margin="-41,11,0,0" FontSize="23" FontFamily="Ink Free" FontWeight="ExtraBold" Foreground="#A1c1" Text="Leads " RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" HorizontalAlignment="Left" d:LayoutOverrides="VerticalAlignment, LeftMargin, RightMargin">
+        <TextBlock  Margin="-28,15,0,0" FontSize="23" FontFamily="Ink Free" FontWeight="ExtraBold" Foreground="#A1c1" Text="Leads " RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" HorizontalAlignment="Left" d:LayoutOverrides="VerticalAlignment, LeftMargin, RightMargin">
           <TextBlock.RenderTransform>
             <RotateTransform Angle="-90"/>
           </TextBlock.RenderTransform>
@@ -54,8 +53,8 @@
         <StackPanel Grid.ColumnSpan="4" Orientation="Horizontal" VerticalAlignment="Center" Margin="6,0">
 
           <StackPanel Orientation="Horizontal">
-            <Label Content="_F" Target="{Binding ElementName=tbFilter}" HorizontalAlignment="Left" />
-            <TextBox Width="80" FontSize="16" TextChanged="onFilter" Name="tbFilter" />
+            <Label Content="      _F" Target="{Binding ElementName=tbFilter}" HorizontalAlignment="Left" />
+            <TextBox Width="120" FontSize="16" TextChanged="onFilter" Name="tbFilter" />
             <CheckBox Content="+_Closed " Checked="onFilter" Unchecked="onFilter" Name="cbInclAll" Margin="0" />
           </StackPanel>
 
@@ -65,9 +64,7 @@
         </StackPanel>
       </Grid>
 
-      <DataGrid CanUserAddRows="True" ItemsSource="{Binding}" Grid.Row="1" x:Name="dgLeads" RowHeight="21" 
-                InitializingNewItem="onInitNewItem"
-                IsReadOnly="False" Margin="-1,0,1,0">
+      <DataGrid CanUserAddRows="True" ItemsSource="{Binding}" Grid.Row="1" x:Name="dgLeads" RowHeight="21" InitializingNewItem="onInitNewItem" IsReadOnly="False" Margin="-1,0,1,0">
         <DataGrid.Resources>
           <DataTemplate x:Key="DateTemplate" >
           </DataTemplate>
