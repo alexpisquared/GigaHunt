@@ -82,7 +82,7 @@ public class OutlookHelper6
 
   public async Task<string> OutlookUndeleteContactsAsync(QStatsRlsContext db)
   {
-    App.SpeakAsync("Synchronous action... usually takes 5 minutes.");
+    App.Speak("Synchronous action... usually takes 5 minutes.");
 
     var sw = Stopwatch.StartNew();
     
@@ -94,7 +94,7 @@ public class OutlookHelper6
     UndeleteContacts(MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderContacts), db, "Contacts");
     UndeleteContacts(MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderDeletedItems), db, "Deleted Items");
 
-    App.SpeakAsync($"All done. Took {sw.Elapsed.TotalMinutes:N1} minutes.");
+    App.Speak($"All done. Took {sw.Elapsed.TotalMinutes:N1} minutes.");
 
     var rep =      //db.TrySaveReport(); // 
       db.GetDbChangesReport();

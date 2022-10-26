@@ -181,7 +181,7 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     {
       if (dbx.ChangeTracker.Entries().Any(e => e.State is EntityState.Added or EntityState.Modified or EntityState.Deleted))
       {
-        App.SpeakAsync("Would you like to save the changes?");
+        App.Speak("Would you like to save the changes?");
         switch (MessageBox.Show($"{dbx.GetDbChangesReport()}", "Would you like to save the changes?", MessageBoxButton.YesNoCancel, MessageBoxImage.Question))
         {
           default:
@@ -211,7 +211,7 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
       i++;
     }
 
-    App.SpeakAsync($"{i} records updated");
+    App.Speak($"{i} records updated");
     OnNxt(s, e);
     DoInfoPendingSave();
   }
@@ -222,11 +222,11 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     if (_cvsEmailsVwSrc.View.CurrentItem is Email em)
       new OutlookHelper6().AddUpdateOutlookContact(em);
     else
-      App.SpeakAsync("Unable to UpdateContactByEmail since current item is not email.");
+      App.Speak("Unable to UpdateContactByEmail since current item is not email.");
   }
   void OnDel(object s, RoutedEventArgs e)
   {
-    App.SpeakAsync("Are you sure?");
+    App.Speak("Are you sure?");
 
     if (MessageBox.Show($"Deleting:\r\n\n{eMailDataGrid.SelectedItems.Count}", "Are you sure?", MessageBoxButton.YesNoCancel, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes)
     {
@@ -249,7 +249,7 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
 
         CollectionViewSource.GetDefaultView(eMailDataGrid.ItemsSource).Refresh(); //tu: refresh bound datagrid
         DoInfoPendingSave();
-        App.SpeakAsync("Deleted the selected rows and all the foreign keyed records.");
+        App.Speak("Deleted the selected rows and all the foreign keyed records.");
       }
       catch (Exception ex) { ex.Pop(); }
     }

@@ -7,7 +7,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
 
   public OutlookToDbWindow() { InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme; tbver.Text = DevOps.IsDbg ? @"DBG" : "rls"; }
   protected override void OnClosing(System.ComponentModel.CancelEventArgs e) => base.OnClosing(e); /*DialogResult = _newEmailsAdded > 0;*/
-  async void onLoaded(object s, RoutedEventArgs e)
+  async void OnLoaded(object s, RoutedEventArgs e)
   {
     var qF = _oh.GetItemsFromFolder(Misc.qFail).Count;
     var qR = _oh.GetItemsFromFolder(Misc.qRcvd).Count;
@@ -19,48 +19,39 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
 
     if (ttl == 0)
     {
-      tb1.Text = "Nothing new in Outlook to for DB. Closing in 2 sec. Not!";
-      App.SpeakSynch(tb1.Text);
-      //await Task.Delay(2000);        Close();
+      App.Speak(tb1.Text = "Nothing new in Outlook to for DB.");
     }
     else
     {
       tb1.Text = $"Total {ttl} new items found (including {qL} OOF). Total sent/rcvd: {qSD} / {qRD} already.\n\n";
-      App.SpeakAsync("Loading DB");
 
-      var sw = Stopwatch.StartNew();
       await _db.Emails.LoadAsync();
-      App.SpeakAsync($"Emails loaded in {sw.Elapsed.TotalSeconds:N0} sec.");
 
-      //sw = Stopwatch.StartNew();
-      //await _db.Ehists.LoadAsync();
-      //App.SpeakAsync($"EHists loaded in {sw.Elapsed.TotalSeconds:N0} sec.");
-
-      await onDoReglr_();
-      await onDoFails_();
-      await onDoLater_();
+      await OnDoReglr_();
+      await OnDoFails_();
+      await OnDoLater_();
 
       if (_newEmailsAdded > 0)
       {
-        App.SpeakAsync($"Finished. Review {_newEmailsAdded} new email addresses found.");
+        App.Speak($"Done. {_newEmailsAdded} new emails found.");
         Hide();
         new AgentAdminnWindow().Show();
         Close();
       }
       else
       {
-        App.SpeakAsync("Finished Outlook-to-database processing.");
+        App.Speak("Done.");
       }
     }
   }
   void OnClose(object s, RoutedEventArgs e) { Close(); Application.Current.Shutdown(); }
-  void onUpdateOutlook(object s, RoutedEventArgs e) => tb1.Text += _oh.SyncDbToOutlook(_db);
-  async void onDoReglr(object s, RoutedEventArgs e) => await onDoReglr_();
-  async void onDoFails(object s, RoutedEventArgs e) => await onDoFails_();
-  async void onDoLater(object s, RoutedEventArgs e) => await onDoLater_();
-  async void onDoDoneR(object s, RoutedEventArgs e) => await onDoDoneR_();
+  void OnUpdateOutlook(object s, RoutedEventArgs e) => tb1.Text += _oh.SyncDbToOutlook(_db);
+  async void OnDoReglr(object s, RoutedEventArgs e) => await OnDoReglr_();
+  async void OnDoFails(object s, RoutedEventArgs e) => await OnDoFails_();
+  async void OnDoLater(object s, RoutedEventArgs e) => await OnDoLater_();
+  async void OnDoDoneR(object s, RoutedEventArgs e) => await OnDoDoneR_();
 
-  async Task onDoReglr_()
+  async Task OnDoReglr_()
   {
     spCtlrPnl.IsEnabled = false;
 
@@ -68,10 +59,10 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
     {
       var sw = Stopwatch.StartNew();
       var rv = "";
-      rv += await outlookFolderToDb_ReglrAsync(Misc.qRcvd);
-      rv += await outlookFolderToDb_ReglrAsync(Misc.qSent);
+      rv += await OutlookFolderToDb_ReglrAsync(Misc.qRcvd);
+      rv += await OutlookFolderToDb_ReglrAsync(Misc.qSent);
 
-      var rowsAdded = await _db.TrySaveReportAsync("OutlookToDb.cs");
+      var (success, rowsSavedCnt, report) = await _db.TrySaveReportAsync("OutlookToDb.cs");
       tb1.Text += rv;
       WriteLine(rv);
       loadVwSrcs(App.Now);
@@ -79,15 +70,15 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
     catch (System.Exception ex) { ex.Pop(); }
     finally { spCtlrPnl.IsEnabled = true; }
   }
-  async Task onDoFails_()
+  async Task OnDoFails_()
   {
     spCtlrPnl.IsEnabled = false;
 
     try
     {
       var sw = Stopwatch.StartNew();
-      var rv = await outlookFolderToDb_FailsAsync(Misc.qFail);
-      var rowsAdded = await _db.TrySaveReportAsync("OutlookToDb.cs");
+      var rv = await OutlookFolderToDb_FailsAsync(Misc.qFail);
+      var (success, rowsSavedCnt, report) = await _db.TrySaveReportAsync("OutlookToDb.cs");
       tb1.Text += rv;
       WriteLine(rv);
       loadVwSrcs(App.Now);
@@ -95,15 +86,15 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
     catch (Exception ex) { ex.Pop(); }
     finally { spCtlrPnl.IsEnabled = true; }
   }
-  async Task onDoLater_()
+  async Task OnDoLater_()
   {
     spCtlrPnl.IsEnabled = false;
 
     try
     {
       var sw = Stopwatch.StartNew();
-      var rv = await outlookFolderToDb_LaterAsync(Misc.qLate);
-      var rowsAdded = await _db.TrySaveReportAsync("OutlookToDb.cs");
+      var rv = await OutlookFolderToDb_LaterAsync(Misc.qLate);
+      var (success, rowsSavedCnt, report) = await _db.TrySaveReportAsync("OutlookToDb.cs");
       tb1.Text += rv;
       WriteLine(rv);
       loadVwSrcs(App.Now);
@@ -111,15 +102,15 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
     catch (System.Exception ex) { ex.Pop(); }
     finally { spCtlrPnl.IsEnabled = true; }
   }
-  async Task onDoDoneR_()
+  async Task OnDoDoneR_()
   {
     spCtlrPnl.IsEnabled = false;
 
     try
     {
       var sw = Stopwatch.StartNew();
-      var rv = await outlookFolderToDb_DoneRAsync(Misc.qRcvdDone);
-      var rowsAdded = await _db.TrySaveReportAsync("OutlookToDb.cs");
+      var rv = await OutlookFolderToDb_DoneRAsync(Misc.qRcvdDone);
+      var (success, rowsSavedCnt, report) = await _db.TrySaveReportAsync("OutlookToDb.cs");
       tb1.Text += rv;
       WriteLine(rv);
       loadVwSrcs(App.Now);
@@ -130,15 +121,15 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
 
   public static async Task<bool> CheckInsert_EMail_EHist_Async(QStatsRlsContext _db, string email, string firstName, string lastName, string? subject, string? body, DateTime? timeRecdSent, string isRcvd, string RS)
   {
-    var em = await checkInsertEMailAsync(_db, email, firstName, lastName, isRcvd);
+    var em = await CheckInsertEMailAsync(_db, email, firstName, lastName, isRcvd);
     if (em == null) return false;
 
-    await checkInsertEHistAsync(_db, subject, body, timeRecdSent ?? DateTime.Now, RS, em);
+    await CheckInsertEHistAsync(_db, subject, body, timeRecdSent ?? DateTime.Now, RS, em);
 
     var isNew = em?.AddedAt == App.Now;
     return isNew;
   }
-  async Task<TupleSubst> findInsertEmailsFromBodyAsync(string body, string firstName, string lastName, string originalSenderEmail)
+  async Task<TupleSubst> FindInsertEmailsFromBodyAsync(string body, string originalSenderEmail)
   {
     var newEmail = OutlookHelper6.FindEmails(body);
     var isAnyNew = false;
@@ -148,20 +139,20 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
       if (!string.IsNullOrEmpty(newEmail[i]))
       {
         var (first, last) = OutlookHelper6.figureOutFLNameFromBody(body, newEmail[i]);
-        var em = await checkInsertEMailAsync(_db, newEmail[i], first, last, $"..from body (sender: {originalSenderEmail}). ");
+        var em = await CheckInsertEMailAsync(_db, newEmail[i], first, last, $"..from body (sender: {originalSenderEmail}). ");
         if (!isAnyNew) isAnyNew = em?.AddedAt == App.Now;
       }
     }
 
-    return new TupleSubst { HasNewEmails = isAnyNew, newEmails = newEmail };
+    return new TupleSubst { HasNewEmails = isAnyNew, NewEmails = newEmail };
   }
   class TupleSubst
   {
     public bool HasNewEmails { get; set; }
-    public string[]? newEmails { get; set; }
+    public string[]? NewEmails { get; set; }
   }
 
-  async Task<string> outlookFolderToDb_ReglrAsync(string folderName)
+  async Task<string> OutlookFolderToDb_ReglrAsync(string folderName)
   {
     int cnt = 0, ttl = 0, newEmailsAdded = 0;
     var rcvdDoneFolder = _oh.GetMapiFOlder(Misc.qRcvdDone);
@@ -186,7 +177,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
             if (folderName == Misc.qRcvd)
             {
               var senderEmail = OutlookHelper6.FigureOutSenderEmail(mailItem);
-              var isNew = await checkDbInsertIfMissing_sender(mailItem, senderEmail, "..from  Q  folder. "); // checkInsertInotDbEMailAndEHistAsync(senderEmail, flNme.first, flNme.last, mailItem.Subject, mailItem.Body, mailItem.ReceivedTime, $"..was a sender", "R");  //foreach (OL.Recipient r in item.Recipients) ... includes potential CC addresses but appears as NEW and gets added ..probably because of wrong direction recvd/sent.				
+              var isNew = await CheckDbInsertIfMissing_sender(mailItem, senderEmail, "..from  Q  folder. "); // checkInsertInotDbEMailAndEHistAsync(senderEmail, flNme.first, flNme.last, mailItem.Subject, mailItem.Body, mailItem.ReceivedTime, $"..was a sender", "R");  //foreach (OL.Recipient r in item.Recipients) ... includes potential CC addresses but appears as NEW and gets added ..probably because of wrong direction recvd/sent.				
               if (isNew) newEmailsAdded++;
               report += OutlookHelper6.reportLine(folderName, senderEmail, isNew);
 
@@ -195,10 +186,10 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
                 //await checkInsertEHistAsync(_db, mailItem.Subject, mailItem.Body, mailItem.ReceivedTime, "R", em); //2022-10 - added next line, as it was missing functionality of inseing received boides to Hist table:
 
                 var (first, last) = OutlookHelper6.figureOutSenderFLName(mailItem, senderEmail);
-                var ii = await findInsertEmailsFromBodyAsync(mailItem.Body, first, last, senderEmail); //if it's via Indeed - name is in the SenderName. Otherwise, it maybe away redirect to a colleague.
+                var ii = await FindInsertEmailsFromBodyAsync(mailItem.Body, senderEmail); //if it's via Indeed - name is in the SenderName. Otherwise, it maybe away redirect to a colleague.
                 if (ii.HasNewEmails)
                 {
-                  for (var i = 0; i < ii.newEmails?.Length; i++) { if (!string.IsNullOrEmpty(ii.newEmails[i])) { newEmailsAdded++; report += OutlookHelper6.reportLine(folderName, ii.newEmails[i], isNew); } }
+                  for (var i = 0; i < ii.NewEmails?.Length; i++) { if (!string.IsNullOrEmpty(ii.NewEmails[i])) { newEmailsAdded++; report += OutlookHelper6.reportLine(folderName, ii.NewEmails[i], isNew); } }
                 }
               }
 
@@ -207,7 +198,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
               {
                 var (first, last) = OutlookHelper6.figureOutSenderFLName(re.Name, re.Address);
 
-                var email = await checkInsertEMailAsync(_db, re.Address, first, last, $"..was a CC of {senderEmail} on {mailItem.SentOn:y-MM-dd HH:mm}. ");
+                var email = await CheckInsertEMailAsync(_db, re.Address, first, last, $"..was a CC of {senderEmail} on {mailItem.SentOn:y-MM-dd HH:mm}. ");
                 isNew = email?.AddedAt == App.Now;
                 if (isNew) newEmailsAdded++;
                 report += OutlookHelper6.reportLine(folderName, re.Address, isNew);
@@ -252,7 +243,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
 
     return report;
   }
-  async Task<string> outlookFolderToDb_FailsAsync(string folderName)
+  async Task<string> OutlookFolderToDb_FailsAsync(string folderName)
   {
     var report = "";
     int ttl0 = 0, newBansAdded = 0, newEmailsAdded = 0;
@@ -297,7 +288,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
               var emr = _db.Emails.Find(senderEmail);
               if (emr == null)
               {
-                var isNew = await checkDbInsertIfMissing_sender(mailItem, senderEmail, "..banned upon delivery fail BUT not existed !!! "); // checkInsertInotDbEMailAndEHistAsync(senderEmail, flNme.first, flNme.last, mailItem.Subject, mailItem.Body, mailItem.ReceivedTime, "..banned upon delivery fail BUT not existed !!!", "R");
+                var isNew = await CheckDbInsertIfMissing_sender(mailItem, senderEmail, "..banned upon delivery fail BUT not existed !!! "); // checkInsertInotDbEMailAndEHistAsync(senderEmail, flNme.first, flNme.last, mailItem.Subject, mailItem.Body, mailItem.ReceivedTime, "..banned upon delivery fail BUT not existed !!!", "R");
                 if (isNew) { newEmailsAdded++; }
               }
               else
@@ -336,7 +327,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
     report += OutlookHelper6.reportSectionTtl(folderName, ttl0, newBansAdded, newEmailsAdded);
     return report;
   }
-  async Task<string> outlookFolderToDb_LaterAsync(string folderName)
+  async Task<string> OutlookFolderToDb_LaterAsync(string folderName)
   {
     var report = "";
     int ttl0 = 0, newBansAdded = 0, newEmailsAdded = 0;
@@ -363,7 +354,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
             }
             else if (item is OL.MailItem mailItem)
             {
-              var isNew = await checkDbInsertIfMissing_sender(mailItem, OutlookHelper6.RemoveBadEmailParts(mailItem.SenderEmailAddress), "..was on vaction && not existed in DB ?!?! ");
+              var isNew = await CheckDbInsertIfMissing_sender(mailItem, OutlookHelper6.RemoveBadEmailParts(mailItem.SenderEmailAddress), "..was on vaction && not existed in DB ?!?! ");
               if (isNew) newEmailsAdded++;
 
               foreach (var emailFromBody in OutlookHelper6.FindEmails(mailItem.Body))
@@ -402,7 +393,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
     report += OutlookHelper6.reportSectionTtl(folderName, ttl0, newBansAdded, newEmailsAdded);
     return report;
   }
-  async Task<string> outlookFolderToDb_DoneRAsync(string folderName)
+  async Task<string> OutlookFolderToDb_DoneRAsync(string folderName)
   {
     var report___ = tb1.Text = "";
     var msg = "..was done before && not existed in DB ?!?! ";
@@ -440,7 +431,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
             senderEmail = OutlookHelper6.RemoveBadEmailParts(mailItem.SenderEmailAddress);
             if (!OutlookHelper6.ValidEmailAddress(senderEmail)) { tb1.Text += $" ! {senderEmail}  \t <- invalid!!!\r\n"; continue; }
 
-            var isNew = await checkDbInsertIfMissing_sender(mailItem, senderEmail, msg);
+            var isNew = await CheckDbInsertIfMissing_sender(mailItem, senderEmail, msg);
             if (isNew) { newEmailsAdded++; tb1.Text += $" * {senderEmail}\r\n"; }
 
             foreach (var emailFromBody in OutlookHelper6.FindEmails(mailItem.Body))
@@ -456,7 +447,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
                 if (isNew) { newEmailsAdded++; tb1.Text += $" * {senderEmail}\r\n"; }
               }
 
-              rptLine += $"body\t{senderEmail,40}  {mailItem.CreationTime:yyyy-MM-dd}  {mailItem.Subject,-80}{oneLineAndTrunkate(mailItem.Body)}   ";
+              rptLine += $"body\t{senderEmail,40}  {mailItem.CreationTime:yyyy-MM-dd}  {mailItem.Subject,-80}{OneLineAndTrunkate(mailItem.Body)}   ";
             }
 
             Write($"\n{ttl,2})  rcvd: {mailItem.ReceivedTime:yyyy-MMM-dd}  {senderEmail,-40}     {mailItem.Recipients.Count} rcpnts: (");
@@ -465,22 +456,22 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
             {
               var (first, last) = OutlookHelper6.figureOutSenderFLName(re.Name, re.Address);
 
-              var email = await checkInsertEMailAsync(_db, re.Address, first, last, $"..CC  {mailItem.SentOn:yyyy-MM-dd}  {++cnt,2}/{mailItem.Recipients.Count,-2}  by {senderEmail}. ");
+              var email = await CheckInsertEMailAsync(_db, re.Address, first, last, $"..CC  {mailItem.SentOn:yyyy-MM-dd}  {++cnt,2}/{mailItem.Recipients.Count,-2}  by {senderEmail}. ");
               isNew = email?.AddedAt == App.Now;
               if (isNew) newEmailsAdded++;
               rptLine += OutlookHelper6.reportLine(folderName, re.Address, isNew);
             }
 
-            rptLine += $"mail\t{senderEmail,40}  {mailItem.CreationTime:yyyy-MM-dd}  {mailItem.Subject,-80}{oneLineAndTrunkate(mailItem.Body)}   ";
+            rptLine += $"mail\t{senderEmail,40}  {mailItem.CreationTime:yyyy-MM-dd}  {mailItem.Subject,-80}{OneLineAndTrunkate(mailItem.Body)}   ";
           }
-          else if (item is OL.AppointmentItem itm0)  /**/ { tb1.Text += $" ? Appointment {itm0.CreationTime:yyyy-MM-dd} {itm0.Subject} \t {oneLineAndTrunkate(itm0.Body)} \r\n"; }
-          else if (item is OL.DistListItem itm1)     /**/ { tb1.Text += $" ? DistList    {itm1.CreationTime:yyyy-MM-dd} {itm1.Subject} \t {oneLineAndTrunkate(itm1.Body)} \r\n"; }
-          else if (item is OL.DocumentItem itm2)     /**/ { tb1.Text += $" ? Document    {itm2.CreationTime:yyyy-MM-dd} {itm2.Subject} \t {oneLineAndTrunkate(itm2.Body)} \r\n"; }
-          else if (item is OL.JournalItem itm3)      /**/ { tb1.Text += $" ? Journal     {itm3.CreationTime:yyyy-MM-dd} {itm3.Subject} \t {oneLineAndTrunkate(itm3.Body)} \r\n"; }
-          else if (item is OL.MeetingItem itm4)      /**/ { tb1.Text += $" ? Meeting     {itm4.CreationTime:yyyy-MM-dd} {itm4.Subject} \t {oneLineAndTrunkate(itm4.Body)} \r\n"; }
-          else if (item is OL.MobileItem itm5)       /**/ { tb1.Text += $" ? Mobile      {itm5.CreationTime:yyyy-MM-dd} {itm5.Subject} \t {oneLineAndTrunkate(itm5.Body)} \r\n"; }
-          else if (item is OL.NoteItem itm6)         /**/ { tb1.Text += $" ? Note        {itm6.CreationTime:yyyy-MM-dd} {itm6.Subject} \t {oneLineAndTrunkate(itm6.Body)} \r\n"; }
-          else if (item is OL.TaskItem itm7)         /**/ { tb1.Text += $" ? Task        {itm7.CreationTime:yyyy-MM-dd} {itm7.Subject} \t {oneLineAndTrunkate(itm7.Body)} \r\n"; }
+          else if (item is OL.AppointmentItem itm0)  /**/ { tb1.Text += $" ? Appointment {itm0.CreationTime:yyyy-MM-dd} {itm0.Subject} \t {OneLineAndTrunkate(itm0.Body)} \r\n"; }
+          else if (item is OL.DistListItem itm1)     /**/ { tb1.Text += $" ? DistList    {itm1.CreationTime:yyyy-MM-dd} {itm1.Subject} \t {OneLineAndTrunkate(itm1.Body)} \r\n"; }
+          else if (item is OL.DocumentItem itm2)     /**/ { tb1.Text += $" ? Document    {itm2.CreationTime:yyyy-MM-dd} {itm2.Subject} \t {OneLineAndTrunkate(itm2.Body)} \r\n"; }
+          else if (item is OL.JournalItem itm3)      /**/ { tb1.Text += $" ? Journal     {itm3.CreationTime:yyyy-MM-dd} {itm3.Subject} \t {OneLineAndTrunkate(itm3.Body)} \r\n"; }
+          else if (item is OL.MeetingItem itm4)      /**/ { tb1.Text += $" ? Meeting     {itm4.CreationTime:yyyy-MM-dd} {itm4.Subject} \t {OneLineAndTrunkate(itm4.Body)} \r\n"; }
+          else if (item is OL.MobileItem itm5)       /**/ { tb1.Text += $" ? Mobile      {itm5.CreationTime:yyyy-MM-dd} {itm5.Subject} \t {OneLineAndTrunkate(itm5.Body)} \r\n"; }
+          else if (item is OL.NoteItem itm6)         /**/ { tb1.Text += $" ? Note        {itm6.CreationTime:yyyy-MM-dd} {itm6.Subject} \t {OneLineAndTrunkate(itm6.Body)} \r\n"; }
+          else if (item is OL.TaskItem itm7)         /**/ { tb1.Text += $" ? Task        {itm7.CreationTime:yyyy-MM-dd} {itm7.Subject} \t {OneLineAndTrunkate(itm7.Body)} \r\n"; }
           else if (Debugger.IsAttached) { WriteLine($"AP: not procesed OL_type: {item.GetType().Name}"); Debugger.Break(); } else throw new Exception("AP: Review this case of missing type: must be something worth processing.");
 
           WriteLine($"{rptLine}");
@@ -499,7 +490,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
     return report___;
   }
 
-  string oneLineAndTrunkate(string body, int max = 55)
+  static string OneLineAndTrunkate(string body, int max = 55)
   {
     if (string.IsNullOrEmpty(body)) return "";
 
@@ -510,14 +501,14 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
     return len <= max ? body : (body[..max] + "...");
   }
 
-  async Task<bool> checkDbInsertIfMissing_sender(OL.MailItem mailItem, string senderEmail, string note)
+  async Task<bool> CheckDbInsertIfMissing_sender(OL.MailItem mailItem, string senderEmail, string note)
   {
     //if (_db.Emails.Find(senderEmail) == null)
     var (first, last) = OutlookHelper6.figureOutSenderFLName(mailItem, senderEmail);
     var isNew = await CheckInsert_EMail_EHist_Async(_db, senderEmail, first, last, mailItem.Subject, mailItem.Body, mailItem.ReceivedTime, note, "R");
     return isNew;
   }
-  public static async Task<Email?> checkInsertEMailAsync(QStatsRlsContext _db, string email, string firstName, string lastName, string notes)
+  public static async Task<Email?> CheckInsertEMailAsync(QStatsRlsContext _db, string email, string firstName, string lastName, string notes)
   {
     const int maxLen = 256;
 
@@ -566,7 +557,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
 
     return em;
   }
-  public static async Task checkInsertEHistAsync(QStatsRlsContext _db, string? subject, string? body, DateTime timeRecdSent, string rs, Email em)
+  public static async Task CheckInsertEHistAsync(QStatsRlsContext _db, string? subject, string? body, DateTime timeRecdSent, string rs, Email em)
   {
     //insertEMailEHistItem(isRcvd, timeRecdSent, em, subject, body);		}		void insertEMailEHistItem(bool isRcvd, DateTime timeRecdSent, Email em, string subject, string body)		{
     try

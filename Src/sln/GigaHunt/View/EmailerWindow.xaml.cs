@@ -214,7 +214,7 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
     try
     {
       if (!int.TryParse(tbMax.Text, out var cnt))
-        App.SpeakAsync($"Unable to parse {tbMax.Text}. Aborting broadcast.");
+        App.Speak($"Unable to parse {tbMax.Text}. Aborting broadcast.");
       else
       {
         for (var i = 0; i < cnt && i < vEMail_Avail_DevDataGrid.Items.Count; i++)
@@ -235,7 +235,7 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
       var msg = "Failes: ";
       var antiSpamBlockListPauseInMs = 1000 + (cnt < 12 ? cnt * cnt * cnt * cnt : 14000);
 
-      App.SpeakAsync(tbkTitle.Text = $"Sending {cnt} letters. Anti Spam delay set to {antiSpamBlockListPauseInMs * .001:N0} sec. ETA {cnt * antiSpamBlockListPauseInMs * .001 / 60.0:N0} minutes.");
+      App.Speak(tbkTitle.Text = $"Sending {cnt} letters. Anti Spam delay set to {antiSpamBlockListPauseInMs * .001:N0} sec. ETA {cnt * antiSpamBlockListPauseInMs * .001 / 60.0:N0} minutes.");
 
       EnableControls(false);
       var sw = Stopwatch.StartNew();
@@ -253,13 +253,13 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
       if (msg.Length > 12)
       {
         tbkTitle.Text = msg;
-        App.SpeakAsync($"Apparently, some letters have failed being sent. ");
+        App.Speak($"Apparently, some letters have failed being sent. ");
       }
       else
       {
         Hide();
         var prompt = $"Must run Outlook-to-DB now, to avoid double-sending!!!\n\n Review mailbox for unprocessed letters ... or just refer to *Done folder.";
-        App.SpeakAsync(prompt);
+        App.Speak(prompt);
         // _ = MessageBox.Show(prompt, "SUCCESS sending all letters", MessageBoxButton.OK, MessageBoxImage.Information);
         new OutlookToDbWindow().Show();
 

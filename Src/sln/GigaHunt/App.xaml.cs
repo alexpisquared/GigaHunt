@@ -3,8 +3,7 @@ public partial class App : Application
 {
   public static DateTime Now = DateTime.Now;
   static SpeechSynthesizer? _synth; static SpeechSynthesizer Synth { get { _synth ??= new SpeechSynthesizer { Rate = 7, Volume = 75 }; return _synth; } }
-  internal static void SpeakAsync(string v) { Synth.SpeakAsyncCancelAll(); Synth.SpeakAsync(v); }
-  internal static void SpeakSynch(string v) { Synth.SpeakAsyncCancelAll(); Synth.Speak(v); }
+  internal static void Speak(string v) => Synth.Speak(v);
 
   static MainSwitchboard? _msb; public static MainSwitchboard Msb => _msb ??= new MainSwitchboard();
 
