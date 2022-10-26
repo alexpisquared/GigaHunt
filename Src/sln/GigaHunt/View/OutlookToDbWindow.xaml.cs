@@ -65,7 +65,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
       var (success, rowsSavedCnt, report) = await _db.TrySaveReportAsync("OutlookToDb.cs");
       tb1.Text += rv;
       WriteLine(rv);
-      loadVwSrcs(App.Now);
+      LoadVwSrcs();
     }
     catch (System.Exception ex) { ex.Pop(); }
     finally { spCtlrPnl.IsEnabled = true; }
@@ -81,7 +81,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
       var (success, rowsSavedCnt, report) = await _db.TrySaveReportAsync("OutlookToDb.cs");
       tb1.Text += rv;
       WriteLine(rv);
-      loadVwSrcs(App.Now);
+      LoadVwSrcs();
     }
     catch (Exception ex) { ex.Pop(); }
     finally { spCtlrPnl.IsEnabled = true; }
@@ -97,7 +97,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
       var (success, rowsSavedCnt, report) = await _db.TrySaveReportAsync("OutlookToDb.cs");
       tb1.Text += rv;
       WriteLine(rv);
-      loadVwSrcs(App.Now);
+      LoadVwSrcs();
     }
     catch (System.Exception ex) { ex.Pop(); }
     finally { spCtlrPnl.IsEnabled = true; }
@@ -113,7 +113,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
       var (success, rowsSavedCnt, report) = await _db.TrySaveReportAsync("OutlookToDb.cs");
       tb1.Text += rv;
       WriteLine(rv);
-      loadVwSrcs(App.Now);
+      LoadVwSrcs();
     }
     catch (System.Exception ex) { ex.Pop(); }
     finally { spCtlrPnl.IsEnabled = true; }
@@ -276,7 +276,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
               }
               else
               {
-                banPremanentlyInDB(ref report, ref newBansAdded, senderEmail ?? throw new ArgumentNullException(nameof(folderName), "#########%%%%%%%%"), "Delivery failed (a) ");
+                BanPremanentlyInDB(ref report, ref newBansAdded, senderEmail ?? throw new ArgumentNullException(nameof(folderName), "#########%%%%%%%%"), "Delivery failed (a) ");
               }
 
               ArgumentNullException.ThrowIfNull(failsDoneFolder, "failsdonefolder is nul @@@@@@@@@@@@@@@");
@@ -293,7 +293,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
               }
               else
               {
-                banPremanentlyInDB(ref report, ref newBansAdded, senderEmail, "Delivery failed (b) ");
+                BanPremanentlyInDB(ref report, ref newBansAdded, senderEmail, "Delivery failed (b) ");
               }
 
               foreach (var emailFromBody in OutlookHelper6.FindEmails(mailItem.Body))
@@ -585,7 +585,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
     catch (Exception ex) { ex.Pop(); }
   }
 
-  void banPremanentlyInDB(ref string rv, ref int newBansAdded, string email, string rsn)
+  void BanPremanentlyInDB(ref string rv, ref int newBansAdded, string email, string rsn)
   {
     var emr = _db.Emails.Find(email);
     if (emr == null)
@@ -611,7 +611,8 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
       }
     }
   }
-  void loadVwSrcs(DateTime before)
+
+  static void LoadVwSrcs()
   {
     //((CollectionViewSource)(FindResource("eMailVwSrc"))).Source = ctx.Emails.Where(p => p.AddedAt >= before).ToList();
     //((CollectionViewSource)(FindResource("eMailVwSrc"))).View.MoveCurrentTo(null);
@@ -619,7 +620,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
     //((CollectionViewSource)(FindResource("eHistVwSrc"))).View.MoveCurrentTo(null);
   }
 
-  static void testOneKey(OL.ReportItem item, string key, bool isBinary = false)
+  static void TestOneKey(OL.ReportItem item, string key, bool isBinary = false)
   {
     try
     {
@@ -652,7 +653,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
 
     WriteLine($"^^^^^^^^^^^^^^^^^^^^^^^^^");
   }
-  static void testAllKeys(OL.ReportItem item) // body for report item ...is hard to find; need more time, but really, who cares. // Aug 2019
+  static void TestAllKeys(OL.ReportItem item) // body for report item ...is hard to find; need more time, but really, who cares. // Aug 2019
   {
     if (item.Body.Length > 0)
     {
@@ -660,92 +661,92 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
       item.SaveAs(@"C:\temp\NDR.txt");
     }
 
-    testOneKey(item, "0x0E04001E"); //tu: email !!!
-    testOneKey(item, "0x007D001F");
-    testOneKey(item, "0x007D001E");
-    testOneKey(item, "0x0065001f");
-    testOneKey(item, "0x0078001f");
-    testOneKey(item, "0x0076001f");
-    testOneKey(item, "0x0C1F001F");
-    testOneKey(item, "0x5D01001F");
-    testOneKey(item, "0x5D02001F");
-    testOneKey(item, "0x0C190102");
-    testOneKey(item, "0x4030001F");
-    testOneKey(item, "0x003F0102");
-    testOneKey(item, "0x0076001F");
+    TestOneKey(item, "0x0E04001E"); //tu: email !!!
+    TestOneKey(item, "0x007D001F");
+    TestOneKey(item, "0x007D001E");
+    TestOneKey(item, "0x0065001f");
+    TestOneKey(item, "0x0078001f");
+    TestOneKey(item, "0x0076001f");
+    TestOneKey(item, "0x0C1F001F");
+    TestOneKey(item, "0x5D01001F");
+    TestOneKey(item, "0x5D02001F");
+    TestOneKey(item, "0x0C190102");
+    TestOneKey(item, "0x4030001F");
+    TestOneKey(item, "0x003F0102");
+    TestOneKey(item, "0x0076001F");
 
-    testOneKey(item, "0x001A001E"); // "PR_MESSAGE_CLASS"
-    testOneKey(item, "0x0037001E"); // "PR_SUBJECT"
-    testOneKey(item, "0x00390040"); // "PR_CLIENT_SUBMIT_TIME"
-    testOneKey(item, "0x003D001E"); // "PR_SUBJECT_PREFIX PT_STRING8"
-    testOneKey(item, "0x0040001E"); // "PR_RECEIVED_BY_NAME"
-    testOneKey(item, "0x0042001E"); // "PR_SENT_REPRESENTING_NAME"
-    testOneKey(item, "0x0050001E"); // "PR_REPLY_RECIPIENT_NAMES"
+    TestOneKey(item, "0x001A001E"); // "PR_MESSAGE_CLASS"
+    TestOneKey(item, "0x0037001E"); // "PR_SUBJECT"
+    TestOneKey(item, "0x00390040"); // "PR_CLIENT_SUBMIT_TIME"
+    TestOneKey(item, "0x003D001E"); // "PR_SUBJECT_PREFIX PT_STRING8"
+    TestOneKey(item, "0x0040001E"); // "PR_RECEIVED_BY_NAME"
+    TestOneKey(item, "0x0042001E"); // "PR_SENT_REPRESENTING_NAME"
+    TestOneKey(item, "0x0050001E"); // "PR_REPLY_RECIPIENT_NAMES"
 
-    testOneKey(item, "0x0064001E"); // "PR_SENT_REPRESENTING_ADDRTYPE"
-    testOneKey(item, "0x0065001E"); // "PR_SENT_REPRESENTING_EMAIL_ADDRESS"
-    testOneKey(item, "0x0070001E"); // "PR_CONVERSATION_TOPIC"
-    testOneKey(item, "0x0075001E"); // "PR_RECEIVED_BY_ADDRTYPE"
-    testOneKey(item, "0x0076001E"); // "PR_RECEIVED_BY_EMAIL_ADDRESS"
-    testOneKey(item, "0x007D001E"); // "PR_TRANSPORT_MESSAGE_HEADERS"
-    testOneKey(item, "0x0C1A001E"); // "PR_SENDER_NAME"
+    TestOneKey(item, "0x0064001E"); // "PR_SENT_REPRESENTING_ADDRTYPE"
+    TestOneKey(item, "0x0065001E"); // "PR_SENT_REPRESENTING_EMAIL_ADDRESS"
+    TestOneKey(item, "0x0070001E"); // "PR_CONVERSATION_TOPIC"
+    TestOneKey(item, "0x0075001E"); // "PR_RECEIVED_BY_ADDRTYPE"
+    TestOneKey(item, "0x0076001E"); // "PR_RECEIVED_BY_EMAIL_ADDRESS"
+    TestOneKey(item, "0x007D001E"); // "PR_TRANSPORT_MESSAGE_HEADERS"
+    TestOneKey(item, "0x0C1A001E"); // "PR_SENDER_NAME"
 
-    testOneKey(item, "0x0C1E001E"); // "PR_SENDER_ADDRTYPE"
-    testOneKey(item, "0x0C1F001E"); // "PR_SENDER_EMAIL_ADDRESS"
-    testOneKey(item, "0x0E02001E"); // "PR_DISPLAY_BCC"
-    testOneKey(item, "0x0E03001E"); // "PR_DISPLAY_CC"
-    testOneKey(item, "0x0E04001E"); // "PR_DISPLAY_TO"
-    testOneKey(item, "0x0E060040"); // "PR_MESSAGE_DELIVERY_TIME"
-    testOneKey(item, "0x0E070003"); // "PR_MESSAGE_FLAGS"
-    testOneKey(item, "0x0E080003"); // "PR_MESSAGE_SIZE"
+    TestOneKey(item, "0x0C1E001E"); // "PR_SENDER_ADDRTYPE"
+    TestOneKey(item, "0x0C1F001E"); // "PR_SENDER_EMAIL_ADDRESS"
+    TestOneKey(item, "0x0E02001E"); // "PR_DISPLAY_BCC"
+    TestOneKey(item, "0x0E03001E"); // "PR_DISPLAY_CC"
+    TestOneKey(item, "0x0E04001E"); // "PR_DISPLAY_TO"
+    TestOneKey(item, "0x0E060040"); // "PR_MESSAGE_DELIVERY_TIME"
+    TestOneKey(item, "0x0E070003"); // "PR_MESSAGE_FLAGS"
+    TestOneKey(item, "0x0E080003"); // "PR_MESSAGE_SIZE"
 
-    testOneKey(item, "0x0E12000D"); // "PR_MESSAGE_RECIPIENTS"
-    testOneKey(item, "0x0E13000D"); // "PR_MESSAGE_ATTACHMENTS"
-    testOneKey(item, "0x0E1B000B"); // "PR_HASATTACH"
-    testOneKey(item, "0x0E1D001E"); // "PR_NORMALIZED_SUBJECT"
-    testOneKey(item, "0x0E1F000B"); // "PR_RTF_IN_SYNC"
-    testOneKey(item, "0x0E28001E"); // "PR_PRIMARY_SEND_ACCT"
-    testOneKey(item, "0x0E29001E"); // "PR_NEXT_SEND_ACCT"
-    testOneKey(item, "0x0FF40003"); // "PR_ACCESS"
-    testOneKey(item, "0x0FF70003"); // "PR_ACCESS_LEVEL"
+    TestOneKey(item, "0x0E12000D"); // "PR_MESSAGE_RECIPIENTS"
+    TestOneKey(item, "0x0E13000D"); // "PR_MESSAGE_ATTACHMENTS"
+    TestOneKey(item, "0x0E1B000B"); // "PR_HASATTACH"
+    TestOneKey(item, "0x0E1D001E"); // "PR_NORMALIZED_SUBJECT"
+    TestOneKey(item, "0x0E1F000B"); // "PR_RTF_IN_SYNC"
+    TestOneKey(item, "0x0E28001E"); // "PR_PRIMARY_SEND_ACCT"
+    TestOneKey(item, "0x0E29001E"); // "PR_NEXT_SEND_ACCT"
+    TestOneKey(item, "0x0FF40003"); // "PR_ACCESS"
+    TestOneKey(item, "0x0FF70003"); // "PR_ACCESS_LEVEL"
 
-    testOneKey(item, "0x0FFE0003"); // "PR_OBJECT_TYPE"
-    testOneKey(item, "0x1000001E"); // "PR_BODY"
-    testOneKey(item, "0x1035001E"); // "PR_INTERNET_MESSAGE_ID"
-    testOneKey(item, "0x1045001E"); // "PR_LIST_UNSUBSCRIBE"
+    TestOneKey(item, "0x0FFE0003"); // "PR_OBJECT_TYPE"
+    TestOneKey(item, "0x1000001E"); // "PR_BODY"
+    TestOneKey(item, "0x1035001E"); // "PR_INTERNET_MESSAGE_ID"
+    TestOneKey(item, "0x1045001E"); // "PR_LIST_UNSUBSCRIBE"
 
-    testOneKey(item, "0x1046001E"); // "N/A"
-    testOneKey(item, "0x30070040"); // "PR_CREATION_TIME"
-    testOneKey(item, "0x30080040"); // "PR_LAST_MODIFICATION_TIME"
-    testOneKey(item, "0x340D0003"); // "PR_STORE_SUPPORT_MASK"
-    testOneKey(item, "0x340F0003"); // "N/A"
-    testOneKey(item, "0x3FDE0003"); // "PR_INTERNET_CPID"
-    testOneKey(item, "0x80050003"); // "SideEffects"
-    testOneKey(item, "0x802A001E"); // "InetAcctID"
-    testOneKey(item, "0x804F001E"); // "InetAcctName"
-    testOneKey(item, "0x80AD001E"); // "x-rcpt-to"
+    TestOneKey(item, "0x1046001E"); // "N/A"
+    TestOneKey(item, "0x30070040"); // "PR_CREATION_TIME"
+    TestOneKey(item, "0x30080040"); // "PR_LAST_MODIFICATION_TIME"
+    TestOneKey(item, "0x340D0003"); // "PR_STORE_SUPPORT_MASK"
+    TestOneKey(item, "0x340F0003"); // "N/A"
+    TestOneKey(item, "0x3FDE0003"); // "PR_INTERNET_CPID"
+    TestOneKey(item, "0x80050003"); // "SideEffects"
+    TestOneKey(item, "0x802A001E"); // "InetAcctID"
+    TestOneKey(item, "0x804F001E"); // "InetAcctName"
+    TestOneKey(item, "0x80AD001E"); // "x-rcpt-to"
 
-    testOneKey(item, "0x003B0102", false); // "PR_SENT_REPRESENTING_SEARCH_KEY"
-    testOneKey(item, "0x003B0102", true); // "PR_SENT_REPRESENTING_SEARCH_KEY"
+    TestOneKey(item, "0x003B0102", false); // "PR_SENT_REPRESENTING_SEARCH_KEY"
+    TestOneKey(item, "0x003B0102", true); // "PR_SENT_REPRESENTING_SEARCH_KEY"
 
-    testOneKey(item, "0x003F0102", true); // "PR_RECEIVED_BY_ENTRYID"
-    testOneKey(item, "0x00410102", true); // "PR_SENT_REPRESENTING_ENTRYID"
-    testOneKey(item, "0x004F0102", true); // "PR_REPLY_RECIPIENT_ENTRIES"
-    testOneKey(item, "0x00510102", true); // "PR_RECEIVED_BY_SEARCH_KEY"
-    testOneKey(item, "0x00710102", true); // "PR_CONVERSATION_INDEX"
-    testOneKey(item, "0x0C190102", true); // "PR_SENDER_ENTRYID"
-    testOneKey(item, "0x0C1D0102", true); // "PR_SENDER_SEARCH_KEY"
-    testOneKey(item, "0x0E090102", true); // "PR_PARENT_ENTRYID"
-    testOneKey(item, "0x0FF80102", true); // "PR_MAPPING_SIGNATURE"
-    testOneKey(item, "0x0FF90102", true); // "PR_RECORD_KEY"
-    testOneKey(item, "0x0FFA0102", true); // "PR_STORE_RECORD_KEY"
-    testOneKey(item, "0x0FFB0102", true); // "PR_STORE_ENTRYID"
-    testOneKey(item, "0x0FFF0102", true); // "PR_ENTRYID"
-    testOneKey(item, "0x10090102", true); // "PR_RTF_COMPRESSED"
-    testOneKey(item, "0x10130102", true); // "PR_HTML"
-    testOneKey(item, "0x300B0102", true); // "PR_SEARCH_KEY"
-    testOneKey(item, "0x34140102", true); // "PR_MDB_PROVIDER"
-    testOneKey(item, "0x80660102", true); // "RemoteEID"
+    TestOneKey(item, "0x003F0102", true); // "PR_RECEIVED_BY_ENTRYID"
+    TestOneKey(item, "0x00410102", true); // "PR_SENT_REPRESENTING_ENTRYID"
+    TestOneKey(item, "0x004F0102", true); // "PR_REPLY_RECIPIENT_ENTRIES"
+    TestOneKey(item, "0x00510102", true); // "PR_RECEIVED_BY_SEARCH_KEY"
+    TestOneKey(item, "0x00710102", true); // "PR_CONVERSATION_INDEX"
+    TestOneKey(item, "0x0C190102", true); // "PR_SENDER_ENTRYID"
+    TestOneKey(item, "0x0C1D0102", true); // "PR_SENDER_SEARCH_KEY"
+    TestOneKey(item, "0x0E090102", true); // "PR_PARENT_ENTRYID"
+    TestOneKey(item, "0x0FF80102", true); // "PR_MAPPING_SIGNATURE"
+    TestOneKey(item, "0x0FF90102", true); // "PR_RECORD_KEY"
+    TestOneKey(item, "0x0FFA0102", true); // "PR_STORE_RECORD_KEY"
+    TestOneKey(item, "0x0FFB0102", true); // "PR_STORE_ENTRYID"
+    TestOneKey(item, "0x0FFF0102", true); // "PR_ENTRYID"
+    TestOneKey(item, "0x10090102", true); // "PR_RTF_COMPRESSED"
+    TestOneKey(item, "0x10130102", true); // "PR_HTML"
+    TestOneKey(item, "0x300B0102", true); // "PR_SEARCH_KEY"
+    TestOneKey(item, "0x34140102", true); // "PR_MDB_PROVIDER"
+    TestOneKey(item, "0x80660102", true); // "RemoteEID"
 
     WriteLine($"++++++++++++++++++++++++++++++++++++++ --------------------\n");
   }
