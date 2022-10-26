@@ -399,23 +399,6 @@ public class OutlookHelper6
     }
   }
 
-  public static string FigureOutSenderEmail(OL.MailItem mailItem) => !string.IsNullOrEmpty(mailItem.Sender?.Address) && mailItem.Sender.Address.Contains('@') ? mailItem.Sender.Address :
-                      !string.IsNullOrEmpty(mailItem.SenderEmailAddress) && mailItem.SenderEmailAddress.Contains("=") && mailItem.SenderEmailAddress.Contains('@') ? RemoveBadEmailParts(mailItem.SenderEmailAddress) :
-                      !string.IsNullOrEmpty(mailItem.SenderEmailAddress) && mailItem.SenderEmailAddress.Contains("@") ? mailItem.SenderEmailAddress :
-                      !string.IsNullOrEmpty(mailItem.SentOnBehalfOfName) && mailItem.SentOnBehalfOfName.Contains("@") ? mailItem.SentOnBehalfOfName :
-                      mailItem.SenderEmailAddress;
-  public static (string, string) figureOutSenderFLName(OL.MailItem mailItem, string email)
-  {
-    var fln =
-      !string.IsNullOrEmpty(mailItem.Sender?.Name) && mailItem.Sender.Name.Contains(" ") ? mailItem.Sender.Name :
-      !string.IsNullOrEmpty(mailItem.SentOnBehalfOfName) && mailItem.SentOnBehalfOfName.Contains(" ") ? mailItem.SentOnBehalfOfName :
-      !string.IsNullOrEmpty(mailItem.Sender?.Name) ? mailItem.Sender.Name :
-      !string.IsNullOrEmpty(mailItem.SentOnBehalfOfName) ? mailItem.SentOnBehalfOfName :
-      null;
-
-    return figureOutSenderFLName(fln, email);
-  }
-
   internal static bool ValidEmailAddress(string emailaddress)
   {
     try
@@ -435,8 +418,23 @@ public class OutlookHelper6
       return false;
     }
   }
+  public static string FigureOutSenderEmail(OL.MailItem mailItem) => !string.IsNullOrEmpty(mailItem.Sender?.Address) && mailItem.Sender.Address.Contains('@') ? mailItem.Sender.Address :
+                      !string.IsNullOrEmpty(mailItem.SenderEmailAddress) && mailItem.SenderEmailAddress.Contains("=") && mailItem.SenderEmailAddress.Contains('@') ? RemoveBadEmailParts(mailItem.SenderEmailAddress) :
+                      !string.IsNullOrEmpty(mailItem.SenderEmailAddress) && mailItem.SenderEmailAddress.Contains("@") ? mailItem.SenderEmailAddress :
+                      !string.IsNullOrEmpty(mailItem.SentOnBehalfOfName) && mailItem.SentOnBehalfOfName.Contains("@") ? mailItem.SentOnBehalfOfName :
+                      mailItem.SenderEmailAddress;
+  public static (string first, string last) figureOutSenderFLName(OL.MailItem mailItem, string email)
+  {
+    var fln =
+      !string.IsNullOrEmpty(mailItem.Sender?.Name) && mailItem.Sender.Name.Contains(" ") ? mailItem.Sender.Name :
+      !string.IsNullOrEmpty(mailItem.SentOnBehalfOfName) && mailItem.SentOnBehalfOfName.Contains(" ") ? mailItem.SentOnBehalfOfName :
+      !string.IsNullOrEmpty(mailItem.Sender?.Name) ? mailItem.Sender.Name :
+      !string.IsNullOrEmpty(mailItem.SentOnBehalfOfName) ? mailItem.SentOnBehalfOfName :
+      null;
 
-  public static (string, string) figureOutSenderFLName(string? fln, string email)
+    return figureOutSenderFLName(fln, email);
+  }
+  public static (string first, string last) figureOutSenderFLName(string? fln, string email)
   {
     if (fln is null or
       "Marketing- SharedMB" // randstad on behalf of case
@@ -469,7 +467,7 @@ public class OutlookHelper6
 
     return ("Sirs", "");
   }
-  public static (string, string) figureOutFLNameFromBody(string body, string email)
+  public static (string first, string last) figureOutFLNameFromBody(string body, string email)
   {
     body = body.ToLower();
     email = email.ToLower();
@@ -503,7 +501,7 @@ public class OutlookHelper6
     var hlp = new FirstLastNameParser(email);
     return (hlp.FirstName, hlp.LastName);
   }
-  public static (string, string) figureOutSenderFLName(OL.ReportItem reportItem, string email)
+  public static (string first, string last) figureOutSenderFLName(OL.ReportItem reportItem, string email)
   {
     var pc = reportItem.Body.ToLower().IndexOf("please contact");
     if (pc > 0)
