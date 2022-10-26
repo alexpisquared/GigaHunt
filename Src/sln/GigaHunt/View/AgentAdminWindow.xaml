@@ -4,7 +4,7 @@
                 xmlns:View="clr-namespace:GigaHunt.View" 
                 xmlns:View1="clr-namespace:WpfUserControlLib.Views;assembly=WpfUserControlLib" 
                 xmlns:Models="clr-namespace:DB.QStats.Std.Models;assembly=DB.QStats.Std"
-                Style="{StaticResource WindowStyle_Aav0}" Title="AgentAdminWindow" Height="350" Width="1600" Loaded="OnLoaded">
+                Style="{StaticResource WindowStyle_Aav0}" Title="AgentAdminWindow" Height="450" Width="2000" Loaded="OnLoaded">
   <WindowChrome.WindowChrome>
     <WindowChrome CaptionHeight="0" ResizeBorderThickness="10" />
   </WindowChrome.WindowChrome>
@@ -84,9 +84,11 @@
 
       <Grid Grid.Row="1" DataContext="{StaticResource eMailViewSource}">
         <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="2*"/>
+          <ColumnDefinition Width="3*"/>
           <ColumnDefinition Width="Auto"/>
           <ColumnDefinition Width="1*"/>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto"/>
@@ -94,7 +96,6 @@
           <RowDefinition Height="Auto"/>
           <RowDefinition Height="260"/>
         </Grid.RowDefinitions>
-
 
         <DataGrid x:Name="eMailDataGrid" Grid.Row="1" ItemsSource="{Binding}" IsReadOnly="False" SelectionChanged="OnSelectnChgd"
                 IsSynchronizedWithCurrentItem="True" RowHeight="22" CanUserAddRows="True">
@@ -116,14 +117,13 @@
           </DataGrid.Columns>
         </DataGrid>
 
-        <DataGrid x:Name="eHistsDataGrid" Grid.Column="2" ItemsSource="{Binding Source={StaticResource eMailEHistsViewSource}}" Grid.Row="1" RowHeight="42" IsReadOnly="True" Margin="0" HeadersVisibility="Column">
+        <DataGrid x:Name="eHistsDataGrid" Grid.Column="2" ItemsSource="{Binding Source={StaticResource eMailEHistsViewSource}}" Grid.Row="0" RowHeight="42" IsReadOnly="True" Margin="0" HeadersVisibility="Column" Grid.RowSpan="4" >
           <DataGrid.Columns>
-            <DataGridTextColumn Header="Emailed" Binding="{Binding EmailedAt, Converter={cmn:UniConverter}}" SortDirection="Descending"  />
-            <!--ToolTipService.ToolTip="{Binding EmailedAt, StringFormat=\{0:yyyy-MMM-dd\}}"-->
-            <DataGridTextColumn Header="R-S"     Binding="{Binding RecivedOrSent}"  ElementStyle="{StaticResource CenterAlignStyle}" />
-            <DataGridTextColumn Header="Subject" Binding="{Binding LetterSubject}"  Width="120" />
-            <DataGridTextColumn Header="Body"    Binding="{Binding LetterBody}"     Width="3*"  FontSize="8" Foreground="#6b1" />
-            <DataGridTextColumn Header="Notes"   Binding="{Binding Notes}"          Width="1*"  FontSize="8" Foreground="#11e"  />
+            <DataGridTextColumn Header=" R-S "    Binding="{Binding RecivedOrSent}"  ElementStyle="{StaticResource CenterAlignStyle}" />
+            <DataGridTextColumn Header=" Emailed" Binding="{Binding EmailedAt, Converter={cmn:UniConverter}}" SortDirection="Descending"  />
+            <DataGridTextColumn Header=" Subject" Binding="{Binding LetterSubject}"  Width="120" />
+            <DataGridTextColumn Header=" Body"    Binding="{Binding LetterBody}"     Width="100" FontSize="10" Foreground="#6b1" />
+            <DataGridTextColumn Header=" Notes"   Binding="{Binding Notes}"          Width="*"   FontSize="12" Foreground="#11e"  />
           </DataGrid.Columns>
         </DataGrid>
 
@@ -183,7 +183,8 @@
           <TextBox                          Grid.Column="1" Grid.Row="4" Text="{Binding Notes, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}" VerticalAlignment="Stretch" Grid.ColumnSpan="5" x:Name="tbAN" AcceptsReturn="True" MinHeight="42" />
 
         </Grid>
-        <Grid x:Name="grid2" Margin="0" Grid.Column="2" DataContext="{StaticResource eMailEHistsViewSource}" Grid.Row="3" >
+        
+        <Grid x:Name="grid2" Margin="0" Grid.Column="4" DataContext="{StaticResource eMailEHistsViewSource}" Grid.RowSpan="4" >
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
@@ -201,19 +202,20 @@
             <RowDefinition Height="Auto"/>
           </Grid.RowDefinitions>
           <Label Content="Subj"   Grid.Column="0"  Grid.Row="0" />
-          <TextBlock Grid.Column="1"                            Grid.Row="0" Text="{Binding LetterSubject}" Width="320"/>
-          <TextBox   Grid.ColumnSpan="4"                        Grid.Row="1" Text="{Binding LetterBody}" TextWrapping="Wrap" MaxHeight="700" VerticalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Visible" IsReadOnly="True" />
-          <Label Content="  Recived or Sent" Grid.Column="2"  Grid.Row="0" />
+          <TextBlock Grid.Column="1"                          Grid.Row="0" Text="{Binding LetterSubject}" Width="320"/>
+          <TextBox   Grid.ColumnSpan="4"                      Grid.Row="1" Text="{Binding LetterBody}" TextWrapping="Wrap" VerticalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Auto" IsReadOnly="True" />
+          <Label Content="  Recived or Sent"  Grid.Column="2" Grid.Row="0" />
           <TextBlock Grid.Column="3"                          Grid.Row="0" Text="{Binding RecivedOrSent}" />
-          <Label Content="Mailed"           Grid.Column="0" Grid.Row="3" />
+          <Label Content="Mailed"             Grid.Column="0" Grid.Row="3" />
           <TextBlock                          Grid.Column="1" Grid.Row="3" Text="{Binding EmailedAt, StringFormat=\{0:yyyy-MMM-dd HH:mm\}}" />
-          <Label Content="Added"            Grid.Column="2" Grid.Row="3" />
+          <Label Content="Added"              Grid.Column="2" Grid.Row="3" />
           <TextBlock                          Grid.Column="3" Grid.Row="3" Text="{Binding AddedAt, StringFormat=\{0:yyyy-MMM-dd HH:mm\}}"  />
-          <Label Content="Note"   Grid.Column="0"           Grid.Row="4"  />
+          <Label Content="Note"   Grid.Column="0"             Grid.Row="4"  />
           <TextBox Grid.Column="1"                            Grid.Row="4" Text="{Binding Notes, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}" Grid.ColumnSpan="3" Height="42" TextWrapping="WrapWithOverflow" x:Name="tbLN" AcceptsReturn="True"/>
         </Grid>
 
         <GridSplitter Grid.Row="1" Grid.Column="1" Grid.RowSpan="2"  Width="8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+        <GridSplitter Grid.Row="1" Grid.Column="3" Grid.RowSpan="2"  Width="8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
         <GridSplitter Grid.Row="2" Grid.ColumnSpan="3"              Height="8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
 
       </Grid>

@@ -88,7 +88,7 @@
         <Grid DataContext="{StaticResource vsEMail_Avail}" Grid.Column="1" Grid.Row="1" >
           <DataGrid x:Name="vEMail_Avail_DevDataGrid" ItemsSource="{Binding}" IsEnabled="{Binding ElementName=chkIsAvailable, Path=IsChecked}" IsReadOnly="True" VerticalAlignment="Top" SelectionChanged="onSelectnChgd" >
             <DataGrid.Columns>
-              <DataGridTextColumn Header=" Id = Email"  Binding="{Binding Id}"                                          Width="180" />
+              <DataGridTextColumn Header=" Email (Id)"  Binding="{Binding Id}"           Width="180"                    />
               <DataGridTextColumn Header=" Fname"       Binding="{Binding Fname}"                                       />
               <DataGridTextColumn Header=" Lname"       Binding="{Binding Lname}"                                       />
               <DataGridTextColumn Header=" Company"     Binding="{Binding Company}"                                     />
@@ -96,8 +96,8 @@
               <DataGridTextColumn Header=" Added At"    Binding="{Binding AddedAt,       Converter={cmn:UniConverter}}" />
               <DataGridTextColumn Header=" LastSent"    Binding="{Binding LastSentAt,    Converter={cmn:UniConverter}}" />
               <DataGridTextColumn Header=" LastReplied" Binding="{Binding LastRepliedAt, Converter={cmn:UniConverter}}" />
-              <DataGridTextColumn Header=" MyRplyCnt"   Binding="{Binding MyReplies}"    Width="62"                     />
-              <DataGridTextColumn Header=" Notes"       Binding="{Binding Notes}"   Width="*" FontSize="9"              />
+              <DataGridTextColumn Header=" MyRplyCnt"   Binding="{Binding MyReplies}"    Width="62"                     ElementStyle="{StaticResource CenterAlignStyle}" />
+              <DataGridTextColumn Header=" Notes"       Binding="{Binding Notes}"        Width="*" FontSize="9"         />
             </DataGrid.Columns>
           </DataGrid>
         </Grid>
