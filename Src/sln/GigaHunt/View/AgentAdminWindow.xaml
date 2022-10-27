@@ -86,7 +86,7 @@
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="3*"/>
           <ColumnDefinition Width="Auto"/>
-          <ColumnDefinition Width="1*"/>
+          <ColumnDefinition Width="480"/>
           <ColumnDefinition Width="Auto"/>
           <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
@@ -119,9 +119,9 @@
 
         <DataGrid x:Name="eHistsDataGrid" Grid.Column="2" ItemsSource="{Binding Source={StaticResource eMailEHistsViewSource}}" Grid.Row="0" RowHeight="42" IsReadOnly="True" Margin="0" HeadersVisibility="Column" Grid.RowSpan="4" >
           <DataGrid.Columns>
-            <DataGridTextColumn Header=" R-S "    Binding="{Binding RecivedOrSent}"  ElementStyle="{StaticResource CenterAlignStyle}" />
+            <DataGridTextColumn Header=" R/S "    Binding="{Binding RecivedOrSent}"  ElementStyle="{StaticResource CenterAlignStyle}" FontWeight="Medium" />
             <DataGridTextColumn Header=" Emailed" Binding="{Binding EmailedAt, Converter={cmn:UniConverter}}" SortDirection="Descending"  />
-            <DataGridTextColumn Header=" Subject" Binding="{Binding LetterSubject}"  Width="120" />
+            <DataGridTextColumn Header=" Subject" Binding="{Binding LetterSubject}"  Width="150" />
             <DataGridTextColumn Header=" Body"    Binding="{Binding LetterBody}"     Width="100" FontSize="10" Foreground="#6b1" />
             <DataGridTextColumn Header=" Notes"   Binding="{Binding Notes}"          Width="*"   FontSize="12" Foreground="#11e"  />
           </DataGrid.Columns>
