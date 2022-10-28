@@ -181,6 +181,12 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     {
       if (dbx.ChangeTracker.Entries().Any(e => e.State is EntityState.Added or EntityState.Modified or EntityState.Deleted))
       {
+#if true
+        App.Speak("Changes has been saved");
+        await savePlusMetadata(); 
+        if (dispose) dbx.Dispose(); 
+        return false;
+#else
         App.Speak("Would you like to save the changes?");
         switch (MessageBox.Show($"{dbx.GetDbChangesReport()}", "Would you like to save the changes?", MessageBoxButton.YesNoCancel, MessageBoxImage.Question))
         {
@@ -189,6 +195,7 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
           case MessageBoxResult.No: if (dispose) dbx.Dispose(); return false;
           case MessageBoxResult.Cancel: return true;
         }
+#endif
       }
       else
         return false;
