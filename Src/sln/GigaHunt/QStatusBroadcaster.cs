@@ -42,7 +42,7 @@ public static class QStatusBroadcaster
       var monthPart = avlbldate.Day < 10 ? "early" : avlbldate.Day > 20 ? "late" : "mid";
       var startDate = $"{monthPart} {avlbldate:MMMM yyyy}";
 
-      return await Emailing.Emailer.Send(
+      return await Emailing.NET6.Emailer.Send(
         emailAddress,
         subj,
         body.Replace("{0}", nameCasing_Mc_only_so_far(firstName)).Replace("{1}", emailAddress).Replace("{2}", startDate),

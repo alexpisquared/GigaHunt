@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Emailing.NET6;
 
-namespace Emailing
+public enum LatestView
 {
-  public enum LatestView
-  {
-    Menu,
-    Leads,
-    Agents,
-    Broadcast,
-    OutlookToDb
-  };
-}
+  Menu,
+  Leads,
+  Agents,
+  Broadcast,
+  OutlookToDb
+};

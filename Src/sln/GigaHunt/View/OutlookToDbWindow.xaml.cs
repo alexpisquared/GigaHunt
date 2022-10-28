@@ -256,8 +256,8 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
       {
         var cnt = itemsFailes.Count;
         prev = cnt;
-#if DEBUG_ // save as then delete - to get the body and other stuff.
-        foreach (OL.ReportItem item in itemsFailes)          {            testAllKeys(item);          }
+#if !DEBUG_ // save as then delete - to get the body and other stuff.
+        if (DateTime.Now == DateTime.MinValue) foreach (OL.ReportItem item in itemsFailes)          {            TestAllKeys(item);          }
 #endif
         foreach (var item in itemsFailes)
         {
@@ -300,8 +300,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
               {
                 // banPremanentlyInDB(ref report, ref newBansAdded, emailFromBody, "Delivery failed (c) "); <== //todo: restore all %Delivery failed (c)%, since in the body usually alternative contacts are mentioned.
 
-                var emr2 = _db.Emails.Find(emailFromBody);
-                if (emr2 == null)
+                if (_db.Emails.Find(emailFromBody) == null)
                 {
                   var (first, last) = OutlookHelper6.figureOutFLNameFromBody(mailItem.Body, emailFromBody);
                   var isNew = await CheckInsert_EMail_EHist_Async(_db, emailFromBody, first, last, mailItem.Subject, mailItem.Body, mailItem.ReceivedTime, "..alt contact from Delvery-Fail body. ", "A");
@@ -340,8 +339,8 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
       {
         var cnt = itemsTempAway.Count;
         prev = cnt;
-#if DEBUG_ // save as then delete - to get the body and other stuff.
-        foreach (OL.ReportItem item in itemsFailes)          {            testAllKeys(item);          }
+#if !DEBUG_ // save as then delete - to get the body and other stuff.
+        if (DateTime.Now == DateTime.MinValue) foreach (OL.ReportItem item in itemsTempAway)          {            TestAllKeys(item);          }
 #endif
         foreach (var item in itemsTempAway)
         {
@@ -359,8 +358,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
 
               foreach (var emailFromBody in OutlookHelper6.FindEmails(mailItem.Body))
               {
-                var emr2 = _db.Emails.Find(emailFromBody);
-                if (emr2 == null)
+                if (_db.Emails.Find(emailFromBody) == null)
                 {
                   var (first, last) = OutlookHelper6.figureOutFLNameFromBody(mailItem.Body, emailFromBody);
                   isNew = await CheckInsert_EMail_EHist_Async(_db, emailFromBody, first, last, mailItem.Subject, mailItem.Body, mailItem.ReceivedTime, "..from I'm-Away body as alt contact ", "A");
@@ -410,7 +408,8 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
         {
           if (item is OL.ReportItem reportItem)
           {
-            // testAllKeys(reportItem);
+            if (DateTime.Now == DateTime.MinValue) TestAllKeys(reportItem);
+
             senderEmail = reportItem.PropertyAccessor.GetProperty("http://schemas.microsoft.com/mapi/proptag/0x0E04001E") as string; // https://stackoverflow.com/questions/25253442/non-delivery-reports-and-vba-script-in-outlook-2010
             ArgumentNullException.ThrowIfNull(senderEmail, "senderEmail is nul @@@@@@@@@@@@@@@");
             senderEmail = OutlookHelper6.RemoveBadEmailParts(senderEmail);
@@ -439,8 +438,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
               senderEmail = OutlookHelper6.RemoveBadEmailParts(emailFromBody);
               if (!OutlookHelper6.ValidEmailAddress(senderEmail)) { tb1.Text += $" ! {senderEmail}  \t <- invalid!!!\r\n"; continue; }
 
-              var emr2 = _db.Emails.Find(senderEmail);
-              if (emr2 == null)
+              if (_db.Emails.Find(senderEmail) == null)
               {
                 var (first, last) = OutlookHelper6.figureOutFLNameFromBody(mailItem.Body, senderEmail);
                 isNew = await CheckInsert_EMail_EHist_Async(_db, senderEmail, first, last, mailItem.Subject, mailItem.Body, mailItem.ReceivedTime, "..from body. ", "R");
