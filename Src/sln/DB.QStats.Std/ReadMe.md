@@ -57,11 +57,10 @@ Scaffold-DbContext "Server=mtDEVsqldb,1625;Database=QStatsRls;Trusted_Connection
 
 #Chrono -- from CI  >>
 
-
-
-
-
-
-
 //entity.HasNoKey(); //tu: ?improper? fix for "The invoked method cannot be used for the entity type 'VEmailAvailProd' because it does not have a primary key."
+
+
+#2022-11-02
+Scaffold-DbContext "Server=.\SqlExpRess;Database=QStatsRls;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -force
+
 

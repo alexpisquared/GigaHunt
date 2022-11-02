@@ -23,6 +23,7 @@ namespace DB.QStats.Std.Models
         public string? Notes { get; set; }
         public int NotifyPriority { get; set; }
         public DateTime? ReSendAfter { get; set; }
+        public DateTime? LastAction { get; set; }
         public DateTime AddedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }
 
