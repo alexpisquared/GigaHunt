@@ -68,38 +68,37 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     var lsw = Stopwatch.StartNew();
     try
     {
-      await _db.Emails.OrderByDescending(r => r.AddedAt).OrderBy(r => r.Notes).LoadAsync(); /**/  WriteLine($">>> Loaded  Emails   {lsw.ElapsedMilliseconds,6:N0} ms");
+      await _db.Emails.OrderByDescending(r => r.AddedAt).OrderBy(r => r.Notes).LoadAsync(); /**/  WriteLine($">>> Loaded  Emails   {lsw.ElapsedMilliseconds,6:N0} ms    {_db.Database.GetConnectionString()}");
       await _db.Ehists.OrderByDescending(r => r.EmailedAt).LoadAsync();                     /**/  WriteLine($">>> Loaded  Ehists   {lsw.ElapsedMilliseconds,6:N0} ms"); //tu: that seems to order results in the secondary table where there is no control of roder available. Jul-2019
       await _db.Leads.OrderByDescending(r => r.AddedAt).LoadAsync();                        /**/  WriteLine($">>> Loaded   Leads   {lsw.ElapsedMilliseconds,6:N0} ms");
       _leadEmails = _db.Leads.Local.Select(r => r.AgentEmailId ?? "").Distinct();           /**/  WriteLine($">>> Loaded  LeadEm   {lsw.ElapsedMilliseconds,6:N0} ms");
       _leadCompns = _db.Leads.Local.Select(r => r.Agency ?? "").Distinct();                 /**/  WriteLine($">>> Loaded  LeadCo   {lsw.ElapsedMilliseconds,6:N0} ms");
-      _badEmails = await CreateCommand("Select Id from [dbo].[BadEmails]()", _db.Database.GetConnectionString() ?? "??");
-
-      static async Task<List<string>> CreateCommand(string queryString, string connectionString)
-      {
-        List<string> rv = new();
-        using (var connection = new SqlConnection(connectionString))
-        {
-          var command = new SqlCommand(queryString, connection);
-          connection.Open();
-          SqlDataReader reader = await command.ExecuteReaderAsync();
-          while (reader.Read())
-          {
-            rv.Add(reader[0]?.ToString() ?? "??");
-          }
-        }
-
-        return rv;
-      }
-
-      _isLoaded = true;
+      _badEmails = await GetBadEmails("Select Id from [dbo].[BadEmails]()", _db.Database.GetConnectionString() ?? "??");
       var fsw = SrchFilter();                                                               /**/  WriteLine($">>> Loaded  Filter   {lsw.ElapsedMilliseconds,6:N0} ms  ({fsw.TotalMilliseconds:N0})");
+      _isLoaded = true;
     }
     catch (Exception ex) { ex.Pop(); }
     finally { ctrlPnl.IsEnabled = true; _ = tbFilter.Focus(); }
   }
   void DoInfoTimedFilter(Stopwatch sw, IOrderedEnumerable<Email> ems) => tbkTitle.Text = $"{(tbkTitle.ToolTip = $"Total agents/emails  {ems.Count():N0}   filtered in  {sw.Elapsed.TotalSeconds:N2} s.  \n{_db.GetDbChangesReport(8)}").ToString()?.Replace("\n", "")}";
   void DoInfoPendingSave() => tbkTitle.Text = $"{(tbkTitle.ToolTip = $"  {_db.GetDbChangesReport(32)}").ToString()?.Replace("\n", "")}";
+
+  static async Task<List<string>> GetBadEmails(string queryString, string connectionString)
+  {
+    List<string> rv = new();
+    using (var connection = new SqlConnection(connectionString))
+    {
+      var command = new SqlCommand(queryString, connection);
+      connection.Open();
+      SqlDataReader reader = await command.ExecuteReaderAsync();
+      while (reader.Read())
+      {
+        rv.Add(reader[0]?.ToString() ?? "??");
+      }
+    }
+
+    return rv;
+  }
 
   static void FillExtProp(Email em)
   {

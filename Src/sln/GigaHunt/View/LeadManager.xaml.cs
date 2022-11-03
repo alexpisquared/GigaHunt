@@ -2,7 +2,7 @@
 public partial class LeadManagerWindow : WpfUserControlLib.Base.WindowBase
 {
   readonly CollectionViewSource _leadViewSource, _leadViewSourcL, _leadViewSourcE;
-  readonly QStatsRlsContext _db = new();
+  readonly QStatsRlsContext _db = QStatsRlsContext.Create();
   readonly int _thisCampaign;
   bool _abandonChanges = false;
 

@@ -7,10 +7,6 @@ namespace DB.QStats.Std.Models
 {
     public partial class QStatsRlsContext : DbContext
     {
-        public QStatsRlsContext()
-        {
-        }
-
         public QStatsRlsContext(DbContextOptions<QStatsRlsContext> options)
             : base(options)
         {
