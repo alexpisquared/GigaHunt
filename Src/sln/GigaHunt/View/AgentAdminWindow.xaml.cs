@@ -1,4 +1,7 @@
-﻿namespace AgentFastAdmin;
+﻿using GenderApiLib;
+using Microsoft.Extensions.Configuration;
+
+namespace AgentFastAdmin;
 public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
 {
   readonly QStatsRlsContext _db = QStatsRlsContext.Create();
@@ -68,14 +71,16 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     var lsw = Stopwatch.StartNew();
     try
     {
-      await _db.Emails.OrderByDescending(r => r.AddedAt).OrderBy(r => r.Notes).LoadAsync(); /**/  WriteLine($">>> Loaded  Emails   {lsw.ElapsedMilliseconds,6:N0} ms    {_db.Database.GetConnectionString()}");
-      await _db.Ehists.OrderByDescending(r => r.EmailedAt).LoadAsync();                     /**/  WriteLine($">>> Loaded  Ehists   {lsw.ElapsedMilliseconds,6:N0} ms"); //tu: that seems to order results in the secondary table where there is no control of roder available. Jul-2019
+      //await _db.Emails.OrderByDescending(r => r.AddedAt).OrderBy(r => r.Notes).LoadAsync(); /**/  WriteLine($">>> Loaded  Emails   {lsw.ElapsedMilliseconds,6:N0} ms    {_db.Database.GetConnectionString()}");
+      //await _db.Ehists.OrderByDescending(r => r.EmailedAt).LoadAsync();                     /**/  WriteLine($">>> Loaded  Ehists   {lsw.ElapsedMilliseconds,6:N0} ms"); //tu: that seems to order results in the secondary table where there is no control of roder available. Jul-2019
+      await _db.Emails.LoadAsync();                                                         /**/  WriteLine($">>> Loaded  Emails   {lsw.ElapsedMilliseconds,6:N0} ms    {_db.Database.GetConnectionString()}");
+      await _db.Ehists.LoadAsync();                                                         /**/  WriteLine($">>> Loaded  Ehists   {lsw.ElapsedMilliseconds,6:N0} ms"); //tu: that seems to order results in the secondary table where there is no control of roder available. Jul-2019
       await _db.Leads.OrderByDescending(r => r.AddedAt).LoadAsync();                        /**/  WriteLine($">>> Loaded   Leads   {lsw.ElapsedMilliseconds,6:N0} ms");
       _leadEmails = _db.Leads.Local.Select(r => r.AgentEmailId ?? "").Distinct();           /**/  WriteLine($">>> Loaded  LeadEm   {lsw.ElapsedMilliseconds,6:N0} ms");
       _leadCompns = _db.Leads.Local.Select(r => r.Agency ?? "").Distinct();                 /**/  WriteLine($">>> Loaded  LeadCo   {lsw.ElapsedMilliseconds,6:N0} ms");
       _badEmails = await GetBadEmails("Select Id from [dbo].[BadEmails]()", _db.Database.GetConnectionString() ?? "??");
-      var fsw = SrchFilter();                                                               /**/  WriteLine($">>> Loaded  Filter   {lsw.ElapsedMilliseconds,6:N0} ms  ({fsw.TotalMilliseconds:N0})");
       _isLoaded = true;
+      var fsw = SrchFilter();                                                               /**/  WriteLine($">>> Loaded  Filter   {lsw.ElapsedMilliseconds,6:N0} ms  ({fsw.TotalMilliseconds:N0})");
     }
     catch (Exception ex) { ex.Pop(); }
     finally { ctrlPnl.IsEnabled = true; _ = tbFilter.Focus(); }
@@ -182,8 +187,8 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
       {
 #if true
         App.Speak("Changes has been saved");
-        await savePlusMetadata(); 
-        if (dispose) dbx.Dispose(); 
+        await savePlusMetadata();
+        if (dispose) dbx.Dispose();
         return false;
 #else
         App.Speak("Would you like to save the changes?");
@@ -230,10 +235,25 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     else
       App.Speak("Unable to UpdateContactByEmail since current item is not email.");
   }
+  void OnSelectnChgd(object s, SelectionChangedEventArgs e)
+  {
+    try
+    {
+      if (e.AddedItems.Count > 0)
+      {
+        if (e.AddedItems[0] as Email is not null)
+          FillExtProp(e.AddedItems[0] as Email ?? throw new ArgumentNullException(nameof(e), "#########%%%%%%%%"));
+      }
+
+      //too often: doInfoPendingSave();
+    }
+    catch (NotSupportedException ex) { ex.Pop("Ignore"); }
+    catch (Exception ex) { ex.Pop(); }
+  }
+  async void OnSave(object s, RoutedEventArgs e) => tbkTitle.Text = await SaveAndUpdateMetadata(_db);
   void OnDel(object s, RoutedEventArgs e)
   {
     App.Speak("Are you sure?");
-
     if (MessageBox.Show($"Deleting:\r\n\n{eMailDataGrid.SelectedItems.Count}", "Are you sure?", MessageBoxButton.YesNoCancel, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes)
     {
       try
@@ -260,21 +280,26 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
       catch (Exception ex) { ex.Pop(); }
     }
   }
-  void OnSelectnChgd(object s, SelectionChangedEventArgs e)
+  async void OnCou(object s, RoutedEventArgs e)
   {
     try
     {
-      if (e.AddedItems.Count > 0)
+      BPR.BeepClk();
+      foreach (Email em in eMailDataGrid.SelectedItems)
       {
-        if (e.AddedItems[0] as Email is not null)
-          FillExtProp(e.AddedItems[0] as Email ?? throw new ArgumentNullException(nameof(e), "#########%%%%%%%%"));
+        if (em.Fname is not null)
+        {
+          var (ts, _, root) = await GenderApi.CallOpenAI(new ConfigurationBuilder().AddUserSecrets<App>().Build(), em.Fname);
+          em.Country = root?.country_of_origin.FirstOrDefault()?.country_name ?? "??";
+        }
       }
 
-      //too often: doInfoPendingSave();
+      CollectionViewSource.GetDefaultView(eMailDataGrid.ItemsSource).Refresh(); //tu: refresh bound datagrid
+      DoInfoPendingSave();
+      //App.Speak("Deleted the selected rows and all the foreign keyed records.");
     }
-    catch (NotSupportedException ex) { ex.Pop("Ignore"); }
     catch (Exception ex) { ex.Pop(); }
   }
-  async void OnSave(object s, RoutedEventArgs e) => tbkTitle.Text = await SaveAndUpdateMetadata(_db);
+
   void OnClose(object s, RoutedEventArgs e) { Close(); Application.Current.Shutdown(); }
 }

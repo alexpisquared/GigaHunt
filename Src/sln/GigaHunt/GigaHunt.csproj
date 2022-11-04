@@ -8,6 +8,7 @@
     <Platforms>AnyCPU;x64</Platforms>
     <LangVersion>latest</LangVersion>
     <ApplicationIcon>MailBroadCast.DeliveryFailed.ico</ApplicationIcon>
+    <UserSecretsId>511f17da-8dcd-4ce1-96dd-a8c403f79f89</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -33,6 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
     <PackageReference Include="Microsoft.Office.Interop.Outlook" Version="15.0.4797.1004" />
     <PackageReference Include="MicrosoftOfficeCore" Version="15.0.0" />
     <PackageReference Include="Microsoft.Office.Core" Version="12.0.0" />
@@ -42,6 +44,7 @@
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net.CI\Ambience\AmbienceLib.csproj" />
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net.CI\EfDbHelperLib\EfDbHelperLib.csproj" />
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net.CI\WpfUserControlLib\WpfUserControlLib.csproj" />
+    <ProjectReference Include="..\..\..\..\CI\Src\CI\GenderApiLib\GenderApiLib.csproj" />
     <ProjectReference Include="..\DB.QStats.Std\DB.QStats.Std.csproj" />
     <ProjectReference Include="..\Emailing.NET6\Emailing.NET6.csproj" />
   </ItemGroup>

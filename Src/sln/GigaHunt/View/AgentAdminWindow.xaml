@@ -114,6 +114,7 @@
             <DataGridTextColumn Header=" Sent"        Binding="{Binding Ttl_Sent}"       IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#01e" />
             <DataGridTextColumn Header=" Rcvd"        Binding="{Binding Ttl_Rcvd}"       IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#1b1" />
             <DataGridTextColumn Header=" Notes"       Binding="{Binding Notes}"          FontSize="8" Width="*"  />
+            <DataGridTextColumn Header=" Country"     Binding="{Binding Country}"        Width="SizeToHeader" />
           </DataGrid.Columns>
         </DataGrid>
 
@@ -149,7 +150,9 @@
           <TextBox                          Grid.Column="1" Grid.Row="0" Text="{Binding Id, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}" />
           <Label Content="Modified At"      Grid.Column="4" Grid.Row="0" />
           <TextBlock                        Grid.Column="5" Grid.Row="0" Text="{Binding ModifiedAt}" />
-          <Button                           Grid.Column="5" Grid.Row="0" Content="Del" Click="OnDel" ToolTip="onDel ... ?????~~~~!!! " Foreground="#f00" HorizontalAlignment="Right" Margin="0" />
+          <TextBlock                        Grid.Column="5" Grid.Row="0" Text="{Binding Country}" HorizontalAlignment="Center" />
+          <Button                           Grid.Column="5" Grid.Row="0" Content="Country" Click="OnCou" ToolTip="onDel ... ?????~~~~!!! " HorizontalAlignment="Right" Margin="0 0 55 0" Foreground="#080"     />
+          <Button                           Grid.Column="5" Grid.Row="0" Content="Del"     Click="OnDel" ToolTip="onDel ... ?????~~~~!!! " HorizontalAlignment="Right" Margin="0"    Foreground="#f00"     />
 
           <Label Content="First Name"       Grid.Column="0" Grid.Row="1" />
           <TextBox                          Grid.Column="1" Grid.Row="1" Text="{Binding Fname, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}"  />

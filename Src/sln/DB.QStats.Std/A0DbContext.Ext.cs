@@ -6,4 +6,5 @@ public partial class Email
   [NotMapped] public int? Ttl_Rcvd { get; set; }
   [NotMapped] public DateTime? LastSent { get; set; }
   [NotMapped] public DateTime? LastRcvd { get; set; }
+  [NotMapped] public string? Country { get; set; }
 }

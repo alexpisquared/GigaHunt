@@ -32,5 +32,5 @@ namespace DB.QStats.Std.Models
         public virtual ICollection<Ehist> Ehists { get; set; }
         public virtual ICollection<LeadEmail> LeadEmails { get; set; }
         public virtual ICollection<Lead> Leads { get; set; }
-    }
+  }
 }
