@@ -285,6 +285,7 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     try
     {
       BPR.BeepClk();
+      var si = eMailDataGrid.SelectedIndex;
       foreach (Email em in eMailDataGrid.SelectedItems)
       {
         if (em.Fname is not null)
@@ -296,6 +297,8 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
 
       CollectionViewSource.GetDefaultView(eMailDataGrid.ItemsSource).Refresh(); //tu: refresh bound datagrid
       DoInfoPendingSave();
+      eMailDataGrid.SelectedIndex = si;
+
       //App.Speak("Deleted the selected rows and all the foreign keyed records.");
     }
     catch (Exception ex) { ex.Pop(); }
