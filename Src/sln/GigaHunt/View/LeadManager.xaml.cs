@@ -15,14 +15,14 @@ public partial class LeadManagerWindow : SaveableWindow
     _leadViewSourcL = (CollectionViewSource)FindResource("lkuLeadStatuViewSource");
     _leadViewSourcE = (CollectionViewSource)FindResource("eMailViewSource");
   }
-  void onLoaded(object s, RoutedEventArgs e)
+  async void onLoaded(object s, RoutedEventArgs e)
   {
     var sw = Stopwatch.StartNew();
     try
     {
-      _db.Leads.Load();
-      _db.LkuLeadStatuses.Load();
-      _db.Emails.Load();
+      await _db.Leads.LoadAsync();
+      await _db.LkuLeadStatuses.LoadAsync();
+      await _db.Emails.LoadAsync();
 
       filterLeads(tbFilter.Text, cbInclAll.IsChecked == true);
       _leadViewSourcL.Source = _db.LkuLeadStatuses.Local.ToBindingList();
