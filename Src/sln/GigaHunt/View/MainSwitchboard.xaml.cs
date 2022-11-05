@@ -17,7 +17,7 @@ public partial class MainSwitchboard : WpfUserControlLib.Base.WindowBase
     }
     catch (Exception ex) { ex.Pop(); }
   }
-  //async void OnClose2(object sender, RoutedEventArgs e) { }//{ BPR.AppFinish(); await Task.Delay(333); BPR.Finish(); Close(); await Task.Delay(333); Application.Current.Shutdown(); await Task.Delay(333); }
+  //async void OnClose2(object sender, RoutedEventArgs e) { }//{ BPR.AppFinish(); await Task.Delay(333); BPR.Finish(); Close(); await Task.Delay(333); await Task.Delay(11000); Application.Current.Shutdown(); await Task.Delay(333); }
   void onDb2Ou(object s, RoutedEventArgs e) => tbver.Text = Title = new OutlookHelper6().SyncDbToOutlook(QStatsRlsContext.Create());
   async void onUndel(object s, RoutedEventArgs e) => tbver.Text = Title = await new OutlookHelper6().OutlookUndeleteContactsAsync(QStatsRlsContext.Create());
   void onDbIni(object s, RoutedEventArgs e) { } //  => DBInitializer.SetDbInitializer();

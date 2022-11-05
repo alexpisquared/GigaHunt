@@ -1,7 +1,7 @@
 ﻿using GenderApiLib;
 using Microsoft.Extensions.Configuration;
 
-namespace AgentFastAdmin;
+namespace GigaHunt.View;
 public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
 {
   readonly QStatsRlsContext _db = QStatsRlsContext.Create();
@@ -33,17 +33,17 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     try
     {
       var emails = _db.Emails.Local.ToBindingList().Where(r =>
-        (cbAll.IsChecked == true || (string.IsNullOrEmpty(r.PermBanReason) && _badEmails is not null && !_badEmails.Contains(r.Id))) && //todo: PermBanReason == '' still treated as BANNED!!!  HAS BEEN FIXED !!! on Sep 29, 2019.
+        (cbAll.IsChecked == true || string.IsNullOrEmpty(r.PermBanReason) && _badEmails is not null && !_badEmails.Contains(r.Id)) && //todo: PermBanReason == '' still treated as BANNED!!!  HAS BEEN FIXED !!! on Sep 29, 2019.
         (cbxLeadEmails.IsChecked != true || _leadEmails?.Contains(r.Id) == true) &&
         (cbxLeadCompns.IsChecked != true || _leadCompns?.Contains(r.Company) == true) &&
         (
           string.IsNullOrEmpty(srchToLwr) ||
 
             r.Id.ToLower().Contains(srchToLwr) ||
-            (r.Company != null && r.Company.ToLower().Contains(srchToLwr)) ||
-            (r.Fname != null && r.Fname.ToLower().Contains(srchToLwr)) ||
-            (r.Lname != null && r.Lname.ToLower().Contains(srchToLwr)) ||
-            (r.Notes != null && r.Notes.ToLower().Contains(srchToLwr))
+            r.Company != null && r.Company.ToLower().Contains(srchToLwr) ||
+            r.Fname != null && r.Fname.ToLower().Contains(srchToLwr) ||
+            r.Lname != null && r.Lname.ToLower().Contains(srchToLwr) ||
+            r.Notes != null && r.Notes.ToLower().Contains(srchToLwr)
         )
       ).OrderByDescending(r => r.AddedAt);
 
@@ -60,7 +60,7 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     return sw.Elapsed;
   }
 
-  protected override async void OnClosing(System.ComponentModel.CancelEventArgs ea) { base.OnClosing(ea); ea.Cancel = await CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(_db, true, SaveAndUpdateMetadata); }
+  protected override async void OnClosing(CancelEventArgs ea) { base.OnClosing(ea); ea.Cancel = await CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(_db, true, SaveAndUpdateMetadata); }
   public async void Load()
   {
     themeSelector1.SetCurThemeToMenu(Thm);
@@ -95,11 +95,9 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     {
       var command = new SqlCommand(queryString, connection);
       connection.Open();
-      SqlDataReader reader = await command.ExecuteReaderAsync();
+      var reader = await command.ExecuteReaderAsync();
       while (reader.Read())
-      {
         rv.Add(reader[0]?.ToString() ?? "??");
-      }
     }
 
     return rv;
@@ -127,39 +125,35 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
   public static async Task<string> SaveAndUpdateMetadata(QStatsRlsContext db)
   {
     BPR.Start();
-    var now = GigaHunt.App.Now;
+    var now = App.Now;
+
+    App.Speak("Saving..."); await Task.Delay(333);
 
     while (true)
     {
       try
       {
         foreach (var row in db.ChangeTracker.Entries().Where(e => e.State == EntityState.Added))
-        {
           if (row.Entity is Email email) // sanity check
           {
             var agencyCompany = email.Company;
 
             if (agencyCompany is not null && db.Agencies.FirstOrDefault(r => string.Compare(r.Id, agencyCompany, true) == 0) == null)
-            {
               _ = db.Agencies.Add(new Agency { Id = agencyCompany, AddedAt = now });
-            }
 
             email.AddedAt = now;
             email.NotifyPriority = 99;
           }
-        }
 
         foreach (var row in db.ChangeTracker.Entries().Where(e => e.State == EntityState.Modified))
-        {
           if (row.Entity is Email email) // sanity check
-          {
             email.ModifiedAt = now;
-          }
-        }
 
-        var rowsSawed = await db.TrySaveReportAsync("OutlookToDb.cs");
+        var (success, rowsSavedCnt, report) = await db.TrySaveReportAsync("OutlookToDb.cs");
 
-        return $"{rowsSawed} rows saved";
+        App.Speak(report); await Task.Delay(333);
+
+        return report;
       }
       catch (Exception ex)
       {
@@ -186,7 +180,6 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
       if (dbx.ChangeTracker.Entries().Any(e => e.State is EntityState.Added or EntityState.Modified or EntityState.Deleted))
       {
 #if true
-        App.Speak("Changes has been saved");
         await savePlusMetadata();
         if (dispose) dbx.Dispose();
         return false;
@@ -202,7 +195,10 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
 #endif
       }
       else
+      {
+        App.Speak("Nothing to save!"); await Task.Delay(333);
         return false;
+      }
     }
     catch (Exception ex) { ex.Pop(); return true; }
   }
@@ -240,10 +236,8 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     try
     {
       if (e.AddedItems.Count > 0)
-      {
         if (e.AddedItems[0] as Email is not null)
           FillExtProp(e.AddedItems[0] as Email ?? throw new ArgumentNullException(nameof(e), "#########%%%%%%%%"));
-      }
 
       //too often: doInfoPendingSave();
     }
@@ -255,7 +249,6 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
   {
     App.Speak("Are you sure?");
     if (MessageBox.Show($"Deleting:\r\n\n{eMailDataGrid.SelectedItems.Count}", "Are you sure?", MessageBoxButton.YesNoCancel, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes)
-    {
       try
       {
         BPR.BeepClk();
@@ -278,7 +271,6 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
         App.Speak("Deleted the selected rows and all the foreign keyed records.");
       }
       catch (Exception ex) { ex.Pop(); }
-    }
   }
   async void OnCou(object s, RoutedEventArgs e)
   {
@@ -287,13 +279,11 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
       BPR.BeepClk();
       var si = eMailDataGrid.SelectedIndex;
       foreach (Email em in eMailDataGrid.SelectedItems)
-      {
         if (em.Fname is not null)
         {
           var (ts, _, root) = await GenderApi.CallOpenAI(new ConfigurationBuilder().AddUserSecrets<App>().Build(), em.Fname);
           em.Country = root?.country_of_origin.FirstOrDefault()?.country_name ?? "??";
         }
-      }
 
       CollectionViewSource.GetDefaultView(eMailDataGrid.ItemsSource).Refresh(); //tu: refresh bound datagrid
       DoInfoPendingSave();
@@ -304,5 +294,5 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     catch (Exception ex) { ex.Pop(); }
   }
 
-  void OnClose(object s, RoutedEventArgs e) { Close(); Application.Current.Shutdown(); }
+ async void OnClose(object s, RoutedEventArgs e) { Close(); await Task.Delay(11000); Application.Current.Shutdown(); }
 }

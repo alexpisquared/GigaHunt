@@ -105,7 +105,7 @@ public class OutlookHelper6
       return AgentAdminnWindow.SaveAndUpdateMetadata(db);
     }
 
-    _ = await AgentFastAdmin.AgentAdminnWindow.CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(db, false, saveAndUpdateMetadata);
+    _ = await AgentAdminnWindow.CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(db, false, saveAndUpdateMetadata);
 
     return rep;
   }

@@ -98,7 +98,8 @@ namespace GigaHunt.View
         await outlookFolderToDbAsync(Misc.qRcvd);
         await outlookFolderToDbAsync(Misc.qSent);
 
-        var rowsAdded = await _db.TrySaveReportAsync("OutlookToDb.cs");
+        var rowsAdded = await _db.
+          TrySaveReportAsync("OutlookToDb.cs");
         tb1.Text = tbkTitle.Text = Title = string.Format("{0} rows added to EHist in {1:N1} sec (~15)", rowsAdded, sw.ElapsedMilliseconds * .001);
         WriteLine(Title);
         loadVwSrcs(_now);

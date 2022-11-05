@@ -17,7 +17,7 @@ global using System.Windows.Controls;
 global using System.Windows.Controls.Primitives;
 global using System.Windows.Data;
 global using System.Xml.Serialization;
-global using AgentFastAdmin;
+global using GigaHunt.View;
 global using AmbienceLib;
 global using DB.QStats.Std.Models;
 global using EF.DbHelper.Lib;

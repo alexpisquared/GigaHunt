@@ -313,7 +313,7 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
     lbMax.Visibility = tbMax.Visibility = btMax.Visibility = dg.SelectedItems.Count < 2 ? Visibility.Visible : Visibility.Collapsed;
     btSel.Visibility = dg.SelectedItems.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
   }
-  void OnClose(object s, RoutedEventArgs e) { Close(); Application.Current.Shutdown(); }
+ async void OnClose(object s, RoutedEventArgs e) { Close(); await Task.Delay(11000); Application.Current.Shutdown(); }
 }
 ///todo: convey the automatinnes of the message:
 ///		...

@@ -2,9 +2,19 @@
 
 public partial class MainSwitchboardUsrCtrl : UserControl
 {
-  public Window ContainerWindow => _owner ??= this.FindParentWindow(); Window? _owner;
+  Window? _owner;
+  public Window ContainerWindow => _owner ??= this.FindParentWindow();
   void popIt_modal(Window popWind, string lastWin) { ContainerWindow.Hide(); _ = popWind.ShowDialog(); ContainerWindow.Show(); Settings.Default.LastWin = lastWin; }
-  void popIt(Window popWind, string lastWin) { ContainerWindow.Hide(); popWind.Show(); ContainerWindow.Close(); Settings.Default.LastWin = lastWin; }
+  void popIt(Window popWind, string lastWin)
+  {
+    if (ContainerWindow is SaveableWindow)
+      ((SaveableWindow)ContainerWindow).Save();
+
+    ContainerWindow.Hide(); 
+    popWind.Show(); 
+    ContainerWindow.Close(); 
+    Settings.Default.LastWin = lastWin;
+  }
 
   public MainSwitchboardUsrCtrl() => InitializeComponent();
 

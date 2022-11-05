@@ -1,14 +1,13 @@
 ﻿namespace GigaHunt.View;
-public partial class LeadManagerWindow : WpfUserControlLib.Base.WindowBase
+public partial class LeadManagerWindow : SaveableWindow
 {
   readonly CollectionViewSource _leadViewSource, _leadViewSourcL, _leadViewSourcE;
-  readonly QStatsRlsContext _db = QStatsRlsContext.Create();
   readonly int _thisCampaign;
   bool _abandonChanges = false;
 
   public LeadManagerWindow()
   {
-    InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme;    tbver.Text = DevOps.IsDbg ? @"DBG" : "rls";
+    InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme; tbver.Text = DevOps.IsDbg ? @"DBG" : "rls";
 
     _thisCampaign = _db.Campaigns.Max(r => r.Id);
 
@@ -35,9 +34,9 @@ public partial class LeadManagerWindow : WpfUserControlLib.Base.WindowBase
     }
     catch (Exception ex) { ex.Pop(); }
 
-    dgLeads.Focus();
+    _ = dgLeads.Focus();
   }
-  protected override void OnClosing(System.ComponentModel.CancelEventArgs ea)
+  protected override async void OnClosing(System.ComponentModel.CancelEventArgs ea)
   {
     base.OnClosing(ea);
     if (_abandonChanges)
@@ -45,7 +44,7 @@ public partial class LeadManagerWindow : WpfUserControlLib.Base.WindowBase
 
     setProperValuesToNewRecords();
 
-    Task.Run(async () => ea.Cancel = await AgentAdminnWindow.CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(_db, true, saveAndUpdateMetadata)).Wait(); //tu: waiting await from synch!!!!!!!
+    ea.Cancel = await AgentAdminnWindow.CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(_db, true, saveAndUpdateMetadata);
   }
   void onQuit(object s, RoutedEventArgs e) { _abandonChanges = true; Close(); }
   async void onSave(object s, RoutedEventArgs e) => await saveAsync();
@@ -67,11 +66,11 @@ public partial class LeadManagerWindow : WpfUserControlLib.Base.WindowBase
   void onFilter(object s, RoutedEventArgs e) => filterLeads(tbFilter.Text, cbInclAll.IsChecked == true);
   void onCloseTheLead(object s, RoutedEventArgs e)
   {
-    WriteLine($"{((DB.QStats.Std.Models.Lead)dgLeads.SelectedItem).AgentName} _{((DB.QStats.Std.Models.Lead)dgLeads.SelectedItem).Status}" );
+    WriteLine($"{((DB.QStats.Std.Models.Lead)dgLeads.SelectedItem).AgentName} _{((DB.QStats.Std.Models.Lead)dgLeads.SelectedItem).Status}");
 
     ((DB.QStats.Std.Models.Lead)dgLeads.SelectedItem).Status = "Closed";
 
-    WriteLine($"{((DB.QStats.Std.Models.Lead)dgLeads.SelectedItem).AgentName} _{((DB.QStats.Std.Models.Lead)dgLeads.SelectedItem).Status} \n" );
+    WriteLine($"{((DB.QStats.Std.Models.Lead)dgLeads.SelectedItem).AgentName} _{((DB.QStats.Std.Models.Lead)dgLeads.SelectedItem).Status} \n");
   }
   void onAddNewLead(object s, RoutedEventArgs e)
   {
@@ -96,17 +95,16 @@ public partial class LeadManagerWindow : WpfUserControlLib.Base.WindowBase
       if (dgLeads.SelectedItem != null)
         dgLeads.ScrollIntoView(dgLeads.SelectedItem);
 
-      tbxNote.Focus();
+      _ = tbxNote.Focus();
     }
     catch (Exception ex) { ex.Pop(); }
   }
-
   void filterLeads(string filter, bool includeClosed = false)
   {
     _leadViewSource.Source = _db.Leads.Local.ToBindingList().Where(r =>
-      (includeClosed || r.CampaignId == _thisCampaign && r.Status != "Closed" && r.Status != "Dead")
+      (includeClosed || (r.CampaignId == _thisCampaign && r.Status != "Closed" && r.Status != "Dead"))
       &&
-      (string.IsNullOrEmpty(filter) || r.AgentEmail != null && (r.AgentEmail.Id.Contains(filter) || r.AgentEmail.Fname?.Contains(filter) == true))
+      (string.IsNullOrEmpty(filter) || (r.AgentEmail != null && (r.AgentEmail.Id.Contains(filter) || r.AgentEmail.Fname?.Contains(filter) == true)))
     ).OrderBy(r => r.AddedAt);
 
     //todo: changes the status to Active: 
@@ -115,26 +113,19 @@ public partial class LeadManagerWindow : WpfUserControlLib.Base.WindowBase
       dgLeads.ScrollIntoView(dgLeads.SelectedItem);
   }
   Task<string> saveAndUpdateMetadata() => AgentAdminnWindow.SaveAndUpdateMetadata(_db);
-  async Task<string> saveAsync()
-  {
-    setProperValuesToNewRecords();
-
-    var rowsSawed = await _db.TrySaveReportAsync("LeadManager.cs");
-    tbkTitle.Text = Title = string.Format("{0} rows saved", rowsSawed);
-    return Title;
-  }
-  void setProperValuesToNewRecords()
+  public override void setProperValuesToNewRecords()
   {
     foreach (var row in _db.ChangeTracker.Entries().Where(e => e.State == EntityState.Added))
     {
       if (((Lead)row.Entity).AddedAt < GigaHunt.App.Now.AddYears(-99))
         ((Lead)row.Entity).AddedAt = GigaHunt.App.Now;
 
-      ((Lead)row.Entity).CampaignId = _thisCampaign;
+      if (((Lead)row.Entity).CampaignId != _thisCampaign)
+        ((Lead)row.Entity).CampaignId = _thisCampaign;
     }
 
     foreach (var row in _db.ChangeTracker.Entries().Where(e => e.State == EntityState.Modified))
       ((Lead)row.Entity).ModifiedAt = GigaHunt.App.Now;
   }
-  void OnClose(object s, RoutedEventArgs e) { Close(); Application.Current.Shutdown(); }
+  async void OnClose(object s, RoutedEventArgs e) { _ = await saveAsync(); Close(); await Task.Delay(11000); Application.Current.Shutdown(); }
 }

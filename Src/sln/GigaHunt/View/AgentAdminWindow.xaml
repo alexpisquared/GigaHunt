@@ -1,4 +1,4 @@
-﻿<lnk:WindowBase x:Name="wnd" mc:Ignorable="d"  x:Class="AgentFastAdmin.AgentAdminnWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+﻿<lnk:WindowBase x:Name="wnd" mc:Ignorable="d"  x:Class="GigaHunt.View.AgentAdminnWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
                 xmlns:lnk="clr-namespace:WpfUserControlLib.Base;assembly=WpfUserControlLib" 
                 xmlns:cmn="clr-namespace:GigaHunt"
                 xmlns:View="clr-namespace:GigaHunt.View" 

@@ -765,9 +765,9 @@ namespace DB.QStats.Std.Models
 
             modelBuilder.Entity<VEmailAvailProd>(entity =>
             {
-                entity.HasNoKey();
+              //entity.HasNoKey(); //tu: ?improper? fix for "The invoked method cannot be used for the entity type 'VEmailAvailProd' because it does not have a primary key."
 
-                entity.ToView("vEMail_Avail_Prod");
+              entity.ToView("vEMail_Avail_Prod");
 
                 entity.Property(e => e.AddedAt).HasColumnType("datetime");
 
