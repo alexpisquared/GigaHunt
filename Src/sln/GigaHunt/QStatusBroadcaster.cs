@@ -73,7 +73,7 @@ public class DbActor
       if (em != null)
         em.ReSendAfter = null;
 
-      _ = await OutlookToDbWindow.CheckInsert_EMail_EHist_Async(db, email, firstName, "", subject, body, timeSent, "..from std broadcast send", isRcvd ? "R" : "S"); // db.EHists.Add(new EHist { EMailID = email, RecivedOrSent = isRcvd ? "R" : "S", EmailedAt = timeSent, LetterSubject = subject, LetterBody = body, Notes = "", AddedAt = GigaHunt.App.Now });
+      _ = await OutlookToDbWindow.CheckInsert_EMail_EHist_Async(db, email, firstName, "", subject, body, timeSent, "..from std broadcast send", isRcvd ? "R" : "S"); // db.EHists.Add(new EHist { EMailID = email, RecivedOrSent = isRcvd ? "R" : "S", EmailedAt = timeSent, LetterSubject = subject, LetterBody = body, Notes = "", AddedAt = GigaHunt.BPR___.Now });
 
       return await db.SaveChangesAsync();
     }

@@ -12,7 +12,7 @@ public partial class App : Application
     base.OnStartup(sea);
     Current.DispatcherUnhandledException += UnhandledExceptionHndlr.OnCurrentDispatcherUnhandledException;
     EventManager.RegisterClassHandler(typeof(TextBox), TextBox.GotFocusEvent, new RoutedEventHandler((s, re) => { (s as TextBox)?.SelectAll(); })); //tu: TextBox
-    //Tracer.SetupTracingOptions("GigaHunt", new TraceSwitch("OnlyUsedWhenInConfig", "This is the trace for all               messages... but who cares?   See ScrSvr for a model.") { Level = TraceLevel.Verbose }); // Trace.WriteLine(string.Format("*{0:MMdd HH:mm} The Start. CommandLine: '{1}'", GigaHunt.App._now, Environment.CommandLine));
+    //Tracer.SetupTracingOptions("GigaHunt", new TraceSwitch("OnlyUsedWhenInConfig", "This is the trace for all               messages... but who cares?   See ScrSvr for a model.") { Level = TraceLevel.Verbose }); // Trace.WriteLine(string.Format("*{0:MMdd HH:mm} The Start. CommandLine: '{1}'", GigaHunt.BPR___._now, Environment.CommandLine));
 
 #if test
       new Office365_POC().Nogo_Jun2020();
@@ -36,17 +36,17 @@ public partial class App : Application
   }
   protected override void OnExit(ExitEventArgs e) // if async - does not get to the end!!!
   {
-    WriteLine($",,, App  000");
-    BPR.AppFinish(); System.Threading.Thread.Sleep(1200); // if async - does not get to the end!!!  ... still, plays only when debugger.isAttached!!!
-    WriteLine($",,, App  111");
-    //BPR.AppFinishAsync();
-    WriteLine($",,, App  222");
-    //await BPR.AppFinishAsync();
-    WriteLine($",,, App  333");
+    WriteLine($",,, BPR___  000");
+    View.BPR.AppFinish(); System.Threading.Thread.Sleep(1200); // if async - does not get to the end!!!  ... still, plays only when debugger.isAttached!!!
+    WriteLine($",,, BPR___  111");
+    //BPR___.AppFinishAsync();
+    WriteLine($",,, BPR___  222");
+    //await BPR___.AppFinishAsync();
+    WriteLine($",,, BPR___  333");
     //await Task.Delay(1333);
     base.OnExit(e);
-    WriteLine($",,, App  444");
+    WriteLine($",,, BPR___  444");
     Settings.Default.Save();
-    WriteLine($",,, App  555 - The End."); // if async - does not get to the end!!!
+    WriteLine($",,, BPR___  555 - The End."); // if async - does not get to the end!!!
   }
 }

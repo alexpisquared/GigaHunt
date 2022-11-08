@@ -44,7 +44,7 @@ public partial class LeadManagerWindow : SaveableWindow
 
     setProperValuesToNewRecords();
 
-    ea.Cancel = await AgentAdminnWindow.CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(_db, true, saveAndUpdateMetadata);
+    ea.Cancel = await AgentAdminnWindowHelpers.CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(_db, true, saveAndUpdateMetadata);
   }
   void onQuit(object s, RoutedEventArgs e) { _abandonChanges = true; Close(); }
   async void onSave(object s, RoutedEventArgs e) => await saveAsync();
@@ -112,7 +112,7 @@ public partial class LeadManagerWindow : SaveableWindow
     if (dgLeads.SelectedItem != null)
       dgLeads.ScrollIntoView(dgLeads.SelectedItem);
   }
-  Task<string> saveAndUpdateMetadata() => AgentAdminnWindow.SaveAndUpdateMetadata(_db);
+  Task<string> saveAndUpdateMetadata() => AgentAdminnWindowHelpers.SaveAndUpdateMetadata(_db);
   public override void setProperValuesToNewRecords()
   {
     foreach (var row in _db.ChangeTracker.Entries().Where(e => e.State == EntityState.Added))

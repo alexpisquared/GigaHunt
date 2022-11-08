@@ -1,5 +1,5 @@
 ﻿namespace GigaHunt.AsLink;
-class Misc { public const string qRcvd = "Q", qSent = "Sent Items", qSentDone = "Sent Items/_DbDoneSent", qDltd = "Deleted Items", qFail = "Q/Fails", qFailsDone = "Q/FailsDone", qRcvdDone = "Q/_DbDoneRcvd", qLate = "Q/ToReSend"/*, qVOld = "Q/VeryOld"*/; }
+public class Misc { public const string qRcvd = "Q", qSent = "Sent Items", qSentDone = "Sent Items/_DbDoneSent", qDltd = "Deleted Items", qFail = "Q/Fails", qFailsDone = "Q/FailsDone", qRcvdDone = "Q/_DbDoneRcvd", qLate = "Q/ToReSend"/*, qVOld = "Q/VeryOld"*/; }
 public class OutlookHelper6
 {
   readonly OL.Application? _olApp;
@@ -82,7 +82,7 @@ public class OutlookHelper6
 
   public async Task<string> OutlookUndeleteContactsAsync(QStatsRlsContext db)
   {
-    App.Speak("Synchronous action... usually takes 5 minutes.");
+    BPR___.Speak("Synchronous action... usually takes 5 minutes.");
 
     var sw = Stopwatch.StartNew();
     
@@ -94,7 +94,7 @@ public class OutlookHelper6
     UndeleteContacts(MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderContacts), db, "Contacts");
     UndeleteContacts(MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderDeletedItems), db, "Deleted Items");
 
-    App.Speak($"All done. Took {sw.Elapsed.TotalMinutes:N1} minutes.");
+    BPR___.Speak($"All done. Took {sw.Elapsed.TotalMinutes:N1} minutes.");
 
     var rep =      //db.TrySaveReport(); // 
       db.GetDbChangesReport();
@@ -102,10 +102,10 @@ public class OutlookHelper6
 
     Task<string> saveAndUpdateMetadata()
     {
-      return AgentAdminnWindow.SaveAndUpdateMetadata(db);
+      return AgentAdminnWindowHelpers.SaveAndUpdateMetadata(db);
     }
 
-    _ = await AgentAdminnWindow.CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(db, false, saveAndUpdateMetadata);
+    _ = await AgentAdminnWindowHelpers.CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(db, false, saveAndUpdateMetadata);
 
     return rep;
   }
@@ -144,7 +144,7 @@ public class OutlookHelper6
   }
   public string SyncDbToOutlook(QStatsRlsContext db)
   {
-    //AAV.Sys.Helpers.BPR.Start();
+    //AAV.Sys.Helpers.BPR___.Start();
     var q = db.Emails.Where(r => string.IsNullOrEmpty(r.PermBanReason)
                             && r.Id.Contains("@")
                             && !r.Id.Contains('=')
@@ -161,7 +161,7 @@ public class OutlookHelper6
       AddUpdateOutlookContact(em);
     }
 
-    BPR.Finish();
+    //BPR___.Finish();
     return string.Format("\r\nTotal Outlook: {0} added, {1} updated / out of {2} eligibles. \r\n", _addedCount, _updatedCount, ttl);
   }
   public void AddUpdateOutlookContact(Email em)
@@ -266,7 +266,7 @@ public class OutlookHelper6
 
     i.Categories = "AppAdded";
     i.User1 = "New from QStats DB";
-    //i.CreationTime = GigaHunt.App.Now;
+    //i.CreationTime = GigaHunt.BPR___.Now;
 
     i.Save();
     _addedCount++;
@@ -333,7 +333,7 @@ public class OutlookHelper6
       db.Agencies.Local.Add(new Agency
       {
         Id = agency.Length > maxLen ? agency.Substring(agency.Length - maxLen, maxLen) : agency,
-        AddedAt = App.Now
+        AddedAt = BPR___.Now
       });
 
     WriteLine($"{emailId,32}\t{ci.FirstName,17} {ci.LastName,-21}\t{ci.JobTitle,-80}\t{phone}\t{(string.IsNullOrWhiteSpace(ci.Body) ? "·" : (ci.Body.Length > 50 ? ci.Body[..50] : ci.Body))}");
@@ -367,7 +367,7 @@ public class OutlookHelper6
         //Company = agency,
         Phone = phone,
         Notes = an,
-        AddedAt = App.Now
+        AddedAt = BPR___.Now
       };
       db.Emails.Local.Add(e0);
     }
@@ -378,19 +378,19 @@ public class OutlookHelper6
       if (string.IsNullOrWhiteSpace(em.Phone) && !string.IsNullOrWhiteSpace(phone))
       {
         em.Phone = phone;
-        em.ModifiedAt = App.Now;
+        em.ModifiedAt = BPR___.Now;
       }
 
       if (string.IsNullOrWhiteSpace(em.Notes))
       {
         em.Notes = note;
-        em.ModifiedAt = App.Now;
+        em.ModifiedAt = BPR___.Now;
       }
       else if (!string.IsNullOrWhiteSpace(em.Notes))
       {
-        if (!string.IsNullOrWhiteSpace(ci.JobTitle      /**/) && !em.Notes.Contains(ci.JobTitle      /**/)) { em.ModifiedAt = App.Now; em.Notes += $" + {ci.JobTitle}"; }
+        if (!string.IsNullOrWhiteSpace(ci.JobTitle      /**/) && !em.Notes.Contains(ci.JobTitle      /**/)) { em.ModifiedAt = BPR___.Now; em.Notes += $" + {ci.JobTitle}"; }
 
-        if (!string.IsNullOrWhiteSpace(ci.Body          /**/) && !em.Notes.Contains(ci.Body          /**/)) { em.ModifiedAt = App.Now; em.Notes += $" + {ci.Body}"; }
+        if (!string.IsNullOrWhiteSpace(ci.Body          /**/) && !em.Notes.Contains(ci.Body          /**/)) { em.ModifiedAt = BPR___.Now; em.Notes += $" + {ci.Body}"; }
       }
       else
       {
@@ -399,7 +399,7 @@ public class OutlookHelper6
     }
   }
 
-  internal static bool ValidEmailAddress(string emailaddress)
+  public static bool ValidEmailAddress(string emailaddress)
   {
     try
     {
@@ -637,4 +637,13 @@ public class OutlookHelper6
     for (var i = 0; i < matches.Count; i++) emails[i] = matches[i].Value;
     return emails;
   }
+}
+
+public class BPR___
+{
+  static DateTime? _now=null; public static DateTime Now { get => _now ?? (_now = DateTime.Now).Value;  }
+
+  internal static void Start() => System.Media.SystemSounds.Beep.Play();
+  internal static void Finish() => System.Media.SystemSounds.Beep.Play();
+  internal static void Speak(string v) => System.Media.SystemSounds.Beep.Play();
 }

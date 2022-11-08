@@ -19,7 +19,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
 
     if (ttl == 0)
     {
-      App.Speak(tb1.Text = "Nothing new in Outlook to for DB.");
+      GigaHunt.App.Speak(tb1.Text = "Nothing new in Outlook to for DB.");
     }
     else
     {
@@ -33,14 +33,14 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
 
       if (_newEmailsAdded > 0)
       {
-        App.Speak($"Done. {_newEmailsAdded} new emails found.");
+        GigaHunt.App.Speak($"Done. {_newEmailsAdded} new emails found.");
         Hide();
         new AgentAdminnWindow().Show();
         Close();
       }
       else
       {
-        App.Speak("Done.");
+        GigaHunt.App.Speak("Done.");
       }
     }
   }
@@ -126,7 +126,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
 
     await CheckInsertEHistAsync(_db, subject, body, timeRecdSent ?? DateTime.Now, RS, em);
 
-    var isNew = em?.AddedAt == App.Now;
+    var isNew = em?.AddedAt == GigaHunt.App.Now;
     return isNew;
   }
   async Task<TupleSubst> FindInsertEmailsFromBodyAsync(string body, string originalSenderEmail)
@@ -140,7 +140,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
       {
         var (first, last) = OutlookHelper6.figureOutFLNameFromBody(body, newEmail[i]);
         var em = await CheckInsertEMailAsync(_db, newEmail[i], first, last, $"..from body (sender: {originalSenderEmail}). ");
-        if (!isAnyNew) isAnyNew = em?.AddedAt == App.Now;
+        if (!isAnyNew) isAnyNew = em?.AddedAt == GigaHunt.App.Now;
       }
     }
 
@@ -199,7 +199,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
                 var (first, last) = OutlookHelper6.figureOutSenderFLName(re.Name, re.Address);
 
                 var email = await CheckInsertEMailAsync(_db, re.Address, first, last, $"..was a CC of {senderEmail} on {mailItem.SentOn:y-MM-dd HH:mm}. ");
-                isNew = email?.AddedAt == App.Now;
+                isNew = email?.AddedAt == GigaHunt.App.Now;
                 if (isNew) newEmailsAdded++;
                 report += OutlookHelper6.reportLine(folderName, re.Address, isNew);
               }
@@ -366,7 +366,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
                 }
               }
 
-              if (App.Now > mailItem.ReceivedTime.AddDays(10)) // bad place ... but!
+              if (GigaHunt.App.Now > mailItem.ReceivedTime.AddDays(10)) // bad place ... but!
               {
                 ArgumentNullException.ThrowIfNull(rcvdDoneFolder, "rcvdDoneFolder is nul @@@@@@@@@@@@@@@");
 
@@ -455,7 +455,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
               var (first, last) = OutlookHelper6.figureOutSenderFLName(re.Name, re.Address);
 
               var email = await CheckInsertEMailAsync(_db, re.Address, first, last, $"..CC  {mailItem.SentOn:yyyy-MM-dd}  {++cnt,2}/{mailItem.Recipients.Count,-2}  by {senderEmail}. ");
-              isNew = email?.AddedAt == App.Now;
+              isNew = email?.AddedAt == GigaHunt.App.Now;
               if (isNew) newEmailsAdded++;
               rptLine += OutlookHelper6.reportLine(folderName, re.Address, isNew);
             }
@@ -594,8 +594,8 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
     {
       if (emr.PermBanReason == null || !emr.PermBanReason.Contains(rsn)) // if new reason
       {
-        emr.PermBanReason += rsn + App.Now.ToString("yyyy-MM-dd");
-        emr.ModifiedAt = App.Now;
+        emr.PermBanReason += rsn + GigaHunt.App.Now.ToString("yyyy-MM-dd");
+        emr.ModifiedAt = GigaHunt.App.Now;
         rv += $"{Misc.qFail,-15}  {email,-48}banned since: {rsn}\n";
         newBansAdded++;
       }

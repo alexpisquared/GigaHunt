@@ -60,12 +60,12 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     return sw.Elapsed;
   }
 
-  protected override async void OnClosing(CancelEventArgs ea) { base.OnClosing(ea); ea.Cancel = await CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(_db, true, SaveAndUpdateMetadata); }
+  protected override async void OnClosing(CancelEventArgs ea) { base.OnClosing(ea); ea.Cancel = await AgentAdminnWindowHelpers.CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(_db, true, SaveAndUpdateMetadata); }
   public async void Load()
   {
     themeSelector1.SetCurThemeToMenu(Thm);
 
-    _ = await CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(_db, false, SaveAndUpdateMetadata); // keep it for future misstreatments.
+    _ = await AgentAdminnWindowHelpers.CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(_db, false, SaveAndUpdateMetadata); // keep it for future misstreatments.
     ctrlPnl.IsEnabled = false;
 
     var lsw = Stopwatch.StartNew();
@@ -121,87 +121,7 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     }
   }
 
-  Task<string> SaveAndUpdateMetadata() => SaveAndUpdateMetadata(_db);
-  public static async Task<string> SaveAndUpdateMetadata(QStatsRlsContext db)
-  {
-    BPR.Start();
-    var now = App.Now;
-
-    App.Speak("Saving..."); await Task.Delay(333);
-
-    while (true)
-    {
-      try
-      {
-        foreach (var row in db.ChangeTracker.Entries().Where(e => e.State == EntityState.Added))
-          if (row.Entity is Email email) // sanity check
-          {
-            var agencyCompany = email.Company;
-
-            if (agencyCompany is not null && db.Agencies.FirstOrDefault(r => string.Compare(r.Id, agencyCompany, true) == 0) == null)
-              _ = db.Agencies.Add(new Agency { Id = agencyCompany, AddedAt = now });
-
-            email.AddedAt = now;
-            email.NotifyPriority = 99;
-          }
-
-        foreach (var row in db.ChangeTracker.Entries().Where(e => e.State == EntityState.Modified))
-          if (row.Entity is Email email) // sanity check
-            email.ModifiedAt = now;
-
-        var (success, rowsSavedCnt, report) = await db.TrySaveReportAsync("OutlookToDb.cs");
-
-        App.Speak(report); await Task.Delay(333);
-
-        return report;
-      }
-      catch (Exception ex)
-      {
-        //if (bKeepShowingMoveError)
-        switch (MessageBox.Show(string.Format("Error in {0}.{1}():\n\n{2}\n\nRetry?\nYes - keep showing\nNo - skip showing\nCancel - Cancel operation", MethodBase.GetCurrentMethod()?.DeclaringType?.Name, MethodBase.GetCurrentMethod()?.Name,
-          ex.InnerException == null ? ex.Message :
-          ex.InnerException.InnerException == null ? ex.InnerException.Message :
-          ex.InnerException.InnerException.Message), "Exception ", MessageBoxButton.YesNoCancel, MessageBoxImage.Error))
-        {
-          case MessageBoxResult.Yes: break;
-          //	case MessageBoxResult.No: bKeepShowingMoveError = false; break;
-          case MessageBoxResult.Cancel: return "Cancelled";// tbkTitle.Text;
-        }
-      }
-      finally { BPR.Finish(); }
-
-      return "*******------------********+++++++++++";
-    }
-  }
-  public static async Task<bool> CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(QStatsRlsContext dbx, bool dispose, Func<Task> savePlusMetadata)
-  {
-    try
-    {
-      if (dbx.ChangeTracker.Entries().Any(e => e.State is EntityState.Added or EntityState.Modified or EntityState.Deleted))
-      {
-#if true
-        await savePlusMetadata();
-        if (dispose) dbx.Dispose();
-        return false;
-#else
-        App.Speak("Would you like to save the changes?");
-        switch (MessageBox.Show($"{dbx.GetDbChangesReport()}", "Would you like to save the changes?", MessageBoxButton.YesNoCancel, MessageBoxImage.Question))
-        {
-          default:
-          case MessageBoxResult.Yes: await savePlusMetadata(); if (dispose) dbx.Dispose(); return false;
-          case MessageBoxResult.No: if (dispose) dbx.Dispose(); return false;
-          case MessageBoxResult.Cancel: return true;
-        }
-#endif
-      }
-      else
-      {
-        App.Speak("Nothing to save!"); await Task.Delay(333);
-        return false;
-      }
-    }
-    catch (Exception ex) { ex.Pop(); return true; }
-  }
+  Task<string> SaveAndUpdateMetadata() => AgentAdminnWindowHelpers.SaveAndUpdateMetadata(_db);
 
   void OnLoaded(object s, RoutedEventArgs e) => Load();
   void OnFilter(object s, RoutedEventArgs e) => SrchFilter();
@@ -244,7 +164,7 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     catch (NotSupportedException ex) { ex.Pop("Ignore"); }
     catch (Exception ex) { ex.Pop(); }
   }
-  async void OnSave(object s, RoutedEventArgs e) => tbkTitle.Text = await SaveAndUpdateMetadata(_db);
+  async void OnSave(object s, RoutedEventArgs e) => tbkTitle.Text = await AgentAdminnWindowHelpers.SaveAndUpdateMetadata(_db);
   void OnDel(object s, RoutedEventArgs e)
   {
     App.Speak("Are you sure?");
@@ -289,7 +209,7 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
       DoInfoPendingSave();
       eMailDataGrid.SelectedIndex = si;
 
-      //App.Speak("Deleted the selected rows and all the foreign keyed records.");
+      //BPR___.Speak("Deleted the selected rows and all the foreign keyed records.");
     }
     catch (Exception ex) { ex.Pop(); }
   }
