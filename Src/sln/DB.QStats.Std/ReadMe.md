@@ -63,4 +63,9 @@ Scaffold-DbContext "Server=mtDEVsqldb,1625;Database=QStatsRls;Trusted_Connection
 #2022-11-02
 Scaffold-DbContext "Server=.\SqlExpRess;Database=QStatsRls;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -force
 
-
+#2022-11-07
+Include:  
+  https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/read-related-data?view=aspnetcore-6.0
+EF6 Eage/Lazy/Explicit: 
+  https://www.entityframeworktutorial.net/eager-loading-in-entity-framework.aspx
+  https://learn.microsoft.com/en-us/ef/core/querying/related-data/eager
