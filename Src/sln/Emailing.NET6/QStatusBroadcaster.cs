@@ -1,7 +1,4 @@
-using OutlookToDbWpfApp;
-
 namespace GigaHunt;
-
 public static class QStatusBroadcaster
 {
   static readonly DateTime _batchNow = DateTime.Now;
