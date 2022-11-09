@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 namespace GigaHunt.View;
 public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
 {
+  static readonly DateTime Now = DateTime.Now;
   readonly QStatsRlsContext _db = QStatsRlsContext.Create();
   readonly CollectionViewSource _cvsEmailsVwSrc;
   IEnumerable<string>? _leadEmails, _leadCompns;
@@ -134,7 +135,7 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     foreach (Email em in eMailDataGrid.SelectedItems)
     {
       em.DoNotNotifyOnAvailableForCampaignId = curCampaignID;
-      em.ModifiedAt = App.Now;
+      em.ModifiedAt = Now;
       i++;
     }
 

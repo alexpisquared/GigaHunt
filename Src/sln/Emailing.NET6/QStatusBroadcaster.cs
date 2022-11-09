@@ -1,8 +1,10 @@
+using OutlookToDbWpfApp;
+
 namespace GigaHunt;
 
 public static class QStatusBroadcaster
 {
-  static readonly DateTime _batchNow = GigaHunt.App.Now;
+  static readonly DateTime _batchNow = DateTime.Now;
   public const string Asu = "Availability Schedule Update - ";
 
   public static async Task<bool> SendLetter_UpdateDb(bool isAvailable, string emailAdrs, string firstName)
@@ -73,7 +75,7 @@ public class DbActor
       if (em != null)
         em.ReSendAfter = null;
 
-      _ = await OutlookToDbWindow.CheckInsert_EMail_EHist_Async(db, email, firstName, "", subject, body, timeSent, "..from std broadcast send", isRcvd ? "R" : "S"); // db.EHists.Add(new EHist { EMailID = email, RecivedOrSent = isRcvd ? "R" : "S", EmailedAt = timeSent, LetterSubject = subject, LetterBody = body, Notes = "", AddedAt = GigaHunt.BPR___.Now });
+      _ = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(db, email, firstName, "", subject, body, timeSent, "..from std broadcast send", isRcvd ? "R" : "S"); // db.EHists.Add(new EHist { EMailID = email, RecivedOrSent = isRcvd ? "R" : "S", EmailedAt = timeSent, LetterSubject = subject, LetterBody = body, Notes = "", AddedAt = GigaHunt.BPR___.Now });
 
       return await db.SaveChangesAsync();
     }

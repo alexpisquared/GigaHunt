@@ -1,5 +1,5 @@
 ﻿namespace GigaHunt.AsLink;
-public class Misc { public const string qRcvd = "Q", qSent = "Sent Items", qSentDone = "Sent Items/_DbDoneSent", qDltd = "Deleted Items", qFail = "Q/Fails", qFailsDone = "Q/FailsDone", qRcvdDone = "Q/_DbDoneRcvd", qLate = "Q/ToReSend"/*, qVOld = "Q/VeryOld"*/; }
+public class OuFolder { public const string qRcvd = "Q", qSent = "Sent Items", qSentDone = "Sent Items/_DbDoneSent", qDltd = "Deleted Items", qFail = "Q/Fails", qFailsDone = "Q/FailsDone", qRcvdDone = "Q/_DbDoneRcvd", qLate = "Q/ToReSend"/*, qVOld = "Q/VeryOld"*/; }
 public class OutlookHelper6
 {
   readonly OL.Application? _olApp;
@@ -37,7 +37,7 @@ public class OutlookHelper6
   {
     try
     {
-      var folder = MyStore?.GetRootFolder().Folders[Misc.qRcvd].Folders[@"Fails"] as OL.Folder;
+      var folder = MyStore?.GetRootFolder().Folders[OuFolder.qRcvd].Folders[@"Fails"] as OL.Folder;
       var itemss = folder?.Items.Restrict("[MessageClass] = 'REPORT.IPM.Note.NDR'");
       WriteLine($"***        Fails: {itemss?.Count}");
       return itemss;
@@ -53,7 +53,7 @@ public class OutlookHelper6
 
       var itemss = messageClass == null ? folder.Items : folder?.Items.Restrict($"[MessageClass] = '{messageClass}'");      //...WriteLine($" *** {folderPath,24}: {itemss.Count}");
       ArgumentNullException.ThrowIfNull(itemss, "itemss is nul @@@@@@@@@@@@@@@");
-      
+
       return itemss;
     }
     catch (Exception ex) { ex.Pop(@"Q\Fails"); throw; }
@@ -62,7 +62,7 @@ public class OutlookHelper6
   {
     try
     {
-      var folder = MyStore?.GetRootFolder().Folders[Misc.qRcvd].Folders[@"ToReSend"] as OL.Folder;
+      var folder = MyStore?.GetRootFolder().Folders[OuFolder.qRcvd].Folders[@"ToReSend"] as OL.Folder;
       var itemss = folder?.Items.Restrict("[MessageClass] = 'IPM.Note'");
       return itemss;
     }
@@ -85,7 +85,7 @@ public class OutlookHelper6
     BPR___.Speak("Synchronous action... usually takes 5 minutes.");
 
     var sw = Stopwatch.StartNew();
-    
+
     db.Emails.Load();
     db.Agencies.Load();
 
@@ -641,9 +641,9 @@ public class OutlookHelper6
 
 public class BPR___
 {
-  static DateTime? _now=null; public static DateTime Now { get => _now ?? (_now = DateTime.Now).Value;  }
+  static DateTime? _now = null; public static DateTime Now { get => _now ?? (_now = DateTime.Now).Value; }
 
-  internal static void Start() => System.Media.SystemSounds.Beep.Play();
-  internal static void Finish() => System.Media.SystemSounds.Beep.Play();
-  internal static void Speak(string v) => System.Media.SystemSounds.Beep.Play();
+  public static void Start() => System.Media.SystemSounds.Beep.Play();
+  public static void Finish() => System.Media.SystemSounds.Beep.Play();
+  public static void Speak(string v) => System.Media.SystemSounds.Beep.Play();
 }

@@ -22,4 +22,3 @@ global using OL = Microsoft.Office.Interop.Outlook;
 global using EF.DbHelper.Lib;
 global using GigaHunt.Helpers;
 global using GigaHunt.View;
-

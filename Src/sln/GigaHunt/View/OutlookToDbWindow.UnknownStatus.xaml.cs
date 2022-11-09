@@ -6,7 +6,7 @@ namespace GigaHunt.View
   {
     readonly QStatsRlsContext _db = QStatsRlsContext.Create();
     const string note = "note3";
-    readonly DateTime _now = GigaHunt.App.Now;
+    readonly DateTime _now = DateTime.Now;
 
     public OutlookToDbWindowUnkn() { InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme; tbver.Text = DevOps.IsDbg ? @"DBG" : "rls"; }
 
@@ -55,23 +55,23 @@ namespace GigaHunt.View
         {
           try
           {
-            var email = folderName != Misc.qRcvd && item.Recipients.Count > 0 ? item.Recipients[item.Recipients.Count].Address : item.SenderEmailAddress;
-            var ename = folderName != Misc.qRcvd && item.Recipients.Count > 0 ? item.Recipients[item.Recipients.Count].Name : item.SenderName;
+            var email = folderName != OuFolder.qRcvd && item.Recipients.Count > 0 ? item.Recipients[item.Recipients.Count].Address : item.SenderEmailAddress;
+            var ename = folderName != OuFolder.qRcvd && item.Recipients.Count > 0 ? item.Recipients[item.Recipients.Count].Name : item.SenderName;
             Write(string.Format("\n{0,4})  {1}  {2,-32}{3,-32}{4,-32}{5}", cnt--, item.ReceivedTime.ToString("yyyy-MMM-dd"), ename, email, item.SentOnBehalfOfName, item.Recipients.Count));  //
             foreach (Outlook.Recipient re in item.Recipients) Write(string.Format("\n{0,52}{1}", "", re.Address));
 
             if (cnt == 55) Write("");
 
-            if (folderName == Misc.qRcvd)
+            if (folderName == OuFolder.qRcvd)
             {
               var senderEmail = item.SentOnBehalfOfName.Contains("@") ? item.SentOnBehalfOfName : item.SenderEmailAddress;
-              await checkInsertEMailAndEHistAsync(senderEmail, item.SenderName, item.Subject, item.Body, item.ReceivedTime, folderName == Misc.qRcvd);
+              await checkInsertEMailAndEHistAsync(senderEmail, item.SenderName, item.Subject, item.Body, item.ReceivedTime, folderName == OuFolder.qRcvd);
               //foreach (Outlook.Recipient r in item.Recipients) ... includes potential CC addresses but appears as NEW and gets added ..probably because of wrong direction recvd/sent.
-              //			checkInsertEMailAndEHist(r.Address, r.Name, item.Subject, item.Body, item.ReceivedTime, folder == Misc.qRcvd);
+              //			checkInsertEMailAndEHist(r.Address, r.Name, item.Subject, item.Body, item.ReceivedTime, folder == OuFolder.qRcvd);
             }
             else
               foreach (Outlook.Recipient r in item.Recipients) // must use ReplyAll for this to work
-                await checkInsertEMailAndEHistAsync(r.Address, r.Name, item.Subject, item.Body, item.ReceivedTime, folderName == Misc.qRcvd);
+                await checkInsertEMailAndEHistAsync(r.Address, r.Name, item.Subject, item.Body, item.ReceivedTime, folderName == OuFolder.qRcvd);
           }
           catch (Exception ex) { ex.Pop(); ; }
         }
@@ -95,8 +95,8 @@ namespace GigaHunt.View
         _db.Emails.Load();
         _db.Ehists.Load();
 
-        await outlookFolderToDbAsync(Misc.qRcvd);
-        await outlookFolderToDbAsync(Misc.qSent);
+        await outlookFolderToDbAsync(OuFolder.qRcvd);
+        await outlookFolderToDbAsync(OuFolder.qSent);
 
         var rowsAdded = await _db.
           TrySaveReportAsync("OutlookToDb.cs");

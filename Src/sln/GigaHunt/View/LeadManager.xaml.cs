@@ -1,6 +1,7 @@
 ﻿namespace GigaHunt.View;
 public partial class LeadManagerWindow : SaveableWindow
 {
+  static readonly DateTime Now = DateTime.Now;
   readonly CollectionViewSource _leadViewSource, _leadViewSourcL, _leadViewSourcE;
   readonly int _thisCampaign;
   bool _abandonChanges = false;
@@ -77,7 +78,7 @@ public partial class LeadManagerWindow : SaveableWindow
     try
     {
       var txt = Clipboard.GetText();
-      _db.Leads.Local.Add(new Lead { AddedAt = App.Now, CampaignId = _thisCampaign, Note = string.IsNullOrEmpty(txt) ? "\r\n\n\n\t New Lead" : txt });
+      _db.Leads.Local.Add(new Lead { AddedAt = Now, CampaignId = _thisCampaign, Note = string.IsNullOrEmpty(txt) ? "\r\n\n\n\t New Lead" : txt });
 
       CollectionViewSource.GetDefaultView(dgLeads.ItemsSource).Refresh(); //tu: refresh bound datagrid
 
@@ -117,15 +118,15 @@ public partial class LeadManagerWindow : SaveableWindow
   {
     foreach (var row in _db.ChangeTracker.Entries().Where(e => e.State == EntityState.Added))
     {
-      if (((Lead)row.Entity).AddedAt < GigaHunt.App.Now.AddYears(-99))
-        ((Lead)row.Entity).AddedAt = GigaHunt.App.Now;
+      if (((Lead)row.Entity).AddedAt < Now.AddYears(-99))
+        ((Lead)row.Entity).AddedAt = Now;
 
       if (((Lead)row.Entity).CampaignId != _thisCampaign)
         ((Lead)row.Entity).CampaignId = _thisCampaign;
     }
 
     foreach (var row in _db.ChangeTracker.Entries().Where(e => e.State == EntityState.Modified))
-      ((Lead)row.Entity).ModifiedAt = GigaHunt.App.Now;
+      ((Lead)row.Entity).ModifiedAt = Now;
   }
   async void OnClose(object s, RoutedEventArgs e) { _ = await saveAsync(); Close(); await Task.Delay(11000); Application.Current.Shutdown(); }
 }
