@@ -16,8 +16,8 @@ public partial class QStatsRlsContext
   }
 
 #if DEBUG
-  public static QStatsRlsContext Create() => new QStatsRlsContext(@"Server=.\SqlExpress;Database=QStatsDBG;Trusted_Connection=True;"); //todo: retire; used by old GigaHunter
+  public static QStatsRlsContext Create() => new QStatsRlsContext(@"Server=.\SqlExpress;Database=QStatsDBG;Trusted_Connection=True;Encrypt=False;"); //todo: retire; used by old GigaHunter
 #else
-  public static QStatsRlsContext Create() => new QStatsRlsContext(@"Server=.\SqlExpress;Database=QStatsRLS;Trusted_Connection=True;"); //todo: retire; used by old GigaHunter
+  public static QStatsRlsContext Create() => new QStatsRlsContext(@"Server=.\SqlExpress;Database=QStatsRLS;Trusted_Connection=True;Encrypt=False;"); //todo: retire; used by old GigaHunter
 #endif
 }
