@@ -1,7 +1,9 @@
 ﻿namespace DB.QStats.Std.Models;
 public partial class QStatsRlsContext
 {
-  readonly string _sqlConnectionString;
+  const string _dbg = @"Server=.\SqlExpress;Database=QStatsDBG;Trusted_Connection=True;Encrypt=False;";
+  const string _rls = @"Server=.\SqlExpress;Database=QStatsRLS;Trusted_Connection=True;Encrypt=False;";
+  readonly string _sqlConnectionString = _dbg; // legacy clients only.
 
   public QStatsRlsContext(string sqlConnectionString) => _sqlConnectionString = sqlConnectionString;
   ~QStatsRlsContext() => Trace.WriteLine($"@?@?@:> ~{nameof(QStatsRlsContext)}() called!");
@@ -15,9 +17,10 @@ public partial class QStatsRlsContext
     }
   }
 
+  public static QStatsRlsContext Create() => //todo: retire; used by old GigaHunter.
 #if DEBUG
-  public static QStatsRlsContext Create() => new QStatsRlsContext(@"Server=.\SqlExpress;Database=QStatsDBG;Trusted_Connection=True;Encrypt=False;"); //todo: retire; used by old GigaHunter
-#else
-  public static QStatsRlsContext Create() => new QStatsRlsContext(@"Server=.\SqlExpress;Database=QStatsRLS;Trusted_Connection=True;Encrypt=False;"); //todo: retire; used by old GigaHunter
+    new(_dbg); 
+#else  
+    new(_rls); 
 #endif
 }
