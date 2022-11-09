@@ -384,7 +384,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
   }
   async Task<string> OutlookFolderToDb_DoneRAsync(string folderName)
   {
-    var report___ = tb1.Text = "";
+    string report___ = tb1.Text = "";
     var msg = "..was done before && not existed in DB ?!?! ";
     int ttlProcessed = 0, newEmailsAdded = 0;
     try
