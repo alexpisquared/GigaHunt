@@ -43,6 +43,7 @@
 
         <Menu Margin="20 0" Background="Transparent" x:Name="menu1" VerticalAlignment="Center">
           <MenuItem Header="[Re] Do _Reglr"    Click="OnDoReglr"   ToolTip="Check and add if new the Q folder"/>
+          <MenuItem Header="[Re] Do _JunkM"    Click="OnDoJunkM"   ToolTip="Check and add if new the Junk Email folder"/>
           <MenuItem Header="[Re] Do _Fails"    Click="OnDoFails"   ToolTip="Find trg emai in Q\Fails folder and ..."/>
           <MenuItem Header="[Re] Do La_ter"    Click="OnDoLater"   ToolTip="Find trg emai in Q\ToResend folder and scan body for alt/new emails."/>
           <MenuItem Header="[Re] Do _DoneR"    Click="OnDoDoneR"   ToolTip="Scour DoneRcvd folder for missing emails in the bodies."/>

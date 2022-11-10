@@ -48,6 +48,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
   void OnClose(object s, RoutedEventArgs e) { Close(); Application.Current.Shutdown(); }
   void OnUpdateOutlook(object s, RoutedEventArgs e) => tb1.Text += _oh.SyncDbToOutlook(_db);
   async void OnDoReglr(object s, RoutedEventArgs e) => await OnDoReglr_();
+  async void OnDoJunkM(object s, RoutedEventArgs e) => await OnDoJunkM_();
   async void OnDoFails(object s, RoutedEventArgs e) => await OnDoFails_();
   async void OnDoLater(object s, RoutedEventArgs e) => await OnDoLater_();
   async void OnDoDoneR(object s, RoutedEventArgs e) => await OnDoDoneR_();
@@ -62,6 +63,24 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
       var rv = "";
       rv += await OutlookFolderToDb_ReglrAsync(OuFolder.qRcvd);
       rv += await OutlookFolderToDb_ReglrAsync(OuFolder.qSent);
+
+      var (success, rowsSavedCnt, report) = await _db.TrySaveReportAsync("OutlookToDb.cs");
+      tb1.Text += rv;
+      WriteLine(rv);
+      LoadVwSrcs();
+    }
+    catch (System.Exception ex) { ex.Pop(); }
+    finally { spCtlrPnl.IsEnabled = true; }
+  }
+  async Task OnDoJunkM_()
+  {
+    spCtlrPnl.IsEnabled = false;
+
+    try
+    {
+      var sw = Stopwatch.StartNew();
+      var rv = "";
+      rv += await OutlookFolderToDb_ReglrAsync(OuFolder.qJunkMail);
 
       var (success, rowsSavedCnt, report) = await _db.TrySaveReportAsync("OutlookToDb.cs");
       tb1.Text += rv;
@@ -165,10 +184,10 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
           cnt++;
           try
           {
-            if (folderName == OuFolder.qRcvd)
+            if (folderName == OuFolder.qRcvd || folderName == OuFolder.qJunkMail)
             {
               var senderEmail = OutlookHelper6.FigureOutSenderEmail(mailItem);
-              var isNew = await CheckDbInsertIfMissing_sender(mailItem, senderEmail, "..from  Q  folder. "); // checkInsertInotDbEMailAndEHistAsync(senderEmail, flNme.first, flNme.last, mailItem.Subject, mailItem.Body, mailItem.ReceivedTime, $"..was a sender", "R");  //foreach (OL.Recipient r in item.Recipients) ... includes potential CC addresses but appears as NEW and gets added ..probably because of wrong direction recvd/sent.				
+              var isNew = await CheckDbInsertIfMissing_sender(mailItem, senderEmail, $"..from  {folderName}  folder. "); // checkInsertInotDbEMailAndEHistAsync(senderEmail, flNme.first, flNme.last, mailItem.Subject, mailItem.Body, mailItem.ReceivedTime, $"..was a sender", "R");  //foreach (OL.Recipient r in item.Recipients) ... includes potential CC addresses but appears as NEW and gets added ..probably because of wrong direction recvd/sent.				
               if (isNew) newEmailsAdded++;
               report += OutlookHelper6.reportLine(folderName, senderEmail, isNew);
 
