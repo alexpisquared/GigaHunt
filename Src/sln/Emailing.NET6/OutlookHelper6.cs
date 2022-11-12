@@ -85,7 +85,7 @@ public class OutlookHelper6
     return folder;
   }
 
-  public async Task<string> OutlookUndeleteContactsAsync(QStatsRlsContext db)
+  public async Task<string> OutlookUndeleteContactsAsync(QstatsRlsContext db)
   {
     BPR___.Speak("Synchronous action... usually takes 5 minutes.");
 
@@ -147,7 +147,7 @@ public class OutlookHelper6
     }
     catch (Exception ex) { ex.Pop("!!! MUST RUN OUTLOOK TO WORK !!!"); throw; }
   }
-  public string SyncDbToOutlook(QStatsRlsContext db)
+  public string SyncDbToOutlook(QstatsRlsContext db)
   {
     //AAV.Sys.Helpers.BPR___.Start();
     var q = db.Emails.Where(r => string.IsNullOrEmpty(r.PermBanReason)
@@ -299,7 +299,7 @@ public class OutlookHelper6
       }
     }
   }
-  void UndeleteContacts(OL.MAPIFolder folder, QStatsRlsContext QStatsRlsContext, string srcFolder)
+  void UndeleteContacts(OL.MAPIFolder folder, QstatsRlsContext QstatsRlsContext, string srcFolder)
   {
     WriteLine($"Folder {folder.Name} has total {folder.Items.Count} items: ");
 
@@ -307,12 +307,12 @@ public class OutlookHelper6
     {
       if (o is OL.ContactItem item)
       {
-        AddUpdateToDb(item, QStatsRlsContext, srcFolder);
+        AddUpdateToDb(item, QstatsRlsContext, srcFolder);
       }
     }
   }
 
-  void AddUpdateToDb(OL.ContactItem ci, QStatsRlsContext db, string srcFolder)
+  void AddUpdateToDb(OL.ContactItem ci, QstatsRlsContext db, string srcFolder)
   {
     const int maxLen = 256;
 
@@ -358,7 +358,7 @@ public class OutlookHelper6
     return cmpny;
   }
 
-  void AddUpdateBassedOnGoodEmailId(OL.ContactItem ci, QStatsRlsContext db, string emailId, string phone, string agency, string srcFolder)
+  void AddUpdateBassedOnGoodEmailId(OL.ContactItem ci, QstatsRlsContext db, string emailId, string phone, string agency, string srcFolder)
   {
     var an = $"-={srcFolder}-Add=-{ci.JobTitle}·{ci.Body}¦";
     var em = db.Emails.Local.FirstOrDefault(r => emailId.Equals(r.Id, StringComparison.OrdinalIgnoreCase));

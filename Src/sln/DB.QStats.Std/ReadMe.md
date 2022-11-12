@@ -9,13 +9,13 @@
       Install-Package Microsoft.EntityFrameworkCore.Design
   ..installed all 3 straight from the Nuget manager.
 
-  Scaffold-DbContext "Server=mtUATsqldb;Database=QStatsRls;Trusted_Connection=True;"  Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models\QStatsRls
-  Scaffold-DbContext "Server=mtUATsqldb;Database=RMS;Trusted_Connection=True;"        Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models\RMS
-  Scaffold-DbContext "Server=mtUATsqldb;Database=RMS;Trusted_Connection=True;"        Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models\RMS -force
-  Scaffold-DbContext "Server=mtUATsqldb;Database=BR;Trusted_Connection=True;"         Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models\BR
+  Scaffold-DbContext "Server=mtUATsqldb;Database=QStatsRls;Trusted_Connection=True;Encrypt=False;"  Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models\QStatsRls
+  Scaffold-DbContext "Server=mtUATsqldb;Database=RMS;Trusted_Connection=True;Encrypt=False;"        Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models\RMS
+  Scaffold-DbContext "Server=mtUATsqldb;Database=RMS;Trusted_Connection=True;Encrypt=False;"        Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models\RMS -force
+  Scaffold-DbContext "Server=mtUATsqldb;Database=BR;Trusted_Connection=True;Encrypt=False;"         Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models\BR
   
 #Running this gives Yellow warnings:
-Scaffold-DbContext "Server=MTUATSQLDB;Database=QStatsRls;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
+Scaffold-DbContext "Server=MTUATSQLDB;Database=QStatsRls;Trusted_Connection=True;Encrypt=False;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
 #Yellow Warnings:
 To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
 The column 'dbo.NewIssues.Active'             would normally be mapped to a non-nullable bool property, but it has a default constraint. Such a column is mapped to a nullable bool property to allow a difference between setting the property to false and invoking the default constraint. See https://go.microsoft.com/fwlink/?linkid=851278 for details.
@@ -24,14 +24,14 @@ The column 'dbo.SecurityGroups.Active'        would normally be mapped to a non-
 
 
 #2021-05-21
-Scaffold-DbContext "Server=.\SqlExpRess;Database=QStatsRls;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -force
+Scaffold-DbContext "Server=.\SqlExpRess;Database=QStatsRls;Trusted_Connection=True;Encrypt=False;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -force
 #2021-06-29
 ##From CLI:
 1. must install EF:  dotnet tool install --global dotnet-ef
 2. must be in the project's folder
-3. dotnet ef dbcontext scaffold "Server=.\SqlExpRess;Database=QStatsRls;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -o Models --schema dpl
+3. dotnet ef dbcontext scaffold "Server=.\SqlExpRess;Database=QStatsRls;Trusted_Connection=True;Encrypt=False;" Microsoft.EntityFrameworkCore.SqlServer -o Models --schema dpl
 ##From VS:
-   Scaffold-DbContext           "Server=.\SqlExpRess;Database=QStatsRls;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -o Models  -schema dpl -table BookGroup,BookReport_view -force
+   Scaffold-DbContext           "Server=.\SqlExpRess;Database=QStatsRls;Trusted_Connection=True;Encrypt=False;" Microsoft.EntityFrameworkCore.SqlServer -o Models  -schema dpl -table BookGroup,BookReport_view -force
 Build started...
 Build succeeded.
 To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
@@ -45,13 +45,13 @@ GO
 
 
 #2021-08-07  dpl schema retired as per MC's request
-Scaffold-DbContext "Server=mtUATsqldb;Database=QStatsRls;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -o Models -force
+Scaffold-DbContext "Server=mtUATsqldb;Database=QStatsRls;Trusted_Connection=True;Encrypt=False;" Microsoft.EntityFrameworkCore.SqlServer -o Models -force
 
 #2022-04-29  //tu: discard local changes:  git reset --hard origin
 
 #2022-05-24  regen-ed model to get PermAsgn joins missing in UAT:
-Scaffold-DbContext "Server=mtDEVsqldb;Database=QStatsRls;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -o Models -force
-Scaffold-DbContext "Server=mtDEVsqldb,1625;Database=QStatsRls;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -o Models -force
+Scaffold-DbContext "Server=mtDEVsqldb;Database=QStatsRls;Trusted_Connection=True;Encrypt=False;" Microsoft.EntityFrameworkCore.SqlServer -o Models -force
+Scaffold-DbContext "Server=mtDEVsqldb,1625;Database=QStatsRls;Trusted_Connection=True;Encrypt=False;" Microsoft.EntityFrameworkCore.SqlServer -o Models -force
     ^ no diff in results.
 
 
@@ -61,7 +61,7 @@ Scaffold-DbContext "Server=mtDEVsqldb,1625;Database=QStatsRls;Trusted_Connection
 
 
 #2022-11-02
-Scaffold-DbContext "Server=.\SqlExpRess;Database=QStatsRls;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -force
+Scaffold-DbContext "Server=.\SqlExpRess;Database=QStatsRls;Trusted_Connection=True;Encrypt=False;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -force
 
 #2022-11-07
 Include:  

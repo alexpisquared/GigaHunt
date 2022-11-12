@@ -11,7 +11,7 @@ public static class QStatusBroadcaster
 #else
     if (await sendLetter(emailAdrs, firstName, isAvailable))
     {
-      _ = await DbActor.InsertContactHistoryItem(false, _batchNow, emailAdrs, firstName, "std", isAvailable ? "Std Available 4 CVs" : "Std Busy");
+      _ = await DbActor.InsertContactHistoryItem(false, _batchNow, _batchNow, emailAdrs, firstName, "std", isAvailable ? "Std Available 4 CVs" : "Std Busy");
       return true;
     }
 #endif
@@ -63,16 +63,16 @@ public static class QStatusBroadcaster
 
 public class DbActor
 {
-  public static async Task<int> InsertContactHistoryItem(bool isRcvd, DateTime timeSent, string email, string firstName, string subject, string body)
+  public static async Task<int> InsertContactHistoryItem(bool isRcvd, DateTime? sentOn, DateTime timeSent, string email, string firstName, string subject, string body)
   {
     try
     {
-      using var db = QStatsRlsContext.Create();
+      using var db = QstatsRlsContext.Create();
       var em = db.Emails.FirstOrDefault(r => r.Id == email && r.ReSendAfter != null);
       if (em != null)
         em.ReSendAfter = null;
 
-      _ = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(db, email, firstName, "", subject, body, timeSent, "..from std broadcast send", isRcvd ? "R" : "S"); // db.EHists.Add(new EHist { EMailID = email, RecivedOrSent = isRcvd ? "R" : "S", EmailedAt = timeSent, LetterSubject = subject, LetterBody = body, Notes = "", AddedAt = GigaHunt.BPR___.Now });
+      _ = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(db, email, firstName, "", subject, body, sentOn, timeSent, "..from std broadcast send", isRcvd ? "R" : "S"); 
 
       return await db.SaveChangesAsync();
     }

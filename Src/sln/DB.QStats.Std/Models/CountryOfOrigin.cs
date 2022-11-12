@@ -1,24 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DB.QStats.Std.Models
+namespace DB.QStats.Std.Models;
+
+public partial class CountryOfOrigin
 {
-    public partial class CountryOfOrigin
-    {
-        public CountryOfOrigin()
-        {
-            FirstnameCountryXrefs = new HashSet<FirstnameCountryXref>();
-        }
+    public string Country { get; set; } = null!;
 
-        public string Country { get; set; } = null!;
-        public string CountryName { get; set; } = null!;
-        public float Probability { get; set; }
-        public string ContinentalRegion { get; set; } = null!;
-        public string StatisticalRegion { get; set; } = null!;
-        public DateTime CreatedAt { get; set; }
-        public DateTime? ChangedAt { get; set; }
-        public string? FirstnameRootObjectname { get; set; }
+    public string CountryName { get; set; } = null!;
 
-        public virtual ICollection<FirstnameCountryXref> FirstnameCountryXrefs { get; set; }
-    }
+    public float Probability { get; set; }
+
+    public string ContinentalRegion { get; set; } = null!;
+
+    public string StatisticalRegion { get; set; } = null!;
+
+    public DateTime CreatedAt { get; set; }
+
+    public DateTime? ChangedAt { get; set; }
+
+    public string? FirstnameRootObjectname { get; set; }
+
+    public virtual ICollection<FirstnameCountryXref> FirstnameCountryXrefs { get; } = new List<FirstnameCountryXref>();
 }

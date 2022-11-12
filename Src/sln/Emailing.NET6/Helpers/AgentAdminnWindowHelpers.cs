@@ -6,7 +6,7 @@ namespace GigaHunt.View;
 
 public static class AgentAdminnWindowHelpers
 {
-  public static async Task<bool> CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(QStatsRlsContext dbx, bool dispose, Func<Task> savePlusMetadata)
+  public static async Task<bool> CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(QstatsRlsContext dbx, bool dispose, Func<Task> savePlusMetadata)
   {
     try
     {
@@ -35,7 +35,7 @@ public static class AgentAdminnWindowHelpers
     }
     catch (Exception ex) { ex.Pop(); return true; }
   }
-  public static async Task<string> SaveAndUpdateMetadata(QStatsRlsContext db)
+  public static async Task<string> SaveAndUpdateMetadata(QstatsRlsContext db)
   {
     BPR___.Start();
     var now = BPR___.Now;

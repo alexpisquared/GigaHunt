@@ -6,18 +6,18 @@ public static class OutlookToDbWindowHelpers
 {
   static readonly DateTime Now = DateTime.Now;
 
-  public static async Task<bool> CheckInsert_EMail_EHist_Async(QStatsRlsContext _db, string email, string firstName, string lastName, string? subject, string? body, DateTime? timeRecdSent, string isRcvd, string RS)
+  public static async Task<bool> CheckInsert_EMail_EHist_Async(QstatsRlsContext _db, string email, string firstName, string lastName, string? subject, string? body, DateTime? sentOn, DateTime? timeRecdSent, string isRcvd, string RS)
   {
     var em = await CheckInsertEMailAsync(_db, email, firstName, lastName, isRcvd);
     if (em == null) return false;
 
-    await CheckInsertEHistAsync(_db, subject, body, timeRecdSent ?? DateTime.Now, RS, em);
+    await CheckInsertEHistAsync(_db, subject, body, sentOn, timeRecdSent ?? DateTime.Now, RS, em);
 
     var isNew = em?.AddedAt == Now;
     return isNew;
   }
 
-  public static async Task<Email?> CheckInsertEMailAsync(QStatsRlsContext _db, string email, string firstName, string lastName, string notes)
+  public static async Task<Email?> CheckInsertEMailAsync(QstatsRlsContext _db, string email, string firstName, string lastName, string notes)
   {
     const int maxLen = 256;
 
@@ -67,7 +67,7 @@ public static class OutlookToDbWindowHelpers
     return em;
   }
 
-  public static async Task CheckInsertEHistAsync(QStatsRlsContext _db, string? subject, string? body, DateTime timeRecdSent, string rs, Email em)
+  public static async Task CheckInsertEHistAsync(QstatsRlsContext _db, string? subject, string? body, DateTime? sentOn, DateTime timeRecdSent, string rs, Email em)
   {
     //insertEMailEHistItem(isRcvd, timeRecdSent, em, subject, body);		}		void insertEMailEHistItem(bool isRcvd, DateTime timeRecdSent, Email em, string subject, string body)		{
     try
@@ -85,6 +85,7 @@ public static class OutlookToDbWindowHelpers
           LetterSubject = subject,
           AddedAt = Now,
           Notes = "",
+          SentOn = sentOn,
           EmailedAt = timeRecdSent
         };
         var newCH2 = _db.Ehists.Add(newEH);
