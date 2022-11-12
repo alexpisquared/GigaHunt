@@ -75,7 +75,14 @@ public static class OutlookToDbWindowHelpers
       var gt = timeRecdSent.AddMinutes(-5);
       var lt = timeRecdSent.AddMinutes(+5);         //var ch = isRcvd ? ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.Id) : ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.Id); if (ch.Count() < 1)
       var eh = _db.Ehists.FirstOrDefault(p => p.RecivedOrSent == rs && p.EmailId == em.Id && gt < p.EmailedAt && p.EmailedAt < lt);
-      if (eh == null)
+      if (eh is not null)
+      {
+        if (eh.SentOn != sentOn )
+        {
+          eh.SentOn = sentOn;
+        }
+      }
+      else
       {
         var newEH = new Ehist
         {
