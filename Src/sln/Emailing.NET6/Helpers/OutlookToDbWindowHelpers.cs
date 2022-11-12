@@ -80,6 +80,7 @@ public static class OutlookToDbWindowHelpers
         if (eh.SentOn != sentOn )
         {
           eh.SentOn = sentOn;
+          _ = await _db.TrySaveReportAsync("checkInsertEHist SentOn update");
         }
       }
       else
@@ -97,7 +98,7 @@ public static class OutlookToDbWindowHelpers
         };
         var newCH2 = _db.Ehists.Add(newEH);
 
-        _ = await _db.TrySaveReportAsync("checkInsertEHist");
+        _ = await _db.TrySaveReportAsync("checkInsertEHist New letter");
       }
     }
     catch (Exception ex) { ex.Pop(); }
