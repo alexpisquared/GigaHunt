@@ -2,7 +2,7 @@
 public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
 {
   const double _fractionToSend = .025, _absoluteMax = 25;
-  readonly QStatsRlsContext _db;
+  readonly QstatsRlsContext _db;
   CollectionViewSource _cvsEmails = new();
   IEnumerable<string>? _leadEmails, _leadCompns;
   string _firstName = "Sirs";
@@ -11,7 +11,7 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
   {
     InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme;    tbver.Text = DevOps.IsDbg ? @"DBG" : "rls";
 
-    _db = QStatsRlsContext.Create();
+    _db = QstatsRlsContext.Create();
 
     _ = tbFilter.Focus();
 

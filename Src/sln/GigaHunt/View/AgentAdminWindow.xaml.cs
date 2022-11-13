@@ -5,7 +5,7 @@ namespace GigaHunt.View;
 public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
 {
   static readonly DateTime Now = DateTime.Now;
-  readonly QStatsRlsContext _db = QStatsRlsContext.Create();
+  readonly QstatsRlsContext _db = QstatsRlsContext.Create();
   readonly CollectionViewSource _cvsEmailsVwSrc;
   IEnumerable<string>? _leadEmails, _leadCompns;
   List<string>? _badEmails;
@@ -14,7 +14,7 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
   {
     InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme; tbver.Text = DevOps.IsDbg ? @"DBG" : "rls";
 
-    //tbver.Text = $"Db: {QStatsRlsContext.DbNameOnly}        Ver: ???";
+    //tbver.Text = $"Db: {QstatsRlsContext.DbNameOnly}        Ver: ???";
     //tbver.Text = $"Db: {_db.ServerDatabase()}        Ver: ???";
     _cvsEmailsVwSrc = (CollectionViewSource)FindResource("eMailViewSource");
     _ = tbFilter.Focus();

@@ -4,7 +4,7 @@ namespace GigaHunt.View
 {
   public partial class OutlookToDbWindowUnkn : WpfUserControlLib.Base.WindowBase
   {
-    readonly QStatsRlsContext _db = QStatsRlsContext.Create();
+    readonly QstatsRlsContext _db = QstatsRlsContext.Create();
     const string note = "note3";
     readonly DateTime _now = DateTime.Now;
 

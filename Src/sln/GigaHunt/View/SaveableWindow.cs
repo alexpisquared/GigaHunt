@@ -2,7 +2,7 @@
 
 public abstract class SaveableWindow : WpfUserControlLib.Base.WindowBase//, ISaveable
 {
-  protected readonly QStatsRlsContext _db = QStatsRlsContext.Create();
+  protected readonly QstatsRlsContext _db = QstatsRlsContext.Create();
 
   public SaveableWindow() : base()  {  }
   public async void Save() => _ = await saveAsync();
