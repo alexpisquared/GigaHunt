@@ -522,14 +522,14 @@ public partial class OutlookHelper6
   {
 #if DEBUG
 #else
-      ol_item.Move(targetFolder);
+      ol_item.Move(targetFolder); ;
 #endif
   }
   public static void MoveIt(OL.MAPIFolder targetFolder, OL.ReportItem ol_item)
   {
 #if DEBUG
 #else
-      ol_item.Move(targetFolder);
+      ol_item.Move(targetFolder); ;
 #endif
   }
   public static void Test(OL.ReportItem item, string ww)
@@ -591,7 +591,7 @@ public partial class OutlookHelper6
       }
     }
 
-    if (email == null || !email.Contains('@')) return new string[0];
+    if (email == null || !email.Contains('@')) return Array.Empty<string>();
 
     if (!email.Contains('@')) Write("");
     if (email.Contains('<')) email = email.Replace("<", "");

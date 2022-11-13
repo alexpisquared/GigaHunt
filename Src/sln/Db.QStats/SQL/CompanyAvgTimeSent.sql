@@ -14,5 +14,5 @@ FROM        EHist INNER JOIN
             EMail ON EHist.EMailID = EMail.ID
 WHERE     (CONVERT(varCHAR, EHist.SentOn, 108) <> '00:00:00')
 GROUP BY EMail.Company
-HAVING     (COUNT(*) > 0)
+HAVING     (COUNT(*) > 10)
 ORDER BY 1, 2 desc
