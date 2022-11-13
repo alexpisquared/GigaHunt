@@ -130,7 +130,7 @@
     <Content Include="SQL\vEMail_Avail_Prod.sql" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net6.0\AAV.Sys\AAV.Sys.csproj">
+    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\net7.0\AAV.Sys\AAV.Sys.csproj">
       <Project>{7139da94-b8f6-45a2-a292-319c5dd1f66c}</Project>
       <Name>AAV.Sys</Name>
     </ProjectReference>
