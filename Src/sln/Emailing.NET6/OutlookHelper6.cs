@@ -5,7 +5,7 @@ public class OuFolder
     qRcvd = "Q", qSent = "Sent Items", qSentDone = "Sent Items/_DbDoneSent", qDltd = "Deleted Items", qFail = "Q/Fails", qFailsDone = "Q/FailsDone", qRcvdDone = "Q/_DbDoneRcvd", qLate = "Q/ToReSend", qVOld = "Q/VeryOld",
     qJunkMail = "Junk Email";
 }
-public class OutlookHelper6
+public partial class OutlookHelper6
 {
   readonly OL.Application? _olApp;
   readonly OL.MAPIFolder? _contactsFolder;
@@ -78,9 +78,7 @@ public class OutlookHelper6
     var folderParts = folderPath.Split(new char[] { '\\', '/' }, StringSplitOptions.RemoveEmptyEntries);
     var folder = MyStore?.GetRootFolder();
     for (var i = 0; i < folderParts.Length; i++)
-    {
       folder = folder?.Folders[folderParts[i]] as OL.Folder;
-    }
 
     return folder;
   }
@@ -96,8 +94,8 @@ public class OutlookHelper6
 
     ArgumentNullException.ThrowIfNull(MyStore, "MyStore is nul @@@@@@@@@@@@@@@");
 
-    UndeleteContacts(MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderContacts), db, "Contacts");
-    UndeleteContacts(MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderDeletedItems), db, "Deleted Items");
+        UndeleteContacts(MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderContacts), db, "Contacts");
+        UndeleteContacts(MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderDeletedItems), db, "Deleted Items");
 
     BPR___.Speak($"All done. Took {sw.Elapsed.TotalMinutes:N1} minutes.");
 
@@ -151,7 +149,7 @@ public class OutlookHelper6
   {
     //AAV.Sys.Helpers.BPR___.Start();
     var q = db.Emails.Where(r => string.IsNullOrEmpty(r.PermBanReason)
-                            && r.Id.Contains("@")
+                            && r.Id.Contains('@')
                             && !r.Id.Contains('=')
                             && !r.Id.Contains("reply")
                             && !r.Id.Contains('\'')
@@ -162,9 +160,7 @@ public class OutlookHelper6
     WriteLine($"\r\n{ttl} eligible email contacts found");
     _addedCount = _updatedCount = 0;
     foreach (var em in q)
-    {
       AddUpdateOutlookContact(em);
-    }
 
     //BPR___.Finish();
     return string.Format("\r\nTotal Outlook: {0} added, {1} updated / out of {2} eligibles. \r\n", _addedCount, _updatedCount, ttl);
@@ -204,7 +200,6 @@ public class OutlookHelper6
       changed = false;
 
       if (!string.IsNullOrWhiteSpace(em.Notes))
-      {
         if (string.IsNullOrWhiteSpace(i.Body))
         {
           i.Body = em.Notes;
@@ -215,7 +210,6 @@ public class OutlookHelper6
           i.Body += Environment.NewLine + Environment.NewLine + " -=-=- From QStats DB -=-=- [[" + Environment.NewLine + em.Notes + Environment.NewLine + "]] -=-=- From QStats DB -=-=-";
           changed = true;
         }
-      }
 
       if (string.IsNullOrWhiteSpace(i.Email1Address))                                                                                                                  /**/{ i.Email1Address = em.Id; changed = true; }
       else if (string.Compare(i.Email1Address, em.Id, true) != 0 && string.IsNullOrWhiteSpace(i.Email2Address))                                                       /**/{ i.Email2Address = em.Id; changed = true; }
@@ -265,7 +259,7 @@ public class OutlookHelper6
       q.Count(),
       q.Min(e => e.EmailedAt),
       q.Max(e => e.EmailedAt),
-      t == null ? "" : (t.LetterBody?.Length > 222 ? (t.LetterBody[..222] + " ...") : t.LetterBody));
+      t == null ? "" : t.LetterBody?.Length > 222 ? t.LetterBody[..222] + " ..." : t.LetterBody);
 
     //i.Display(true);
 
@@ -282,8 +276,7 @@ public class OutlookHelper6
     WriteLine($"Folder {folder.Name} has total {folder.Items.Count} items: ");
 
     foreach (var o in folder.Items) //.Where(r => r==r))
-    {
-      if (o is OL.ContactItem)          /**/{ var i = o as OL.ContactItem;    /**/ WriteLine($"C {i?.FirstName,16}\t{i?.LastName,-16}\t{i?.Email1Address,24}\t{i?.Subject,-48}\t{(string.IsNullOrWhiteSpace(i?.Body) ? "·" : (i?.Body.Length > 50 ? i?.Body[..50] : i?.Body))}\t{i?.Account}"); }
+      if (o is OL.ContactItem)          /**/{ var i = o as OL.ContactItem;    /**/ WriteLine($"C {i?.FirstName,16}\t{i?.LastName,-16}\t{i?.Email1Address,24}\t{i?.Subject,-48}\t{(string.IsNullOrWhiteSpace(i?.Body) ? "·" : i?.Body.Length > 50 ? i?.Body[..50] : i?.Body)}\t{i?.Account}"); }
       else if (o is OL.MailItem)        /**/{ var i = o as OL.MailItem;       /**/ WriteLine($"M {i?.To,-32}\t{i?.Subject,-48}\t"); }
       else if (o is OL.AppointmentItem) /**/{ var i = o as OL.AppointmentItem;/**/ WriteLine($"M {i?.Subject,-48}\t"); }
       else if (o is OL.MeetingItem)     /**/{ var i = o as OL.MeetingItem;    /**/ WriteLine($"M {i?.Subject,-48}\t"); }
@@ -291,45 +284,33 @@ public class OutlookHelper6
       else
       {
         foreach (PropertyDescriptor descrip in TypeDescriptor.GetProperties(o))
-        {
           Write($" {descrip.Name}"); // if (descrip.Name == "Subject") { foreach (PropertyDescriptor descrip2 in TypeDescriptor.GetProperties(descrip)) { if (descrip2.Name == "sub attribute Name") { } } }
-        }
 
         Write($"\n");
       }
-    }
   }
-  void UndeleteContacts(OL.MAPIFolder folder, QstatsRlsContext QstatsRlsContext, string srcFolder)
+
+    static void UndeleteContacts(OL.MAPIFolder folder, QstatsRlsContext QstatsRlsContext, string srcFolder)
   {
     WriteLine($"Folder {folder.Name} has total {folder.Items.Count} items: ");
 
     foreach (var o in folder.Items)
-    {
       if (o is OL.ContactItem item)
-      {
-        AddUpdateToDb(item, QstatsRlsContext, srcFolder);
-      }
-    }
+                AddUpdateToDb(item, QstatsRlsContext, srcFolder);
   }
 
-  void AddUpdateToDb(OL.ContactItem ci, QstatsRlsContext db, string srcFolder)
+    static void AddUpdateToDb(OL.ContactItem ci, QstatsRlsContext db, string srcFolder)
   {
     const int maxLen = 256;
 
     var emailId = "";
-    if (!string.IsNullOrWhiteSpace(ci.Email1Address))                                               /**/{ emailId = ci.Email1Address; }
-    else if (!string.IsNullOrWhiteSpace(ci.Email2Address))                                          /**/{ emailId = ci.Email2Address; }
-    else if (!string.IsNullOrWhiteSpace(ci.Email3Address))                                          /**/{ emailId = ci.Email3Address; }
-    else if (!string.IsNullOrWhiteSpace(ci.FirstName) && !string.IsNullOrWhiteSpace(ci.LastName))   /**/{ emailId = $"{ci.FirstName}.{ci.LastName}@__UnKnwn__.com"; }
-    else if (!string.IsNullOrWhiteSpace(ci.FirstName))                                              /**/{ emailId = $"{ci.FirstName}.__UnKnwn__@__UnKnwn__.com"; }
-    else if (!string.IsNullOrWhiteSpace(ci.LastName))                                               /**/{ emailId = $"__UnKnwn__.{ci.LastName}@__UnKnwn__.com"; }
-    else
+    if (!string.IsNullOrWhiteSpace(ci.Email1Address))                                               /**/emailId = ci.Email1Address;     else if (!string.IsNullOrWhiteSpace(ci.Email2Address))                                          /**/emailId = ci.Email2Address;     else if (!string.IsNullOrWhiteSpace(ci.Email3Address))                                          /**/emailId = ci.Email3Address;     else if (!string.IsNullOrWhiteSpace(ci.FirstName) && !string.IsNullOrWhiteSpace(ci.LastName))   /**/emailId = $"{ci.FirstName}.{ci.LastName}@__UnKnwn__.com";     else if (!string.IsNullOrWhiteSpace(ci.FirstName))                                              /**/emailId = $"{ci.FirstName}.__UnKnwn__@__UnKnwn__.com";     else if (!string.IsNullOrWhiteSpace(ci.LastName))                                               /**/emailId = $"__UnKnwn__.{ci.LastName}@__UnKnwn__.com";     else
     {
       WriteLine($"******************");
       return;
     }
 
-    if (!string.IsNullOrWhiteSpace(ci.Body)) WriteLine($"{(string.IsNullOrWhiteSpace(ci.Body) ? "·" : (ci.Body.Length > 50 ? ci.Body[..50] : ci.Body))}"); // <= strange thing: all bodies are empty.
+    if (!string.IsNullOrWhiteSpace(ci.Body)) WriteLine($"{(string.IsNullOrWhiteSpace(ci.Body) ? "·" : ci.Body.Length > 50 ? ci.Body[..50] : ci.Body)}"); // <= strange thing: all bodies are empty.
 
     var phone = $"{ci.HomeTelephoneNumber} {ci.PrimaryTelephoneNumber} {ci.BusinessTelephoneNumber} {ci.Business2TelephoneNumber} {ci.MobileTelephoneNumber}".Replace("(", "").Replace(")", "-").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Trim();
     var agency = /*!string.IsNullOrWhiteSpace(ci.CompanyName) ? ci.CompanyName : */GetCompanyName(emailId);
@@ -341,9 +322,9 @@ public class OutlookHelper6
         AddedAt = BPR___.Now
       });
 
-    WriteLine($"{emailId,32}\t{ci.FirstName,17} {ci.LastName,-21}\t{ci.JobTitle,-80}\t{phone}\t{(string.IsNullOrWhiteSpace(ci.Body) ? "·" : (ci.Body.Length > 50 ? ci.Body[..50] : ci.Body))}");
+    WriteLine($"{emailId,32}\t{ci.FirstName,17} {ci.LastName,-21}\t{ci.JobTitle,-80}\t{phone}\t{(string.IsNullOrWhiteSpace(ci.Body) ? "·" : ci.Body.Length > 50 ? ci.Body[..50] : ci.Body)}");
 
-    AddUpdateBassedOnGoodEmailId(ci, db, emailId, phone, agency, srcFolder);
+        AddUpdateBassedOnGoodEmailId(ci, db, emailId, phone, agency, srcFolder);
   }
   public static string GetCompanyName(string email)
   {
@@ -358,7 +339,7 @@ public class OutlookHelper6
     return cmpny;
   }
 
-  void AddUpdateBassedOnGoodEmailId(OL.ContactItem ci, QstatsRlsContext db, string emailId, string phone, string agency, string srcFolder)
+    static void AddUpdateBassedOnGoodEmailId(OL.ContactItem ci, QstatsRlsContext db, string emailId, string phone, string agency, string srcFolder)
   {
     var an = $"-={srcFolder}-Add=-{ci.JobTitle}·{ci.Body}¦";
     var em = db.Emails.Local.FirstOrDefault(r => emailId.Equals(r.Id, StringComparison.OrdinalIgnoreCase));
@@ -398,9 +379,7 @@ public class OutlookHelper6
         if (!string.IsNullOrWhiteSpace(ci.Body          /**/) && !em.Notes.Contains(ci.Body          /**/)) { em.ModifiedAt = BPR___.Now; em.Notes += $" + {ci.Body}"; }
       }
       else
-      {
         return;
-      }
     }
   }
 
@@ -424,22 +403,22 @@ public class OutlookHelper6
     }
   }
   public static string FigureOutSenderEmail(OL.MailItem mailItem) => !string.IsNullOrEmpty(mailItem.Sender?.Address) && mailItem.Sender.Address.Contains('@') ? mailItem.Sender.Address :
-                      !string.IsNullOrEmpty(mailItem.SenderEmailAddress) && mailItem.SenderEmailAddress.Contains("=") && mailItem.SenderEmailAddress.Contains('@') ? RemoveBadEmailParts(mailItem.SenderEmailAddress) :
-                      !string.IsNullOrEmpty(mailItem.SenderEmailAddress) && mailItem.SenderEmailAddress.Contains("@") ? mailItem.SenderEmailAddress :
-                      !string.IsNullOrEmpty(mailItem.SentOnBehalfOfName) && mailItem.SentOnBehalfOfName.Contains("@") ? mailItem.SentOnBehalfOfName :
+                      !string.IsNullOrEmpty(mailItem.SenderEmailAddress) && mailItem.SenderEmailAddress.Contains('=') && mailItem.SenderEmailAddress.Contains('@') ? RemoveBadEmailParts(mailItem.SenderEmailAddress) :
+                      !string.IsNullOrEmpty(mailItem.SenderEmailAddress) && mailItem.SenderEmailAddress.Contains('@') ? mailItem.SenderEmailAddress :
+                      !string.IsNullOrEmpty(mailItem.SentOnBehalfOfName) && mailItem.SentOnBehalfOfName.Contains('@') ? mailItem.SentOnBehalfOfName :
                       mailItem.SenderEmailAddress;
-  public static (string first, string last) figureOutSenderFLName(OL.MailItem mailItem, string email)
+  public static (string first, string last) FigureOutSenderFLName(OL.MailItem mailItem, string email)
   {
     var fln =
-      !string.IsNullOrEmpty(mailItem.Sender?.Name) && mailItem.Sender.Name.Contains(" ") ? mailItem.Sender.Name :
-      !string.IsNullOrEmpty(mailItem.SentOnBehalfOfName) && mailItem.SentOnBehalfOfName.Contains(" ") ? mailItem.SentOnBehalfOfName :
+      !string.IsNullOrEmpty(mailItem.Sender?.Name) && mailItem.Sender.Name.Contains(' ') ? mailItem.Sender.Name :
+      !string.IsNullOrEmpty(mailItem.SentOnBehalfOfName) && mailItem.SentOnBehalfOfName.Contains(' ') ? mailItem.SentOnBehalfOfName :
       !string.IsNullOrEmpty(mailItem.Sender?.Name) ? mailItem.Sender.Name :
       !string.IsNullOrEmpty(mailItem.SentOnBehalfOfName) ? mailItem.SentOnBehalfOfName :
       null;
 
-    return figureOutSenderFLName(fln, email);
+    return FigureOutSenderFLName(fln, email);
   }
-  public static (string first, string last) figureOutSenderFLName(string? fln, string email)
+  public static (string first, string last) FigureOutSenderFLName(string? fln, string email)
   {
     if (fln is null or
       "Marketing- SharedMB" // randstad on behalf of case
@@ -463,16 +442,14 @@ public class OutlookHelper6
       return (flnArray[0], "");
 
     if (flnArray.Length >= 2)
-    {
       if (fln.Contains(','))
         return (flnArray[1], flnArray[0]);
       else
         return (flnArray[0], flnArray[1]);
-    }
 
     return ("Sirs", "");
   }
-  public static (string first, string last) figureOutFLNameFromBody(string body, string email)
+  public static (string first, string last) FigureOutFLNameFromBody(string body, string email)
   {
     body = body.ToLower();
     email = email.ToLower();
@@ -484,20 +461,14 @@ public class OutlookHelper6
       Write($">>> {words[len - 5]} {words[len - 4]}    {words[len - 3]} {words[len - 2]}    {words[len - 1]}    <= '{email}' ");
 
       if (new[] { "at", "-", "@", "<" }.Contains(words[len - 1]))
-      {
         if (new[] { "contact", "manager", "email", "to", "from", "com>", "ca>", "ca", "com" }.Contains(words[len - 4]))
           return (words[len - 3], words[len - 2]);           // Thank you for your email. Liam Tang is no longer with Experis-Veritaaq, please contact Michael Baraban at michaelb@experis-veritaaq.ca.
-      }
       else
       if (words[len - 1] == "(")
-      {
         if (words[len - 4] == "contact") return (words[len - 3], words[len - 2]);            // ... contact Gary Shearer (gary.shearer@appcentrica.com <mailto:gary.shearer@appcentrica.com> ). 
-      }
       else
       if (new[] { "<mailto", "addresses" }.Contains(words[len - 1]))
-      {
         WriteLine($" ignore this !!!");
-      }
       else
       if (Debugger.IsAttached)
         WriteLine($" ignore this ???");
@@ -506,7 +477,7 @@ public class OutlookHelper6
     var hlp = new FirstLastNameParser(email);
     return (hlp.FirstName, hlp.LastName);
   }
-  public static (string first, string last) figureOutSenderFLName(OL.ReportItem reportItem, string email)
+  public static (string first, string last) FigureOutSenderFLName(OL.ReportItem reportItem, string email)
   {
     var pc = reportItem.Body.ToLower().IndexOf("please contact");
     if (pc > 0)
@@ -518,18 +489,18 @@ public class OutlookHelper6
     var hlp = new FirstLastNameParser(email);
     return (hlp.FirstName, hlp.LastName);
   }
-  public static string reportLine(string folder, string senderEmail, bool isNew) => $"{folder,-15}{(isNew ? "*" : " ")} {senderEmail,-48}{GetCompanyName(senderEmail),-48}\n";
-  public static string reportSectionTtl(string folder, int ttls, int news)      /**/ => $"{folder,-13}=>  total/new:        {ttls,3} / {news} \n\n";
-  public static string reportSectionTtl(string folder, int ttls, int bans, int news) => $"{folder,-13}=>  total/new/banned: {ttls,3} / {news} / {bans} \n\n";
+  public static string ReportLine(string folder, string senderEmail, bool isNew) => $"{folder,-15}{(isNew ? "*" : " ")} {senderEmail,-48}{GetCompanyName(senderEmail),-48}\n";
+  public static string ReportSectionTtl(string folder, int ttls, int news)      /**/ => $"{folder,-13}=>  total/new:        {ttls,3} / {news} \n\n";
+  public static string ReportSectionTtl(string folder, int ttls, int bans, int news) => $"{folder,-13}=>  total/new/banned: {ttls,3} / {news} / {bans} \n\n";
   public static string RemoveBadEmailParts(string emailAddress)
   {
     emailAddress = emailAddress.Trim(_delim); //  new[] { ' ', '\'', '`', ';', ':' });
 
-    foreach (var delim in new char[] { '=', '?' }) emailAddress = removeBadEmailParts(emailAddress, delim);
+    foreach (var delim in new char[] { '=', '?' }) emailAddress = RemoveBadEmailParts(emailAddress, delim);
 
     return emailAddress;
   }
-  static string removeBadEmailParts(string emailAddress, char delim)
+  static string RemoveBadEmailParts(string emailAddress, char delim)
   {
     var a = emailAddress.IndexOf(delim);
     if (a < 0) return emailAddress;
@@ -547,21 +518,21 @@ public class OutlookHelper6
       return c;
     }
   }
-  public static void moveIt(OL.MAPIFolder targetFolder, OL.MailItem ol_item)
+  public static void MoveIt(OL.MAPIFolder targetFolder, OL.MailItem ol_item)
   {
 #if DEBUG
 #else
       ol_item.Move(targetFolder);
 #endif
   }
-  public static void moveIt(OL.MAPIFolder targetFolder, OL.ReportItem ol_item)
+  public static void MoveIt(OL.MAPIFolder targetFolder, OL.ReportItem ol_item)
   {
 #if DEBUG
 #else
       ol_item.Move(targetFolder);
 #endif
   }
-  public static void test(OL.ReportItem item, string ww)
+  public static void Test(OL.ReportItem item, string ww)
   {
     try
     {
@@ -581,9 +552,7 @@ public class OutlookHelper6
       }
       //else if (sndr is byte[]) { }
       else
-      {
         Write($"==> {prop.GetType().Name}  {prop}");
-      }
     }
     catch (Exception ex) { Write($"!!! {ex.Message}"); }
 
@@ -601,7 +570,7 @@ public class OutlookHelper6
     return em;
   }
 
-  public static string[] findEmails_OLD(string body)
+  public static string[] FindEmailsOLD(string body)
   {
     var email = GetStringBetween(body, "Recipient(s):\r\n\t<", ">\r\n");
     email ??= GetStringBetween(body, "Recipient(s):\r\n\t", "\r\n");
@@ -611,9 +580,9 @@ public class OutlookHelper6
     //if (email == null) continue;
     //if (!email.Contains("@")) email = item.SenderEmailAddress;
 
-    if (email == null || !email.Contains("@"))
+    if (email == null || !email.Contains('@'))
     {
-      var matches = new Regex(_regexEmailPattern, RegexOptions.IgnoreCase).Matches(body);
+      var matches = MyRegex().Matches(body);
       if (matches.Count > 0)
       {
         var emails = new string[matches.Count];
@@ -622,14 +591,14 @@ public class OutlookHelper6
       }
     }
 
-    if (email == null || !email.Contains("@")) return new string[0];
+    if (email == null || !email.Contains('@')) return new string[0];
 
-    if (!email.Contains("@")) Write("");
-    if (email.Contains("<")) email = email.Replace("<", "");
-    if (email.Contains(">")) email = email.Replace(">", "");
-    if (email.Contains(" ")) email = email.Split(' ')[0];
-    if (email.Contains(":")) email = email.Split(':')[1];
-    if (email.Contains("\"")) email = email.Trim('"');
+    if (!email.Contains('@')) Write("");
+    if (email.Contains('<')) email = email.Replace("<", "");
+    if (email.Contains('>')) email = email.Replace(">", "");
+    if (email.Contains(' ')) email = email.Split(' ')[0];
+    if (email.Contains(':')) email = email.Split(':')[1];
+    if (email.Contains('"')) email = email.Trim('"');
 
     email = email.Trim();
 
@@ -637,11 +606,16 @@ public class OutlookHelper6
   }
   public static string[] FindEmails(string body)
   {
-    var matches = new Regex(_regexEmailPattern, RegexOptions.IgnoreCase).Matches(body);
+    var matches = MyRegex1().Matches(body);
     var emails = new string[matches.Count];
     for (var i = 0; i < matches.Count; i++) emails[i] = matches[i].Value;
     return emails;
   }
+
+    [GeneratedRegex("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*", RegexOptions.IgnoreCase, "en-US")]
+    private static partial Regex MyRegex();
+    [GeneratedRegex("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*", RegexOptions.IgnoreCase, "en-US")]
+    private static partial Regex MyRegex1();
 }
 
 public class BPR___
