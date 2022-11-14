@@ -22,7 +22,7 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
   }
   public static readonly DependencyProperty SrchProperty = DependencyProperty.Register("Srch", typeof(string), typeof(AgentAdminnWindow), new PropertyMetadata("", SrchCallback)); public string Srch { get => (string)GetValue(SrchProperty); set => SetValue(SrchProperty, value); }
   static void SrchCallback(DependencyObject d, DependencyPropertyChangedEventArgs e) => (d as AgentAdminnWindow)?.SrchFilter();
-  public TimeSpan SrchFilter(int max = 10)
+  public TimeSpan SrchFilter(int topRows = 10)
   {
     if (!_isLoaded)
       return TimeSpan.Zero;
@@ -48,7 +48,7 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
         )
       ).OrderByDescending(r => r.AddedAt);
 
-      foreach (var em in emails) { FillExtProp(em); if (--max < 0) break; }
+      foreach (var em in emails) { FillExtProp(em); if (--topRows < 0) break; }
 
       _cvsEmailsVwSrc.Source = emails;
 
@@ -79,7 +79,7 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
       await _db.Leads.OrderByDescending(r => r.AddedAt).LoadAsync();                        /**/  WriteLine($">>> Loaded   Leads   {lsw.ElapsedMilliseconds,6:N0} ms");
       _leadEmails = _db.Leads.Local.Select(r => r.AgentEmailId ?? "").Distinct();           /**/  WriteLine($">>> Loaded  LeadEm   {lsw.ElapsedMilliseconds,6:N0} ms");
       _leadCompns = _db.Leads.Local.Select(r => r.Agency ?? "").Distinct();                 /**/  WriteLine($">>> Loaded  LeadCo   {lsw.ElapsedMilliseconds,6:N0} ms");
-      _badEmails = await GetBadEmails("Select Id from [dbo].[BadEmails]()", _db.Database.GetConnectionString() ?? "??");
+      _badEmails = await DB.QStats.Std.Models.MiscEfDb.GetBadEmails("Select Id from [dbo].[BadEmails]()", _db.Database.GetConnectionString() ?? "??");
       _isLoaded = true;
       var fsw = SrchFilter();                                                               /**/  WriteLine($">>> Loaded  Filter   {lsw.ElapsedMilliseconds,6:N0} ms  ({fsw.TotalMilliseconds:N0})");
     }
@@ -89,20 +89,6 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
   void DoInfoTimedFilter(Stopwatch sw, IOrderedEnumerable<Email> ems) => tbkTitle.Text = $"{(tbkTitle.ToolTip = $"Total agents/emails  {ems.Count():N0}   filtered in  {sw.Elapsed.TotalSeconds:N2} s.  \n{_db.GetDbChangesReport(8)}").ToString()?.Replace("\n", "")}";
   void DoInfoPendingSave() => tbkTitle.Text = $"{(tbkTitle.ToolTip = $"  {_db.GetDbChangesReport(32)}").ToString()?.Replace("\n", "")}";
 
-  static async Task<List<string>> GetBadEmails(string queryString, string connectionString)
-  {
-    List<string> rv = new();
-    using (var connection = new SqlConnection(connectionString))
-    {
-      var command = new SqlCommand(queryString, connection);
-      connection.Open();
-      var reader = await command.ExecuteReaderAsync();
-      while (reader.Read())
-        rv.Add(reader[0]?.ToString() ?? "??");
-    }
-
-    return rv;
-  }
 
   static void FillExtProp(Email em)
   {

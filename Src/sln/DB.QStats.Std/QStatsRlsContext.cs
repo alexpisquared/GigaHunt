@@ -1,8 +1,8 @@
 ﻿namespace DB.QStats.Std.Models;
 public partial class QstatsRlsContext
 {
-  const string _dbg = @"Server=.\SqlExpress;Database=QStatsDBG;Trusted_Connection=True;Encrypt=False;";
-  const string _rls = @"Server=.\SqlExpress;Database=QStatsRLS;Trusted_Connection=True;Encrypt=False;";
+  const string _dbg = """Server=.\SqlExpress;Database=QStatsDBG;Trusted_Connection=True;Encrypt=False;""";
+  const string _rls = """Server=.\SqlExpress;Database=QStatsRLS;Trusted_Connection=True;Encrypt=False;""";
   readonly string _sqlConnectionString = _dbg; // legacy clients only.
 
   public QstatsRlsContext(string sqlConnectionString) => _sqlConnectionString = sqlConnectionString;

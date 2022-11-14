@@ -42,7 +42,7 @@ public partial class OutlookHelper6
   {
     try
     {
-      var folder = MyStore?.GetRootFolder().Folders[OuFolder.qRcvd].Folders[@"Fails"] as OL.Folder;
+      var folder = MyStore?.GetRootFolder().Folders[OuFolder.qRcvd].Folders["Fails"] as OL.Folder;
       var itemss = folder?.Items.Restrict("[MessageClass] = 'REPORT.IPM.Note.NDR'");
       WriteLine($"***        Fails: {itemss?.Count}");
       return itemss;
@@ -67,7 +67,7 @@ public partial class OutlookHelper6
   {
     try
     {
-      var folder = MyStore?.GetRootFolder().Folders[OuFolder.qRcvd].Folders[@"ToReSend"] as OL.Folder;
+      var folder = MyStore?.GetRootFolder().Folders[OuFolder.qRcvd].Folders["ToReSend"] as OL.Folder;
       var itemss = folder?.Items.Restrict("[MessageClass] = 'IPM.Note'");
       return itemss;
     }

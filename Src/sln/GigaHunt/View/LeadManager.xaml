@@ -1,8 +1,8 @@
 ﻿<lnk:SaveableWindow x:Class="GigaHunt.View.LeadManagerWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:Models="clr-namespace:DB.QStats.Std.Models;assembly=DB.QStats.Std" mc:Ignorable="d" 
                     xmlns:lnk="clr-namespace:GigaHunt.View" 
                     xmlns:View="clr-namespace:GigaHunt.View" 
-                    xmlns:cmn="clr-namespace:GigaHunt"
                     xmlns:AavWpfVw="clr-namespace:WpfUserControlLib.Views;assembly=WpfUserControlLib"                
+                    xmlns:cnv="clr-namespace:WpfUserControlLib.Converters;assembly=WpfUserControlLib"
                     Title="Lead Manager" Height="700" Width="1200" Loaded="onLoaded" Style="{StaticResource WindowStyle_Aav0}" >
   <WindowChrome.WindowChrome>
     <WindowChrome CaptionHeight="0" ResizeBorderThickness="10" />
@@ -75,14 +75,14 @@
           <DataGridTemplateColumn                                 Header="Agency" Width="90" SortMemberPath="Agency">
             <DataGridTemplateColumn.CellTemplate>
               <DataTemplate>
-                <TextBlock Text="{Binding Agency}"          Foreground="{Binding HourlyRate, Converter={cmn:UniConverter}}" />
+                <TextBlock Text="{Binding Agency}"          Foreground="{Binding HourlyRate, Converter={cnv:QStatsConverter}}" />
               </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
           </DataGridTemplateColumn>
           <DataGridTemplateColumn  Header="Rate" Width="Auto" SortMemberPath="HourlyRate">
             <DataGridTemplateColumn.CellTemplate>
               <DataTemplate>
-                <TextBox Text="{Binding Path='HourlyRate'}" Foreground="{Binding Path='HourlyRate', Converter={cmn:UniConverter}}" FontWeight="Bold" Background="Transparent" BorderThickness="0" TextAlignment="Center" />
+                <TextBox Text="{Binding Path='HourlyRate'}" Foreground="{Binding Path='HourlyRate', Converter={cnv:QStatsConverter}}" FontWeight="Bold" Background="Transparent" BorderThickness="0" TextAlignment="Center" />
               </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
           </DataGridTemplateColumn>
@@ -92,13 +92,13 @@
 
           <DataGridTextColumn Binding="{Binding OppCompany}"      Header="Company"   />
           <DataGridTextColumn Binding="{Binding OppAddress}"      Header="Address"   Width="140" />
-          <DataGridTextColumn Binding="{Binding AddedAt, Converter={cmn:UniConverter}}"	Header="Added"     IsReadOnly="True" FontWeight="SemiBold" Foreground="Green" SortDirection="Ascending" />
+          <DataGridTextColumn Binding="{Binding AddedAt, Converter={cnv:QStatsConverter}}"	Header="Added"     IsReadOnly="True" FontWeight="SemiBold" Foreground="Green" SortDirection="Ascending" />
           <DataGridTextColumn Binding="{Binding Status}"          Header="Status"    Width="Auto" ElementStyle="{StaticResource CenterAlignStyle}"  Foreground="Blue" />
 
           <DataGridTemplateColumn                                 Header="Act" Width="Auto">
             <DataGridTemplateColumn.CellTemplate>
               <DataTemplate>
-                <Button Content="Close" Click="onCloseTheLead" Height="20" Margin="3 -4" Padding="3 -9" Foreground="{Binding Path='HourlyRate', Converter={cmn:UniConverter}}" FontWeight="SemiBold" />
+                <Button Content="Close" Click="onCloseTheLead" Height="20" Margin="3 -4" Padding="3 -9" Foreground="{Binding Path='HourlyRate', Converter={cnv:QStatsConverter}}" FontWeight="SemiBold" />
               </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
           </DataGridTemplateColumn>
@@ -109,7 +109,7 @@
           <DataGridTextColumn Binding="{Binding Note}"            Header="Note"      Width="*"/>
           <DataGridTextColumn Binding="{Binding Priority}"        Header="Priority"  Width="Auto" FontWeight="Bold" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="OrangeRed" />
           <DataGridTextColumn Binding="{Binding OfficiallySubmittedAt, StringFormat={}{0:MMM-d}}" Header="Submitted" IsReadOnly="True" FontWeight="SemiBold" Foreground="Brown" />
-          <DataGridTextColumn Binding="{Binding InterviewedAt, Converter={cmn:UniConverter}}" Header="Intervwd"  IsReadOnly="True" FontWeight="SemiBold" Foreground="Red" />
+          <DataGridTextColumn Binding="{Binding InterviewedAt, Converter={cnv:QStatsConverter}}" Header="Intervwd"  IsReadOnly="True" FontWeight="SemiBold" Foreground="Red" />
           -->
 
         </DataGrid.Columns>
@@ -181,7 +181,7 @@
         <DatePicker                       Grid.Column="7" Grid.Row="3" SelectedDate="{Binding InterviewedAt,         Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="0,1" Width="102"  Name="dpAdAt3" />
 
         <Label Content="$$/_hr"           Grid.Column="8" Grid.Row="1" Target="{Binding ElementName=tbHR}" />
-        <TextBox FontSize="16"            Grid.Column="9" Grid.Row="1" Text="{Binding HourlyRate,      Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  FontWeight="ExtraBold" Foreground="{Binding Path='HourlyRate', Converter={cmn:UniConverter}}" Name="tbHR"/>
+        <TextBox FontSize="16"            Grid.Column="9" Grid.Row="1" Text="{Binding HourlyRate,      Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  FontWeight="ExtraBold" Foreground="{Binding Path='HourlyRate', Converter={cnv:QStatsConverter}}" Name="tbHR"/>
 
         <TextBox                          Grid.Column="0" Grid.Row="5" Text="{Binding Note,                          Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" Grid.ColumnSpan="11" TextWrapping="WrapWithOverflow" VerticalAlignment="Stretch" SpellCheck.IsEnabled="True" AcceptsReturn="True" x:Name="tbxNote" />
       </Grid>

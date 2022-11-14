@@ -24,15 +24,15 @@ public static class QStatusBroadcaster
     try
     {
       var html = //isResumeFeatureUpdate ?
-                 //$@"C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AvailabilityStatus_AvailableNow_FreshCV.htm" :
-        $@"C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AvailabilityStatus_{(isAvailable ? "AvailableNow" : "Unavailable")}.htm";
+                 //$"C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AvailabilityStatus_AvailableNow_FreshCV.htm" :
+        $"""C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AvailabilityStatus_{(isAvailable ? "AvailableNow" : "Unavailable")}.htm """;
 
       var body = new StreamReader(html).ReadToEnd();
       var subj = /*isResumeFeatureUpdate*/false ? "resume feature update" : Asu + (isAvailable ? "Open for opportunities in Toronto++" : "Unavailable");
 
       var attachmnt = isAvailable ? new string[] {
-        @"C:\c\docs\CV\ikmnet assessment - Alex Pigida - 95304315.pdf",
-        @"C:\c\docs\CV\Resume - Alex Pigida - short summary.docx",
+        """C:\c\docs\CV\ikmnet assessment - Alex Pigida - 95304315.pdf""",
+        """C:\c\docs\CV\Resume - Alex Pigida - short summary.docx""",
         @"C:\c\docs\CV\Resume - Alex Pigida - short summary.pdf",
         @"C:\c\docs\CV\Resume - Alex Pigida - long detailed version.docx",
         @"C:\c\docs\CV\Resume - Alex Pigida - long detailed version.pdf"

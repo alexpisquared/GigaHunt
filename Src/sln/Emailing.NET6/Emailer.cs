@@ -43,8 +43,8 @@ public class Emailer
               else
                 mailMessage.Attachments.Add(new Attachment(fnm));
 
-        //message.Attachments.Add(new Attachment(@"C:\Documents and Settings\Grandma\Application Data\Microsoft\Signatures\QStatusUpdate(Wrd)_files\image002.jpg"));
-        //message.Attachments.Add(new Attachment(@"C:\Documents and Settings\Grandma\Application Data\Microsoft\Signatures\QStatusUpdate(Wrd)_files\image001.png"));
+        //message.Attachments.Add(new Attachment("""C:\Documents and Settings\Grandma\Application Data\Microsoft\Signatures\QStatusUpdate(Wrd)_files\image002.jpg"""));
+        //message.Attachments.Add(new Attachment("""C:\Documents and Settings\Grandma\Application Data\Microsoft\Signatures\QStatusUpdate(Wrd)_files\image001.png"""));
 
         using var client = new SmtpClient("smtp.office365.com", 587) { EnableSsl = true, Credentials = new System.Net.NetworkCredential(GetMicrosoftAccountName(), File.ReadAllText($"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\\1PageNote\\OutlookKeysOrSomething.txt")) }; // https://account.live.com/proofs/Manage/additional?mkt=en-us - BPR___ passwords   Some apps ... don't support security codes for two-step verification. In these cases, you need to create an app password to sign in. Learn more about app passwords.   Create a new app password
         try { await client.SendMailAsync(mailMessage); } // letter does not appear in the Outlook ==> use DB to track sent messages.
@@ -110,7 +110,7 @@ public class Emailer
     Thread.Sleep(1000);
   }
 
-  static string LogFile => @"C:\temp\Logs\CV.Emailed.txt";// Path.Combine(OneDrive.Folder(@"Public\Logs"), "CV.Emailed.txt");
+  static string LogFile => """@"C:\temp\Logs\CV.Emailed.txt""";// Path.Combine(OneDrive.Folder(@"Public\Logs"), "CV.Emailed.txt");
   const string cFrom = "Alex.Pigida@outlook.com";
   static bool isFirst = true;
 }

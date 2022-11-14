@@ -3,6 +3,7 @@
                 xmlns:View="clr-namespace:GigaHunt.View" 
                 xmlns:cmn="clr-namespace:GigaHunt"
                 xmlns:AavWpfVw="clr-namespace:WpfUserControlLib.Views;assembly=WpfUserControlLib"
+                xmlns:cnv="clr-namespace:WpfUserControlLib.Converters;assembly=WpfUserControlLib"
                 Style="{StaticResource WindowStyle_Aav0}">
   <WindowChrome.WindowChrome>
     <WindowChrome CaptionHeight="0" ResizeBorderThickness="10" />
@@ -93,9 +94,9 @@
               <DataGridTextColumn Header=" Lname"       Binding="{Binding Lname}"                                       />
               <DataGridTextColumn Header=" Company"     Binding="{Binding Company}"                                     />
               <DataGridTextColumn Header=" DNN"         Binding="{Binding DoNotNotifyForCampaignId}"                    ToolTipService.ToolTip="Do Not Notify On On-Market For Campaign Id"/>
-              <DataGridTextColumn Header=" Added At"    Binding="{Binding AddedAt,       Converter={cmn:UniConverter}}" />
-              <DataGridTextColumn Header=" LastSent"    Binding="{Binding LastSentAt,    Converter={cmn:UniConverter}}" />
-              <DataGridTextColumn Header=" LastReplied" Binding="{Binding LastRepliedAt, Converter={cmn:UniConverter}}" />
+              <DataGridTextColumn Header=" Added At"    Binding="{Binding AddedAt,       Converter={cnv:QStatsConverter}}" />
+              <DataGridTextColumn Header=" LastSent"    Binding="{Binding LastSentAt,    Converter={cnv:QStatsConverter}}" />
+              <DataGridTextColumn Header=" LastReplied" Binding="{Binding LastRepliedAt, Converter={cnv:QStatsConverter}}" />
               <DataGridTextColumn Header=" MyRplyCnt"   Binding="{Binding MyReplies}"    Width="62"                     ElementStyle="{StaticResource CenterAlignStyle}" />
               <DataGridTextColumn Header=" Notes"       Binding="{Binding Notes}"        Width="*" FontSize="9"         />
             </DataGrid.Columns>
@@ -111,8 +112,8 @@
               <DataGridTextColumn Header="Company"                                               Binding="{Binding Company}"                                      />
               <DataGridTextColumn Header="DNN"                                                   Binding="{Binding DoNotNotifyForCampaignId}"                     ToolTipService.ToolTip="Do Not Notify On Off-Market For Campaign Id"/>
               <DataGridTextColumn Header="MyReplies"                                             Binding="{Binding MyReplies}"                                     />
-              <DataGridTextColumn Header="LastRepliedAt"                                         Binding="{Binding LastRepliedAt, Converter={cmn:UniConverter}}"   />
-              <DataGridTextColumn Header="Added At"                                              Binding="{Binding AddedAt, Converter={cmn:UniConverter}}"         />
+              <DataGridTextColumn Header="LastRepliedAt"                                         Binding="{Binding LastRepliedAt, Converter={cnv:QStatsConverter}}"   />
+              <DataGridTextColumn Header="Added At"                                              Binding="{Binding AddedAt, Converter={cnv:QStatsConverter}}"         />
               <DataGridTextColumn Header="Notes    (this is the list for BUSY/TAKEN broadcast)"  Binding="{Binding Notes}"                                        Width="*"/>
             </DataGrid.Columns>
           </DataGrid>

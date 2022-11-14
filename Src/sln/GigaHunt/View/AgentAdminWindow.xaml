@@ -4,6 +4,7 @@
                 xmlns:View="clr-namespace:GigaHunt.View" 
                 xmlns:View1="clr-namespace:WpfUserControlLib.Views;assembly=WpfUserControlLib" 
                 xmlns:Models="clr-namespace:DB.QStats.Std.Models;assembly=DB.QStats.Std"
+                xmlns:cnv="clr-namespace:WpfUserControlLib.Converters;assembly=WpfUserControlLib"
                 Style="{StaticResource WindowStyle_Aav0}" Title="AgentAdminWindow" Height="450" Width="2000" Loaded="OnLoaded">
   <WindowChrome.WindowChrome>
     <WindowChrome CaptionHeight="0" ResizeBorderThickness="10" />
@@ -108,9 +109,9 @@
             <DataGridTextColumn Header=" !OffMt"      Binding="{Binding DoNotNotifyOnOffMarketForCampaignId}"      IsReadOnly="False" ElementStyle="{StaticResource CenterAlignStyle}" />
             <DataGridTextColumn Header=" PermBan"     Binding="{Binding PermBanReason}"  Foreground="#c00" />
             <DataGridTextColumn Header=" ResndAftr"   Binding="{Binding ReSendAfter, StringFormat=\{0:yy-MM-dd\}}" IsReadOnly="True"  />
-            <DataGridTextColumn Header=" Added"       Binding="{Binding AddedAt,  Converter={cmn:UniConverter}}"   IsReadOnly="True"  />
-            <DataGridTextColumn Header=" Sent"        Binding="{Binding LastSent, Converter={cmn:UniConverter}}"   IsReadOnly="True"  />
-            <DataGridTextColumn Header=" Rcvd"        Binding="{Binding LastRcvd, Converter={cmn:UniConverter}}"   IsReadOnly="True"  />
+            <DataGridTextColumn Header=" Added"       Binding="{Binding AddedAt,  Converter={cnv:QStatsConverter}}"   IsReadOnly="True"  />
+            <DataGridTextColumn Header=" Sent"        Binding="{Binding LastSent, Converter={cnv:QStatsConverter}}"   IsReadOnly="True"  />
+            <DataGridTextColumn Header=" Rcvd"        Binding="{Binding LastRcvd, Converter={cnv:QStatsConverter}}"   IsReadOnly="True"  />
             <DataGridTextColumn Header=" Sent"        Binding="{Binding Ttl_Sent}"       IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#01e" />
             <DataGridTextColumn Header=" Rcvd"        Binding="{Binding Ttl_Rcvd}"       IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#1b1" />
             <DataGridTextColumn Header=" Notes"       Binding="{Binding Notes}"          FontSize="8" Width="*"  />
@@ -121,7 +122,7 @@
         <DataGrid x:Name="eHistsDataGrid" Grid.Column="2" ItemsSource="{Binding Source={StaticResource eMailEHistsViewSource}}" Grid.Row="0" RowHeight="42" IsReadOnly="True" Margin="0" HeadersVisibility="Column" Grid.RowSpan="4" >
           <DataGrid.Columns>
             <DataGridTextColumn Header=" R/S "    Binding="{Binding RecivedOrSent}"  ElementStyle="{StaticResource CenterAlignStyle}" FontWeight="Medium" />
-            <DataGridTextColumn Header=" Emailed" Binding="{Binding EmailedAt, Converter={cmn:UniConverter}}" SortDirection="Descending"  />
+            <DataGridTextColumn Header=" Emailed" Binding="{Binding EmailedAt, Converter={cnv:QStatsConverter}}" SortDirection="Descending"  />
             <DataGridTextColumn Header=" Subject" Binding="{Binding LetterSubject}"  Width="150" />
             <DataGridTextColumn Header=" Body"    Binding="{Binding LetterBody}"     Width="100" FontSize="10" Foreground="#6b1" />
             <DataGridTextColumn Header=" Notes"   Binding="{Binding Notes}"          Width="*"   FontSize="12" Foreground="#11e"  />
