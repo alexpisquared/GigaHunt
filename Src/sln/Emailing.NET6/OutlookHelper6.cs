@@ -54,10 +54,10 @@ public partial class OutlookHelper6
     try
     {
       var folder = GetMapiFOlder(folderPath);
-      ArgumentNullException.ThrowIfNull(folder, "folder is nul @@@@@@@@@@@@@@@");
+      ArgumentNullException.ThrowIfNull(folder, "folder is nul @@@@@@@@@@@@@@@-");
 
       var itemss = messageClass == null ? folder.Items : folder?.Items.Restrict($"[MessageClass] = '{messageClass}'");      //...WriteLine($" *** {folderPath,24}: {itemss.Count}");
-      ArgumentNullException.ThrowIfNull(itemss, "itemss is nul @@@@@@@@@@@@@@@");
+      ArgumentNullException.ThrowIfNull(itemss, "itemss is nul @@@@@@@@@@@@@@@-");
 
       return itemss;
     }
@@ -92,7 +92,7 @@ public partial class OutlookHelper6
     db.Emails.Load();
     db.Agencies.Load();
 
-    ArgumentNullException.ThrowIfNull(MyStore, "MyStore is nul @@@@@@@@@@@@@@@");
+    ArgumentNullException.ThrowIfNull(MyStore, "MyStore is nul @@@@@@@@@@@@@@@-");
 
         UndeleteContacts(MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderContacts), db, "Contacts");
         UndeleteContacts(MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderDeletedItems), db, "Deleted Items");
@@ -117,7 +117,7 @@ public partial class OutlookHelper6
   {
     try
     {
-      ArgumentNullException.ThrowIfNull(_contactsFolder, "_contactsFolder is nul @@@@@@@@@@@@@@@");
+      ArgumentNullException.ThrowIfNull(_contactsFolder, "_contactsFolder is nul @@@@@@@@@@@@@@@-");
       var i = (OL.ContactItem)_contactsFolder.Items.Find(string.Format("[LastName]='{0}'", lastName)); // ..Format("[FirstName]='{0}' and [LastName]='{1}'", firstName, lastName));
       while (i != null)
       {
@@ -138,7 +138,7 @@ public partial class OutlookHelper6
       //  contact = contactsFolder.Items.FindNext();
       //}
 
-      ArgumentNullException.ThrowIfNull(MyStore, "MyStore is nul @@@@@@@@@@@@@@@");
+      ArgumentNullException.ThrowIfNull(MyStore, "MyStore is nul @@@@@@@@@@@@@@@-");
 
       DbgListAllCOntacts(MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderContacts));
       DbgListAllCOntacts(MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderDeletedItems));
@@ -233,14 +233,14 @@ public partial class OutlookHelper6
         _updatedCount++;
       }
 
-      ArgumentNullException.ThrowIfNull(_contactsFolder, "contactsFolder is nul @@@@@@@@@@@@@@@");
+      ArgumentNullException.ThrowIfNull(_contactsFolder, "contactsFolder is nul @@@@@@@@@@@@@@@-");
 
       i = (OL.ContactItem)_contactsFolder.Items.FindNext();
     }
   }
   void CreateFromDbOutlookContact(Email em)
   {
-    ArgumentNullException.ThrowIfNull(_olApp, "olApp is nul @@@@@@@@@@@@@@@");
+    ArgumentNullException.ThrowIfNull(_olApp, "olApp is nul @@@@@@@@@@@@@@@-");
     var i = (OL.ContactItem)_olApp.CreateItem(OL.OlItemType.olContactItem);
     i.Email1Address = em.Id;
     if (!string.IsNullOrWhiteSpace(em.Fname))    /**/ i.FirstName = em.Fname;
@@ -578,7 +578,7 @@ public partial class OutlookHelper6
     email ??= GetStringBetween(body, "<", ">");
     //if (email == null) email = item.SentOnBehalfOfName;
     //if (email == null) continue;
-    //if (!email.Contains("@")) email = item.SenderEmailAddress;
+    //if (!email.Contains("@-")) email = item.SenderEmailAddress;
 
     if (email == null || !email.Contains('@'))
     {

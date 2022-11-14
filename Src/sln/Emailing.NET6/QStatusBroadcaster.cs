@@ -33,9 +33,9 @@ public static class QStatusBroadcaster
       var attachmnt = isAvailable ? new string[] {
         """C:\c\docs\CV\ikmnet assessment - Alex Pigida - 95304315.pdf""",
         """C:\c\docs\CV\Resume - Alex Pigida - short summary.docx""",
-        @"C:\c\docs\CV\Resume - Alex Pigida - short summary.pdf",
-        @"C:\c\docs\CV\Resume - Alex Pigida - long detailed version.docx",
-        @"C:\c\docs\CV\Resume - Alex Pigida - long detailed version.pdf"
+        """C:\c\docs\CV\Resume - Alex Pigida - short summary.pdf""",
+        """C:\c\docs\CV\Resume - Alex Pigida - long detailed version.docx""",
+        """C:\c\docs\CV\Resume - Alex Pigida - long detailed version.pdf"""
       } : new string[0];
       var avlbldate = DateTime.Today < new DateTime(2022, 10, 15) ? new DateTime(2022, 11, 1) : DateTime.Today.AddDays(14);
       var monthPart = avlbldate.Day < 10 ? "early" : avlbldate.Day > 20 ? "late" : "mid";
@@ -45,7 +45,7 @@ public static class QStatusBroadcaster
         emailAddress,
         subj,
         body.Replace("{0}", nameCasing_Mc_only_so_far(firstName)).Replace("{1}", emailAddress).Replace("{2}", startDate),
-        attachmnt, @"C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AlexTiny_LinkedIn.png");//@"C:\g\GigaHunt\Src\sln\GigaHunt\Assets\MCSD Logo - Latest as of 2009.gif|C:\g\GigaHunt\Src\sln\GigaHunt\Assets\linkedIn66x16.png|C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AlexTiny_LinkedIn.png");
+        attachmnt, """C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AlexTiny_LinkedIn.png""");//@"C:\g\GigaHunt\Src\sln\GigaHunt\Assets\MCSD Logo - Latest as of 2009.gif|C:\g\GigaHunt\Src\sln\GigaHunt\Assets\linkedIn66x16.png|C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AlexTiny_LinkedIn.png");
     }
     catch (Exception ex) { ex.Pop($"{emailAddress}"); return false; }
   }
