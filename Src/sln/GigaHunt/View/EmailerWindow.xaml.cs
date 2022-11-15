@@ -9,7 +9,7 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
   bool _isLoaded = false;
   public EmailersendWindow()
   {
-    InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme;    tbver.Text = DevOps.IsDbg ? @"DBG" : "rls";
+    InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme; tbver.Text = DevOps.IsDbg ? @"DBG" : "rls";
 
     _db = QstatsRlsContext.Create();
 
@@ -230,24 +230,33 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
     BPR.BeepClk();
     try
     {
+      var antiSpamPause90sec = 90000;
       var cnt = vEMail_Avail_DevDataGrid.SelectedItems.Count;
-      var cntRO = cnt;
+      Progress1.Maximum = cnt;
       var msg = "Failes: ";
-      var antiSpamBlockListPauseInMs = 1000 + (cnt < 12 ? cnt * cnt * cnt * cnt : 14000);
 
-      App.Speak(tbkTitle.Text = $"Sending {cnt} letters. Anti Spam delay set to {antiSpamBlockListPauseInMs * .001:N0} sec. ETA {cnt * antiSpamBlockListPauseInMs * .001 / 60.0:N0} minutes.");
+      App.Speak(tbkTitle.Text = $"Sending {cnt} letters. Anti Spam delay set to {antiSpamPause90sec * .001:N0} sec. ETA {cnt * antiSpamPause90sec * .001 / 60.0:N0} minutes.");
 
       EnableControls(false);
       var sw = Stopwatch.StartNew();
       foreach (var em in vEMail_Avail_DevDataGrid.SelectedItems)
       {
-        var scs = await QStatusBroadcaster.SendLetter_UpdateDb(true, ((VEmailAvailProd)em).Id, ((VEmailAvailProd)em).Fname??"....");
+#if DEBUG
+        var scs = true;
+#else
+        var scs = await QStatusBroadcaster.SendLetter_UpdateDb(true, ((VEmailAvailProd)em).Id, ((VEmailAvailProd)em).Fname ?? "....");
         if (!scs)
           msg += $"\n  {((VEmailAvailProd)em).Id}";
+#endif
 
-        tbkTitle.Text = $"Done/Todo: {cntRO - cnt} / {--cnt}      msg/min so far: {(cntRO - cnt) / sw.Elapsed.TotalMinutes:N1}      Last one is:  {(scs ? "Success" : "Failure")}  sending to  {((VEmailAvailProd)em).Id}";
+        tbkTitle.Text = $"Done/Todo: {Progress1.Maximum - --cnt} / {cnt}      msg/min so far: {(Progress1.Maximum - cnt) / sw.Elapsed.TotalMinutes:N1}      Last one is:  {(scs ? "Success" : "Failure")}  sending to  {((VEmailAvailProd)em).Id}";
+        Progress1.Value = Progress1.Maximum - cnt;
 
-        await Task.Delay(antiSpamBlockListPauseInMs);
+#if DEBUG
+        await Task.Delay(999);
+#else
+        await Task.Delay(antiSpamPause90sec);
+#endif
       }
 
       if (msg.Length > 12)
@@ -281,7 +290,7 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
       {
         EnableControls(false);
         //WindowState = System.Windows.WindowState.Minimized;
-        foreach (var em in vEMail_UnAvl_DevDataGrid.SelectedItems) _ = await QStatusBroadcaster.SendLetter_UpdateDb(false, ((VEmailUnAvlProd)em).Id, ((VEmailUnAvlProd)em).Fname??".....");
+        foreach (var em in vEMail_UnAvl_DevDataGrid.SelectedItems) _ = await QStatusBroadcaster.SendLetter_UpdateDb(false, ((VEmailUnAvlProd)em).Id, ((VEmailUnAvlProd)em).Fname ?? ".....");
         Close();
       }
     }
@@ -313,7 +322,7 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
     lbMax.Visibility = tbMax.Visibility = btMax.Visibility = dg.SelectedItems.Count < 2 ? Visibility.Visible : Visibility.Collapsed;
     btSel.Visibility = dg.SelectedItems.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
   }
- async void OnClose(object s, RoutedEventArgs e) { Close(); await Task.Delay(11000); Application.Current.Shutdown(); }
+  async void OnClose(object s, RoutedEventArgs e) { Close(); await Task.Delay(11000); Application.Current.Shutdown(); }
 }
 ///todo: convey the automatinnes of the message:
 ///		...

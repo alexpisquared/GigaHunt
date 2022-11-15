@@ -110,7 +110,7 @@ public class Emailer
     Thread.Sleep(1000);
   }
 
-  static string LogFile => """@"C:\temp\Logs\CV.Emailed.txt""";// Path.Combine(OneDrive.Folder(@"Public\Logs"), "CV.Emailed.txt");
+  static string LogFile => """C:\temp\Logs\CV.Emailed.txt""";// Path.Combine(OneDrive.Folder(@"Public\Logs"), "CV.Emailed.txt");
   const string cFrom = "Alex.Pigida@outlook.com";
   static bool isFirst = true;
 }

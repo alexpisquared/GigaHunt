@@ -45,7 +45,7 @@
         <Grid.RowDefinitions>
           <RowDefinition Height="auto"/>
           <RowDefinition Height="*"/>
-          <RowDefinition Height="5"/>
+          <RowDefinition Height="8"/>
           <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <TextBlock  Margin="-40,15,-33,0"                   FontSize="23" FontFamily="Ink Free" FontWeight="ExtraBold" Foreground="{DynamicResource EmlrButtonForeground}" Text="Emailer  " RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" HorizontalAlignment="Left">
@@ -54,6 +54,9 @@
           </TextBlock.RenderTransform>
         </TextBlock>
 
+
+        <ProgressBar Grid.Row="2" Grid.Column="1" x:Name="Progress1" Value="11" Foreground="#08f" Background="#111" BorderThickness="0" />
+        
         <StackPanel Grid.ColumnSpan="2" Name="ctrlPanelOnMarket" Orientation="Horizontal" VerticalAlignment="Center">
           <Label Content="      _F" Target="{Binding ElementName=tbFilter}" />
           <TextBox Width="120" FontSize="16"              x:Name="tbFilter" Text="{Binding Srch, Delay=300, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -73,7 +76,6 @@
             <CheckBox Grid.Row="1" Grid.Column="1" Content="Companies"   Foreground="#1a1" Checked="onFilter" Unchecked="onFilter" Margin="8" x:Name="cbxLeadCompns" />
           </Grid>
 
-
           <Label  Content="_Top" Target="{Binding ElementName=tbMax}" x:Name="lbMax" />
           <TextBox Text="8" Width="25"   Margin="4" Name="tbMax" TextChanged="tbMax_TextChanged" />
           <Button Content="top 8 rows"   Margin="4" Click="OnBroadcastTopN" ToolTip="Broadcast to the top N emails/agents"    Height="30" x:Name="btMax" />
@@ -83,9 +85,8 @@
           <!--<Button Content="Leads"                    Click="onLeads" Foreground="#08f" />          <Button Content="Agents"                   Click="onAgent" Foreground="#076" />          <Button Content="Outlook -> DB"            Click="onOu2Db" Foreground="#0a0" />-->
 
           <TextBlock x:Name="tbkTitle" Foreground="#1af"  HorizontalAlignment="Center" TextWrapping="Wrap" Text="Info" />
-
         </StackPanel>
-
+          
         <Grid DataContext="{StaticResource vsEMail_Avail}" Grid.Column="1" Grid.Row="1" >
           <DataGrid x:Name="vEMail_Avail_DevDataGrid" ItemsSource="{Binding}" IsEnabled="{Binding ElementName=chkIsAvailable, Path=IsChecked}" IsReadOnly="True" VerticalAlignment="Top" SelectionChanged="onSelectnChgd" >
             <DataGrid.Columns>

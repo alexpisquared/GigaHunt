@@ -50,7 +50,6 @@
 
   <ItemGroup>
     <Resource Include="Assets\AlexTiny_LinkedIn.png" />
-    <Resource Include="Assets\Icon1.ico" />
     <Resource Include="Assets\MailBroadCast.DeliveryFailed.ico" />
     <Resource Include="Assets\MailBroadCast.ico" />
     <Resource Include="Assets\MCSD Logo - Latest as of 2009.gif" />
