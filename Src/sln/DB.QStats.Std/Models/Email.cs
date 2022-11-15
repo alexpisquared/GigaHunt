@@ -15,7 +15,7 @@ public partial class Email
 
     public string? Phone { get; set; }
 
-    public string? PermBanReason { get; set; }
+    public string? PermBanReason { get => _pbr; set { if (value != _pbr) { _pbr = value; OnPropertyChanged(); } } } // *****************************
 
     public int? DoNotNotifyOnAvailableForCampaignId { get; set; }
 

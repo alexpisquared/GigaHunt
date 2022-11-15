@@ -1,14 +1,23 @@
-﻿using Microsoft.Data.SqlClient;
+﻿namespace DB.QStats.Std.Models;
 
-namespace DB.QStats.Std.Models;
-
-public partial class Email
+public partial class Email : INotifyPropertyChanged
 {
   [NotMapped] public int? Ttl_Sent { get; set; }
   [NotMapped] public int? Ttl_Rcvd { get; set; }
   [NotMapped] public DateTime? LastSent { get; set; }
   [NotMapped] public DateTime? LastRcvd { get; set; }
-  [NotMapped] public string? Country { get; set; }
+  [NotMapped] public string? Country { get => _country; set { if (value != _country) { _country = value; OnPropertyChanged(); } } }
+
+  string? _country, _pbr;
+
+  //[ObservableProperty] string? country;
+
+
+  public event PropertyChangedEventHandler? PropertyChanged;
+  protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+  {
+    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+  }
 }
 
 public class MiscEfDb
@@ -27,5 +36,4 @@ public class MiscEfDb
 
     return rv;
   }
-
 }
