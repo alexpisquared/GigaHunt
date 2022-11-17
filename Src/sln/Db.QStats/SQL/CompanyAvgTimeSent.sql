@@ -16,3 +16,18 @@ WHERE     (CONVERT(varCHAR, EHist.SentOn, 108) <> '00:00:00')
 GROUP BY EMail.Company
 HAVING     (COUNT(*) > 10)
 ORDER BY 1, 2 desc
+
+
+SELECT     ID, AddedAt, FName, Company, PermBanReason, Notes
+FROM        EMail
+WHERE     (ID LIKE '%br_%') AND (NOT EXISTS
+                      (SELECT     ID
+                       FROM        EHist
+                       WHERE     (EMail.ID = EMailID)))
+ORDER BY ID
+
+
+SELECT     COUNT(*) AS Cnt, RecivedOrSent, LetterSubject, MIN(EmailedAt) AS Expr1, MAX(EmailedAt) AS Expr2
+FROM        EHist
+GROUP BY LetterSubject, RecivedOrSent
+ORDER BY Cnt DESC, LetterSubject
