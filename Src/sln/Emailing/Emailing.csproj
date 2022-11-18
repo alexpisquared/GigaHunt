@@ -150,7 +150,7 @@
       <Project>{1ce2c02f-5fa8-41ca-ac2e-ba91ab283a02}</Project>
       <Name>AAV.WPF.4.8</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\net7.0\AAV.Sys\AAV.Sys.csproj">
+    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net6.0\AAV.Sys\AAV.Sys.csproj">
       <Project>{7139da94-b8f6-45a2-a292-319c5dd1f66c}</Project>
       <Name>AAV.Sys</Name>
     </ProjectReference>
