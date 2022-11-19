@@ -20,7 +20,7 @@ public partial class QstatsRlsContext
   }
 
   public static QstatsRlsContext Create() => //todo: retire; used by old GigaHunter.
-#if DEBUG
+#if !DEBUG
     new(_dbg); 
 #else  
     new(_rls); 

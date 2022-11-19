@@ -755,7 +755,7 @@ public partial class QstatsRlsContext : DbContext
         modelBuilder.Entity<VEmailAvailProd>(entity =>
         {
             entity
-                .HasNoKey()
+                //.HasNoKey() ▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄
                 .ToView("vEMail_Avail_Prod");
 
             entity.Property(e => e.AddedAt).HasColumnType("datetime");
