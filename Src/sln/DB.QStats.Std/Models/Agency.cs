@@ -20,4 +20,6 @@ public partial class Agency
     public DateTime? ModifiedAt { get; set; }
 
     public virtual ICollection<Email> Emails { get; } = new List<Email>();
+
+    public virtual ICollection<PhoneAgencyXref> PhoneAgencyXrefs { get; } = new List<PhoneAgencyXref>();
 }

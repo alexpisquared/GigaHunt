@@ -15,7 +15,7 @@ public partial class Email
 
     public string? Phone { get; set; }
 
-    public string? PermBanReason { get => _pbr; set { if (value != _pbr) { _pbr = value; OnPropertyChanged(); } } } // *****************************
+    public string? PermBanReason { get; set; }
 
     public int? DoNotNotifyOnAvailableForCampaignId { get; set; }
 
@@ -42,4 +42,6 @@ public partial class Email
     public virtual ICollection<LeadEmail> LeadEmails { get; } = new List<LeadEmail>();
 
     public virtual ICollection<Lead> Leads { get; } = new List<Lead>();
+
+    public virtual ICollection<PhoneEmailXref> PhoneEmailXrefs { get; } = new List<PhoneEmailXref>();
 }

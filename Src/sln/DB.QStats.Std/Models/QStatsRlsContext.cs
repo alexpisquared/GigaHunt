@@ -59,6 +59,12 @@ public partial class QstatsRlsContext : DbContext
 
     public virtual DbSet<OppContactView> OppContactViews { get; set; }
 
+    public virtual DbSet<Phone> Phones { get; set; }
+
+    public virtual DbSet<PhoneAgencyXref> PhoneAgencyXrefs { get; set; }
+
+    public virtual DbSet<PhoneEmailXref> PhoneEmailXrefs { get; set; }
+
     public virtual DbSet<VEmailAvailDev> VEmailAvailDevs { get; set; }
 
     public virtual DbSet<VEmailAvailProd> VEmailAvailProds { get; set; }
@@ -71,6 +77,9 @@ public partial class QstatsRlsContext : DbContext
 
     public virtual DbSet<VwAgencyRate> VwAgencyRates { get; set; }
 
+//    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+//        => optionsBuilder.UseSqlServer("Server=.\\SqlExpRess;Database=QStatsRls;Trusted_Connection=True;Encrypt=False;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -634,6 +643,82 @@ public partial class QstatsRlsContext : DbContext
                 .IsUnicode(false);
         });
 
+        modelBuilder.Entity<Phone>(entity =>
+        {
+            entity.ToTable("Phone");
+
+            entity.HasIndex(e => e.PhoneNumber, "IX_Phone").IsUnique();
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.AddedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Notes)
+                .HasMaxLength(800)
+                .IsUnicode(false);
+            entity.Property(e => e.PhoneNumber)
+                .HasMaxLength(12)
+                .IsUnicode(false);
+            entity.Property(e => e.SeenFirst).HasColumnType("datetime");
+            entity.Property(e => e.SeenLast).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<PhoneAgencyXref>(entity =>
+        {
+            entity.ToTable("PhoneAgencyXRef");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.AddedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.AgencyId)
+                .HasMaxLength(256)
+                .IsUnicode(false)
+                .HasColumnName("AgencyID");
+            entity.Property(e => e.Note)
+                .HasMaxLength(256)
+                .IsUnicode(false);
+            entity.Property(e => e.PhoneId).HasColumnName("PhoneID");
+
+            entity.HasOne(d => d.Agency).WithMany(p => p.PhoneAgencyXrefs)
+                .HasForeignKey(d => d.AgencyId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PhoneAgencyXRef_Agency");
+
+            entity.HasOne(d => d.Phone).WithMany(p => p.PhoneAgencyXrefs)
+                .HasForeignKey(d => d.PhoneId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PhoneAgencyXRef_Phone");
+        });
+
+        modelBuilder.Entity<PhoneEmailXref>(entity =>
+        {
+            entity.ToTable("PhoneEmailXRef");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.AddedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.EmailId)
+                .HasMaxLength(256)
+                .IsUnicode(false)
+                .HasColumnName("EmailID");
+            entity.Property(e => e.Note)
+                .HasMaxLength(256)
+                .IsUnicode(false);
+            entity.Property(e => e.PhoneId).HasColumnName("PhoneID");
+
+            entity.HasOne(d => d.Email).WithMany(p => p.PhoneEmailXrefs)
+                .HasForeignKey(d => d.EmailId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PhoneEmailXRef_EMail");
+
+            entity.HasOne(d => d.Phone).WithMany(p => p.PhoneEmailXrefs)
+                .HasForeignKey(d => d.PhoneId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PhoneEmailXRef_Phone");
+        });
+
         modelBuilder.Entity<VEmailAvailDev>(entity =>
         {
             entity
@@ -669,10 +754,8 @@ public partial class QstatsRlsContext : DbContext
 
         modelBuilder.Entity<VEmailAvailProd>(entity =>
         {
-          //entity.HasNoKey(); //tu: ?improper? fix for "The invoked method cannot be used for the entity type 'VEmailAvailProd' because it does not have a primary key." ▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄
-
-          entity
-                //.HasNoKey() ▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄
+            entity
+                .HasNoKey()
                 .ToView("vEMail_Avail_Prod");
 
             entity.Property(e => e.AddedAt).HasColumnType("datetime");
