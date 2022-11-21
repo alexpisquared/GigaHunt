@@ -11,7 +11,7 @@ public partial class Agency
 
     public string? Address { get; set; }
 
-    public bool NotForBroadcast { get; set; }
+    public bool IsBroadcastee { get; set; }
 
     public string? Note { get; set; }
 
