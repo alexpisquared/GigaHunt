@@ -12,7 +12,7 @@ public partial class OutlookHelper6
   readonly int _customLetersSentThreshold = 3; // to become an Outlook contact, must have at least 3 letters sent.
   static readonly char[] _delim = new[] { ' ', '.', ',', ':', ';', '\r', '\n', '\'', '"', '_' };
   int _updatedCount, _addedCount;
-  const string _regexEmailPattern = @"\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*"; // //var r = new Regex(@"/\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}\b/");         \b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b  <== http://www.regular-expressions.info/email.html
+  const string phonerx = @"((\+|\+\s|\d{1}\s?|\()(\d\)?\s?[-\.\s\(]??){8,}\d{1}|\d{3}[-\.\s]??\d{3}[-\.\s]??\d{4}|\(\d{3}\)\s*\d{3}[-\.\s]??\d{4}|\d{3}[-\.\s]??\d{4})", _regexEmailPattern = @"\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*"; // //var r = new Regex(@"/\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}\b/");         \b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b  <== http://www.regular-expressions.info/email.html
 
   public OutlookHelper6()
   {
@@ -85,7 +85,7 @@ public partial class OutlookHelper6
 
   public async Task<string> OutlookUndeleteContactsAsync(QstatsRlsContext db)
   {
-    BPR___.Speak("Synchronous action... usually takes 5 minutes.");
+    Trace.WriteLine("Synchronous action... usually takes 5 minutes.");
 
     var sw = Stopwatch.StartNew();
 
@@ -97,7 +97,7 @@ public partial class OutlookHelper6
     UndeleteContacts(MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderContacts), db, "Contacts");
     UndeleteContacts(MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderDeletedItems), db, "Deleted Items");
 
-    BPR___.Speak($"All done. Took {sw.Elapsed.TotalMinutes:N1} minutes.");
+    Trace.WriteLine($"All done. Took {sw.Elapsed.TotalMinutes:N1} minutes.");
 
     var rep =      //db.TrySaveReport(); // 
       db.GetDbChangesReport();
@@ -623,10 +623,8 @@ public partial class OutlookHelper6
   [GeneratedRegex("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*", RegexOptions.IgnoreCase, "en-US")]
   private static partial Regex MyRegex1();
 
-  public static void GetPhoneNumbersFromLetter(Ehist ehist, ref int cur, int ttl,  Stopwatch sw, HashSet<string> _vlds , HashSet<string> _bads, string regex = @"((\+|\+\s|\d{1}\s?|\()(\d\)?\s?[-\.\s\(]??){8,}\d{1}|\d{3}[-\.\s]??\d{3}[-\.\s]??\d{4}|\(\d{3}\)\s*\d{3}[-\.\s]??\d{4}|\d{3}[-\.\s]??\d{4})")
+  public static void GetUniqueValidBadPhoneNumbersFromLetter(Ehist ehist, int cur, int ttl, Stopwatch sw, HashSet<string> _vlds, HashSet<string> _bads, string regex = phonerx)
   {
-    cur++;
-
     ArgumentNullException.ThrowIfNull(ehist.LetterBody);
 
     var match = new Regex(regex).Match(ehist.LetterBody);
@@ -665,7 +663,7 @@ public partial class OutlookHelper6
               ArgumentNullException.ThrowIfNull(ehist.LetterBody);
               if (d.Contains(ehist.LetterBody.Substring(idx - 1, 1)))
               {
-                Console.ForegroundColor = ConsoleColor.DarkGreen; Console.Write($"{cur,8:N0} / {ttl:N0}  {ehist.EmailId,56}  {pnraw,16} {pn,11}   {(ttl - cur) * sw.Elapsed.TotalSeconds / cur,8:N1} sec left       {ehist.EmailedAt:yyyy-MM}     {ehist.LetterBody?.Substring(idx - 6, 6).Replace("\n","\\n")}  +++++++++++++++++++\n");
+                Console.ForegroundColor = ConsoleColor.DarkGreen; Console.Write($"{cur,8:N0} / {ttl:N0}  {ehist.EmailId,56}  {pnraw,16} {pn,11}   {(ttl - cur) * sw.Elapsed.TotalSeconds / cur,8:N1} sec left       {ehist.EmailedAt:yyyy-MM}     {ehist.LetterBody?.Substring(idx - 6, 6).Replace("\n", "\\n")}  +++++++++++++++++++\n");
               }
               else
               {
@@ -702,11 +700,72 @@ public partial class OutlookHelper6
       match = match.NextMatch();
     }
   }
+  public static HashSet<string> GetUniquePhoneNumbersFromLetter(Ehist ehist, string regex = phonerx)
+  {
+    HashSet<string> valids = new HashSet<string>();
+    ArgumentNullException.ThrowIfNull(ehist.LetterBody);
+    var match = new Regex(regex).Match(ehist.LetterBody);
+    while (match.Success)
+    {
+      foreach (var pnraw in match.Value.Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+      {
+        var pn = pnraw
+          .Replace(" ", "")
+          .Replace(" ", "")
+          .Replace("+", "")
+          .Replace("_", "")
+          .Replace("-", "")
+          .Replace(".", "")
+          .Replace("(", "")
+          .Replace(")", "");
+
+        if (pn.Length < 10) Write($"< 10 ---");
+        else if (pn.Length > 11) Write($"> 11 ---");
+        else if (pn == pnraw)
+        {
+          if (
+            (pn.Length == 10 && (pn.StartsWith("416") || pn.StartsWith("647") || pn.StartsWith("905"))) ||
+            (pn.Length == 11 && (pn.StartsWith("1416") || pn.StartsWith("1647") || pn.StartsWith("1905"))))
+          {
+            Write($"  + + + \n");
+          }
+          else
+          {
+            var idx = ehist.LetterBody?.IndexOf(pnraw) ?? -1;
+            if (idx > 10)
+            {
+              var d = " :+\n\r";
+              ArgumentNullException.ThrowIfNull(ehist.LetterBody);
+              if (d.Contains(ehist.LetterBody.Substring(idx - 1, 1)))
+              {
+                Write($"     {ehist.LetterBody?.Substring(idx - 6, 6).Replace("\n", "\\n")}  +++++++++++++++++++\n");
+              }
+              else
+              {
+                Write($"     {ehist.LetterBody?.Substring(idx - 16, 16)}  ■ ■ ■ ■ ■  Remove me from DB!!!\n");
+              }
+            }
+            else
+            {
+              Write($"  - - -\n");
+            }
+          }
+        }
+        else
+        {
+          if (pn.Length == 11 && pn[0] == '1') pn = pn[1..];
+          if (valids.Add(pn))
+          {
+            Write($"  ++ ++ ++\n");
+          }
+        }
+      }
+
+      match = match.NextMatch();
+    }
+
+    return valids;
+  }
 }
 
-public class BPR___
-{
-  static DateTime? _now = null; public static DateTime Now { get => _now ?? (_now = DateTime.Now).Value; }
-
-  public static void Speak(string v) { }
-}
+public class BPR___ { static DateTime? _now = null; public static DateTime Now { get => _now ?? (_now = DateTime.Now).Value; } }

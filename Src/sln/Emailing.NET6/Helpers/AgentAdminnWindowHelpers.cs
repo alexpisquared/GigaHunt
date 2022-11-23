@@ -29,7 +29,7 @@ public static class AgentAdminnWindowHelpers
       }
       else
       {
-        BPR___.Speak("Nothing to save!"); await Task.Delay(333);
+        Trace.WriteLine("Nothing to save!"); await Task.Delay(333);
         return false;
       }
     }
@@ -61,7 +61,7 @@ public static class AgentAdminnWindowHelpers
 
         var (success, rowsSavedCnt, report) = await db.TrySaveReportAsync("OutlookToDb.cs");
 
-        BPR___.Speak(report); await Task.Delay(333);
+        Trace.WriteLine(report); await Task.Delay(333);
 
         return report;
       }
