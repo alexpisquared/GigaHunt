@@ -1,10 +1,5 @@
 ﻿namespace GigaHunt.AsLink;
-public class OuFolder
-{
-  public const string
-    qRcvd = "Q", qSent = "Sent Items", qSentDone = "Sent Items/_DbDoneSent", qDltd = "Deleted Items", qFail = "Q/Fails", qFailsDone = "Q/FailsDone", qRcvdDone = "Q/_DbDoneRcvd", qLate = "Q/ToReSend", qVOld = "Q/VeryOld",
-    qJunkMail = "Junk Email";
-}
+
 public partial class OutlookHelper6
 {
   readonly OL.Application? _olApp;
@@ -12,7 +7,6 @@ public partial class OutlookHelper6
   readonly int _customLetersSentThreshold = 3; // to become an Outlook contact, must have at least 3 letters sent.
   static readonly char[] _delim = new[] { ' ', '.', ',', ':', ';', '\r', '\n', '\'', '"', '_' };
   int _updatedCount, _addedCount;
-  const string phonerx = @"((\+|\+\s|\d{1}\s?|\()(\d\)?\s?[-\.\s\(]??){8,}\d{1}|\d{3}[-\.\s]??\d{3}[-\.\s]??\d{4}|\(\d{3}\)\s*\d{3}[-\.\s]??\d{4}|\d{3}[-\.\s]??\d{4})", _regexEmailPattern = @"\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*"; // //var r = new Regex(@"/\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}\b/");         \b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b  <== http://www.regular-expressions.info/email.html
 
   public OutlookHelper6()
   {
@@ -147,7 +141,7 @@ public partial class OutlookHelper6
   }
   public string SyncDbToOutlook(QstatsRlsContext db)
   {
-    //AAV.Sys.Helpers.BPR___.Start();
+    //AAV.Sys.Helpers.Chronoer.Start();
     var q = db.Emails.Where(r => string.IsNullOrEmpty(r.PermBanReason)
                             && r.Id.Contains('@')
                             && !r.Id.Contains('=')
@@ -162,7 +156,7 @@ public partial class OutlookHelper6
     foreach (var em in q)
       AddUpdateOutlookContact(em);
 
-    //BPR___.Finish();
+    //Chronoer.Finish();
     return string.Format("\r\nTotal Outlook: {0} added, {1} updated / out of {2} eligibles. \r\n", _addedCount, _updatedCount, ttl);
   }
   public void AddUpdateOutlookContact(Email em)
@@ -265,7 +259,7 @@ public partial class OutlookHelper6
 
     i.Categories = "AppAdded";
     i.User1 = "New from QStats DB";
-    //i.CreationTime = GigaHunt.BPR___.Now;
+    //i.CreationTime = GigaHunt.Chronoer.Now;
 
     i.Save();
     _addedCount++;
@@ -325,7 +319,7 @@ public partial class OutlookHelper6
       db.Agencies.Local.Add(new Agency
       {
         Id = agency.Length > maxLen ? agency.Substring(agency.Length - maxLen, maxLen) : agency,
-        AddedAt = BPR___.Now
+        AddedAt = Chronoer.Now
       });
 
     WriteLine($"{emailId,32}\t{ci.FirstName,17} {ci.LastName,-21}\t{ci.JobTitle,-80}\t{phone}\t{(string.IsNullOrWhiteSpace(ci.Body) ? "·" : ci.Body.Length > 50 ? ci.Body[..50] : ci.Body)}");
@@ -359,7 +353,7 @@ public partial class OutlookHelper6
         //Company = agency,
         Phone = phone,
         Notes = an,
-        AddedAt = BPR___.Now
+        AddedAt = Chronoer.Now
       };
       db.Emails.Local.Add(e0);
     }
@@ -370,19 +364,19 @@ public partial class OutlookHelper6
       if (string.IsNullOrWhiteSpace(em.Phone) && !string.IsNullOrWhiteSpace(phone))
       {
         em.Phone = phone;
-        em.ModifiedAt = BPR___.Now;
+        em.ModifiedAt = Chronoer.Now;
       }
 
       if (string.IsNullOrWhiteSpace(em.Notes))
       {
         em.Notes = note;
-        em.ModifiedAt = BPR___.Now;
+        em.ModifiedAt = Chronoer.Now;
       }
       else if (!string.IsNullOrWhiteSpace(em.Notes))
       {
-        if (!string.IsNullOrWhiteSpace(ci.JobTitle      /**/) && !em.Notes.Contains(ci.JobTitle      /**/)) { em.ModifiedAt = BPR___.Now; em.Notes += $" + {ci.JobTitle}"; }
+        if (!string.IsNullOrWhiteSpace(ci.JobTitle      /**/) && !em.Notes.Contains(ci.JobTitle      /**/)) { em.ModifiedAt = Chronoer.Now; em.Notes += $" + {ci.JobTitle}"; }
 
-        if (!string.IsNullOrWhiteSpace(ci.Body          /**/) && !em.Notes.Contains(ci.Body          /**/)) { em.ModifiedAt = BPR___.Now; em.Notes += $" + {ci.Body}"; }
+        if (!string.IsNullOrWhiteSpace(ci.Body          /**/) && !em.Notes.Contains(ci.Body          /**/)) { em.ModifiedAt = Chronoer.Now; em.Notes += $" + {ci.Body}"; }
       }
       else
         return;
@@ -564,208 +558,4 @@ public partial class OutlookHelper6
 
     WriteLine($"^^^^^^^^^^^^^^^^^^^^^^^^^");
   }
-  public static string? GetStringBetween(string b, string s1, string s2)
-  {
-    var i1 = b.IndexOf(s1);
-    if (i1 < 0) return null;
-    i1 += s1.Length;
-    var i2 = b.IndexOf(s2, i1);
-    if (i2 < 0) return null;
-    if (i2 < i1) return null;
-    var em = b[i1..i2];
-    return em;
-  }
-
-  public static string[] FindEmailsOLD(string body)
-  {
-    var email = GetStringBetween(body, "Recipient(s):\r\n\t<", ">\r\n");
-    email ??= GetStringBetween(body, "Recipient(s):\r\n\t", "\r\n");
-    email ??= GetStringBetween(body, "To: ", "\r\n");
-    email ??= GetStringBetween(body, "<", ">");
-    //if (email == null) email = item.SentOnBehalfOfName;
-    //if (email == null) continue;
-    //if (!email.Contains("@-")) email = item.SenderEmailAddress;
-
-    if (email == null || !email.Contains('@'))
-    {
-      var matches = MyRegex().Matches(body);
-      if (matches.Count > 0)
-      {
-        var emails = new string[matches.Count];
-        for (var i = 0; i < matches.Count; i++) emails[i] = matches[i].Value;
-        return emails;
-      }
-    }
-
-    if (email == null || !email.Contains('@')) return Array.Empty<string>();
-
-    if (!email.Contains('@')) Write("");
-    if (email.Contains('<')) email = email.Replace("<", "");
-    if (email.Contains('>')) email = email.Replace(">", "");
-    if (email.Contains(' ')) email = email.Split(' ')[0];
-    if (email.Contains(':')) email = email.Split(':')[1];
-    if (email.Contains('"')) email = email.Trim('"');
-
-    email = email.Trim();
-
-    return new string[] { email.Trim() };
-  }
-  public static string[] FindEmails(string body)
-  {
-    var matches = MyRegex1().Matches(body);
-    var emails = new string[matches.Count];
-    for (var i = 0; i < matches.Count; i++) emails[i] = matches[i].Value;
-    return emails;
-  }
-
-  [GeneratedRegex("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*", RegexOptions.IgnoreCase, "en-US")]
-  private static partial Regex MyRegex();
-  [GeneratedRegex("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*", RegexOptions.IgnoreCase, "en-US")]
-  private static partial Regex MyRegex1();
-
-  public static void GetUniqueValidBadPhoneNumbersFromLetter(Ehist ehist, int cur, int ttl, Stopwatch sw, HashSet<string> _vlds, HashSet<string> _bads, string regex = phonerx)
-  {
-    ArgumentNullException.ThrowIfNull(ehist.LetterBody);
-
-    var match = new Regex(regex).Match(ehist.LetterBody);
-    while (match.Success)
-    {
-      foreach (var pnraw in match.Value.Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
-      {
-        var pn = pnraw
-          .Replace(" ", "")
-          .Replace(" ", "")
-          .Replace("+", "")
-          .Replace("_", "")
-          .Replace("-", "")
-          .Replace(".", "")
-          .Replace("(", "")
-          .Replace(")", "");
-
-        Trace.Write($"{ehist.Id,5:N0} {ehist.LetterBody?.Length,8:N0}   {ehist.EmailId,40}   ");
-
-        if (pn.Length < 10) Trace.Write($"< 10 ---");
-        else if (pn.Length > 11) Trace.Write($"> 11 ---");
-        else if (pn == pnraw)
-        {
-          if (
-            (pn.Length == 10 && (pn.StartsWith("416") || pn.StartsWith("647") || pn.StartsWith("905"))) ||
-            (pn.Length == 11 && (pn.StartsWith("1416") || pn.StartsWith("1647") || pn.StartsWith("1905"))))
-          {
-            Console.ForegroundColor = ConsoleColor.DarkCyan; Console.Write($"{cur,8:N0} / {ttl:N0}  {ehist.EmailId,56}  {pnraw,16} {pn,11}   {(ttl - cur) * sw.Elapsed.TotalSeconds / cur,8:N1} sec left       {ehist.EmailedAt:yyyy-MM}  + + + \n");
-          }
-          else
-          {
-            var idx = ehist.LetterBody?.IndexOf(pnraw) ?? -1;
-            if (idx > 10)
-            {
-              var d = " :+\n\r";
-              ArgumentNullException.ThrowIfNull(ehist.LetterBody);
-              if (d.Contains(ehist.LetterBody.Substring(idx - 1, 1)))
-              {
-                Console.ForegroundColor = ConsoleColor.DarkGreen; Console.Write($"{cur,8:N0} / {ttl:N0}  {ehist.EmailId,56}  {pnraw,16} {pn,11}   {(ttl - cur) * sw.Elapsed.TotalSeconds / cur,8:N1} sec left       {ehist.EmailedAt:yyyy-MM}     {ehist.LetterBody?.Substring(idx - 6, 6).Replace("\n", "\\n")}  +++++++++++++++++++\n");
-              }
-              else
-              {
-
-                if (pn.Length == 11 && pn[0] == '1') pn = pn[1..];
-                if (_bads.Add(pn))
-                {
-                  Console.ForegroundColor = ConsoleColor.Magenta; Console.Write($"{cur,8:N0} / {ttl:N0}  {ehist.EmailId,56}  {pnraw,16} {pn,11}   {(ttl - cur) * sw.Elapsed.TotalSeconds / cur,8:N1} sec left       {ehist.EmailedAt:yyyy-MM}     {ehist.LetterBody?.Substring(idx - 16, 16)}  ■ ■ ■ ■ ■  Remove me from DB!!!\n");
-                }
-              }
-            }
-            else
-            {
-              Console.ForegroundColor = ConsoleColor.Magenta;
-              Console.BackgroundColor = ConsoleColor.DarkBlue;
-              Console.Write($"{cur,8:N0} / {ttl:N0}  {ehist.EmailId,56}  {pnraw,16} {pn,11}   {(ttl - cur) * sw.Elapsed.TotalSeconds / cur,8:N1} sec left       {ehist.EmailedAt:yyyy-MM}  - - -\n");
-              Console.ResetColor();
-            }
-          }
-        }
-        else
-        {
-          if (pn.Length == 11 && pn[0] == '1') pn = pn[1..];
-          if (_vlds.Add(pn))
-          {
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.Write($"{cur,8:N0} / {ttl:N0}  {ehist.EmailId,56}  {pnraw,16} {pn,11}   {((ttl - cur) * sw.Elapsed.TotalSeconds / cur),8:N1} sec left       {ehist.EmailedAt:yyyy-MM}  ++ ++ ++\n");
-          }
-        }
-
-        Trace.WriteLine($"    {pn}");
-      }
-
-      match = match.NextMatch();
-    }
-  }
-  public static HashSet<string> GetUniquePhoneNumbersFromLetter(Ehist ehist, string regex = phonerx)
-  {
-    HashSet<string> valids = new HashSet<string>();
-    ArgumentNullException.ThrowIfNull(ehist.LetterBody);
-    var match = new Regex(regex).Match(ehist.LetterBody);
-    while (match.Success)
-    {
-      foreach (var pnraw in match.Value.Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
-      {
-        var pn = pnraw
-          .Replace(" ", "")
-          .Replace(" ", "")
-          .Replace("+", "")
-          .Replace("_", "")
-          .Replace("-", "")
-          .Replace(".", "")
-          .Replace("(", "")
-          .Replace(")", "");
-
-        if (pn.Length < 10) Write($"< 10 ---");
-        else if (pn.Length > 11) Write($"> 11 ---");
-        else if (pn == pnraw)
-        {
-          if (
-            (pn.Length == 10 && (pn.StartsWith("416") || pn.StartsWith("647") || pn.StartsWith("905"))) ||
-            (pn.Length == 11 && (pn.StartsWith("1416") || pn.StartsWith("1647") || pn.StartsWith("1905"))))
-          {
-            Write($"  + + + \n");
-          }
-          else
-          {
-            var idx = ehist.LetterBody?.IndexOf(pnraw) ?? -1;
-            if (idx > 10)
-            {
-              var d = " :+\n\r";
-              ArgumentNullException.ThrowIfNull(ehist.LetterBody);
-              if (d.Contains(ehist.LetterBody.Substring(idx - 1, 1)))
-              {
-                Write($"     {ehist.LetterBody?.Substring(idx - 6, 6).Replace("\n", "\\n")}  +++++++++++++++++++\n");
-              }
-              else
-              {
-                Write($"     {ehist.LetterBody?.Substring(idx - 16, 16)}  ■ ■ ■ ■ ■  Remove me from DB!!!\n");
-              }
-            }
-            else
-            {
-              Write($"  - - -\n");
-            }
-          }
-        }
-        else
-        {
-          if (pn.Length == 11 && pn[0] == '1') pn = pn[1..];
-          if (valids.Add(pn))
-          {
-            Write($"  ++ ++ ++\n");
-          }
-        }
-      }
-
-      match = match.NextMatch();
-    }
-
-    return valids;
-  }
 }
-
-public class BPR___ { static DateTime? _now = null; public static DateTime Now { get => _now ?? (_now = DateTime.Now).Value; } }

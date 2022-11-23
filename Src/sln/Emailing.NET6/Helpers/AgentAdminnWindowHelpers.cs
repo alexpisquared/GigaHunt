@@ -37,7 +37,7 @@ public static class AgentAdminnWindowHelpers
   }
   public static async Task<string> SaveAndUpdateMetadata(QstatsRlsContext db)
   {
-    var now = BPR___.Now;
+    var now = Chronoer.Now;
 
     while (true)
     {
