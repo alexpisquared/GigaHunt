@@ -23,8 +23,8 @@ public partial class OutlookHelper6
       MyStore = _olApp.Session.Stores["alex.pigida@outlook.com"];
       _contactsFolder = MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderContacts);        // this.Application.GetNamespace("MAPI").GetDefaultFolder(OL.OlDefaultFolders.olFolderContacts);                //_deletedsFolder = _store.GetDefaultFolder(OL.OlDefaultFolders.olFolderDeletedItems);
     }
-    catch (COMException ex) { ex.Pop("I think this is it... (ap: Jun`20)"); }
-    catch (Exception ex) { ex.Pop(); throw; }
+    catch (COMException ex) { ex.Log("I think this is it... (ap: Jun`20)"); }
+    catch (Exception ex) { ex.Log(); throw; }
   }
 
   public OL.Store? MyStore { get; }
@@ -36,7 +36,7 @@ public partial class OutlookHelper6
       var items = folder0?.Items.Restrict("[MessageClass] = 'IPM.Note'");
       return items;
     }
-    catch (Exception ex) { ex.Pop(folder); throw; }
+    catch (Exception ex) { ex.Log(folder); throw; }
   }
   public OL.Items? GetDeliveryFailedItems()
   {
@@ -47,7 +47,7 @@ public partial class OutlookHelper6
       WriteLine($"***        Fails: {itemss?.Count}");
       return itemss;
     }
-    catch (Exception ex) { ex.Pop(@"Q\Fails"); throw; }
+    catch (Exception ex) { ex.Log(@"Q\Fails"); throw; }
   }
   public OL.Items GetItemsFromFolder(string folderPath, string? messageClass = null) // IPM.Note, REPORT.IPM.Note.NDR
   {
@@ -61,7 +61,7 @@ public partial class OutlookHelper6
 
       return itemss;
     }
-    catch (Exception ex) { ex.Pop(@"Q\Fails"); throw; }
+    catch (Exception ex) { ex.Log(@"Q\Fails"); throw; }
   }
   public OL.Items? GetToResendItems()
   {
@@ -71,7 +71,7 @@ public partial class OutlookHelper6
       var itemss = folder?.Items.Restrict("[MessageClass] = 'IPM.Note'");
       return itemss;
     }
-    catch (Exception ex) { ex.Pop(@"Q\ToReSend"); throw; }
+    catch (Exception ex) { ex.Log(@"Q\ToReSend"); throw; }
   }
   public OL.MAPIFolder? GetMapiFOlder(string folderPath)
   {
@@ -94,8 +94,8 @@ public partial class OutlookHelper6
 
     ArgumentNullException.ThrowIfNull(MyStore, "MyStore is nul @@@@@@@@@@@@@@@-");
 
-        UndeleteContacts(MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderContacts), db, "Contacts");
-        UndeleteContacts(MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderDeletedItems), db, "Deleted Items");
+    UndeleteContacts(MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderContacts), db, "Contacts");
+    UndeleteContacts(MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderDeletedItems), db, "Deleted Items");
 
     BPR___.Speak($"All done. Took {sw.Elapsed.TotalMinutes:N1} minutes.");
 
@@ -125,7 +125,7 @@ public partial class OutlookHelper6
         i = (OL.ContactItem)_contactsFolder.Items.FindNext();
       }
     }
-    catch (Exception ex) { ex.Pop(lastName); throw; }
+    catch (Exception ex) { ex.Log(lastName); throw; }
   }
   public void FindContactByEmail(string email)
   {
@@ -143,7 +143,7 @@ public partial class OutlookHelper6
       DbgListAllCOntacts(MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderContacts));
       DbgListAllCOntacts(MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderDeletedItems));
     }
-    catch (Exception ex) { ex.Pop("!!! MUST RUN OUTLOOK TO WORK !!!"); throw; }
+    catch (Exception ex) { ex.Log("!!! MUST RUN OUTLOOK TO WORK !!!"); throw; }
   }
   public string SyncDbToOutlook(QstatsRlsContext db)
   {
@@ -188,7 +188,7 @@ public partial class OutlookHelper6
 
       CreateFromDbOutlookContact(em);
     }
-    catch (Exception ex) { ex.Pop("!!! MUST RUN OUTLOOK TO WORK !!!"); throw; }
+    catch (Exception ex) { ex.Log("!!! MUST RUN OUTLOOK TO WORK !!!"); throw; }
   }
 
   void MergeDbDataToOutlookContact(Email em, ref OL.ContactItem i, string msg)
@@ -290,21 +290,27 @@ public partial class OutlookHelper6
       }
   }
 
-    static void UndeleteContacts(OL.MAPIFolder folder, QstatsRlsContext QstatsRlsContext, string srcFolder)
+  static void UndeleteContacts(OL.MAPIFolder folder, QstatsRlsContext QstatsRlsContext, string srcFolder)
   {
     WriteLine($"Folder {folder.Name} has total {folder.Items.Count} items: ");
 
     foreach (var o in folder.Items)
       if (o is OL.ContactItem item)
-                AddUpdateToDb(item, QstatsRlsContext, srcFolder);
+        AddUpdateToDb(item, QstatsRlsContext, srcFolder);
   }
 
-    static void AddUpdateToDb(OL.ContactItem ci, QstatsRlsContext db, string srcFolder)
+  static void AddUpdateToDb(OL.ContactItem ci, QstatsRlsContext db, string srcFolder)
   {
     const int maxLen = 256;
 
     var emailId = "";
-    if (!string.IsNullOrWhiteSpace(ci.Email1Address))                                               /**/emailId = ci.Email1Address;     else if (!string.IsNullOrWhiteSpace(ci.Email2Address))                                          /**/emailId = ci.Email2Address;     else if (!string.IsNullOrWhiteSpace(ci.Email3Address))                                          /**/emailId = ci.Email3Address;     else if (!string.IsNullOrWhiteSpace(ci.FirstName) && !string.IsNullOrWhiteSpace(ci.LastName))   /**/emailId = $"{ci.FirstName}.{ci.LastName}@__UnKnwn__.com";     else if (!string.IsNullOrWhiteSpace(ci.FirstName))                                              /**/emailId = $"{ci.FirstName}.__UnKnwn__@__UnKnwn__.com";     else if (!string.IsNullOrWhiteSpace(ci.LastName))                                               /**/emailId = $"__UnKnwn__.{ci.LastName}@__UnKnwn__.com";     else
+    if (!string.IsNullOrWhiteSpace(ci.Email1Address))                                               /**/emailId = ci.Email1Address;
+    else if (!string.IsNullOrWhiteSpace(ci.Email2Address))                                          /**/emailId = ci.Email2Address;
+    else if (!string.IsNullOrWhiteSpace(ci.Email3Address))                                          /**/emailId = ci.Email3Address;
+    else if (!string.IsNullOrWhiteSpace(ci.FirstName) && !string.IsNullOrWhiteSpace(ci.LastName))   /**/emailId = $"{ci.FirstName}.{ci.LastName}@__UnKnwn__.com";
+    else if (!string.IsNullOrWhiteSpace(ci.FirstName))                                              /**/emailId = $"{ci.FirstName}.__UnKnwn__@__UnKnwn__.com";
+    else if (!string.IsNullOrWhiteSpace(ci.LastName))                                               /**/emailId = $"__UnKnwn__.{ci.LastName}@__UnKnwn__.com";
+    else
     {
       WriteLine($"******************");
       return;
@@ -324,7 +330,7 @@ public partial class OutlookHelper6
 
     WriteLine($"{emailId,32}\t{ci.FirstName,17} {ci.LastName,-21}\t{ci.JobTitle,-80}\t{phone}\t{(string.IsNullOrWhiteSpace(ci.Body) ? "·" : ci.Body.Length > 50 ? ci.Body[..50] : ci.Body)}");
 
-        AddUpdateBassedOnGoodEmailId(ci, db, emailId, phone, agency, srcFolder);
+    AddUpdateBassedOnGoodEmailId(ci, db, emailId, phone, agency, srcFolder);
   }
   public static string GetCompanyName(string email)
   {
@@ -339,7 +345,7 @@ public partial class OutlookHelper6
     return cmpny;
   }
 
-    static void AddUpdateBassedOnGoodEmailId(OL.ContactItem ci, QstatsRlsContext db, string emailId, string phone, string agency, string srcFolder)
+  static void AddUpdateBassedOnGoodEmailId(OL.ContactItem ci, QstatsRlsContext db, string emailId, string phone, string agency, string srcFolder)
   {
     var an = $"-={srcFolder}-Add=-{ci.JobTitle}·{ci.Body}¦";
     var em = db.Emails.Local.FirstOrDefault(r => emailId.Equals(r.Id, StringComparison.OrdinalIgnoreCase));
@@ -463,15 +469,15 @@ public partial class OutlookHelper6
       if (new[] { "at", "-", "@", "<" }.Contains(words[len - 1]))
         if (new[] { "contact", "manager", "email", "to", "from", "com>", "ca>", "ca", "com" }.Contains(words[len - 4]))
           return (words[len - 3], words[len - 2]);           // Thank you for your email. Liam Tang is no longer with Experis-Veritaaq, please contact Michael Baraban at michaelb@experis-veritaaq.ca.
-      else
+        else
       if (words[len - 1] == "(")
-        if (words[len - 4] == "contact") return (words[len - 3], words[len - 2]);            // ... contact Gary Shearer (gary.shearer@appcentrica.com <mailto:gary.shearer@appcentrica.com> ). 
-      else
-      if (new[] { "<mailto", "addresses" }.Contains(words[len - 1]))
-        WriteLine($" ignore this !!!");
-      else
-      if (Debugger.IsAttached)
-        WriteLine($" ignore this ???");
+          if (words[len - 4] == "contact") return (words[len - 3], words[len - 2]);            // ... contact Gary Shearer (gary.shearer@appcentrica.com <mailto:gary.shearer@appcentrica.com> ). 
+          else
+        if (new[] { "<mailto", "addresses" }.Contains(words[len - 1]))
+            WriteLine($" ignore this !!!");
+          else
+        if (Debugger.IsAttached)
+            WriteLine($" ignore this ???");
     }
 
     var hlp = new FirstLastNameParser(email);
@@ -612,17 +618,95 @@ public partial class OutlookHelper6
     return emails;
   }
 
-    [GeneratedRegex("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*", RegexOptions.IgnoreCase, "en-US")]
-    private static partial Regex MyRegex();
-    [GeneratedRegex("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*", RegexOptions.IgnoreCase, "en-US")]
-    private static partial Regex MyRegex1();
+  [GeneratedRegex("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*", RegexOptions.IgnoreCase, "en-US")]
+  private static partial Regex MyRegex();
+  [GeneratedRegex("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*", RegexOptions.IgnoreCase, "en-US")]
+  private static partial Regex MyRegex1();
+
+  public static void GetPhoneNumbersFromLetter(Ehist ehist, ref int cur, int ttl,  Stopwatch sw, HashSet<string> _vlds , HashSet<string> _bads, string regex = @"((\+|\+\s|\d{1}\s?|\()(\d\)?\s?[-\.\s\(]??){8,}\d{1}|\d{3}[-\.\s]??\d{3}[-\.\s]??\d{4}|\(\d{3}\)\s*\d{3}[-\.\s]??\d{4}|\d{3}[-\.\s]??\d{4})")
+  {
+    cur++;
+
+    ArgumentNullException.ThrowIfNull(ehist.LetterBody);
+
+    var match = new Regex(regex).Match(ehist.LetterBody);
+    while (match.Success)
+    {
+      foreach (var pnraw in match.Value.Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+      {
+        var pn = pnraw
+          .Replace(" ", "")
+          .Replace(" ", "")
+          .Replace("+", "")
+          .Replace("_", "")
+          .Replace("-", "")
+          .Replace(".", "")
+          .Replace("(", "")
+          .Replace(")", "");
+
+        Trace.Write($"{ehist.Id,5:N0} {ehist.LetterBody?.Length,8:N0}   {ehist.EmailId,40}   ");
+
+        if (pn.Length < 10) Trace.Write($"< 10 ---");
+        else if (pn.Length > 11) Trace.Write($"> 11 ---");
+        else if (pn == pnraw)
+        {
+          if (
+            (pn.Length == 10 && (pn.StartsWith("416") || pn.StartsWith("647") || pn.StartsWith("905"))) ||
+            (pn.Length == 11 && (pn.StartsWith("1416") || pn.StartsWith("1647") || pn.StartsWith("1905"))))
+          {
+            Console.ForegroundColor = ConsoleColor.DarkCyan; Console.Write($"{cur,8:N0} / {ttl:N0}  {ehist.EmailId,56}  {pnraw,16} {pn,11}   {(ttl - cur) * sw.Elapsed.TotalSeconds / cur,8:N1} sec left       {ehist.EmailedAt:yyyy-MM}  + + + \n");
+          }
+          else
+          {
+            var idx = ehist.LetterBody?.IndexOf(pnraw) ?? -1;
+            if (idx > 10)
+            {
+              var d = " :+\n\r";
+              ArgumentNullException.ThrowIfNull(ehist.LetterBody);
+              if (d.Contains(ehist.LetterBody.Substring(idx - 1, 1)))
+              {
+                Console.ForegroundColor = ConsoleColor.DarkGreen; Console.Write($"{cur,8:N0} / {ttl:N0}  {ehist.EmailId,56}  {pnraw,16} {pn,11}   {(ttl - cur) * sw.Elapsed.TotalSeconds / cur,8:N1} sec left       {ehist.EmailedAt:yyyy-MM}     {ehist.LetterBody?.Substring(idx - 6, 6).Replace("\n","\\n")}  +++++++++++++++++++\n");
+              }
+              else
+              {
+
+                if (pn.Length == 11 && pn[0] == '1') pn = pn[1..];
+                if (_bads.Add(pn))
+                {
+                  Console.ForegroundColor = ConsoleColor.Magenta; Console.Write($"{cur,8:N0} / {ttl:N0}  {ehist.EmailId,56}  {pnraw,16} {pn,11}   {(ttl - cur) * sw.Elapsed.TotalSeconds / cur,8:N1} sec left       {ehist.EmailedAt:yyyy-MM}     {ehist.LetterBody?.Substring(idx - 16, 16)}  ■ ■ ■ ■ ■  Remove me from DB!!!\n");
+                }
+              }
+            }
+            else
+            {
+              Console.ForegroundColor = ConsoleColor.Magenta;
+              Console.BackgroundColor = ConsoleColor.DarkBlue;
+              Console.Write($"{cur,8:N0} / {ttl:N0}  {ehist.EmailId,56}  {pnraw,16} {pn,11}   {(ttl - cur) * sw.Elapsed.TotalSeconds / cur,8:N1} sec left       {ehist.EmailedAt:yyyy-MM}  - - -\n");
+              Console.ResetColor();
+            }
+          }
+        }
+        else
+        {
+          if (pn.Length == 11 && pn[0] == '1') pn = pn[1..];
+          if (_vlds.Add(pn))
+          {
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write($"{cur,8:N0} / {ttl:N0}  {ehist.EmailId,56}  {pnraw,16} {pn,11}   {((ttl - cur) * sw.Elapsed.TotalSeconds / cur),8:N1} sec left       {ehist.EmailedAt:yyyy-MM}  ++ ++ ++\n");
+          }
+        }
+
+        Trace.WriteLine($"    {pn}");
+      }
+
+      match = match.NextMatch();
+    }
+  }
 }
 
 public class BPR___
 {
   static DateTime? _now = null; public static DateTime Now { get => _now ?? (_now = DateTime.Now).Value; }
 
-  public static void Start() => System.Media.SystemSounds.Beep.Play();
-  public static void Finish() => System.Media.SystemSounds.Beep.Play();
-  public static void Speak(string v) => System.Media.SystemSounds.Beep.Play();
+  public static void Speak(string v) { }
 }

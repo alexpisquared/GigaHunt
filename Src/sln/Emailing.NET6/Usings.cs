@@ -19,6 +19,7 @@ global using GigaHunt.Helpers;
 global using GigaHunt.View;
 global using Microsoft.EntityFrameworkCore;
 global using OutlookToDbWpfApp;
-global using WpfUserControlLib.Extensions;
+//global using WpfUserControlLib.Extensions;
 global using static System.Diagnostics.Trace;
 global using OL = Microsoft.Office.Interop.Outlook;
+global using StandardLib.Extensions;

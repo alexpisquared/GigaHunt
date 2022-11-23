@@ -33,14 +33,11 @@ public static class AgentAdminnWindowHelpers
         return false;
       }
     }
-    catch (Exception ex) { ex.Pop(); return true; }
+    catch (Exception ex) { ex.Log(); return true; }
   }
   public static async Task<string> SaveAndUpdateMetadata(QstatsRlsContext db)
   {
-    BPR___.Start();
     var now = BPR___.Now;
-
-    BPR___.Speak("Saving..."); await Task.Delay(333);
 
     while (true)
     {
@@ -68,22 +65,20 @@ public static class AgentAdminnWindowHelpers
 
         return report;
       }
-      catch (Exception ex)
+      catch (Exception)
       {
-        //if (bKeepShowingMoveError)
-        switch (MessageBox.Show(string.Format("Error in {0}.{1}():\n\n{2}\n\nRetry?\nYes - keep showing\nNo - skip showing\nCancel - Cancel operation", MethodBase.GetCurrentMethod()?.DeclaringType?.Name, MethodBase.GetCurrentMethod()?.Name,
-          ex.InnerException == null ? ex.Message :
-          ex.InnerException.InnerException == null ? ex.InnerException.Message :
-          ex.InnerException.InnerException.Message), "Exception ", MessageBoxButton.YesNoCancel, MessageBoxImage.Error))
-        {
-          case MessageBoxResult.Yes: break;
-          //	case MessageBoxResult.No: bKeepShowingMoveError = false; break;
-          case MessageBoxResult.Cancel: return "Cancelled";// tbkTitle.Text;
-        }
+        throw;
+        ////if (bKeepShowingMoveError)
+        //switch (MessageBox.Show(string.Format("Error in {0}.{1}():\n\n{2}\n\nRetry?\nYes - keep showing\nNo - skip showing\nCancel - Cancel operation", MethodBase.GetCurrentMethod()?.DeclaringType?.Name, MethodBase.GetCurrentMethod()?.Name,
+        //  ex.InnerException == null ? ex.Message :
+        //  ex.InnerException.InnerException == null ? ex.InnerException.Message :
+        //  ex.InnerException.InnerException.Message), "Exception ", MessageBoxButton.YesNoCancel, MessageBoxImage.Error))
+        //{
+        //  case MessageBoxResult.Yes: break;
+        //  //	case MessageBoxResult.No: bKeepShowingMoveError = false; break;
+        //  case MessageBoxResult.Cancel: return "Cancelled";// tbkTitle.Text;
+        //}
       }
-      finally { BPR___.Finish(); }
-
-      return "*******------------********+++++++++++";
     }
   }
 }

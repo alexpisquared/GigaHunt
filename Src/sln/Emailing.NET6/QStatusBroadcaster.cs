@@ -47,7 +47,7 @@ public static class QStatusBroadcaster
         body.Replace("{0}", nameCasing_Mc_only_so_far(firstName)).Replace("{1}", emailAddress).Replace("{2}", startDate),
         attachmnt, """C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AlexTiny_LinkedIn.png""");//@"C:\g\GigaHunt\Src\sln\GigaHunt\Assets\MCSD Logo - Latest as of 2009.gif|C:\g\GigaHunt\Src\sln\GigaHunt\Assets\linkedIn66x16.png|C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AlexTiny_LinkedIn.png");
     }
-    catch (Exception ex) { ex.Pop($"{emailAddress}"); return false; }
+    catch (Exception ex) { ex.Log($"{emailAddress}"); return false; }
   }
   static string nameCasing_Mc_only_so_far(string fname)
   {
@@ -76,6 +76,6 @@ public class DbActor
 
       return await db.SaveChangesAsync();
     }
-    catch (Exception ex) { ex.Pop(); throw; }
+    catch (Exception ex) { ex.Log(); throw; }
   }
 }

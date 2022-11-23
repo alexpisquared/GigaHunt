@@ -46,7 +46,7 @@ public static class OutlookToDbWindowHelpers
           });
         }
       }
-      catch (Exception ex) { ex.Pop("."); }
+      catch (Exception ex) { ex.Log("."); }
 
 
       em = _db.Emails.Add(new Email
@@ -101,6 +101,6 @@ public static class OutlookToDbWindowHelpers
         _ = await _db.TrySaveReportAsync("checkInsertEHist New letter");
       }
     }
-    catch (Exception ex) { ex.Pop(); }
+    catch (Exception ex) { ex.Log(); }
   }
 }
