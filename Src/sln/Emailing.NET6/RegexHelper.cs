@@ -1,4 +1,5 @@
 ﻿using System.Runtime.ConstrainedExecution;
+using WpfUserControlLib.Converters;
 
 namespace Emailing.NET6;
 
@@ -147,7 +148,7 @@ public partial class RegexHelper
 
         if (pnInt.Length is < 10 or > 11) continue;
         if (pnInt.Length == 11 && pnInt[0] != '1') continue;
-        
+
         Write($"\n");
 
         //todo: figure out what is that and below for: if (pnInt == pnRaw)
@@ -156,14 +157,17 @@ public partial class RegexHelper
           var pnIdx = ehist.LetterBody?.IndexOf(pnRaw) ?? -1;
           if (pnIdx > offset) // JIC not at the very beginning of the letter body.
           {
-            var alloweds = " :+\n\r";
+            var alloweds = "\n: +\r";
             ArgumentNullException.ThrowIfNull(ehist.LetterBody);
             Write($" prefix: '..{ehist.LetterBody.Substring(pnIdx - offset, offset).Replace("\n", "\\n").Replace("\r", "\\r"),20}'   {(alloweds.Contains(ehist.LetterBody.Substring(pnIdx - 1, 1)) ? ":all good  (no action needed)" : "this is bad  ■ ■ ■ ■ ■  Remove me from DB!!! \\n\"")}");
           }
         }
-
-        var scs = valids.Add(pnInt.Length == 11 ? pnInt[1..] : pnInt);
-        Write($"     {(scs ? "added OK +++" : "a dupe ---")}");
+        var pnX = pnInt.Length == 11 ? pnInt[1..] : pnInt;
+        if (AreaCodeValidator.Any(pnX))
+        {
+          var scs = valids.Add(pnX);
+          Write($"     {(scs ? "added OK +++" : "a dupe ---")}");
+        }
       }
 
       match = match.NextMatch();
