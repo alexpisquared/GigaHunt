@@ -68,6 +68,8 @@ public class Emailer
   public static string GetMicrosoftAccountName() //todo: move it to a proper place.
   {
     var wi = WindowsIdentity.GetCurrent();
+
+    ArgumentNullException.ThrowIfNull(wi.Groups);
     var groups = from g in wi.Groups
                  select new SecurityIdentifier(g.Value)
                  .Translate(typeof(NTAccount)).Value;

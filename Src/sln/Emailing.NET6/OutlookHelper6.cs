@@ -17,7 +17,7 @@ public partial class OutlookHelper6
       MyStore = _olApp.Session.Stores["alex.pigida@outlook.com"];
       _contactsFolder = MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderContacts);        // this.Application.GetNamespace("MAPI").GetDefaultFolder(OL.OlDefaultFolders.olFolderContacts);                //_deletedsFolder = _store.GetDefaultFolder(OL.OlDefaultFolders.olFolderDeletedItems);
     }
-    catch (COMException ex) { ex.Log("I think this is it... (ap: Jun`20)"); }
+    catch (COMException ex) { ex.Log("I think this is it... (ap: Jun`20)"); throw; }
     catch (Exception ex) { ex.Log(); throw; }
   }
 

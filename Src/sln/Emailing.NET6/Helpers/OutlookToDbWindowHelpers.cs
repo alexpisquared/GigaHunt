@@ -48,7 +48,7 @@ public static class OutlookToDbWindowHelpers
           });
         }
       }
-      catch (Exception ex) { ex.Log("."); }
+      catch (Exception ex) { ex.Log("."); throw; }
 
 
       em = _db.Emails.Add(new Email
@@ -107,7 +107,7 @@ public static class OutlookToDbWindowHelpers
         await PhoneNumbersGetInsSave(dbx, timeRecdSent, email, newEH);
       }
     }
-    catch (Exception ex) { ex.Log(); }
+    catch (Exception ex) { ex.Log(); throw; }
   }
 
   static async Task PhoneNumbersGetInsSave(QstatsRlsContext dbx, DateTime timeRecdSent, Email email, Ehist newEH)
