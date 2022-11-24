@@ -162,6 +162,7 @@ public partial class RegexHelper
             Write($" prefix: '..{ehist.LetterBody.Substring(pnIdx - offset, offset).Replace("\n", "\\n").Replace("\r", "\\r"),20}'   {(alloweds.Contains(ehist.LetterBody.Substring(pnIdx - 1, 1)) ? ":all good  (no action needed)" : "this is bad  ■ ■ ■ ■ ■  Remove me from DB!!! \\n\"")}");
           }
         }
+
         var pnX = pnInt.Length == 11 ? pnInt[1..] : pnInt;
         if (AreaCodeValidator.Any(pnX))
         {
