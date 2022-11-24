@@ -23,3 +23,5 @@ global using OutlookToDbWpfApp;
 global using static System.Diagnostics.Trace;
 global using OL = Microsoft.Office.Interop.Outlook;
 global using StandardLib.Extensions;
+global using System.Runtime.ConstrainedExecution;
+global using StandardLib.Consts;

@@ -1,7 +1,4 @@
-﻿using System.Runtime.ConstrainedExecution;
-using WpfUserControlLib.Converters;
-
-namespace Emailing.NET6;
+﻿namespace Emailing.NET6;
 
 public partial class RegexHelper
 {
