@@ -4,6 +4,7 @@ public partial class RegexHelper
 {
   const string
     _regexPhonePattern = @"((\+|\+\s|\d{1}\s?|\()(\d\)?\s?[-\.\s\(]??){8,}\d{1}|\d{3}[-\.\s]??\d{3}[-\.\s]??\d{4}|\(\d{3}\)\s*\d{3}[-\.\s]??\d{4}|\d{3}[-\.\s]??\d{4})",
+    _no7digitPhones = @"(?!(\d{7})$)((\+|\+\s|\d{1}\s?|\()(\d\)?\s?[-\.\s\(]??){8,}\d{1}|\d{3}[-\.\s]??\d{3}[-\.\s]??\d{4}|\(\d{3}\)\s*\d{3}[-\.\s]??\d{4}|\d{3}[-\.\s]??\d{4})", // :chatgpt
     _regexEmailPattern = @"\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*"; // //var r = new Regex(@"/\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}\b/");         \b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b  <== http://www.regular-expressions.info/email.html
 
   [GeneratedRegex(_regexEmailPattern, RegexOptions.IgnoreCase, "en-US")] private static partial Regex MyRegex();
