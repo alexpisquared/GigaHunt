@@ -36,7 +36,7 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
 #if DEBUG // POC
       var qr0 = _db.Emails.Where(r => r.Id == Srch);
       var qr1 = _db.Emails.Where(r => QstatsRlsContext.SoundsLike(r.Id) == QstatsRlsContext.SoundsLike(Srch));
-      WriteLine($"lll Cnt: {qr0.Count()} < {qr1.Count()}");
+      WriteLine($">>>{Srch}: {qr0.Count()} < {qr1.Count()}");
       var qry = _db.Emails.Where(r => cbDEX.IsChecked == true ? QstatsRlsContext.SoundsLike(r.Id) == QstatsRlsContext.SoundsLike(Srch) : r.Id.ToLower().Contains(srchToLwr));
       var emc = qry.Count();
 #endif
