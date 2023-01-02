@@ -19,10 +19,13 @@ public partial class QstatsRlsContext
     }
   }
 
+  [DbFunction(Name = "SOUNDEX", IsBuiltIn = true)]
+  public static string SoundsLike(string sounds) { throw new NotImplementedException(); }
+
   public static QstatsRlsContext Create() => //todo: retire; used by old GigaHunter.
 #if !DEBUG
     new(_dbg); 
 #else  
-    new(_rls); 
+    new(_rls);
 #endif
 }

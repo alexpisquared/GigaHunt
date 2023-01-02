@@ -33,6 +33,14 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     var srchToLwr = Srch.ToLower();
     try
     {
+#if DEBUG // POC
+      var qr0 = _db.Emails.Where(r => r.Id == Srch);
+      var qr1 = _db.Emails.Where(r => QstatsRlsContext.SoundsLike(r.Id) == QstatsRlsContext.SoundsLike(Srch));
+      WriteLine($"lll Cnt: {qr0.Count()} < {qr1.Count()}");
+      var qry = _db.Emails.Where(r => cbDEX.IsChecked == true ? QstatsRlsContext.SoundsLike(r.Id) == QstatsRlsContext.SoundsLike(Srch) : r.Id.ToLower().Contains(srchToLwr));
+      var emc = qry.Count();
+#endif
+
       var emails = _db.Emails.Local.ToBindingList().Where(r =>
         (cbAll.IsChecked == true || string.IsNullOrEmpty(r.PermBanReason) && _badEmails is not null && !_badEmails.Contains(r.Id)) && //todo: PermBanReason == '' still treated as BANNED!!!  HAS BEEN FIXED !!! on Sep 29, 2019.
         (cbxLeadEmails.IsChecked != true || _leadEmails?.Contains(r.Id) == true) &&
@@ -201,5 +209,5 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     catch (Exception ex) { ex.Pop(); }
   }
 
- async void OnClose(object s, RoutedEventArgs e) { Close(); await Task.Delay(11000); Application.Current.Shutdown(); }
+  async void OnClose(object s, RoutedEventArgs e) { Close(); await Task.Delay(11000); Application.Current.Shutdown(); }
 }

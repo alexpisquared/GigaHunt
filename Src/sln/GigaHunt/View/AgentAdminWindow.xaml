@@ -56,8 +56,9 @@
         <TextBox Width="120" FontSize="16"          x:Name="tbFilter" Text="{Binding Srch, Delay=300, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-          <CheckBox Content="_+ Banned"   Checked="OnFilter" Unchecked="OnFilter" Margin="4" x:Name="cbAll" />
-          <CheckBox Content="_+ Notes "   Checked="OnFilter" Unchecked="OnFilter" Margin="4" x:Name="cbNtA" />
+          <CheckBox Content="_+ Banned"   Checked="OnFilter" Unchecked="OnFilter" Margin="0" x:Name="cbAll" />
+          <CheckBox Content="_+ Notes "   Checked="OnFilter" Unchecked="OnFilter" Margin="0" x:Name="cbNtA" />
+          <CheckBox Content="_+ SnDex "   Checked="OnFilter" Unchecked="OnFilter" Margin="0" x:Name="cbDEX" />
         </StackPanel>
 
         <Grid Margin="0">
