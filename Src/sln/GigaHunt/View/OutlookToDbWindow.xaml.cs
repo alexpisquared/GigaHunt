@@ -1,5 +1,7 @@
 ﻿//using Microsoft.Office.Interop.Outlook;
 
+using Emailing.NET6;
+
 namespace OutlookToDbWpfApp;
 public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
 {
@@ -143,7 +145,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
 
   async Task<TupleSubst> FindInsertEmailsFromBodyAsync(string body, string originalSenderEmail)
   {
-    var newEmail = OutlookHelper6.FindEmails(body);
+    var newEmail = RegexHelper.FindEmails(body);
     var isAnyNew = false;
 
     for (var i = 0; i < newEmail.Length; i++)
@@ -308,7 +310,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
                 BanPremanentlyInDB(ref report, ref newBansAdded, senderEmail, "Delivery failed (b) ");
               }
 
-              foreach (var emailFromBody in OutlookHelper6.FindEmails(mailItem.Body))
+              foreach (var emailFromBody in RegexHelper.FindEmails(mailItem.Body))
               {
                 // banPremanentlyInDB(ref report, ref newBansAdded, emailFromBody, "Delivery failed (c) "); <== //todo: restore all %Delivery failed (c)%, since in the body usually alternative contacts are mentioned.
 
@@ -368,7 +370,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
               var isNew = await CheckDbInsertIfMissing_sender(mailItem, OutlookHelper6.RemoveBadEmailParts(mailItem.SenderEmailAddress), "..was on vaction && not existed in DB ?!?! ");
               if (isNew) newEmailsAdded++;
 
-              foreach (var emailFromBody in OutlookHelper6.FindEmails(mailItem.Body))
+              foreach (var emailFromBody in RegexHelper.FindEmails(mailItem.Body))
               {
                 if (_db.Emails.Find(emailFromBody) == null)
                 {
@@ -445,7 +447,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
             var isNew = await CheckDbInsertIfMissing_sender(mailItem, senderEmail, msg);
             if (isNew) { newEmailsAdded++; tb1.Text += $" * {senderEmail}\r\n"; }
 
-            foreach (var emailFromBody in OutlookHelper6.FindEmails(mailItem.Body))
+            foreach (var emailFromBody in RegexHelper.FindEmails(mailItem.Body))
             {
               senderEmail = OutlookHelper6.RemoveBadEmailParts(emailFromBody);
               if (!OutlookHelper6.ValidEmailAddress(senderEmail)) { tb1.Text += $" ! {senderEmail}  \t <- invalid!!!\r\n"; continue; }

@@ -1,4 +1,6 @@
-﻿namespace GigaHunt.View;
+﻿using Emailing.NET6;
+
+namespace GigaHunt.View;
 public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
 {
   const double _fractionToSend = .025, _absoluteMax = 25;
@@ -167,7 +169,7 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
               var text = Clipboard.GetText();
               if (string.IsNullOrEmpty(text)) return;
 
-              var mail = OutlookHelper6.FindEmails(text)?.FirstOrDefault();
+              var mail = RegexHelper.FindEmails(text)?.FirstOrDefault();
               if (string.IsNullOrEmpty(mail)) return;
 
               var t = text.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
@@ -191,7 +193,7 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
       var text = tbMail.Text;
       if (string.IsNullOrEmpty(text)) return;
 
-      var mail = OutlookHelper6.FindEmails(text)?.FirstOrDefault();
+      var mail = RegexHelper.FindEmails(text)?.FirstOrDefault();
       if (string.IsNullOrEmpty(mail)) return;
 
       _firstName = Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase((tbName.Text ?? "Sirs").ToLower()); // ALEX will be ALEX without .ToLower() (2020-12-03)
