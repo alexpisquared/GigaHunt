@@ -69,3 +69,12 @@ Include:
 EF6 Eage/Lazy/Explicit: 
   https://www.entityframeworktutorial.net/eager-loading-in-entity-framework.aspx
   https://learn.microsoft.com/en-us/ef/core/querying/related-data/eager
+
+
+2023-01-03  //tu:
+
+dotnet new classlib -n DB.DbName
+cd .\DB.DbName\
+dotnet add package Microsoft.EntityFrameworkCore.Design
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+dotnet ef dbcontext scaffold "Server=.\SqlExpress;Database=DbName;Trusted_Connection=True;TrustServerCertificate=Yes;" Microsoft.EntityFrameworkCore.SqlServer -o Models --force
