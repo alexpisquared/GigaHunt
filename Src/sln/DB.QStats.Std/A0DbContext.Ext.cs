@@ -8,7 +8,7 @@ public partial class Email : INotifyPropertyChanged
   [NotMapped] public DateTime? LastRcvd { get => lastRcvd; set { if (value != lastRcvd) { lastRcvd = value; OnPropertyChanged(); } } }
   [NotMapped] public string? Country { get => _country; set { if (value != _country) { _country = value; OnPropertyChanged(); } } }
 
-  string? _country, _pbr;
+  string? _country;
   int? ttl_Sent;
   int? ttl_Rcvd;
   DateTime? lastSent;
@@ -17,10 +17,7 @@ public partial class Email : INotifyPropertyChanged
   //[ObservableProperty] string? country;
 
   public event PropertyChangedEventHandler? PropertyChanged;
-  protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-  {
-    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-  }
+  protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 }
 
 public class MiscEfDb
