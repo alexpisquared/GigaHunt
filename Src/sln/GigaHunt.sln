@@ -13,17 +13,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GigaHunt", "GigaHunt\GigaHu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emailing.NET6", "Emailing.NET6\Emailing.NET6.csproj", "{45F8E3F4-E27B-49A1-B68D-3C13F41E0B3D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StandardLib", "..\..\..\AAV.Shared\Src\Net.CI\StandardLib\StandardLib.csproj", "{384B3550-9068-4EDF-A5BA-37E5D35DD8B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StandardLib", "..\..\..\AAV.Shared\Src\NetLts\StandardLib\StandardLib.csproj", "{384B3550-9068-4EDF-A5BA-37E5D35DD8B9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfUserControlLib", "..\..\..\AAV.Shared\Src\Net.CI\WpfUserControlLib\WpfUserControlLib.csproj", "{55C21AD9-0148-4376-A9B8-B6A337315466}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfUserControlLib", "..\..\..\AAV.Shared\Src\NetLts\WpfUserControlLib\WpfUserControlLib.csproj", "{55C21AD9-0148-4376-A9B8-B6A337315466}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AmbienceLib", "..\..\..\AAV.Shared\Src\Net.CI\Ambience\AmbienceLib.csproj", "{9E450200-926E-4BF1-A21F-E99CD2135CA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AmbienceLib", "..\..\..\AAV.Shared\Src\NetLts\Ambience\AmbienceLib.csproj", "{9E450200-926E-4BF1-A21F-E99CD2135CA4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EfDbHelperLib", "..\..\..\AAV.Shared\Src\Net.CI\EfDbHelperLib\EfDbHelperLib.csproj", "{3F8114AD-6EDB-4FAA-B973-D2D9A0FEA68B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EfDbHelperLib", "..\..\..\AAV.Shared\Src\NetLts\EfDbHelperLib\EfDbHelperLib.csproj", "{3F8114AD-6EDB-4FAA-B973-D2D9A0FEA68B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenderApiLib", "..\..\..\CI\Src\CI\GenderApiLib\GenderApiLib.csproj", "{272033A9-737B-4A6F-BD80-73EE90F9179F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StandardContractsLib", "..\..\..\AAV.Shared\Src\Net.CI\StandardContractsLib\StandardContractsLib.csproj", "{BE1F1EDA-A5AB-42FD-A7E9-B426228B16A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StandardContractsLib", "..\..\..\AAV.Shared\Src\NetLts\StandardContractsLib\StandardContractsLib.csproj", "{BE1F1EDA-A5AB-42FD-A7E9-B426228B16A8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -16,8 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net.CI\EfDbHelperLib\EfDbHelperLib.csproj" />
-    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net.CI\StandardLib\StandardLib.csproj" />
+    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\EfDbHelperLib\EfDbHelperLib.csproj" />
+    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\StandardLib\StandardLib.csproj" />
     <ProjectReference Include="..\DB.QStats.Std\DB.QStats.Std.csproj" />
   </ItemGroup>
 
