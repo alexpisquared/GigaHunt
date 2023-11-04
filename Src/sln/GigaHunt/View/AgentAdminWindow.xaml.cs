@@ -122,7 +122,7 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
   void OnFilter(object s, RoutedEventArgs e) => SrchFilter();
   void OnMoreHistCounts(object s, RoutedEventArgs e) => SrchFilter(50);
   void OnPBR(object s, RoutedEventArgs e) { tbPbr.Text += $" {((Button)s).Tag} - {DateTime.Today:yyyy-MM-dd}. "; OnNxt(s, e); }
-  void OnDNN(object s, RoutedEventArgs e)
+ async void OnDNN(object s, RoutedEventArgs e)
   {
     var i = 0;
     var curCampaignID = _db.Campaigns.Max(r => r.Id);
@@ -133,18 +133,18 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
       i++;
     }
 
-    App.Speak($"{i} records updated");
+    await SpeechSynth.SpeakFreeAsync($"{i} records updated");
     OnNxt(s, e);
     DoInfoPendingSave();
   }
   void OnNxt(object s, RoutedEventArgs e) => _cvsEmailsVwSrc.View.MoveCurrentToNext();
-  void OnOLk(object s, RoutedEventArgs e)
+  async void OnOLk(object s, RoutedEventArgs e)
   {
     BPR.BeepClk();
     if (_cvsEmailsVwSrc.View.CurrentItem is Email em)
       new OutlookHelper6().AddUpdateOutlookContact(em);
     else
-      App.Speak("Unable to UpdateContactByEmail since current item is not email.");
+      await SpeechSynth.SpeakFreeAsync("Unable to UpdateContactByEmail since current item is not email.");
   }
   void OnSelectnChgd(object s, SelectionChangedEventArgs e)
   {
@@ -160,9 +160,9 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     catch (Exception ex) { ex.Pop(); }
   }
   async void OnSave(object s, RoutedEventArgs e) => tbkTitle.Text = await AgentAdminnWindowHelpers.SaveAndUpdateMetadata(_db);
-  void OnDel(object s, RoutedEventArgs e)
+  async void OnDel(object s, RoutedEventArgs e)
   {
-    App.Speak("Are you sure?");
+    await SpeechSynth.SpeakFreeAsync("Are you sure?");
     if (MessageBox.Show($"Deleting:\r\n\n{eMailDataGrid.SelectedItems.Count}", "Are you sure?", MessageBoxButton.YesNoCancel, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes)
       try
       {
@@ -183,7 +183,7 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
 
         CollectionViewSource.GetDefaultView(eMailDataGrid.ItemsSource).Refresh(); //tu: refresh bound datagrid
         DoInfoPendingSave();
-        App.Speak("Deleted the selected rows and all the foreign keyed records.");
+        await SpeechSynth.SpeakFreeAsync("Deleted the selected rows and all the foreign keyed records.");
       }
       catch (Exception ex) { ex.Pop(); }
   }

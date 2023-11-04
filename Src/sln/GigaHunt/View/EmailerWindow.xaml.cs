@@ -211,12 +211,12 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
   void onRefresh(object s, RoutedEventArgs e) => ReFresh();
   async void onReLoad(object s, RoutedEventArgs e) => tbkTitle.Text = Title = await reLoad();
   void onClear(object s, RoutedEventArgs e) => _db.VEmailAvailProds.Local.Clear();
-  void OnBroadcastTopN(object s, RoutedEventArgs e)
+  async void OnBroadcastTopN(object s, RoutedEventArgs e)
   {
     try
     {
       if (!int.TryParse(tbMax.Text, out var cnt))
-        App.Speak($"Unable to parse {tbMax.Text}. Aborting broadcast.");
+        await SpeechSynth.SpeakFreeAsync($"Unable to parse {tbMax.Text}. Aborting broadcast.");
       else
       {
         for (var i = 0; i < cnt && i < vEMail_Avail_DevDataGrid.Items.Count; i++)
@@ -237,7 +237,7 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
       Progress1.Maximum = cnt;
       var msg = "Failes: ";
 
-      App.Speak(tbkTitle.Text = $"Sending {cnt} letters. Anti Spam delay set to {antiSpamPause90sec * .001:N0} sec. ETA {cnt * antiSpamPause90sec * .001 / 60.0:N0} minutes.");
+      await SpeechSynth.SpeakFreeAsync(tbkTitle.Text = $"Sending {cnt} letters. Anti Spam delay set to {antiSpamPause90sec * .001:N0} sec. ETA {cnt * antiSpamPause90sec * .001 / 60.0:N0} minutes.");
 
       EnableControls(false);
       var sw = Stopwatch.StartNew();
@@ -264,13 +264,13 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
       if (msg.Length > 12)
       {
         tbkTitle.Text = msg;
-        App.Speak($"Apparently, some letters have failed being sent. ");
+        await SpeechSynth.SpeakFreeAsync($"Apparently, some letters have failed being sent. ");
       }
       else
       {
         Hide();
         var prompt = $"Must run Outlook-to-DB now, to avoid double-sending!!!\n\n Review mailbox for unprocessed letters ... or just refer to *Done folder.";
-        App.Speak(prompt);
+        await SpeechSynth.SpeakFreeAsync(prompt);
         // _ = MessageBox.Show(prompt, "SUCCESS sending all letters", MessageBoxButton.OK, MessageBoxImage.Information);
         new OutlookToDbWindow().Show();
 

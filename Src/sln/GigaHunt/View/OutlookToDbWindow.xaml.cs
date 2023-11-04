@@ -24,7 +24,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
 
     if (ttl == 0)
     {
-      App.Speak(tb1.Text = "Nothing new in Outlook to for DB.");
+      await SpeechSynth.SpeakFreeAsync(tb1.Text = "Nothing new in Outlook to for DB.");
     }
     else
     {
@@ -38,14 +38,14 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
 
       if (_newEmailsAdded > 0)
       {
-        GigaHunt.App.Speak($"Done. {_newEmailsAdded} new emails found.");
+        await SpeechSynth.SpeakFreeAsync($"Done. {_newEmailsAdded} new emails found.");
         Hide();
         new AgentAdminnWindow().Show();
         Close();
       }
       else
       {
-        GigaHunt.App.Speak("Done.");
+        await SpeechSynth.SpeakFreeAsync("Done.");
       }
     }
   }

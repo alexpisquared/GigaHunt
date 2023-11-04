@@ -17,7 +17,7 @@ public static class AgentAdminnWindowHelpers
         if (dispose) dbx.Dispose();
         return false;
 #else
-        App.Speak("Would you like to save the changes?");
+        await SpeechSynth.SpeakFreeAsync("Would you like to save the changes?");
         switch (MessageBox.Show($"{dbx.GetDbChangesReport()}", "Would you like to save the changes?", MessageBoxButton.YesNoCancel, MessageBoxImage.Question))
         {
           default:

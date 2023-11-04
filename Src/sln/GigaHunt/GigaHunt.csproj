@@ -37,8 +37,9 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="7.0.0" />
     <!-- Gives project triangle WARNING - do we need it?  
     2023-01-04     Compiles ...but not tested yet
-    <PackageReference Include="MicrosoftOfficeCore" Version="15.0.0" />
+    2023-11-04     YES, IT IS NEEDED: does not email without it!!!
     -->
+    <PackageReference Include="MicrosoftOfficeCore" Version="15.0.0" />
     <PackageReference Include="Microsoft.Office.Core" Version="12.0.0" />
   </ItemGroup>
 
