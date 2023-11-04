@@ -6,15 +6,11 @@ public static class QStatusBroadcaster
 
   public static async Task<bool> SendLetter_UpdateDb(bool isAvailable, string emailAdrs, string firstName)
   {
-#if DEBUG_
-    await SpeechSynth.SpeakFreeAsync("Not sent in Debug mode.");
-#else
     if (await sendLetter(emailAdrs, firstName, isAvailable))
     {
       _ = await DbActor.InsertContactHistoryItem(false, _batchNow, _batchNow, emailAdrs, firstName, "std", isAvailable ? "Std Available 4 CVs" : "Std Busy");
       return true;
     }
-#endif
 
     return false;
   }

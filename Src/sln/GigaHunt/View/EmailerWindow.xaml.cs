@@ -198,7 +198,7 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
 
       _firstName = Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase((tbName.Text ?? "Sirs").ToLower()); // ALEX will be ALEX without .ToLower() (2020-12-03)
 
-      scs = await QStatusBroadcaster.SendLetter_UpdateDb(chkIsAvailable.IsChecked == true, mail, _firstName);
+      scs = await QStatusBroadcasterProxy.SendLetter_UpdateDb(chkIsAvailable.IsChecked == true, mail, _firstName);
     }
     finally
     {
@@ -232,33 +232,25 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
     BPR.BeepClk();
     try
     {
-      var antiSpamPause90sec = 90000;
+      var antiSpamPause90sec = 10;
       var cnt = vEMail_Avail_DevDataGrid.SelectedItems.Count;
       Progress1.Maximum = cnt;
-      var msg = "Failes: ";
+      var msg = "Failed emails:";
 
-      await SpeechSynth.SpeakFreeAsync(tbkTitle.Text = $"Sending {cnt} letters. Anti Spam delay set to {antiSpamPause90sec * .001:N0} sec. ETA {cnt * antiSpamPause90sec * .001 / 60.0:N0} minutes.");
+      await SpeechSynth.SpeakFreeAsync(tbkTitle.Text = $"Sending {cnt} letters. Anti Spam delay set to {antiSpamPause90sec:N0} sec. ETA {cnt * antiSpamPause90sec / 60.0:N0} minutes.");
 
       EnableControls(false);
       var sw = Stopwatch.StartNew();
       foreach (var em in vEMail_Avail_DevDataGrid.SelectedItems)
       {
-#if DEBUG
-        var scs = true;
-#else
-        var scs = await QStatusBroadcaster.SendLetter_UpdateDb(true, ((VEmailAvailProd)em).Id, ((VEmailAvailProd)em).Fname ?? "....");
-        if (!scs)
+        var success = await QStatusBroadcasterProxy.SendLetter_UpdateDb(true, ((VEmailAvailProd)em).Id, ((VEmailAvailProd)em).Fname ?? "....");
+        if (!success)
           msg += $"\n  {((VEmailAvailProd)em).Id}";
-#endif
 
-        tbkTitle.Text = $"Done/Todo: {Progress1.Maximum - --cnt} / {cnt}      msg/min so far: {(Progress1.Maximum - cnt) / sw.Elapsed.TotalMinutes:N1}      Last one is:  {(scs ? "Success" : "Failure")}  sending to  {((VEmailAvailProd)em).Id}";
+        tbkTitle.Text = $"Done/Todo: {Progress1.Maximum - --cnt} / {cnt}      msg/min so far: {(Progress1.Maximum - cnt) / sw.Elapsed.TotalMinutes:N1}      Last one is:  {(success ? "Success" : "Failure")}  sending to  {((VEmailAvailProd)em).Id}";
         Progress1.Value = Progress1.Maximum - cnt;
 
-#if DEBUG
-        await Task.Delay(999);
-#else
-        await Task.Delay(antiSpamPause90sec);
-#endif
+        await new Bpr().BeepAsync(333, DevOps.IsDbg ? .333 : antiSpamPause90sec);
       }
 
       if (msg.Length > 12)
@@ -269,7 +261,10 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
       else
       {
         Hide();
-        var prompt = $"Must run Outlook-to-DB now, to avoid double-sending!!!\n\n Review mailbox for unprocessed letters ... or just refer to *Done folder.";
+        var prompt = DevOps.IsDbg ? 
+          $"Running Outlook-to-DB now, but there should be nothing there since debug mode does not send anything." :
+          $"Running Outlook-to-DB now, to avoid double-sending!!!\n\n Review mailbox for unprocessed letters ... or just refer to *Done folder.";
+
         await SpeechSynth.SpeakFreeAsync(prompt);
         // _ = MessageBox.Show(prompt, "SUCCESS sending all letters", MessageBoxButton.OK, MessageBoxImage.Information);
         new OutlookToDbWindow().Show();
@@ -292,7 +287,7 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
       {
         EnableControls(false);
         //WindowState = System.Windows.WindowState.Minimized;
-        foreach (var em in vEMail_UnAvl_DevDataGrid.SelectedItems) _ = await QStatusBroadcaster.SendLetter_UpdateDb(false, ((VEmailUnAvlProd)em).Id, ((VEmailUnAvlProd)em).Fname ?? ".....");
+        foreach (var em in vEMail_UnAvl_DevDataGrid.SelectedItems) _ = await QStatusBroadcasterProxy.SendLetter_UpdateDb(false, ((VEmailUnAvlProd)em).Id, ((VEmailUnAvlProd)em).Fname ?? ".....");
         Close();
       }
     }

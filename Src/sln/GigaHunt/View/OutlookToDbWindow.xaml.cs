@@ -385,7 +385,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
                 ArgumentNullException.ThrowIfNull(rcvdDoneFolder, "rcvdDoneFolder is nul @@@@@@@@@@@@@@@");
 
                 var fnm = _db.Emails.Find(mailItem.SenderEmailAddress)?.Fname ?? OutlookHelper6.FigureOutSenderFLName(mailItem, mailItem.SenderEmailAddress).first;
-                var scs = await QStatusBroadcaster.SendLetter_UpdateDb(true, mailItem.SenderEmailAddress, fnm);
+                var scs = await QStatusBroadcasterProxy.SendLetter_UpdateDb(true, mailItem.SenderEmailAddress, fnm);
                 if (scs)
                   OutlookHelper6.MoveIt(rcvdDoneFolder, mailItem);
               }
