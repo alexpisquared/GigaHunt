@@ -1,7 +1,7 @@
 ﻿namespace GigaHunt.View;
 public partial class MainSwitchboard : WpfUserControlLib.Base.WindowBase
 {
-  public MainSwitchboard() { InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme; tbver.Text = DevOps.IsDbg ? @"DBG" : "rls"; }
+  public MainSwitchboard() { InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme; tbver.Text = VersionHelper.CurVerStr; }
   async void OnLoaded(object s, RoutedEventArgs e)
   {
     themeSelector1.SetCurThemeToMenu(Thm);
@@ -21,5 +21,4 @@ public partial class MainSwitchboard : WpfUserControlLib.Base.WindowBase
   void onDb2Ou(object s, RoutedEventArgs e) => tbver.Text = Title = new OutlookHelper6().SyncDbToOutlook(QstatsRlsContext.Create());
   async void onUndel(object s, RoutedEventArgs e) => tbver.Text = Title = await new OutlookHelper6().OutlookUndeleteContactsAsync(QstatsRlsContext.Create());
   void onDbIni(object s, RoutedEventArgs e) { } //  => DBInitializer.SetDbInitializer();
-
 }

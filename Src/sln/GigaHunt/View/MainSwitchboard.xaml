@@ -24,7 +24,6 @@
       </Grid.LayoutTransform>
 
       <TextBlock x:Name="tbver" Margin="0 -6 26 0" FontSize="13" Text="ver" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="#4af" />
-      <TextBlock x:Name="tbve_" Margin="0 -6 96 0" FontSize="13" Text="2023-11-05" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="#4af" />
 
       <Menu VerticalAlignment="Center" Background="Transparent" Foreground="#c80" HorizontalAlignment="Center">
         <View:MainSwitchboardUsrCtrl/>
