@@ -1,11 +1,8 @@
-﻿using System.Speech.Synthesis;
+﻿using System.Reflection;
 
 namespace GigaHunt;
 public partial class App : Application
 {
-  static SpeechSynthesizer? _synth; static SpeechSynthesizer Synth { get { _synth ??= new SpeechSynthesizer { Rate = 7, Volume = 75 }; return _synth; } }
-  internal static void Speak(string v) => Synth.Speak(v);
-
   static MainSwitchboard? _msb; public static MainSwitchboard Msb => _msb ??= new MainSwitchboard();
 
   protected override void OnStartup(StartupEventArgs sea)
@@ -13,7 +10,11 @@ public partial class App : Application
     base.OnStartup(sea);
     Current.DispatcherUnhandledException += UnhandledExceptionHndlr.OnCurrentDispatcherUnhandledException;
     EventManager.RegisterClassHandler(typeof(TextBox), TextBox.GotFocusEvent, new RoutedEventHandler((s, re) => { (s as TextBox)?.SelectAll(); })); //tu: TextBox
-    //Tracer.SetupTracingOptions("GigaHunt", new TraceSwitch("OnlyUsedWhenInConfig", "This is the trace for all               messages... but who cares?   See ScrSvr for a model.") { Level = TraceLevel.Verbose }); // Trace.WriteLine(string.Format("*{0:MMdd HH:mm} The Start. CommandLine: '{1}'", GigaHunt.BPR___._now, Environment.CommandLine));
+#if !EmergencyTroubleshooting
+        Listeners.Add(new TextWriterTraceListener(@$"C:\temp\Logs\{Assembly.GetExecutingAssembly().GetName().Name}.log"));
+        AutoFlush = true;
+        WriteLine("");
+#endif
 
 #if test
       new Office365_POC().Nogo_Jun2020();
