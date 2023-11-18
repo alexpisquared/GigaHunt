@@ -69,22 +69,22 @@ public static class OutlookToDbWindowHelpers
     return em;
   }
 
-  public static async Task EHistInsUpdSaveAsync(QstatsRlsContext dbx, string? subject, string? body, DateTime? sentOn, DateTime timeRecdSent, string rs, Email email)
+  public static async Task EHistInsUpdSaveAsync(QstatsRlsContext dbq, string? subject, string? body, DateTime? sentOn, DateTime timeRecdSent, string rs, Email email)
   {
     //insertEMailEHistItem(isRcvd, timeRecdSent, email, subject, body);		}		void insertEMailEHistItem(bool isRcvd, DateTime timeRecdSent, Email email, string subject, string body)		{
     try
     {
       var gt = timeRecdSent.AddMinutes(-5);
       var lt = timeRecdSent.AddMinutes(+5);         //var ch = isRcvd ? ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.Id) : ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.Id); if (ch.Count() < 1)
-      var eh = dbx.Ehists.FirstOrDefault(p => p.RecivedOrSent == rs && p.EmailId == email.Id && gt < p.EmailedAt && p.EmailedAt < lt);
+      var eh = dbq.Ehists.FirstOrDefault(p => p.RecivedOrSent == rs && p.EmailId == email.Id && gt < p.EmailedAt && p.EmailedAt < lt);
       if (eh is not null)
       {
-       await PhoneNumbersGetInsSave(dbx, timeRecdSent, email, eh);
+       await PhoneNumbersGetInsSave(dbq, timeRecdSent, email, eh);
 
         if (eh.SentOn != sentOn)
         {
           eh.SentOn = sentOn;
-          _ = await dbx.TrySaveReportAsync("checkInsertEHist SentOn update");
+          _ = await dbq.TrySaveReportAsync("checkInsertEHist SentOn update");
         }
       }
       else
@@ -100,21 +100,21 @@ public static class OutlookToDbWindowHelpers
           SentOn = sentOn,
           EmailedAt = timeRecdSent
         };
-        var newCH2 = dbx.Ehists.Add(newEH);
+        var newCH2 = dbq.Ehists.Add(newEH);
 
-        _ = await dbx.TrySaveReportAsync("checkInsertEHist New letter");
+        _ = await dbq.TrySaveReportAsync("checkInsertEHist New letter");
 
-        await PhoneNumbersGetInsSave(dbx, timeRecdSent, email, newEH);
+        await PhoneNumbersGetInsSave(dbq, timeRecdSent, email, newEH);
       }
     }
     catch (Exception ex) { ex.Log(); throw; }
   }
 
-  static async Task PhoneNumbersGetInsSave(QstatsRlsContext dbx, DateTime timeRecdSent, Email email, Ehist newEH)
+  static async Task PhoneNumbersGetInsSave(QstatsRlsContext dbq, DateTime timeRecdSent, Email email, Ehist newEH)
   {
     var phones = RegexHelper.GetUniquePhoneNumbersFromLetter(newEH);
-    phones.ToList().ForEach(pn => QStatsDbHelper.InsertPhoneNumberIntoDB(dbx, email.Id, timeRecdSent, Now, pn));
+    phones.ToList().ForEach(pn => QStatsDbHelper.InsertPhoneNumberIntoDB(dbq, email.Id, timeRecdSent, Now, pn));
 
-    _ = await dbx.TrySaveReportAsync(nameof(OutlookToDbWindowHelpers));
+    _ = await dbq.TrySaveReportAsync(nameof(OutlookToDbWindowHelpers));
   }
 }

@@ -6,23 +6,23 @@ namespace GigaHunt.View;
 
 public static class AgentAdminnWindowHelpers
 {
-  public static async Task<bool> CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(QstatsRlsContext dbx, bool dispose, Func<Task> savePlusMetadata)
+  public static async Task<bool> CheckAskToSaveDispose_CanditdteForGlobalRepltAsync(QstatsRlsContext dbq, bool dispose, Func<Task> savePlusMetadata)
   {
     try
     {
-      if (dbx.ChangeTracker.Entries().Any(e => e.State is EntityState.Added or EntityState.Modified or EntityState.Deleted))
+      if (dbq.ChangeTracker.Entries().Any(e => e.State is EntityState.Added or EntityState.Modified or EntityState.Deleted))
       {
 #if true
         await savePlusMetadata();
-        if (dispose) dbx.Dispose();
+        if (dispose) dbq.Dispose();
         return false;
 #else
         await SpeechSynth.SpeakFreeAsync("Would you like to save the changes?");
-        switch (MessageBox.Show($"{dbx.GetDbChangesReport()}", "Would you like to save the changes?", MessageBoxButton.YesNoCancel, MessageBoxImage.Question))
+        switch (MessageBox.Show($"{dbq.GetDbChangesReport()}", "Would you like to save the changes?", MessageBoxButton.YesNoCancel, MessageBoxImage.Question))
         {
           default:
-          case MessageBoxResult.Yes: await savePlusMetadata(); if (dispose) dbx.Dispose(); return false;
-          case MessageBoxResult.No: if (dispose) dbx.Dispose(); return false;
+          case MessageBoxResult.Yes: await savePlusMetadata(); if (dispose) dbq.Dispose(); return false;
+          case MessageBoxResult.No: if (dispose) dbq.Dispose(); return false;
           case MessageBoxResult.Cancel: return true;
         }
 #endif
