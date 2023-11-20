@@ -3,22 +3,22 @@
 public partial class QStatsDbHelper
 {
   public static void InsertPhoneNumbersIntoDB(QstatsRlsContext dbq, List<string> pnLst, string emailId, DateTime emailedAt, DateTime now) { pnLst.ForEach(pn => InsertPhoneNumberIntoDB(dbq, emailId, emailedAt, now, pn)); }
-  public static void InsertPhoneNumberIntoDB(QstatsRlsContext dbq, string emailId, DateTime emailedAt, DateTime now, string phnum)
+  public static void InsertPhoneNumberIntoDB(QstatsRlsContext dbq, string emailId, DateTime emailedAt, DateTime now, string phoneNumber)
   {
-    //if (Debugger.IsAttached && !dbq.Phones.Any(r => r.PhoneNumber == phnum)) Debugger.Break();
-
-    var phone = dbq.Phones.FirstOrDefault(r => r.PhoneNumber == phnum) ?? dbq.Phones.Add(new Phone { AddedAt = now, SeenFirst = emailedAt, SeenLast = emailedAt, PhoneNumber = phnum }).Entity;
-
+    var phone = dbq.Phones.FirstOrDefault(r => r.PhoneNumber == phoneNumber) ?? dbq.Phones.Add(new Phone { AddedAt = now, SeenFirst = emailedAt, SeenLast = emailedAt, PhoneNumber = phoneNumber }).Entity;
     if (phone.SeenFirst > emailedAt) phone.SeenFirst = emailedAt;
     else
     if (phone.SeenLast < emailedAt) phone.SeenLast = emailedAt;
 
-    InsertPhoneEmailXRef(dbq, emailId, now, phnum, phone);
-    InsertPhoneAgencyXRef(dbq, emailId, now, phnum, phone);
+    InsertPhoneEmailXRef(dbq, emailId, now, phone);
+    InsertPhoneAgencyXRef(dbq, emailId, now, phone);
   }
-  public static void InsertPhoneAgencyXRef(QstatsRlsContext dbq, string emailId, DateTime now, string phnum, Phone phone)
+  public static void InsertPhoneAgencyXRef(QstatsRlsContext dbq, string emailId, DateTime now, Phone phone)
   {
-    if (Debugger.IsAttached && !dbq.Phones.Any(r => r.PhoneNumber == phnum)) Debugger.Break(); //todo: make sure OK.
+    if (!dbq.Phones.Any(r => r.PhoneNumber == phone.PhoneNumber))
+    {
+      phone = dbq.Phones.Add(phone).Entity;
+    }
 
     const int maxLen = 256;
 
@@ -28,17 +28,17 @@ public partial class QStatsDbHelper
 
     if (!dbq.PhoneAgencyXrefs.Any(r => r.PhoneId == phone.Id && r.AgencyId == agencyId))
     {
-      dbq.PhoneAgencyXrefs.Add(new PhoneAgencyXref { PhoneId = phone.Id, AgencyId = agencyId, Note = "", AddedAt = now, Phone = phone, Agency = agency });
+      dbq.PhoneAgencyXrefs.Add(new PhoneAgencyXref { Phone= phone, AgencyId = agencyId, Note = "", AddedAt = now, Agency = agency });
     }
   }
-  public static void InsertPhoneEmailXRef(QstatsRlsContext dbq, string emailId, DateTime now, string phnum, Phone phone)
+  public static void InsertPhoneEmailXRef(QstatsRlsContext dbq, string emailId, DateTime now, Phone phone)
   {
     var email = dbq.Emails.Find(emailId);
     if (email is null)
-      Console.Write($"(email is null): {emailId} ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
+      Write($"(email is null): {emailId} ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
     else
     {
-      if (string.IsNullOrEmpty(email.Phone)) email.Phone = phnum;
+      if (string.IsNullOrEmpty(email.Phone)) email.Phone = phone.PhoneNumber;
 
       if (!dbq.PhoneEmailXrefs.Any(r => r.PhoneId == phone.Id && r.EmailId == email.Id))
       {
