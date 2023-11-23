@@ -88,7 +88,8 @@
         </StackPanel>
           
         <Grid DataContext="{StaticResource vsEMail_Avail}" Grid.Column="1" Grid.Row="1" >
-          <DataGrid x:Name="vEMail_Avail_DevDataGrid" ItemsSource="{Binding}" IsEnabled="{Binding ElementName=chkIsAvailable, Path=IsChecked}" IsReadOnly="True" VerticalAlignment="Top" SelectionChanged="onSelectnChgd" >
+          <DataGrid x:Name="vEMail_Avail_DevDataGrid" ItemsSource="{Binding}" IsEnabled="{Binding ElementName=chkIsAvailable, Path=IsChecked}" IsReadOnly="True" VerticalAlignment="Top" SelectionChanged="onSelectnChgd" 
+                    SelectionMode="Extended">
             <DataGrid.Columns>
               <DataGridTextColumn Header=" Email (Id)"  Binding="{Binding Id}"           Width="180"                    />
               <DataGridTextColumn Header=" Fname"       Binding="{Binding Fname}"                                       />

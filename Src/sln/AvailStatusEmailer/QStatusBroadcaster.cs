@@ -46,8 +46,8 @@ namespace AvailStatusEmailer
           @"C:\c\docs\CV\ikmnet assessment - Alex Pigida - 95304315.pdf",
           @"C:\c\docs\CV\Resume - Alex Pigida - short summary.docx",
           @"C:\c\docs\CV\Resume - Alex Pigida - short summary.pdf",
-          @"C:\c\docs\CV\Resume - Alex Pigida - long detailed version.docx",
-          @"C:\c\docs\CV\Resume - Alex Pigida - long detailed version.pdf"
+          @"C:\c\docs\CV\Resume - Alex Pigida - long version.docx",
+          @"C:\c\docs\CV\Resume - Alex Pigida - long version.pdf"
         } : new string[0];
         var avlbldate = DateTime.Today < new DateTime(2022, 10, 15) ? new DateTime(2022, 11, 1) : DateTime.Today.AddDays(14);
         var monthPart = avlbldate.Day < 10 ? "early" : avlbldate.Day > 20 ? "late" : "mid";
