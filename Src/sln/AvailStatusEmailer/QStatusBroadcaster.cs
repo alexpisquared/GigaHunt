@@ -35,9 +35,8 @@ namespace AvailStatusEmailer
     {
       try
       {
-        var html = //isResumeFeatureUpdate ?
-                   //$@"C:\g\GigaHunt\Src\sln\AvailStatusEmailer\Assets\AvailabilityStatus_AvailableNow_FreshCV.htm" :
-          $@"C:\g\GigaHunt\Src\sln\AvailStatusEmailer\Assets\AvailabilityStatus_{(isAvailable ? "AvailableNow" : "Unavailable")}.htm";
+        var html = @"C:\g\GigaHunt\Src\sln\AvailStatusEmailer\Assets\AvailabilityStatus_AvailableNow.htm"; //isResumeFeatureUpdate ? $@"C:\g\GigaHunt\Src\sln\AvailStatusEmailer\Assets\AvailabilityStatus_AvailableNow_FreshCV.htm" :
+                //$@"C:\g\GigaHunt\Src\sln\AvailStatusEmailer\Assets\AvailabilityStatus_{(isAvailable ? "AvailableNow" : "Unavailable")}.htm";
 
         var body = new StreamReader(html).ReadToEnd();
         var subj = /*isResumeFeatureUpdate*/false ? "resume feature update" : Asu + (isAvailable ? "Open for opportunities in Toronto++" : "Unavailable");
