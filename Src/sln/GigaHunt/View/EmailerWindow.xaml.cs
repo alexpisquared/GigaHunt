@@ -232,7 +232,7 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
     BPR.BeepClk();
     try
     {
-      var antiSpamPause90sec = 10;
+      var antiSpamPause90sec = DevOps.IsDbg || Debugger.IsAttached ? .555 : 80;
       var cnt = vEMail_Avail_DevDataGrid.SelectedItems.Count;
       Progress1.Maximum = cnt;
       var msg = "Failed emails:";
@@ -250,7 +250,7 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
         tbkTitle.Text = $"Done/Todo: {Progress1.Maximum - --cnt} / {cnt}      msg/min so far: {(Progress1.Maximum - cnt) / sw.Elapsed.TotalMinutes:N1}      Last one is:  {(success ? "Success" : "Failure")}  sending to  {((VEmailAvailProd)em).Id}";
         Progress1.Value = Progress1.Maximum - cnt;
 
-        await new Bpr().BeepAsync(333, DevOps.IsDbg ? .333 : antiSpamPause90sec);
+        await new Bpr().BeepAsync(333, antiSpamPause90sec);
       }
 
       if (msg.Length > 12)

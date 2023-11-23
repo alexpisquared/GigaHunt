@@ -1,6 +1,7 @@
 ﻿//using Microsoft.Office.Interop.Outlook;
 
 
+using Emailing.NET6;
 using Microsoft.Office.Interop.Outlook;
 
 namespace OutlookToDbWpfApp;

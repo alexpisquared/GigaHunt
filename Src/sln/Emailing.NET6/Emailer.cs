@@ -1,14 +1,14 @@
 #define REALREADY			//uncomment only when ready:
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 
 namespace Emailing.NET6;
 public class Emailer
 {
-  public static async Task<bool> Send(string trgEmailAdrs, string msgSubject, string msgBody, string[]? attachedFilenames = null, string? signatureImage = null) => await Send(cFrom, trgEmailAdrs, msgSubject, msgBody, attachedFilenames, signatureImage);
-  public static async Task<bool> Send(string from, string trgEmailAdrs, string msgSubject, string msgBody, string[]? attachedFilenames = null, string? signatureImage = null)
+  public static async Task<(bool success, string report)> Send(string trgEmailAdrs, string msgSubject, string msgBody, string[]? attachedFilenames = null, string? signatureImage = null) => await Send(cFrom, trgEmailAdrs, msgSubject, msgBody, attachedFilenames, signatureImage);
+  public static async Task<(bool success, string report)> Send(string from, string trgEmailAdrs, string msgSubject, string msgBody, string[]? attachedFilenames = null, string? signatureImage = null)
   {
     var sw = Stopwatch.StartNew();
+    var report = "";
     try
     {
       using (var mailMessage = new MailMessage(cFrom, trgEmailAdrs, msgSubject, msgBody))
@@ -52,23 +52,24 @@ public class Emailer
         var appPassword = new ConfigurationBuilder().AddUserSecrets<Emailer>().Build()["AppPassword"] ?? "no key"; //tu: adhoc usersecrets
 
         using var client = new SmtpClient("smtp.office365.com", 587) { EnableSsl = true, Credentials = new System.Net.NetworkCredential(GetMicrosoftAccountName(), appPassword) }; // see readme # 8979 !!!!
-        try { await client.SendMailAsync(mailMessage); } // letter does not appear in the Outlook ==> use DB to track sent messages.
-        catch (Exception ex) { ex.Log($"Error emailing to: {trgEmailAdrs}"); throw; }           //tu: add to Chronoer.cfg: <system.net><mailSettings><smtp deliveryMethod="Network" from="test@foo.com"><!--userName="pigida@aei.ca" password=""--><!--port="25"--><network host="mail.aei.ca" defaultCredentials="true"/></smtp></mailSettings></system.net>
+        try { await client.SendMailAsync(mailMessage); }
+        catch (SmtpException ex) { report = ex.Log($"Error emailing to: {trgEmailAdrs}"); throw; }
+        catch (Exception ex) { report = ex.Log($"Error emailing to: {trgEmailAdrs}"); throw; }           //tu: add to Chronoer.cfg: <system.net><mailSettings><smtp deliveryMethod="Network" from="test@foo.com"><!--userName="pigida@aei.ca" password=""--><!--port="25"--><network host="mail.aei.ca" defaultCredentials="true"/></smtp></mailSettings></system.net>
       }
 
       var logMsg = string.Format("{0} ({3}.{4})   sent to:  {1,-49} Subj: {2} \t (took {5:m\\:ss\\.f}){6}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), trgEmailAdrs, msgSubject, Environment.MachineName, Environment.UserName, sw.Elapsed, Environment.NewLine);
-      Trace.Write(logMsg);
+      Write(logMsg);
       if (isFirst) { isFirst = false; File.AppendAllText(LogFile, Environment.NewLine); }
 
       File.AppendAllText(LogFile, logMsg);
 
-      return true;
+      return (true, report);
     }
-    catch (FormatException ex) { ex.Log(trgEmailAdrs); }
-    catch (SmtpException ex) { ex.Log(trgEmailAdrs); }
-    catch (Exception ex) { ex.Log(trgEmailAdrs); }
+    catch (FormatException ex) { report = ex.Log(trgEmailAdrs); }
+    catch (SmtpException ex) { report = ex.Log(trgEmailAdrs); }
+    catch (Exception ex) { report = ex.Log(trgEmailAdrs); }
 
-    return false;
+    return (false, report);
   }
   public static string GetMicrosoftAccountName() //todo: move it to a proper place.
   {
