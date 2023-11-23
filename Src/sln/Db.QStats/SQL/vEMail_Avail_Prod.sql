@@ -14,8 +14,9 @@ ALTER FUNCTION [dbo].[BadEmails] () RETURNS TABLE AS                   -- last e
 	  'idctechnologies', 'imax', 'indeed', 'indeedemail', 'intel', 'invalidemail', 'iRun', 
 		'jazz', 'kijiji', 'lexisnexis', 'linkedin', 'news', 'nityo', 'nokia', 'nymi', 'quantumworld', 
 		'ramac', 'resource-logistics', 'richmondhilltoyota', 'runningroom', 'shatny', 'sleepcountry', 'stackoverflow', 'torontopolice', 
-	  'twitter', 'ukr', 'umca', 'vbuzzer', 'wietzestoyota'
-	  , 'botsford' -- temp: remove after a talk or after Dec 3, 2023
+	  'twitter', 'ukr', 'umca', 'vbuzzer', 'wietzestoyota', 'here'
+	  , 'botsford'   -- temp: remove after a talk or after Dec 3, 2023
+	  , 'botsfordit' -- temp: remove after a talk or after Dec 3, 2023
 	  )) OR
 	  (ID LIKE '%unsubscribe%') OR
 	  (ID LIKE '%no-reply%') OR
@@ -118,7 +119,7 @@ GO
 --2023-11-23 11:15:11.527 13421       10632       2789        21          2768        2023-11-11 00:00:00.000 12               1                                   1
 
 
-CREATE NONCLUSTERED INDEX EmailerViewAcceleratorIndex ON dbo.EHist (EMailID, RecivedOrSent) -- solves 8 min cold start for the vEMail_Avail_Prod view!!!
+--CREATE NONCLUSTERED INDEX EmailerViewAcceleratorIndex ON dbo.EHist (EMailID, RecivedOrSent) -- solves 8 min cold start for the vEMail_Avail_Prod view!!!
 
 --INSERT INTO EMail                                              (ID, FName, LName, Company, Phone, PermBanReason, DoNotNotifyOnAvailableForCampaignID, DoNotNotifyOnOffMarketForCampaignID,                          Notes, NotifyPriority, ReSendAfter, AddedAt, ModifiedAt)
 SELECT     REPLACE(REPLACE(ID, '@bullhorn.com', ''), '=', '@') AS ID, FName, LName, Company, Phone, PermBanReason, DoNotNotifyOnAvailableForCampaignID, DoNotNotifyOnOffMarketForCampaignID, 'from ''' + ID + '''' AS Notes, NotifyPriority, ReSendAfter, AddedAt, ModifiedAt

@@ -22,7 +22,7 @@ namespace AvailStatusEmailer
 {
   public partial class EmailersendWindow : AAV.WPF.Base.WindowBase
   {
-    const double _fractionToSend = .025, _absoluteMax = 25;
+    const double _fractionToSend = .025, _absoluteMax = 2;
     A0DbContext _db;
     CollectionViewSource _cvsEmails;
     ObservableCollection<vEMail_Avail_Prod> _obsColAvlbl;
