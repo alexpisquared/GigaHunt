@@ -58,11 +58,11 @@ namespace AvailStatusEmailer
         }
         else
         {
-          await _db.vEMail_UnAvl_Prod.OrderByDescending(r => r.AddedAt).LoadAsync();
+          await _db.vEMail_UnAvl_Prod.LoadAsync();
 
           _cvsEmails = (CollectionViewSource)FindResource("vsEMail_UnAvl");
           _cvsEmails.Source = null;
-          _cvsEmails.Source = _db.vEMail_UnAvl_Prod.Local.OrderByDescending(r => r.AddedAt);
+          _cvsEmails.Source = _db.vEMail_UnAvl_Prod.Local;
         }
 
         var ttl = chkIsAvailable.IsChecked == true ? _obsColAvlbl.Count : _db.vEMail_UnAvl_Prod.Local.Count;
@@ -128,7 +128,11 @@ namespace AvailStatusEmailer
       }
       catch (Exception ex) { ex.Pop(); }
     }
-    void populateWithSorting(IEnumerable<vEMail_Avail_Prod> rv) => _cvsEmails.Source = rv.OrderBy(r => r.LastSentAt).ThenBy(r => r.AddedAt);// <= for restarting the failed campaingn | for starting brand new campagn after a contract => .OrderByDescending(r => r.TtlSends).ThenByDescending(r => r.TtlRcvds); 
+    void populateWithSorting(IEnumerable<vEMail_Avail_Prod> rv) => _cvsEmails.Source = rv
+    .OrderBy(r => r.NotifyPriority).ThenByDescending(r => r.AddedAt)          // :new 2020-11-23 
+    //.OrderBy(r => r.LastSentAt).ThenBy(r => r.AddedAt)                      // :for restarting the failed campaign 
+    //.OrderByDescending(r => r.TtlSends).ThenByDescending(r => r.TtlRcvds)   // :for starting brand new campaign after a contract
+    ;
     void Save()
     {
       try
@@ -244,7 +248,7 @@ namespace AvailStatusEmailer
         var cnt = vEMail_Avail_DevDataGrid.SelectedItems.Count;
         var cntRO = cnt;
         var msg = "Failes: ";
-        var antiSpamBlockListPauseInMs = 1000 + (cnt < 12 ? cnt * cnt * cnt * cnt : 14000);
+        var antiSpamBlockListPauseInMs = (33 + cnt * 2) * 1000;
 
         App.SpeakAsync(tbkTitle.Text = $"Sending {cnt} letters. Anti Spam delay set to {antiSpamBlockListPauseInMs * .001:N0} sec. ETA {cnt * antiSpamBlockListPauseInMs * .001 / 60.0:N0} minutes.");
 
@@ -258,7 +262,7 @@ namespace AvailStatusEmailer
 
           tbkTitle.Text = $"Done/Todo: {cntRO - cnt} / {--cnt}      msg/min so far: {(cntRO - cnt) / sw.Elapsed.TotalMinutes:N1}      Last one is:  {(scs ? "Success" : "Failure")}  sending to  {((vEMail_Avail_Prod)em).ID}";
 
-          await Task.Delay(antiSpamBlockListPauseInMs);
+          Bpr.BeepFD(333, antiSpamBlockListPauseInMs); // blocking call.
         }
 
         if (msg.Length > 12)

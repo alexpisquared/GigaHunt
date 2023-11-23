@@ -111,7 +111,7 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accessibility" />
@@ -277,13 +277,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\C\AAV\AAV.Sys\AAV.Sys.csproj">
+      <Project>{60bb75f4-e913-40f9-be60-d5e408f24751}</Project>
+      <Name>AAV.Sys</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net4.8\AAV.WPF\AAV.WPF.4.8.csproj">
       <Project>{1ce2c02f-5fa8-41ca-ac2e-ba91ab283a02}</Project>
       <Name>AAV.WPF.4.8</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net6.0\AAV.Sys\AAV.Sys.csproj">
-      <Project>{7139da94-b8f6-45a2-a292-319c5dd1f66c}</Project>
-      <Name>AAV.Sys</Name>
     </ProjectReference>
     <ProjectReference Include="..\Db.QStats\Db.QStats.csproj">
       <Project>{54bd5d24-3421-47c3-af55-d88a4af38d63}</Project>

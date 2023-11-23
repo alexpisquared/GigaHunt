@@ -95,16 +95,17 @@
         <Grid DataContext="{StaticResource vsEMail_Avail}" Grid.Column="1" Grid.Row="1" >
           <DataGrid x:Name="vEMail_Avail_DevDataGrid" ItemsSource="{Binding}" IsEnabled="{Binding ElementName=chkIsAvailable, Path=IsChecked}" IsReadOnly="True" VerticalAlignment="Top" SelectionChanged="onSelectnChgd" RowHeight="32" >
             <DataGrid.Columns>
-              <DataGridTextColumn Header="ID = Email"  Binding="{Binding ID}"                                            Width="180" />
-              <DataGridTextColumn Header="FName"       Binding="{Binding FName}"                                         />
-              <DataGridTextColumn Header="LName"       Binding="{Binding LName}"                                         />
-              <DataGridTextColumn Header="Company"     Binding="{Binding Company}"                                       />
-              <DataGridTextColumn Header="DNN"         Binding="{Binding DoNotNotifyForCampaignID}"                      ToolTipService.ToolTip="Do Not Notify On On-Market For Campaign ID"/>
-              <DataGridTextColumn Header="MyReplies"   Binding="{Binding MyReplies}"                                     />
-              <DataGridTextColumn Header="LastSent"    Binding="{Binding LastSentAt,    Converter={cmn:UniConverter}}"    />
-              <DataGridTextColumn Header="LastReplied" Binding="{Binding LastRepliedAt, Converter={cmn:UniConverter}}"    />
-              <DataGridTextColumn Header="Added At"    Binding="{Binding AddedAt,       Converter={cmn:UniConverter}}"    />
-              <DataGridTextColumn Header="Notes        (this is the list for AVAILABLE broadcast)" Binding="{Binding Notes}"   Width="*" FontSize="8" />
+              <DataGridTextColumn Header="Prior"       Binding="{Binding NotifyPriority}"                              Width="41" />
+              <DataGridTextColumn Header="ID = Email"  Binding="{Binding ID}"                                          Width="180" />
+              <DataGridTextColumn Header="FName"       Binding="{Binding FName}"                                       />
+              <DataGridTextColumn Header="LName"       Binding="{Binding LName}"                                       />
+              <DataGridTextColumn Header="Company"     Binding="{Binding Company}"                                     />
+              <DataGridTextColumn Header="DNN"         Binding="{Binding DoNotNotifyForCampaignID}"                    ToolTipService.ToolTip="Do Not Notify On On-Market For Campaign ID"/>
+              <DataGridTextColumn Header="MyReplies"   Binding="{Binding MyReplies}"                                   />
+              <DataGridTextColumn Header="LastSent"    Binding="{Binding LastSentAt,    Converter={cmn:UniConverter}}" />
+              <DataGridTextColumn Header="LastReplied" Binding="{Binding LastRepliedAt, Converter={cmn:UniConverter}}" />
+              <DataGridTextColumn Header="Added At"    Binding="{Binding AddedAt,       Converter={cmn:UniConverter}}" />
+              <DataGridTextColumn Header="Notes (this is for AVAILABLE broadcast)" Binding="{Binding Notes}"           Width="*" FontSize="8" />
             </DataGrid.Columns>
           </DataGrid>
         </Grid>

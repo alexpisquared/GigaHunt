@@ -1,10 +1,10 @@
-USE [QStatsRls] -- Use this file - NOT the sql inline - for keeping track of logic (2019-11). Revisited 2023-11.
+USE [QStatsRls] -- Use this file - NOT THE SQL INLINE - for keeping track of logic (2019-11). Revisited on 2023-11.
 GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-/*
+-- / *
 ALTER FUNCTION [dbo].[BadEmails] () RETURNS TABLE AS                   -- last edit: 2023-11-23
   RETURN (  
 	 SELECT ID FROM EMail WHERE        
@@ -97,7 +97,7 @@ AS
       ((SELECT MAX(EmailedAt) AS LastSent FROM dbo.EHist WHERE (RecivedOrSent = 'S') AND (EMailID = em.ID)) < dbo.CurrentCampaignStart())
     )
      -- OR ReSendAfter IS NOT NULL AND ReSendAfter < GETDATE()
-  ORDER BY NotifyPriority, AddedAt DESC -- !!! DOES NOT WORK !!! WHY ??? <= no worries: sort in C#!!! (2019-11)
+  ORDER BY NotifyPriority, AddedAt DESC -- !!! DOES NOT WORK !!! WHY ??? <= MUST sort in C#!!! 
 GO
 
 -- Broadcast Status/Progress:                     2023-11-23
@@ -113,13 +113,12 @@ SELECT getdate() Date,
   dbo.IsNotifiedForCurCmpgn('apigida@nymi.com')                                  AS 'notified already - apigida@nymi.com',
   dbo.IsNotifiedForCurCmpgn('nadine.pigida@outlook.com')                         AS 'notified already - nadine.pigida@ou'
 GO
-Date                    AllEmails = BadEmails + !Bad ones - Sent   =    Left        Last Campaign Start     Last Campaign ID notified already - apigida@nymi.com notified already - nadine.pigida@ou
------------------------ ----------- ----------- ----------- ----------- ----------- ----------------------- ---------------- ----------------------------------- -----------------------------------
-2023-11-23 11:15:11.527 13421       10632       2789        21          2768        2023-11-11 00:00:00.000 12               1                                   1
+--Date                    AllEmails = BadEmails + !Bad ones - Sent   =    Left        Last Campaign Start     Last Campaign ID notified already - apigida@nymi.com notified already - nadine.pigida@ou
+------------------------- ----------- ----------- ----------- ----------- ----------- ----------------------- ---------------- ----------------------------------- -----------------------------------
+--2023-11-23 11:15:11.527 13421       10632       2789        21          2768        2023-11-11 00:00:00.000 12               1                                   1
 
 
 CREATE NONCLUSTERED INDEX EmailerViewAcceleratorIndex ON dbo.EHist (EMailID, RecivedOrSent) -- solves 8 min cold start for the vEMail_Avail_Prod view!!!
-*/
 
 --INSERT INTO EMail                                              (ID, FName, LName, Company, Phone, PermBanReason, DoNotNotifyOnAvailableForCampaignID, DoNotNotifyOnOffMarketForCampaignID,                          Notes, NotifyPriority, ReSendAfter, AddedAt, ModifiedAt)
 SELECT     REPLACE(REPLACE(ID, '@bullhorn.com', ''), '=', '@') AS ID, FName, LName, Company, Phone, PermBanReason, DoNotNotifyOnAvailableForCampaignID, DoNotNotifyOnOffMarketForCampaignID, 'from ''' + ID + '''' AS Notes, NotifyPriority, ReSendAfter, AddedAt, ModifiedAt
@@ -128,6 +127,7 @@ WHERE     (ID LIKE '%=%@bullhorn.com%') AND (NOT EXISTS
                       (SELECT     ID, FName, LName, Company, Phone, PermBanReason, DoNotNotifyOnAvailableForCampaignID, DoNotNotifyOnOffMarketForCampaignID, Notes, NotifyPriority, ReSendAfter, AddedAt, ModifiedAt
                        FROM        EMail AS EMail_1
                        WHERE     (ID = REPLACE(REPLACE(e1.ID, '@bullhorn.com', ''), '=', '@'))))
+-- */
 
 select top (100) PERCENT * from [dbo].[vEMail_Avail_Prod] ORDER BY NotifyPriority, AddedAt DESC -- !!! DOES NOT WORK !!! WHY ??? <= no worries: sort in C#!!! (2019-11)
 

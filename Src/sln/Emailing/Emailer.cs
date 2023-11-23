@@ -1,14 +1,17 @@
 #define REALREADY			//uncomment only when ready:
-using AAV.Sys.Helpers;
-using AAV.WPF.Ext;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Net.Mime;
+using System.Runtime.Serialization.Json;
 using System.Security.Principal;
 using System.Threading.Tasks;
+using AAV.Sys.Helpers;
+using AAV.WPF.Ext;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json; // System.Runtime.Serialization <-- ref to add.
 
 namespace Emailing
 {
@@ -64,8 +67,8 @@ namespace Emailing
           //message.Attachments.Add(new Attachment(@"C:\Documents and Settings\Grandma\Application Data\Microsoft\Signatures\QStatusUpdate(Wrd)_files\image002.jpg"));
           //message.Attachments.Add(new Attachment(@"C:\Documents and Settings\Grandma\Application Data\Microsoft\Signatures\QStatusUpdate(Wrd)_files\image001.png"));
 
-
-          using (var client = new SmtpClient("smtp.office365.com", 587) { EnableSsl = true, Credentials = new System.Net.NetworkCredential(GetMicrosoftAccountName(), File.ReadAllText($"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\\1PageNote\\OutlookKeysOrSomething.txt")) }) // https://account.live.com/proofs/Manage/additional?mkt=en-us - App passwords   Some apps ... don't support security codes for two-step verification. In these cases, you need to create an app password to sign in. Learn more about app passwords.   Create a new app password
+          var appCode = new SecretsReader().ReadAppPassword(); // 2023-11-23
+          using (var client = new SmtpClient("smtp.office365.com", 587) { EnableSsl = true, Credentials = new System.Net.NetworkCredential(GetMicrosoftAccountName(), appCode) }) // https://account.live.com/proofs/Manage/additional?mkt=en-us - App passwords   Some apps ... don't support security codes for two-step verification. In these cases, you need to create an app password to sign in. Learn more about app passwords.   Create a new app password
           {
             try { await client.SendMailAsync(mailMessage); } // letter does not appear in the Outlook ==> use DB to track sent messages.
             catch (Exception ex) { ex.Pop($"Error emailing to: {trgEmailAdrs}"); throw; }           //tu: add to App.cfg: <system.net><mailSettings><smtp deliveryMethod="Network" from="test@foo.com"><!--userName="pigida@aei.ca" password=""--><!--port="25"--><network host="mail.aei.ca" defaultCredentials="true"/></smtp></mailSettings></system.net>
@@ -75,6 +78,7 @@ namespace Emailing
         var logMsg = string.Format("{0} ({3}.{4})   sent to:  {1,-49} Subj: {2} \t (took {5:m\\:ss\\.f}){6}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), trgEmailAdrs, msgSubject, Environment.MachineName, Environment.UserName, sw.Elapsed, Environment.NewLine);
         Trace.Write(logMsg);
         if (isFirst) { isFirst = false; File.AppendAllText(LogFile, Environment.NewLine); }
+
         File.AppendAllText(LogFile, logMsg);
 
         return true;
@@ -103,7 +107,7 @@ namespace Emailing
     {
       var fi = new FileInfo(photoFullPath);
 
-      await Send(trgEmailAdrs,
+      _ = await Send(trgEmailAdrs,
          string.Format("Photo: {0}. ISent: {1} - {2}. Forewarnig...",
             Path.GetFileName(photoFullPath),
             DateTime.Now.ToShortDateString(),
@@ -117,7 +121,7 @@ namespace Emailing
          Array.Empty<string>(), @"C:\g\GigaHunt\Src\sln\AvailStatusEmailer\Assets\MCSD Logo - Latest as of 2009.gif");
       System.Threading.Thread.Sleep(1000);
 
-      await Send(trgEmailAdrs,
+      _ = await Send(trgEmailAdrs,
          string.Format("Photo: {0}. ISent: {1} - {2}.",
             Path.GetFileName(photoFullPath),
             DateTime.Now.ToShortDateString(),
@@ -131,7 +135,24 @@ namespace Emailing
     }
 
     static string LogFile => Path.Combine(OneDrive.Folder(@"Public\Logs"), "CV.Emailed.txt");
-    const string cFrom = "Alex.Pigida@outlook.com";   
+    const string cFrom = "Alex.Pigida@outlook.com";
     static bool isFirst = true;
+  }
+
+  public class SecretsReader
+  {
+    public string ReadAppPassword()
+    {
+      var filePath = @"C:\Users\alexp\AppData\Roaming\Microsoft\UserSecrets\798e2991-62a6-41f2-8e74-7c9deb71514a\secrets.json";
+
+      var rv = JsonFileSerializer.Load2023<Secrets>(filePath);
+
+      return rv.AppPassword;
+    }
+  }
+
+  public class Secrets
+  {
+    public string AppPassword { get; set; }
   }
 }
