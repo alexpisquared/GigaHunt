@@ -8,7 +8,7 @@ public partial class LeadManagerWindow : SaveableWindow
 
   public LeadManagerWindow()
   {
-    InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme; tbver.Text = DevOps.IsDbg ? @"DBG" : "rls";
+    InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme; tbver.Text = $".NET 8    Db: ~QStats        Ver: {VersionHelper.CurVer}  {(DevOps.IsDbg ? @"DBG" : "rls")}";
 
     _thisCampaign = _db.Campaigns.Max(r => r.Id);
 

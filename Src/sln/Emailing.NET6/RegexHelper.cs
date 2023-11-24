@@ -21,7 +21,7 @@ public partial class RegexHelper
     return em;
   }
 
-  public static string[] FindEmailsOLD(string body)
+  public static string[] FindEmails__OLD(string body)
   {
     var email = GetStringBetween(body, "Recipient(s):\r\n\t<", ">\r\n");
     email ??= GetStringBetween(body, "Recipient(s):\r\n\t", "\r\n");
@@ -63,11 +63,11 @@ public partial class RegexHelper
     return emails;
   }
 
-  public static void ShowUniqueValidBadPhoneNumbersFromLetter(Ehist ehist, int cur, int ttl, Stopwatch sw, HashSet<string> _vlds, HashSet<string> _bads, string regex = _regexPhonePattern)
+  public static void ShowUniqueValidBadPhoneNumbersFromLetter(Ehist ehist, int cur, int ttl, Stopwatch sw, HashSet<string> valids, HashSet<string> bads, string regexPattern = _regexPhonePattern)
   {
     ArgumentNullException.ThrowIfNull(ehist.LetterBody);
 
-    var match = new Regex(regex).Match(ehist.LetterBody);
+    var match = new Regex(regexPattern).Match(ehist.LetterBody);
     while (match.Success)
     {
       foreach (var pnRaw in match.Value.Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
@@ -100,7 +100,7 @@ public partial class RegexHelper
               {
 
                 if (pnInt.Length == 11 && pnInt[0] == '1') pnInt = pnInt[1..];
-                if (_bads.Add(pnInt))
+                if (bads.Add(pnInt))
                 {
                   Console.ForegroundColor = ConsoleColor.Magenta; Console.Write($"{cur,8:N0} / {ttl:N0}  {ehist.EmailId,56}  {pnRaw,16} {pnInt,11}   {(ttl - cur) * sw.Elapsed.TotalSeconds / cur,8:N1} sec left       {ehist.EmailedAt:yyyy-MM}     {ehist.LetterBody?.Substring(idx - 16, 16)}  ■ ■ ■ ■ ■  Remove me from DB!!!\n");
                 }
@@ -117,7 +117,7 @@ public partial class RegexHelper
         else
         {
           if (pnInt.Length == 11 && pnInt[0] == '1') pnInt = pnInt[1..];
-          if (_vlds.Add(pnInt))
+          if (valids.Add(pnInt))
           {
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.Write($"{cur,8:N0} / {ttl:N0}  {ehist.EmailId,56}  {pnRaw,16} {pnInt,11}   {(ttl - cur) * sw.Elapsed.TotalSeconds / cur,8:N1} sec left       {ehist.EmailedAt:yyyy-MM}  ++ ++ ++\n");

@@ -1,28 +1,28 @@
 namespace Emailing.NET6;
 public static class QStatusBroadcaster
 {
-  static readonly DateTime _batchNow = DateTime.Now;
   public const string Asu = "Availability Schedule Update - ";
 
-  public static async Task<bool> SendLetter_UpdateDb(bool isAvailable, string emailAdrs, string firstName)
+  public static async Task<bool> SendLetter_UpdateDb(bool isAvailable, string email, string firstName)
   {
-    var (success, report) = await sendLetter(emailAdrs, firstName, isAvailable);
+    var timestamp = DateTime.Now;
+    
+    var (success, report) = await sendLetter(email, firstName, isAvailable, timestamp);
     if (success)
     {
-      _ = await DbActor.InsertContactHistoryItem(false, _batchNow, _batchNow, emailAdrs, firstName, "std", isAvailable ? "Std Available 4 CVs" : "Std Busy");
+      _ = await DbActor.InsertContactHistoryItem(false, timestamp, timestamp, email, firstName, "std .net8", isAvailable ? "ASU - 4 CVs - 2023-11" : "Std Busy");
       return true;
     }
 
-    _ = await DbActor.MarkAsNotUsable(false, _batchNow, _batchNow, emailAdrs, report, "std", isAvailable ? "Std Available 4 CVs" : "Std Busy");
+    _ = await DbActor.MarkAsNotUsable(email, report);
     return false;
   }
 
-  static async Task<(bool success, string report)> sendLetter(string emailAddress, string firstName, bool isAvailable)
+  static async Task<(bool success, string report)> sendLetter(string emailAddress, string firstName, bool isAvailable, DateTime timestamp)
   {
     try
     {
-      var html = """C:\g\GigaHunt\Src\sln\AvailStatusEmailer\Assets\AvailabilityStatus_AvailableNow.htm""";//isResumeFeatureUpdate ? $"C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AvailabilityStatus_AvailableNow_FreshCV.htm" :
-              //$"""C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AvailabilityStatus_{(isAvailable ? "AvailableNow" : "Unavailable")}.htm """;
+      var html = """C:\g\GigaHunt\Src\sln\AvailStatusEmailer\Assets\AvailabilityStatus_AvailableNow.htm""";//isResumeFeatureUpdate ? $"C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AvailabilityStatus_AvailableNow_FreshCV.htm" : $"""C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AvailabilityStatus_{(isAvailable ? "AvailableNow" : "Unavailable")}.htm """;
 
       var body = new StreamReader(html).ReadToEnd();
       var subj = /*isResumeFeatureUpdate*/false ? "resume feature update" : Asu + (isAvailable ? "Open for opportunities in Toronto++" : "Unavailable");
@@ -37,11 +37,12 @@ public static class QStatusBroadcaster
       var avlbldate = DateTime.Today < new DateTime(2022, 10, 15) ? new DateTime(2022, 11, 1) : DateTime.Today.AddDays(14);
       var monthPart = avlbldate.Day < 10 ? "early" : avlbldate.Day > 20 ? "late" : "mid";
       var startDate = $"{monthPart} {avlbldate:MMMM yyyy}";
+      var senttDate = $"{timestamp:yyMMddHHmmss}";
 
       return await Emailer.Send(
         emailAddress,
         subj,
-        body.Replace("{0}", nameCasing_Mc_only_so_far(firstName)).Replace("{1}", emailAddress).Replace("{2}", startDate),
+        body.Replace("{0}", nameCasing_Mc_only_so_far(firstName)).Replace("{1}", emailAddress).Replace("{2}", startDate).Replace("{3}", senttDate),
         attachmnt, """C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AlexTiny_LinkedIn.png""");//@"C:\g\GigaHunt\Src\sln\GigaHunt\Assets\MCSD Logo - Latest as of 2009.gif|C:\g\GigaHunt\Src\sln\GigaHunt\Assets\linkedIn66x16.png|C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AlexTiny_LinkedIn.png");
     }
     catch (Exception ex) { var report = ex.Log($"{emailAddress}"); return (false, report); }
@@ -75,7 +76,7 @@ public class DbActor
     }
     catch (Exception ex) { _ = ex.Log(); throw; }
   }
-  public static async Task<int> MarkAsNotUsable(bool isRcvd, DateTime? sentOn, DateTime timeSent, string email, string exceptionMessage, string subject, string body)
+  public static async Task<int> MarkAsNotUsable(string email, string exceptionMessage)
   {
     try
     {

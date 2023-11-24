@@ -5,22 +5,21 @@ using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Net.Mime;
-using System.Runtime.Serialization.Json;
 using System.Security.Principal;
 using System.Threading.Tasks;
+using AAV.Sys.Ext;
 using AAV.Sys.Helpers;
 using AAV.WPF.Ext;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json; // System.Runtime.Serialization <-- ref to add.
 
 namespace Emailing
 {
   public class Emailer
   {
-    public static async Task<bool> Send(string trgEmailAdrs, string msgSubject, string msgBody, string[] attachedFilenames = null, string signatureImage = null) => await Send(cFrom, trgEmailAdrs, msgSubject, msgBody, attachedFilenames, signatureImage);
-    public static async Task<bool> Send(string from, string trgEmailAdrs, string msgSubject, string msgBody, string[] attachedFilenames = null, string signatureImage = null)
+    public static async Task<(bool success, string report)> Send(string trgEmailAdrs, string msgSubject, string msgBody, string[] attachedFilenames = null, string signatureImage = null) => await Send(cFrom, trgEmailAdrs, msgSubject, msgBody, attachedFilenames, signatureImage);
+    public static async Task<(bool success, string report)> Send(string from, string trgEmailAdrs, string msgSubject, string msgBody, string[] attachedFilenames = null, string signatureImage = null)
     {
       var sw = Stopwatch.StartNew();
+      var report = "";
       try
       {
         using (var mailMessage = new MailMessage(cFrom, trgEmailAdrs, msgSubject, msgBody))
@@ -81,13 +80,13 @@ namespace Emailing
 
         File.AppendAllText(LogFile, logMsg);
 
-        return true;
+        return (true, report);
       }
-      catch (FormatException ex) { ex.Pop(trgEmailAdrs); }
-      catch (SmtpException ex) { ex.Pop(trgEmailAdrs); }
-      catch (Exception ex) { ex.Pop(trgEmailAdrs); }
+      catch (FormatException ex) { report = ex.Log(trgEmailAdrs); }
+      catch (SmtpException ex) { report = ex.Log(trgEmailAdrs); }
+      catch (Exception ex) { report = ex.Log(trgEmailAdrs); }
 
-      return false;
+      return (false, report);
     }
     public static string GetMicrosoftAccountName() //todo: move it to a proper place.
     {

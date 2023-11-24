@@ -1,15 +1,15 @@
-﻿using AAV.WPF.Ext;
-using AgentFastAdmin;
-using AsLink;
-using AvailStatusEmailer;
-using AvailStatusEmailer.View;
-using Db.QStats.DbModel;
-using System;
+﻿using System;
 using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using AAV.WPF.Ext;
+using AgentFastAdmin;
+using AsLink;
+using AvailStatusEmailer;
+using AvailStatusEmailer.View;
+using Db.QStats.DbModel;
 using OL = Microsoft.Office.Interop.Outlook;
 
 namespace OutlookToDbWpfApp
@@ -85,7 +85,7 @@ namespace OutlookToDbWpfApp
         rv += await outlookFolderToDb_ReglrAsync(Misc.qRcvd);
         rv += await outlookFolderToDb_ReglrAsync(Misc.qSent);
 
-        var rowsAdded = await _db.TrySaveReportAsync("OutlookToDb.cs");
+        var (success, rowsSavedCnt, report) = await _db.TrySaveReportAsync("OutlookToDb.cs");
         tb1.Text += rv;
         Debug.WriteLine(rv);
         loadVwSrcs(App.Now);
@@ -102,7 +102,7 @@ namespace OutlookToDbWpfApp
       {
         var sw = Stopwatch.StartNew();
         var rv = await outlookFolderToDb_FailsAsync(Misc.qFail);
-        var rowsAdded = await _db.TrySaveReportAsync("OutlookToDb.cs");
+        var (success, rowsSavedCnt, report) = await _db.TrySaveReportAsync("OutlookToDb.cs");
         tb1.Text += rv;
         Debug.WriteLine(rv);
         loadVwSrcs(App.Now);
@@ -119,7 +119,7 @@ namespace OutlookToDbWpfApp
       {
         var sw = Stopwatch.StartNew();
         var rv = await outlookFolderToDb_LaterAsync(Misc.qLate);
-        var rowsAdded = await _db.TrySaveReportAsync("OutlookToDb.cs");
+        var (success, rowsSavedCnt, report) = await _db.TrySaveReportAsync("OutlookToDb.cs");
         tb1.Text += rv;
         Debug.WriteLine(rv);
         loadVwSrcs(App.Now);
@@ -136,7 +136,7 @@ namespace OutlookToDbWpfApp
       {
         var sw = Stopwatch.StartNew();
         var rv = await outlookFolderToDb_DoneRAsync(Misc.qRcvdDone);
-        var rowsAdded = await _db.TrySaveReportAsync("OutlookToDb.cs");
+        var (success, rowsSavedCnt, report) = await _db.TrySaveReportAsync("OutlookToDb.cs");
         tb1.Text += rv;
         Debug.WriteLine(rv);
         loadVwSrcs(App.Now);
@@ -234,10 +234,11 @@ namespace OutlookToDbWpfApp
 
                   var isNew = await CheckInsertEMailEHistAsync(_db, re.Address, senderFLNme.Item1, senderFLNme.Item2, mailItem.Subject, mailItem.Body, mailItem.ReceivedTime, $"..from Sent folder. ", "S");
                   if (isNew) { newEmailsAdded++; }
+
                   report += OutlookHelper.reportLine(folderName, re.Address, isNew);
                 }
 
-                var trgFolder = (mailItem.Subject ?? "").StartsWith(QStatusBroadcaster.Asu) ? deletedsFolder : sentDoneFolder; // delete Avali-ty broadcasts.
+                var trgFolder = (mailItem.Subject ?? "").StartsWith(QStatusBroadcaster.ASU) ? deletedsFolder : sentDoneFolder; // delete Avali-ty broadcasts.
                 OutlookHelper.moveIt(trgFolder, mailItem);
               }
             }
@@ -254,6 +255,7 @@ namespace OutlookToDbWpfApp
       }
       catch (Exception ex) { ex.Pop(); }
       finally { Debug.WriteLine(""); }
+
       return report;
     }
     async Task<string> outlookFolderToDb_FailsAsync(string folderName)
@@ -431,6 +433,7 @@ namespace OutlookToDbWpfApp
                 var isNew = await CheckInsertEMailEHistAsync(_db, senderEmail, senderFLNme.Item1, senderFLNme.Item2, reportItem.Subject, "under constr-n", reportItem.CreationTime, msg, "R");
                 if (isNew) { newEmailsAdded++; tb1.Text += $" * {senderEmail}\r\n"; }
               }
+
               rptLine += $"report\t{senderEmail,40}  {reportItem.CreationTime:yyyy-MM-dd}  {reportItem.Subject,-80} \t [no body - too slow and wrong]";
             }
             else if (item is OL.MailItem mailItem)
@@ -537,7 +540,7 @@ namespace OutlookToDbWpfApp
 
         if (_db.Agencies.FirstOrDefault(r => string.Compare(r.ID, agency, true) == 0) == null)
         {
-          _db.Agencies.Add(new Agency
+          _ = _db.Agencies.Add(new Agency
           {
             ID = agency.Length > maxLen ? agency.Substring(agency.Length - maxLen, maxLen) : agency,
             AddedAt = AvailStatusEmailer.App.Now
@@ -556,7 +559,7 @@ namespace OutlookToDbWpfApp
           NotifyPriority = 99
         });
 
-        await _db.TrySaveReportAsync("checkInsertEMail");
+        _ = await _db.TrySaveReportAsync("checkInsertEMail");
       }
 
       return em;
@@ -566,9 +569,9 @@ namespace OutlookToDbWpfApp
       //insertEMailEHistItem(isRcvd, timeRecdSent, em, subject, body);		}		void insertEMailEHistItem(bool isRcvd, DateTime timeRecdSent, EMail em, string subject, string body)		{
       try
       {
-        var gt = timeRecdSent.AddMinutes(-5);
-        var lt = timeRecdSent.AddMinutes(+5);         //var ch = isRcvd ? ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.ID) : ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.ID); if (ch.Count() < 1)
-        var eh = _db.EHists./*Local.*/FirstOrDefault(p => p.RecivedOrSent == rs && p.EMailID == em.ID && gt < p.EmailedAt && p.EmailedAt < lt);
+        //var gt = timeRecdSent.AddMinutes(-5);
+        //var lt = timeRecdSent.AddMinutes(+5);         //var ch = isRcvd ? ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.ID) : ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.ID); if (ch.Count() < 1)
+        var eh = _db.EHists./*Local.*/FirstOrDefault(p => p.RecivedOrSent == rs && p.EMailID == em.ID /*&& gt < p.EmailedAt && p.EmailedAt < lt*/);
         if (eh == null)
         {
           var newEH = new EHist
@@ -583,7 +586,7 @@ namespace OutlookToDbWpfApp
           };
           var newCH2 = _db.EHists.Add(newEH);
 
-          await _db.TrySaveReportAsync("checkInsertEHist");
+          _ = await _db.TrySaveReportAsync("checkInsertEHist");
         }
       }
       catch (Exception ex) { ex.Pop(); }
@@ -598,16 +601,16 @@ namespace OutlookToDbWpfApp
       }
       else
       {
-        if ((emr.PermBanReason == null || !emr.PermBanReason.Contains(rsn))) // if new reason
+        if (emr.PermBanReason == null || !emr.PermBanReason.Contains(rsn)) // if new reason
         {
-          emr.PermBanReason += (rsn + App.Now.ToString("yyyy-MM-dd"));
+          emr.PermBanReason += rsn + App.Now.ToString("yyyy-MM-dd");
           emr.ModifiedAt = App.Now;
-          rv += ($"{Misc.qFail,-15}  {email,-48}banned since: {rsn}\n");
+          rv += $"{Misc.qFail,-15}  {email,-48}banned since: {rsn}\n";
           newBansAdded++;
         }
         else if (emr.PermBanReason.Contains(rsn)) // same reason already there
         {
-          rv += ($"{Misc.qFail,-15}  {email,-48}banned before with the same reason: {rsn}\n");
+          rv += $"{Misc.qFail,-15}  {email,-48}banned before with the same reason: {rsn}\n";
         }
         else
         {
@@ -750,8 +753,6 @@ namespace OutlookToDbWpfApp
       testOneKey(item, "0x300B0102", true); // "PR_SEARCH_KEY"
       testOneKey(item, "0x34140102", true); // "PR_MDB_PROVIDER"
       testOneKey(item, "0x80660102", true); // "RemoteEID"
-
-
 
       Debug.WriteLine($"++++++++++++++++++++++++++++++++++++++ --------------------\n");
     }

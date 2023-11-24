@@ -1,8 +1,6 @@
-﻿using DB.QStats.Std.Models;
-using Emailing.NET6;
-using GigaHunt.AsLink;
+﻿using GigaHunt.AsLink;
 
-namespace OutlookToDbWpfApp;
+namespace Emailing.NET6.Helpers;
 
 public static class OutlookToDbWindowHelpers
 {
@@ -40,16 +38,13 @@ public static class OutlookToDbWindowHelpers
         var r3 = _db.Agencies.Any(r => r.Id.Equals(agency.ToUpper()));
 
         if (!_db.Agencies.Any(r => r.Id.Equals(agency))) //i think db is set to be case ignore:  , StringComparison.InvariantCultureIgnoreCase)) )
-        {
           _ = _db.Agencies.Add(new Agency
           {
             Id = agency.Length > maxLen ? agency.Substring(agency.Length - maxLen, maxLen) : agency,
             AddedAt = Now
           });
-        }
       }
-      catch (Exception ex) { ex.Log("."); throw; }
-
+      catch (Exception ex) { _ = ex.Log("."); throw; }
 
       em = _db.Emails.Add(new Email
       {
@@ -74,12 +69,12 @@ public static class OutlookToDbWindowHelpers
     //insertEMailEHistItem(isRcvd, timeRecdSent, email, subject, body);		}		void insertEMailEHistItem(bool isRcvd, DateTime timeRecdSent, Email email, string subject, string body)		{
     try
     {
-      var gt = timeRecdSent.AddMinutes(-5);
-      var lt = timeRecdSent.AddMinutes(+5);         //var ch = isRcvd ? ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.Id) : ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.Id); if (ch.Count() < 1)
-      var eh = dbq.Ehists.FirstOrDefault(p => p.RecivedOrSent == rs && p.EmailId == email.Id && gt < p.EmailedAt && p.EmailedAt < lt);
+      //var gt = timeRecdSent.AddMinutes(-5);
+      //var lt = timeRecdSent.AddMinutes(+5);         //var ch = isRcvd ? ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.Id) : ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.Id); if (ch.Count() < 1)
+      var eh = dbq.Ehists.FirstOrDefault(p => p.RecivedOrSent == rs && p.EmailId == email.Id /*&& gt < p.EmailedAt && p.EmailedAt < lt*/);
       if (eh is not null)
       {
-       await PhoneNumbersGetInsSave(dbq, timeRecdSent, email, eh);
+        await PhoneNumbersGetInsSave(dbq, timeRecdSent, email, eh);
 
         if (eh.SentOn != sentOn)
         {
@@ -107,7 +102,7 @@ public static class OutlookToDbWindowHelpers
         await PhoneNumbersGetInsSave(dbq, timeRecdSent, email, newEH);
       }
     }
-    catch (Exception ex) { ex.Log(); throw; }
+    catch (Exception ex) { _ = ex.Log(); throw; }
   }
 
   static async Task PhoneNumbersGetInsSave(QstatsRlsContext dbq, DateTime timeRecdSent, Email email, Ehist newEH)

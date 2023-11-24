@@ -1,6 +1,5 @@
-﻿//using Microsoft.Office.Interop.Outlook;
-
-using Emailing.NET6;
+﻿using Emailing.NET6;
+using Emailing.NET6.Helpers;
 
 namespace OutlookToDbWpfApp;
 public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
@@ -10,7 +9,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
   readonly QstatsRlsContext _db = QstatsRlsContext.Create();
   int _newEmailsAdded = 0;
 
-  public OutlookToDbWindow() { InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme; tbver.Text = DevOps.IsDbg ? @"DBG" : "rls"; }
+  public OutlookToDbWindow() { InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme; tbver.Text = $".NET 8    Db: ~QStats        Ver: {VersionHelper.CurVer}  {(DevOps.IsDbg ? @"DBG" : "rls")}"; }
   protected override void OnClosing(System.ComponentModel.CancelEventArgs e) => base.OnClosing(e); /*DialogResult = _newEmailsAdded > 0;*/
   async void OnLoaded(object s, RoutedEventArgs e)
   {

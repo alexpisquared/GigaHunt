@@ -8,7 +8,7 @@ namespace GigaHunt.View
     const string note = "note3";
     readonly DateTime _now = DateTime.Now;
 
-    public OutlookToDbWindowUnkn() { InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme; tbver.Text = DevOps.IsDbg ? @"DBG" : "rls"; }
+    public OutlookToDbWindowUnkn() { InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme; tbver.Text = $".NET 8    Db: ~QStats        Ver: {VersionHelper.CurVer}  {(DevOps.IsDbg ? @"DBG" : "rls")}"; }
 
     async void onLoadedAsync(object s, RoutedEventArgs e) => await btnRefreshDbFromOutlookAsync();
 

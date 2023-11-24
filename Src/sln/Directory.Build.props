@@ -1,0 +1,16 @@
+<Project>
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+</Project>
+<!--
+  https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/configure-language-version
+  Value	      Meaning
+  preview	    The compiler accepts all valid language syntax from the latest preview version.
+  latest	    The compiler accepts syntax from the latest released version of the compiler (including minor version).
+  latestMajor
+  or default	The compiler accepts syntax from the latest released major version of the compiler.
+  12.0	      The compiler accepts only syntax that is included in C# 12 or lower.
+  11.0	      The compiler accepts only syntax that is included in C# 11 or lower.
+  10.0	
+-->

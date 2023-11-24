@@ -150,7 +150,7 @@
             </ComboBox>-->
 
             <Label   Content="          _Mail to" Target="{Binding ElementName=tbMail}" />
-            <TextBox x:Name="tbMail" Width="210"                  ToolTip=""          Foreground="#fcf" Margin="5 0" FontSize="16" Text="pigida@gmail.com" LostFocus="OnGetNameFromEmail" />
+            <TextBox x:Name="tbMail" Width="320"                  ToolTip=""          Foreground="#fcf" Margin="5 0" FontSize="16" Text="pigida@gmail.com" LostFocus="OnGetNameFromEmail" />
             <TextBox x:Name="tbName" Width="110"                  ToolTip="Fist name" Foreground="#fcf" Margin="5 0" FontSize="16" Text="Sirs" />
             <Button Content="Send"   Click="onSendFromCbx"        ToolTip="Copy  'EMail FirstName'  to Clipboard and reload to see it here" Foreground="#d7f" Margin="5" />
           </StackPanel>

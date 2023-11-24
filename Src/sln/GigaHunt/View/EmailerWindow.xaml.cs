@@ -11,7 +11,7 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
   bool _isLoaded = false;
   public EmailersendWindow()
   {
-    InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme; tbver.Text = DevOps.IsDbg ? @"DBG" : "rls";
+    InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme; tbver.Text = $".NET 8    Db: ~QStats        Ver: {VersionHelper.CurVer}  {(DevOps.IsDbg ? @"DBG" : "rls")}";
 
     _db = QstatsRlsContext.Create();
 
@@ -90,7 +90,7 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
     var lsw = Stopwatch.StartNew();
     try
     {
-      tbver.Text = $"Db: ???        Ver: ???";
+      tbver.Text = $".NET 8    Db: ~QStats        Ver: {VersionHelper.CurVer}";
       if (chkIsAvailable.IsChecked == true)
       {
         _db.Database.SetCommandTimeout(300);
@@ -250,7 +250,7 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
         tbkTitle.Text = $"Done/Todo: {Progress1.Maximum - --cnt} / {cnt}      msg/min so far: {(Progress1.Maximum - cnt) / sw.Elapsed.TotalMinutes:N1}      Last one is:  {(success ? "Success" : "Failure")}  sending to  {((VEmailAvailProd)em).Id}";
         Progress1.Value = Progress1.Maximum - cnt;
 
-        await new Bpr().BeepAsync(333, antiSpamPause90sec);
+        await new Bpr().BeepAsync(222, antiSpamPause90sec);
       }
 
       if (msg.Length > 12)

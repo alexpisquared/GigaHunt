@@ -12,7 +12,7 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
   bool _isLoaded = false;
   public AgentAdminnWindow()
   {
-    InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme; tbver.Text = DevOps.IsDbg ? @"DBG" : "rls";
+    InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme; tbver.Text = $".NET 8    Db: ~QStats        Ver: {VersionHelper.CurVer}  {(DevOps.IsDbg ? @"DBG" : "rls")}";
 
     //tbver.Text = $"Db: {QstatsRlsContext.DbNameOnly}        Ver: ???";
     //tbver.Text = $"Db: {_db.ServerDatabase()}        Ver: ???";
