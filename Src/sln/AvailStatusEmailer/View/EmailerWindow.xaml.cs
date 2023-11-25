@@ -128,7 +128,7 @@ public partial class EmailersendWindow : AAV.WPF.Base.WindowBase
     catch (Exception ex) { ex.Pop(); }
   }
   void populateWithSorting(IEnumerable<vEMail_Avail_Prod> rv) => _cvsEmails.Source = rv
-  .OrderBy(r => r.NotifyPriority).ThenByDescending(r => r.AddedAt)          // :new 2020-11-23 
+  .OrderBy(r => r.NotifyPriority).ThenByDescending(r => r.AddedAt).ThenByDescending(r => r.LastRepliedAt).ThenBy(r => r.Company).ThenBy(r => r.FName) // :new 2020-11-23 
   //.OrderBy(r => r.LastSentAt).ThenBy(r => r.AddedAt)                      // :for restarting the failed campaign 
   //.OrderByDescending(r => r.TtlSends).ThenByDescending(r => r.TtlRcvds)   // :for starting brand new campaign after a contract
   ;

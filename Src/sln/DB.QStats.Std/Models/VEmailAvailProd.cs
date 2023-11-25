@@ -38,4 +38,5 @@ public partial class VEmailAvailProd
     public int? TtlSends { get; set; }
 
     public int? TtlRcvds { get; set; }
+  public int NotifyPriority { get; set; } // :manual addition to the view on 2023-11-23.
 }

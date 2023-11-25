@@ -4,7 +4,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
--- / *
+/*
 ALTER FUNCTION [dbo].[BadEmails] () RETURNS TABLE AS                   -- last edit: 2023-11-23
   RETURN (  
 	 SELECT ID FROM EMail WHERE        
@@ -46,6 +46,7 @@ go
 -- 2019-08-14	 1,965 
 -- 2019-09-29	 2,308
 -- 2023-11-23	10,632
+-- 2023-11-24   10,653
 
 ALTER FUNCTION CurrentCampaignStart () --IF OBJECT_ID (N'CurrentCampaignStart', N'FN') IS NOT NULL    DROP FUNCTION CurrentCampaignStart;  GO
 RETURNS datetime --WITH EXECUTE AS CALLER  
@@ -130,5 +131,5 @@ WHERE     (ID LIKE '%=%@bullhorn.com%') AND (NOT EXISTS
                        WHERE     (ID = REPLACE(REPLACE(e1.ID, '@bullhorn.com', ''), '=', '@'))))
 -- */
 
-select top (100) PERCENT * from [dbo].[vEMail_Avail_Prod] ORDER BY NotifyPriority, AddedAt DESC -- !!! DOES NOT WORK !!! WHY ??? <= no worries: sort in C#!!! (2019-11)
+select top (100) PERCENT * from [dbo].[vEMail_Avail_Prod] ORDER BY NotifyPriority, AddedAt DESC, LastRepliedAt DESC, Company, FName -- repeat the sort in C#!!! (2019-11)
 

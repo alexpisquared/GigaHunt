@@ -120,7 +120,12 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
     }
     catch (Exception ex) { ex.Pop(); return ex.Message; }
   }
-  void populateWithSorting(IEnumerable<VEmailAvailProd> rv) => _cvsEmails.Source = rv.OrderBy(r => r.LastSentAt).ThenBy(r => r.AddedAt);// <= for restarting the failed campaingn | for starting brand new campagn after a contract => .OrderByDescending(r => r.TtlSends).ThenByDescending(r => r.TtlRcvds); 
+  void populateWithSortin_(IEnumerable<VEmailAvailProd> rv) => _cvsEmails.Source = rv.OrderBy(r => r.LastSentAt).ThenBy(r => r.AddedAt);// <= for restarting the failed campaingn | for starting brand new campagn after a contract => .OrderByDescending(r => r.TtlSends).ThenByDescending(r => r.TtlRcvds); 
+  void populateWithSorting(IEnumerable<VEmailAvailProd> rv) => _cvsEmails.Source = rv
+    .OrderBy(r => r.NotifyPriority).ThenByDescending(r => r.AddedAt).ThenByDescending(r => r.LastRepliedAt).ThenBy(r => r.Company).ThenBy(r => r.Fname) // :new 2020-11-23 
+    //.OrderBy(r => r.LastSentAt).ThenBy(r => r.AddedAt)                      // :for restarting the failed campaign 
+    //.OrderByDescending(r => r.TtlSends).ThenByDescending(r => r.TtlRcvds)   // :for starting brand new campaign after a contract
+    ;
   void Save()
   {
     try
