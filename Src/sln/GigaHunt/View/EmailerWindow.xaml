@@ -100,6 +100,7 @@
               <DataGridTextColumn Header=" LastSent"    Binding="{Binding LastSentAt,    Converter={cnv:QStatsConverter}}" />
               <DataGridTextColumn Header=" LastReplied" Binding="{Binding LastRepliedAt, Converter={cnv:QStatsConverter}}" />
               <DataGridTextColumn Header=" MyRplyCnt"   Binding="{Binding MyReplies}"    Width="62"                     ElementStyle="{StaticResource CenterAlignStyle}" />
+              <DataGridTextColumn Header=" Priority"    Binding="{Binding NotifyPriority}"                               IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" />
               <DataGridTextColumn Header=" Notes"       Binding="{Binding Notes}"        Width="*" FontSize="9"         />
             </DataGrid.Columns>
           </DataGrid>

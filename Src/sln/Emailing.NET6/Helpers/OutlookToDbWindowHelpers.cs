@@ -55,7 +55,7 @@ public static class OutlookToDbWindowHelpers
         Notes = notes,
         AddedAt = Now,
         ReSendAfter = null,
-        NotifyPriority = 99
+        NotifyPriority = 8765
       }).Entity;
 
       _ = await _db.TrySaveReportAsync("checkInsertEMail");
@@ -69,9 +69,9 @@ public static class OutlookToDbWindowHelpers
     //insertEMailEHistItem(isRcvd, timeRecdSent, email, subject, body);		}		void insertEMailEHistItem(bool isRcvd, DateTime timeRecdSent, Email email, string subject, string body)		{
     try
     {
-      //var gt = timeRecdSent.AddMinutes(-5);
-      //var lt = timeRecdSent.AddMinutes(+5);         //var ch = isRcvd ? ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.Id) : ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.Id); if (ch.Count() < 1)
-      var eh = dbq.Ehists.FirstOrDefault(p => p.RecivedOrSent == rs && p.EmailId == email.Id /*&& gt < p.EmailedAt && p.EmailedAt < lt*/);
+      var gt = timeRecdSent.AddMinutes(-5);
+      var lt = timeRecdSent.AddMinutes(+5);         //var ch = isRcvd ? ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.Id) : ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.Id); if (ch.Count() < 1)
+      var eh = dbq.Ehists.FirstOrDefault(p => p.RecivedOrSent == rs && p.EmailId == email.Id && gt < p.EmailedAt && p.EmailedAt < lt);
       if (eh is not null)
       {
         await PhoneNumbersGetInsSave(dbq, timeRecdSent, email, eh);
@@ -81,6 +81,8 @@ public static class OutlookToDbWindowHelpers
           eh.SentOn = sentOn;
           _ = await dbq.TrySaveReportAsync("checkInsertEHist SentOn update");
         }
+      
+        new Exception().Log("??? No EHist added: There is already the same record in DB within the +-5min range ???");
       }
       else
       {

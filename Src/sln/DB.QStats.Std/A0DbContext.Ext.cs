@@ -6,7 +6,7 @@ public partial class Email : INotifyPropertyChanged
   [NotMapped] public int? Ttl_Rcvd { get => ttl_Rcvd; set { if (value != ttl_Rcvd) { ttl_Rcvd = value; OnPropertyChanged(); } } }
   [NotMapped] public DateTime? LastSent { get => lastSent; set { if (value != lastSent) { lastSent = value; OnPropertyChanged(); } } }
   [NotMapped] public DateTime? LastRcvd { get => lastRcvd; set { if (value != lastRcvd) { lastRcvd = value; OnPropertyChanged(); } } }
-  [NotMapped] public string? Country { get => _country; set { if (value != _country) { _country = value; OnPropertyChanged(); } } }
+  public string? Country { get => _country; set { if (value != _country) { _country = value; OnPropertyChanged(); } } } // now it is real db field (2023-11)
 
   string? _country;
   int? ttl_Sent;

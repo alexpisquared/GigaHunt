@@ -165,7 +165,7 @@ namespace AgentFastAdmin
               }
 
               ((EMail)(row.Entity)).AddedAt = now;
-              ((EMail)(row.Entity)).NotifyPriority = 99;
+              ((EMail)(row.Entity)).NotifyPriority = 9988;
             }
           }
 

@@ -127,11 +127,8 @@ public partial class EmailersendWindow : AAV.WPF.Base.WindowBase
     }
     catch (Exception ex) { ex.Pop(); }
   }
-  void populateWithSorting(IEnumerable<vEMail_Avail_Prod> rv) => _cvsEmails.Source = rv
-  .OrderBy(r => r.NotifyPriority).ThenByDescending(r => r.AddedAt).ThenByDescending(r => r.LastRepliedAt).ThenBy(r => r.Company).ThenBy(r => r.FName) // :new 2020-11-23 
-  //.OrderBy(r => r.LastSentAt).ThenBy(r => r.AddedAt)                      // :for restarting the failed campaign 
-  //.OrderByDescending(r => r.TtlSends).ThenByDescending(r => r.TtlRcvds)   // :for starting brand new campaign after a contract
-  ;
+  void populateWithSorting(IEnumerable<vEMail_Avail_Prod> rv) => _cvsEmails.Source = rv.OrderBy(r => r.NotifyPriority); // :new 2020-11-25
+
   void Save()
   {
     try
@@ -247,7 +244,7 @@ public partial class EmailersendWindow : AAV.WPF.Base.WindowBase
       var cnt = vEMail_Avail_DevDataGrid.SelectedItems.Count;
       var cntRO = cnt;
       var msg = "Failes: ";
-      var antiSpamBlockListPauseInMs = (50 + (cnt * 2)) * 1000;
+      var antiSpamBlockListPauseInMs = Debugger.IsAttached ? 555 : (50 + (cnt * 2)) * 1000;
 
       App.SpeakAsync(tbkTitle.Text = $"Sending {cnt} letters. Anti Spam delay set to {antiSpamBlockListPauseInMs * .001:N0} sec. ETA {cnt * antiSpamBlockListPauseInMs * .001 / 60.0:N0} minutes.");
 

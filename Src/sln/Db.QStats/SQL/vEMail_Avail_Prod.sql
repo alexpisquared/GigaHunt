@@ -129,7 +129,29 @@ WHERE     (ID LIKE '%=%@bullhorn.com%') AND (NOT EXISTS
                       (SELECT     ID, FName, LName, Company, Phone, PermBanReason, DoNotNotifyOnAvailableForCampaignID, DoNotNotifyOnOffMarketForCampaignID, Notes, NotifyPriority, ReSendAfter, AddedAt, ModifiedAt
                        FROM        EMail AS EMail_1
                        WHERE     (ID = REPLACE(REPLACE(e1.ID, '@bullhorn.com', ''), '=', '@'))))
+
+-- run this periodically to update priorities and expedite email broadcast:
+UPDATE    EMail
+SET           NotifyPriority = isnull((
+	SELECT     1000 * DATEDIFF(day, MAX(EmailedAt), GETDATE()) / COUNT(*) AS Priority
+	FROM        EHist
+	WHERE     (RecivedOrSent = 'R') AND (EMailID = EMail.ID)
+	GROUP BY EMailID
+), 11888111)
+WHERE     (Notes NOT LIKE '#TopPriority#%')
+
 -- */
 
-select top (100) PERCENT * from [dbo].[vEMail_Avail_Prod] ORDER BY NotifyPriority, AddedAt DESC, LastRepliedAt DESC, Company, FName -- repeat the sort in C#!!! (2019-11)
+-- repeat the sort in C#!!! (2019-11):
+select top (100) PERCENT * from [dbo].[vEMail_Avail_Prod] ORDER BY NotifyPriority, AddedAt DESC, 
+	--LastRepliedAt DESC, 
+	FName DESC 
+
+
+SELECT     EHist.EMailID, COUNT(*) AS Recieves, MAX(EHist.EmailedAt) AS LastTime
+FROM        EHist INNER JOIN
+                  EMail ON EHist.EMailID = EMail.ID
+WHERE     (EHist.RecivedOrSent = 'R') AND (EMail.PermBanReason IS NULL)
+GROUP BY EHist.EMailID
+ORDER BY Recieves DESC, LastTime DESC
 

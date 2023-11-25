@@ -556,7 +556,7 @@ namespace OutlookToDbWpfApp
           Notes = notes,
           AddedAt = AvailStatusEmailer.App.Now,
           ReSendAfter = null,
-          NotifyPriority = 99
+          NotifyPriority = 9977
         });
 
         _ = await _db.TrySaveReportAsync("checkInsertEMail");
@@ -569,10 +569,14 @@ namespace OutlookToDbWpfApp
       //insertEMailEHistItem(isRcvd, timeRecdSent, em, subject, body);		}		void insertEMailEHistItem(bool isRcvd, DateTime timeRecdSent, EMail em, string subject, string body)		{
       try
       {
-        //var gt = timeRecdSent.AddMinutes(-5);
-        //var lt = timeRecdSent.AddMinutes(+5);         //var ch = isRcvd ? ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.ID) : ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.ID); if (ch.Count() < 1)
-        var eh = _db.EHists./*Local.*/FirstOrDefault(p => p.RecivedOrSent == rs && p.EMailID == em.ID /*&& gt < p.EmailedAt && p.EmailedAt < lt*/);
-        if (eh == null)
+        var gt = timeRecdSent.AddMinutes(-5);
+        var lt = timeRecdSent.AddMinutes(+5);         //var ch = isRcvd ? ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.ID) : ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.ID); if (ch.Count() < 1)
+        var eh = _db.EHists./*Local.*/FirstOrDefault(p => p.RecivedOrSent == rs && p.EMailID == em.ID && gt < p.EmailedAt && p.EmailedAt < lt);
+        if (eh != null)
+        {
+          new Exception().Pop("??? No EHist added: There is already the same record in DB within the +-5min range ???");
+        }
+        else
         {
           var newEH = new EHist
           {
@@ -580,7 +584,7 @@ namespace OutlookToDbWpfApp
             EMail = em,
             LetterBody = string.IsNullOrEmpty(body) ? "" : body.Replace("\n\n\n", "\n\n").Replace("\n\n", "\n").Replace("\r\n\r\n\r\n", "\n\n").Replace("\r\n\r\n", "\n"),
             LetterSubject = subject,
-            AddedAt = AvailStatusEmailer.App.Now,
+            AddedAt = App.Now,
             Notes = "",
             EmailedAt = timeRecdSent
           };

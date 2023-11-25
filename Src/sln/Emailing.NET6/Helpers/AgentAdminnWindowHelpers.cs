@@ -52,7 +52,7 @@ public static class AgentAdminnWindowHelpers
               _ = db.Agencies.Add(new Agency { Id = agencyCompany, AddedAt = now });
 
             email.AddedAt = now;
-            email.NotifyPriority = 99;
+            email.NotifyPriority = 9876;
           }
 
         foreach (var row in db.ChangeTracker.Entries().Where(e => e.State == EntityState.Modified))

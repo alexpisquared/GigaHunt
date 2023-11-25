@@ -50,7 +50,7 @@
         </Grid.RowDefinitions>
 
         <TextBlock HorizontalAlignment="Right" Margin="0 -5" FontSize="43" FontFamily="Ink Free" FontWeight="ExtraBold" Foreground="#4e21" Text="Emailer  " Grid.ColumnSpan="3"/>
-        <TextBlock  Margin="-45,9,-33,0"                   FontSize="23" FontFamily="Ink Free" FontWeight="ExtraBold" Foreground="#ae21" Text="Emailer  " RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" HorizontalAlignment="Left">
+        <TextBlock  Margin="-45,9,-33,0"                     FontSize="23" FontFamily="Ink Free" FontWeight="ExtraBold" Foreground="#ae21" Text="Emailer  " RenderTransformOrigin="0.5,0.5" VerticalAlignment="Top" HorizontalAlignment="Left">
           <TextBlock.RenderTransform>
             <RotateTransform Angle="-90"/>
           </TextBlock.RenderTransform>
@@ -105,6 +105,7 @@
               <DataGridTextColumn Header="LastSent"    Binding="{Binding LastSentAt,    Converter={cmn:UniConverter}}" />
               <DataGridTextColumn Header="LastReplied" Binding="{Binding LastRepliedAt, Converter={cmn:UniConverter}}" />
               <DataGridTextColumn Header="Added At"    Binding="{Binding AddedAt,       Converter={cmn:UniConverter}}" />
+              <DataGridTextColumn Header="Priority"    Binding="{Binding NotifyPriority}"                               IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" />
               <DataGridTextColumn Header="Notes (this is for AVAILABLE broadcast)" Binding="{Binding Notes}"           Width="*" FontSize="8" />
             </DataGrid.Columns>
           </DataGrid>
@@ -121,6 +122,7 @@
               <DataGridTextColumn Header="MyReplies"                                             Binding="{Binding MyReplies}"                                     />
               <DataGridTextColumn Header="LastRepliedAt"                                         Binding="{Binding LastRepliedAt, Converter={cmn:UniConverter}}"   />
               <DataGridTextColumn Header="Added At"                                              Binding="{Binding AddedAt, Converter={cmn:UniConverter}}"         />
+              <DataGridTextColumn Header="Priority"                                              Binding="{Binding NotifyPriority}"                               IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" />
               <DataGridTextColumn Header="Notes    (this is the list for BUSY/TAKEN broadcast)"  Binding="{Binding Notes}"                                        Width="*"/>
             </DataGrid.Columns>
           </DataGrid>
