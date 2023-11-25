@@ -79,7 +79,7 @@ GO
 
 ALTER VIEW [dbo].[vEMail_Avail_Prod]
 AS
-  SELECT TOP (100) PERCENT
+  SELECT -- TOP (100) PERCENT
     ISNULL(ROW_NUMBER() OVER (ORDER BY AddedAt desc), 0)                                                 AS RowNumberForEfId,
     NotifyPriority, ID, FName, LName, Company, Phone, PermBanReason, Notes, AddedAt, DoNotNotifyOnAvailableForCampaignID AS DoNotNotifyForCampaignID,
     (SELECT MAX(CampaignStart) FROM dbo.Campaign)                                                                             AS CurrentCampaignStart,
@@ -99,7 +99,7 @@ AS
       ((SELECT MAX(EmailedAt) AS LastSent FROM dbo.EHist WHERE (RecivedOrSent = 'S') AND (EMailID = em.ID)) < dbo.CurrentCampaignStart())
     )
      -- OR ReSendAfter IS NOT NULL AND ReSendAfter < GETDATE()
-  ORDER BY NotifyPriority, AddedAt DESC -- !!! DOES NOT WORK !!! WHY ??? <= MUST sort in C#!!! 
+  -- ORDER BY NotifyPriority, AddedAt DESC -- !!! DOES NOT WORK !!! WHY ??? <= MUST sort in C#!!! 
 GO
 
 -- Broadcast Status/Progress:                     2023-11-23
@@ -139,19 +139,14 @@ SET           NotifyPriority = isnull((
 	GROUP BY EMailID
 ), 11888111)
 WHERE     (Notes NOT LIKE '#TopPriority#%')
-
 -- */
 
 -- repeat the sort in C#!!! (2019-11):
-select top (100) PERCENT * from [dbo].[vEMail_Avail_Prod] ORDER BY NotifyPriority, AddedAt DESC, 
-	--LastRepliedAt DESC, 
-	FName DESC 
-
+select top (100) * from [dbo].[vEMail_Avail_Prod] ORDER BY NotifyPriority
 
 SELECT     EHist.EMailID, COUNT(*) AS Recieves, MAX(EHist.EmailedAt) AS LastTime
-FROM        EHist INNER JOIN
-                  EMail ON EHist.EMailID = EMail.ID
+FROM        EHist INNER JOIN EMail ON EHist.EMailID = EMail.ID
 WHERE     (EHist.RecivedOrSent = 'R') AND (EMail.PermBanReason IS NULL)
 GROUP BY EHist.EMailID
-ORDER BY Recieves DESC, LastTime DESC
+
 
