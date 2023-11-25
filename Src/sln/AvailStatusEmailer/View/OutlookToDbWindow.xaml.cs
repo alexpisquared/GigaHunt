@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using AAV.Sys.Ext;
 using AAV.WPF.Ext;
 using AgentFastAdmin;
 using AsLink;
@@ -574,7 +575,7 @@ namespace OutlookToDbWpfApp
         var eh = _db.EHists./*Local.*/FirstOrDefault(p => p.RecivedOrSent == rs && p.EMailID == em.ID && gt < p.EmailedAt && p.EmailedAt < lt);
         if (eh != null)
         {
-          new Exception().Pop("??? No EHist added: There is already the same record in DB within the +-5min range ???");
+          new Exception().Log("??? No EHist added: There is already the same record in DB within the +-5min range ???");
         }
         else
         {
