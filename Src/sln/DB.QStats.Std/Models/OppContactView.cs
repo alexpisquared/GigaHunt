@@ -11,19 +11,19 @@ public partial class OppContactView
 
     public DateTime LastActivityAt { get; set; }
 
-    public string Company { get; set; } = null!;
+    public string Company { get; set; }
 
-    public string Location { get; set; } = null!;
+    public string Location { get; set; }
 
     public int RateAsked { get; set; }
 
     public int ContactId { get; set; }
 
-    public string? AgentCompany { get; set; }
+    public string AgentCompany { get; set; }
 
-    public string Notes { get; set; } = null!;
+    public string Notes { get; set; }
 
-    public string Start { get; set; } = null!;
+    public string Start { get; set; }
 
-    public string Term { get; set; } = null!;
+    public string Term { get; set; }
 }

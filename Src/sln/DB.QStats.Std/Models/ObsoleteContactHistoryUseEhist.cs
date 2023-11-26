@@ -15,11 +15,11 @@ public partial class ObsoleteContactHistoryUseEhist
 
     public DateTime? Ireceived { get; set; }
 
-    public string? LetterSubject { get; set; }
+    public string LetterSubject { get; set; }
 
-    public string? LetterBody { get; set; }
+    public string LetterBody { get; set; }
 
-    public string? Notes { get; set; }
+    public string Notes { get; set; }
 
-    public virtual ObsoleteContactUseEmail Contact { get; set; } = null!;
+    public virtual ObsoleteContactUseEmail Contact { get; set; }
 }

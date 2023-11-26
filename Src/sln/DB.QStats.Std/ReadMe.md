@@ -78,3 +78,7 @@ cd .\DB.DbName\
 dotnet add package Microsoft.EntityFrameworkCore.Design
 dotnet add package Microsoft.EntityFrameworkCore.SqlServer
 dotnet ef dbcontext scaffold "Server=.\SqlExpress;Database=DbName;Trusted_Connection=True;TrustServerCertificate=Yes;" Microsoft.EntityFrameworkCore.SqlServer -o Models --force
+
+2023-11-25  
+cd C:\g\GigaHunt\Src\sln\DB.QStats.Std\
+dotnet ef dbcontext scaffold "Server=.\SqlExpRess;Database=QStatsRls;Trusted_Connection=True;Encrypt=False;" Microsoft.EntityFrameworkCore.SqlServer -o Models --force

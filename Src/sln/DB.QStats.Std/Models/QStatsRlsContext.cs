@@ -19,6 +19,8 @@ public partial class QstatsRlsContext : DbContext
 
     public virtual DbSet<AgencyOrg> AgencyOrgs { get; set; }
 
+    public virtual DbSet<AgentOfInterestBySentQntView> AgentOfInterestBySentQntViews { get; set; }
+
     public virtual DbSet<Campaign> Campaigns { get; set; }
 
     public virtual DbSet<ContactForBroadcastView> ContactForBroadcastViews { get; set; }
@@ -69,6 +71,8 @@ public partial class QstatsRlsContext : DbContext
 
     public virtual DbSet<VEmailAvailProd> VEmailAvailProds { get; set; }
 
+    public virtual DbSet<VEmailIdAvailProd> VEmailIdAvailProds { get; set; }
+
     public virtual DbSet<VEmailUnAvlDev> VEmailUnAvlDevs { get; set; }
 
     public virtual DbSet<VEmailUnAvlProd> VEmailUnAvlProds { get; set; }
@@ -78,7 +82,7 @@ public partial class QstatsRlsContext : DbContext
     public virtual DbSet<VwAgencyRate> VwAgencyRates { get; set; }
 
 //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
 //        => optionsBuilder.UseSqlServer("Server=.\\SqlExpRess;Database=QStatsRls;Trusted_Connection=True;Encrypt=False;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -99,6 +103,7 @@ public partial class QstatsRlsContext : DbContext
             entity.Property(e => e.Address)
                 .HasMaxLength(256)
                 .IsUnicode(false);
+            entity.Property(e => e.IsBroadcastee).HasDefaultValue(true);
             entity.Property(e => e.ModifiedAt).HasColumnType("datetime");
             entity.Property(e => e.Note).IsUnicode(false);
         });
@@ -121,6 +126,20 @@ public partial class QstatsRlsContext : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.Note).IsUnicode(false);
             entity.Property(e => e.TextMax).IsUnicode(false);
+        });
+
+        modelBuilder.Entity<AgentOfInterestBySentQntView>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("AgentOfInterestBySentQntView");
+
+            entity.Property(e => e.EmailId)
+                .IsRequired()
+                .HasMaxLength(256)
+                .IsUnicode(false)
+                .HasColumnName("EMailID");
+            entity.Property(e => e.LastSent).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<Campaign>(entity =>
@@ -195,15 +214,18 @@ public partial class QstatsRlsContext : DbContext
                 .HasMaxLength(6)
                 .HasColumnName("country");
             entity.Property(e => e.ContinentalRegion)
+                .IsRequired()
                 .HasMaxLength(32)
                 .HasColumnName("continental_region");
             entity.Property(e => e.CountryName)
+                .IsRequired()
                 .HasMaxLength(32)
                 .HasColumnName("country_name");
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
             entity.Property(e => e.FirstnameRootObjectname).HasMaxLength(32);
             entity.Property(e => e.Probability).HasColumnName("probability");
             entity.Property(e => e.StatisticalRegion)
+                .IsRequired()
                 .HasMaxLength(32)
                 .HasColumnName("statistical_region");
         });
@@ -265,6 +287,7 @@ public partial class QstatsRlsContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.EmailId)
+                .IsRequired()
                 .HasMaxLength(256)
                 .IsUnicode(false)
                 .HasColumnName("EMailID");
@@ -273,6 +296,7 @@ public partial class QstatsRlsContext : DbContext
             entity.Property(e => e.LetterSubject).IsUnicode(false);
             entity.Property(e => e.Notes).IsUnicode(false);
             entity.Property(e => e.RecivedOrSent)
+                .IsRequired()
                 .HasMaxLength(1)
                 .IsUnicode(false);
             entity.Property(e => e.SentOn).HasColumnType("datetime");
@@ -303,25 +327,34 @@ public partial class QstatsRlsContext : DbContext
             entity.Property(e => e.Company)
                 .HasMaxLength(256)
                 .IsUnicode(false);
+            entity.Property(e => e.Country)
+                .HasMaxLength(32)
+                .IsUnicode(false);
             entity.Property(e => e.DoNotNotifyOnAvailableForCampaignId).HasColumnName("DoNotNotifyOnAvailableForCampaignID");
             entity.Property(e => e.DoNotNotifyOnOffMarketForCampaignId).HasColumnName("DoNotNotifyOnOffMarketForCampaignID");
             entity.Property(e => e.Fname)
                 .HasMaxLength(128)
                 .IsUnicode(false)
                 .HasColumnName("FName");
-            entity.Property(e => e.LastAction).HasColumnType("datetime");
+            entity.Property(e => e.LastAction)
+                .HasDefaultValueSql("(NULL)")
+                .HasColumnType("datetime");
             entity.Property(e => e.Lname)
                 .HasMaxLength(128)
                 .IsUnicode(false)
                 .HasColumnName("LName");
-            entity.Property(e => e.ModifiedAt).HasColumnType("datetime");
+            entity.Property(e => e.ModifiedAt)
+                .HasDefaultValueSql("(NULL)")
+                .HasColumnType("datetime");
             entity.Property(e => e.Notes).IsUnicode(false);
-            entity.Property(e => e.NotifyPriority).HasDefaultValueSql("((100))");
+            entity.Property(e => e.NotifyPriority).HasDefaultValue(100);
             entity.Property(e => e.PermBanReason).IsUnicode(false);
             entity.Property(e => e.Phone)
                 .HasMaxLength(100)
                 .IsUnicode(false);
-            entity.Property(e => e.ReSendAfter).HasColumnType("datetime");
+            entity.Property(e => e.ReSendAfter)
+                .HasDefaultValueSql("(NULL)")
+                .HasColumnType("datetime");
 
             entity.HasOne(d => d.CompanyNavigation).WithMany(p => p.Emails)
                 .HasForeignKey(d => d.Company)
@@ -343,12 +376,16 @@ public partial class QstatsRlsContext : DbContext
             entity.HasIndex(e => e.Name, "IX_FirstnameCountryXRefs_FirstnameRootObjectname");
 
             entity.Property(e => e.Country)
+                .IsRequired()
                 .HasMaxLength(6)
                 .HasColumnName("country");
             entity.Property(e => e.Name)
+                .IsRequired()
                 .HasMaxLength(32)
                 .HasColumnName("name");
-            entity.Property(e => e.Note).HasMaxLength(200);
+            entity.Property(e => e.Note)
+                .IsRequired()
+                .HasMaxLength(200);
             entity.Property(e => e.Probability).HasColumnName("probability");
 
             entity.HasOne(d => d.CountryNavigation).WithMany(p => p.FirstnameCountryXrefs)
@@ -374,16 +411,20 @@ public partial class QstatsRlsContext : DbContext
                 .HasColumnName("name");
             entity.Property(e => e.Accuracy).HasColumnName("accuracy");
             entity.Property(e => e.CountryOfOriginMapUrl)
+                .IsRequired()
                 .HasMaxLength(128)
                 .HasColumnName("country_of_origin_map_url");
             entity.Property(e => e.CreditsUsed).HasColumnName("credits_used");
             entity.Property(e => e.Duration)
+                .IsRequired()
                 .HasMaxLength(12)
                 .HasColumnName("duration");
             entity.Property(e => e.Gender)
+                .IsRequired()
                 .HasMaxLength(12)
                 .HasColumnName("gender");
             entity.Property(e => e.NameSanitized)
+                .IsRequired()
                 .HasMaxLength(32)
                 .HasColumnName("name_sanitized");
             entity.Property(e => e.Samples).HasColumnName("samples");
@@ -405,12 +446,14 @@ public partial class QstatsRlsContext : DbContext
             entity.Property(e => e.AgentName)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            entity.Property(e => e.CampaignId).HasDefaultValueSql("((3))");
+            entity.Property(e => e.CampaignId).HasDefaultValue(3);
             entity.Property(e => e.InterviewedAt).HasColumnType("datetime");
             entity.Property(e => e.MarketVenue)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            entity.Property(e => e.ModifiedAt).HasColumnType("datetime");
+            entity.Property(e => e.ModifiedAt)
+                .HasDefaultValueSql("(NULL)")
+                .HasColumnType("datetime");
             entity.Property(e => e.Note).IsUnicode(false);
             entity.Property(e => e.NoteAlso).IsUnicode(false);
             entity.Property(e => e.OfficiallySubmittedAt).HasColumnType("datetime");
@@ -452,6 +495,7 @@ public partial class QstatsRlsContext : DbContext
                 .ValueGeneratedNever()
                 .HasColumnName("ID");
             entity.Property(e => e.EmailId)
+                .IsRequired()
                 .HasMaxLength(256)
                 .IsUnicode(false);
             entity.Property(e => e.HourlyRate).HasColumnType("money");
@@ -557,9 +601,10 @@ public partial class QstatsRlsContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.Notes)
+                .IsRequired()
                 .HasMaxLength(5000)
                 .IsUnicode(false)
-                .HasDefaultValueSql("('')");
+                .HasDefaultValue("");
             entity.Property(e => e.OpportunityId).HasColumnName("OpportunityID");
         });
 
@@ -574,27 +619,32 @@ public partial class QstatsRlsContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.Company)
+                .IsRequired()
                 .HasMaxLength(150)
                 .IsUnicode(false);
             entity.Property(e => e.Description)
+                .IsRequired()
                 .HasMaxLength(4000)
                 .IsUnicode(false)
-                .HasDefaultValueSql("('')");
+                .HasDefaultValue("");
             entity.Property(e => e.LastActivityAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.Location)
+                .IsRequired()
                 .HasMaxLength(400)
                 .IsUnicode(false)
-                .HasDefaultValueSql("('')");
+                .HasDefaultValue("");
             entity.Property(e => e.Start)
+                .IsRequired()
                 .HasMaxLength(150)
                 .IsUnicode(false)
-                .HasDefaultValueSql("('')");
+                .HasDefaultValue("");
             entity.Property(e => e.Term)
+                .IsRequired()
                 .HasMaxLength(150)
                 .IsUnicode(false)
-                .HasDefaultValueSql("('')");
+                .HasDefaultValue("");
 
             entity.HasOne(d => d.Contact).WithMany(p => p.ObsoleteOpportunities)
                 .HasForeignKey(d => d.ContactId)
@@ -626,19 +676,24 @@ public partial class QstatsRlsContext : DbContext
                 .HasMaxLength(388)
                 .IsUnicode(false);
             entity.Property(e => e.Company)
+                .IsRequired()
                 .HasMaxLength(150)
                 .IsUnicode(false);
             entity.Property(e => e.LastActivityAt).HasColumnType("datetime");
             entity.Property(e => e.Location)
+                .IsRequired()
                 .HasMaxLength(400)
                 .IsUnicode(false);
             entity.Property(e => e.Notes)
+                .IsRequired()
                 .HasMaxLength(4000)
                 .IsUnicode(false);
             entity.Property(e => e.Start)
+                .IsRequired()
                 .HasMaxLength(150)
                 .IsUnicode(false);
             entity.Property(e => e.Term)
+                .IsRequired()
                 .HasMaxLength(150)
                 .IsUnicode(false);
         });
@@ -657,6 +712,7 @@ public partial class QstatsRlsContext : DbContext
                 .HasMaxLength(800)
                 .IsUnicode(false);
             entity.Property(e => e.PhoneNumber)
+                .IsRequired()
                 .HasMaxLength(12)
                 .IsUnicode(false);
             entity.Property(e => e.SeenFirst).HasColumnType("datetime");
@@ -672,10 +728,12 @@ public partial class QstatsRlsContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.AgencyId)
+                .IsRequired()
                 .HasMaxLength(256)
                 .IsUnicode(false)
                 .HasColumnName("AgencyID");
             entity.Property(e => e.Note)
+                .IsRequired()
                 .HasMaxLength(256)
                 .IsUnicode(false);
             entity.Property(e => e.PhoneId).HasColumnName("PhoneID");
@@ -700,10 +758,12 @@ public partial class QstatsRlsContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.EmailId)
+                .IsRequired()
                 .HasMaxLength(256)
                 .IsUnicode(false)
                 .HasColumnName("EmailID");
             entity.Property(e => e.Note)
+                .IsRequired()
                 .HasMaxLength(256)
                 .IsUnicode(false);
             entity.Property(e => e.PhoneId).HasColumnName("PhoneID");
@@ -735,6 +795,7 @@ public partial class QstatsRlsContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("FName");
             entity.Property(e => e.Id)
+                .IsRequired()
                 .HasMaxLength(128)
                 .IsUnicode(false)
                 .HasColumnName("ID");
@@ -769,6 +830,7 @@ public partial class QstatsRlsContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("FName");
             entity.Property(e => e.Id)
+                .IsRequired()
                 .HasMaxLength(256)
                 .IsUnicode(false)
                 .HasColumnName("ID");
@@ -784,6 +846,19 @@ public partial class QstatsRlsContext : DbContext
             entity.Property(e => e.Phone)
                 .HasMaxLength(100)
                 .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<VEmailIdAvailProd>(entity =>
+        {
+            entity
+                //.HasNoKey() ▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄
+                .ToView("vEMailId_Avail_Prod");
+
+            entity.Property(e => e.Id)
+                .IsRequired()
+                .HasMaxLength(256)
+                .IsUnicode(false)
+                .HasColumnName("ID");
         });
 
         modelBuilder.Entity<VEmailUnAvlDev>(entity =>
@@ -802,6 +877,7 @@ public partial class QstatsRlsContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("FName");
             entity.Property(e => e.Id)
+                .IsRequired()
                 .HasMaxLength(128)
                 .IsUnicode(false)
                 .HasColumnName("ID");
@@ -813,6 +889,7 @@ public partial class QstatsRlsContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("LName");
             entity.Property(e => e.NoSendsAfterCmapaignEnd)
+                .IsRequired()
                 .HasMaxLength(8)
                 .IsUnicode(false)
                 .HasColumnName("No sends after cmapaign end");
@@ -839,6 +916,7 @@ public partial class QstatsRlsContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("FName");
             entity.Property(e => e.Id)
+                .IsRequired()
                 .HasMaxLength(128)
                 .IsUnicode(false)
                 .HasColumnName("ID");
@@ -850,6 +928,7 @@ public partial class QstatsRlsContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("LName");
             entity.Property(e => e.NoSendsAfterCmapaignEnd)
+                .IsRequired()
                 .HasMaxLength(8)
                 .IsUnicode(false)
                 .HasColumnName("No sends after cmapaign end");
@@ -876,6 +955,7 @@ public partial class QstatsRlsContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("FName");
             entity.Property(e => e.Id)
+                .IsRequired()
                 .HasMaxLength(128)
                 .IsUnicode(false)
                 .HasColumnName("ID");

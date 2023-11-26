@@ -11,5 +11,5 @@ public partial class LkuLeadStatus
 
     public string? Description { get; set; }
 
-    public virtual ICollection<Lead> Leads { get; } = new List<Lead>();
+    public virtual ICollection<Lead> Leads { get;  } = new List<Lead>();
 }

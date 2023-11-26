@@ -5,7 +5,7 @@ namespace DB.QStats.Std.Models;
 
 public partial class VwAgencyRate
 {
-    public string? Agency { get; set; }
+    public string Agency { get; set; }
 
     public int? Cnt { get; set; }
 

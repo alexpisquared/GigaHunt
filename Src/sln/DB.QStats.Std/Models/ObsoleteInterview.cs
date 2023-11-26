@@ -13,5 +13,5 @@ public partial class ObsoleteInterview
 
     public int? ContactId { get; set; }
 
-    public string Notes { get; set; } = null!;
+    public string Notes { get; set; }
 }

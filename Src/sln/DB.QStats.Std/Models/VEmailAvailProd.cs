@@ -7,19 +7,21 @@ public partial class VEmailAvailProd
 {
     public long RowNumberForEfId { get; set; }
 
-    public string Id { get; set; } = null!;
+    public int NotifyPriority { get; set; }
 
-    public string? Fname { get; set; }
+    public string Id { get; set; }
 
-    public string? Lname { get; set; }
+    public string Fname { get; set; }
 
-    public string? Company { get; set; }
+    public string Lname { get; set; }
 
-    public string? Phone { get; set; }
+    public string Company { get; set; }
 
-    public string? PermBanReason { get; set; }
+    public string Phone { get; set; }
 
-    public string? Notes { get; set; }
+    public string PermBanReason { get; set; }
+
+    public string Notes { get; set; }
 
     public DateTime AddedAt { get; set; }
 
@@ -38,5 +40,4 @@ public partial class VEmailAvailProd
     public int? TtlSends { get; set; }
 
     public int? TtlRcvds { get; set; }
-  public int NotifyPriority { get; set; } // :manual addition to the view on 2023-11-23.
 }

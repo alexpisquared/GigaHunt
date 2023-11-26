@@ -11,19 +11,19 @@ public partial class ObsoleteOpportunity
 
     public DateTime LastActivityAt { get; set; }
 
-    public string Company { get; set; } = null!;
+    public string Company { get; set; }
 
-    public string Location { get; set; } = null!;
+    public string Location { get; set; }
 
     public int? ContactId { get; set; }
 
-    public string Description { get; set; } = null!;
+    public string Description { get; set; }
 
     public int RateAsked { get; set; }
 
-    public string Start { get; set; } = null!;
+    public string Start { get; set; }
 
-    public string Term { get; set; } = null!;
+    public string Term { get; set; }
 
-    public virtual ObsoleteContactUseEmail? Contact { get; set; }
+    public virtual ObsoleteContactUseEmail Contact { get; set; }
 }

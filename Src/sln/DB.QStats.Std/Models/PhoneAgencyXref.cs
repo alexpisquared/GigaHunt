@@ -9,13 +9,13 @@ public partial class PhoneAgencyXref
 
     public int PhoneId { get; set; }
 
-    public string AgencyId { get; set; } = null!;
+    public string AgencyId { get; set; }
 
-    public string Note { get; set; } = null!;
+    public string Note { get; set; }
 
     public DateTime AddedAt { get; set; }
 
-    public virtual Agency Agency { get; set; } = null!;
+    public virtual Agency Agency { get; set; }
 
-    public virtual Phone Phone { get; set; } = null!;
+    public virtual Phone Phone { get; set; }
 }

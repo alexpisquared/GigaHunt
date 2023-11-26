@@ -9,11 +9,11 @@ public partial class LeadEmail
 
     public int LeadId { get; set; }
 
-    public string EmailId { get; set; } = null!;
+    public string EmailId { get; set; }
 
     public decimal? HourlyRate { get; set; }
 
-    public virtual Email Email { get; set; } = null!;
+    public virtual Email Email { get; set; }
 
-    public virtual Lead Lead { get; set; } = null!;
+    public virtual Lead Lead { get; set; }
 }

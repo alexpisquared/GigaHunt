@@ -9,13 +9,13 @@ public partial class PhoneEmailXref
 
     public int PhoneId { get; set; }
 
-    public string EmailId { get; set; } = null!;
+    public string EmailId { get; set; }
 
-    public string Note { get; set; } = null!;
+    public string Note { get; set; }
 
     public DateTime AddedAt { get; set; }
 
-    public virtual Email Email { get; set; } = null!;
+    public virtual Email Email { get; set; }
 
-    public virtual Phone Phone { get; set; } = null!;
+    public virtual Phone Phone { get; set; }
 }
