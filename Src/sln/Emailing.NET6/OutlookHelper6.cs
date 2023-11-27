@@ -413,8 +413,7 @@ public partial class OutlookHelper6
       !string.IsNullOrEmpty(mailItem.Sender?.Name) && mailItem.Sender.Name.Contains(' ') ? mailItem.Sender.Name :
       !string.IsNullOrEmpty(mailItem.SentOnBehalfOfName) && mailItem.SentOnBehalfOfName.Contains(' ') ? mailItem.SentOnBehalfOfName :
       !string.IsNullOrEmpty(mailItem.Sender?.Name) ? mailItem.Sender.Name :
-      !string.IsNullOrEmpty(mailItem.SentOnBehalfOfName) ? mailItem.SentOnBehalfOfName :
-      null;
+      !string.IsNullOrEmpty(mailItem.SentOnBehalfOfName) ? mailItem.SentOnBehalfOfName :      "Sirs";
 
     return FigureOutSenderFLName(fln, email);
   }
