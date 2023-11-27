@@ -4,20 +4,20 @@ namespace Emailing.NET6.Helpers;
 
 public static class OutlookToDbWindowHelpers
 {
-  static readonly DateTime Now = DateTime.Now;
+  static readonly DateTime _batchNow = DateTime.Now;
 
-  public static async Task<bool> CheckInsert_EMail_EHist_Async(QstatsRlsContext _db, string email, string firstName, string lastName, string? subject, string? body, DateTime? sentOn, DateTime? timeRecdSent, string isRcvd, string RS)
+  public static async Task<bool> CheckInsert_EMail_EHist_Async(QstatsRlsContext dbq, string email, string firstName, string lastName, string? subject, string? body, DateTime? sentOn, DateTime? timeRecdSent, string isRcvd, string RS)
   {
-    var em = await CheckInsertEMailAsync(_db, email, firstName, lastName, isRcvd);
+    var em = await CheckInsertEMailAsync(dbq, email, firstName, lastName, isRcvd);
     if (em == null) return false;
 
-    await EHistInsUpdSaveAsync(_db, subject, body, sentOn, timeRecdSent ?? DateTime.Now, RS, em);
+    await EHistInsUpdSaveAsync(dbq, subject, body, sentOn, timeRecdSent ?? DateTime.Now, RS, em);
 
-    var isNew = em?.AddedAt == Now;
+    var isNew = em?.AddedAt == _batchNow; //todo: revisit this logic as it is not correct. 2023-11-26
     return isNew;
   }
 
-  public static async Task<Email?> CheckInsertEMailAsync(QstatsRlsContext _db, string email, string firstName, string lastName, string notes)
+  public static async Task<Email?> CheckInsertEMailAsync(QstatsRlsContext dbq, string email, string firstName, string lastName, string notes)
   {
     const int maxLen = 256;
 
@@ -27,38 +27,38 @@ public static class OutlookToDbWindowHelpers
     if (email.Length > maxLen)
       email = email.Substring(email.Length - maxLen, maxLen);
 
-    var em = _db.Emails.Find(email);
+    var em = dbq.Emails.Find(email);
     if (em == null)
     {
       var agency = OutlookHelper6.GetCompanyName(email);
 
       try
       {
-        var r2 = _db.Agencies.Any(r => r.Id.Equals(agency.ToLower()));
-        var r3 = _db.Agencies.Any(r => r.Id.Equals(agency.ToUpper()));
+        var r2 = dbq.Agencies.Any(r => r.Id.Equals(agency.ToLower()));
+        var r3 = dbq.Agencies.Any(r => r.Id.Equals(agency.ToUpper()));
 
-        if (!_db.Agencies.Any(r => r.Id.Equals(agency))) //i think db is set to be case ignore:  , StringComparison.InvariantCultureIgnoreCase)) )
-          _ = _db.Agencies.Add(new Agency
+        if (!dbq.Agencies.Any(r => r.Id.Equals(agency))) //i think db is set to be case ignore:  , StringComparison.InvariantCultureIgnoreCase)) )
+          _ = dbq.Agencies.Add(new Agency
           {
             Id = agency.Length > maxLen ? agency.Substring(agency.Length - maxLen, maxLen) : agency,
-            AddedAt = Now
+            AddedAt = DateTime.Now
           });
       }
       catch (Exception ex) { _ = ex.Log("."); throw; }
 
-      em = _db.Emails.Add(new Email
+      em = dbq.Emails.Add(new Email
       {
         Id = email.Length > maxLen ? email.Substring(email.Length - maxLen, maxLen) : email,
         Company = agency,
         Fname = firstName,
         Lname = lastName,
         Notes = notes,
-        AddedAt = Now,
+        AddedAt = DateTime.Now,
         ReSendAfter = null,
         NotifyPriority = 8765
       }).Entity;
 
-      _ = await _db.TrySaveReportAsync("checkInsertEMail");
+      _ = await dbq.TrySaveReportAsync("checkInsertEMail");
     }
 
     return em;
@@ -74,15 +74,15 @@ public static class OutlookToDbWindowHelpers
       var eh = dbq.Ehists.FirstOrDefault(p => p.RecivedOrSent == rs && p.EmailId == email.Id && gt < p.EmailedAt && p.EmailedAt < lt);
       if (eh is not null)
       {
-        await PhoneNumbersGetInsSave(dbq, timeRecdSent, email, eh);
+        _ = await PhoneNumbersGetInsSave(dbq, timeRecdSent, email, eh);
 
         if (eh.SentOn != sentOn)
         {
           eh.SentOn = sentOn;
           _ = await dbq.TrySaveReportAsync("checkInsertEHist SentOn update");
         }
-      
-        new Exception().Log("??? No EHist added: There is already the same record in DB within the +-5min range ???");
+
+        _ = new Exception().Log("??? No EHist added: There is already the same record in DB within the +-5min range ???");
       }
       else
       {
@@ -92,7 +92,7 @@ public static class OutlookToDbWindowHelpers
           Email = email,
           LetterBody = string.IsNullOrEmpty(body) ? "" : body.Replace("\n\n\n", "\n\n").Replace("\n\n", "\n").Replace("\r\n\r\n\r\n", "\n\n").Replace("\r\n\r\n", "\n"),
           LetterSubject = subject,
-          AddedAt = Now,
+          AddedAt = DateTime.Now,
           Notes = "",
           SentOn = sentOn,
           EmailedAt = timeRecdSent
@@ -101,17 +101,19 @@ public static class OutlookToDbWindowHelpers
 
         _ = await dbq.TrySaveReportAsync("checkInsertEHist New letter");
 
-        await PhoneNumbersGetInsSave(dbq, timeRecdSent, email, newEH);
+        _ = await PhoneNumbersGetInsSave(dbq, timeRecdSent, email, newEH);
       }
     }
     catch (Exception ex) { _ = ex.Log(); throw; }
   }
 
-  static async Task PhoneNumbersGetInsSave(QstatsRlsContext dbq, DateTime timeRecdSent, Email email, Ehist newEH)
+  static async Task<string> PhoneNumbersGetInsSave(QstatsRlsContext dbq, DateTime timeRecdSent, Email email, Ehist newEH)
   {
     var phones = RegexHelper.GetUniquePhoneNumbersFromLetter(newEH);
-    phones.ToList().ForEach(pn => QStatsDbHelper.InsertPhoneNumberIntoDB(dbq, email.Id, timeRecdSent, Now, pn));
+    phones.ToList().ForEach(pn => QStatsDbHelper.InsertPhoneNumberIntoDB(dbq, email.Id, timeRecdSent, DateTime.Now, pn));
 
-    _ = await dbq.TrySaveReportAsync(nameof(OutlookToDbWindowHelpers));
+    var (success, rowsSavedCnt, report) = await dbq.TrySaveReportAsync(nameof(OutlookToDbWindowHelpers));
+
+    return report;
   }
 }

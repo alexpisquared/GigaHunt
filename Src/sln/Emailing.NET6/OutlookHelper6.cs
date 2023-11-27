@@ -259,7 +259,7 @@ public partial class OutlookHelper6
 
     i.Categories = "AppAdded";
     i.User1 = "New from QStats DB";
-    //i.CreationTime = GigaHunt.Chronoer.Now;
+    //i.CreationTime = GigaHunt.Chronoer._now;
 
     i.Save();
     _addedCount++;
