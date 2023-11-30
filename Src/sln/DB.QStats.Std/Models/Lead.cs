@@ -25,6 +25,8 @@ public partial class Lead
 
     public int? HourlyRate { get; set; }
 
+    public double HourPerDay { get; set; } // 2023
+
     public DateTime? InterviewedAt { get; set; }
 
     public string Agency { get; set; }

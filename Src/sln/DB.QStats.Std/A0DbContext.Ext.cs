@@ -1,5 +1,9 @@
 ﻿namespace DB.QStats.Std.Models;
 
+public partial class Lead
+{
+  [NotMapped] public double? RealRate => HourlyRate * HourPerDay / 8.0;
+}
 public partial class Email : INotifyPropertyChanged
 {
   [NotMapped] public int? Ttl_Sent { get => ttl_Sent; set { if (value != ttl_Sent) { ttl_Sent = value; OnPropertyChanged(); } } }

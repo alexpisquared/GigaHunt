@@ -289,7 +289,7 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
               }
               else
               {
-                BanPremanentlyInDB(ref report, ref newBansAdded, senderEmail ?? throw new ArgumentNullException(nameof(folderName), "#########%%%%%%%%"), "Delivery failed (a) ");
+                BanPremanentlyInDB(ref report, ref newBansAdded, senderEmail ?? throw new ArgumentNullException(nameof(folderName), "#########%%%%%%%%"), "Delivery failed (v2 .net6 a) ");
               }
 
               ArgumentNullException.ThrowIfNull(failsDoneFolder, "failsdonefolder is nul @@@@@@@@@@@@@@@");
@@ -306,12 +306,12 @@ public partial class OutlookToDbWindow : WpfUserControlLib.Base.WindowBase
               }
               else
               {
-                BanPremanentlyInDB(ref report, ref newBansAdded, senderEmail, "Delivery failed (b) ");
+                BanPremanentlyInDB(ref report, ref newBansAdded, senderEmail, "Delivery failed (v2 .net6 b) ");
               }
 
               foreach (var emailFromBody in RegexHelper.FindEmails(mailItem.Body))
               {
-                // banPremanentlyInDB(ref report, ref newBansAdded, emailFromBody, "Delivery failed (c) "); <== //todo: restore all %Delivery failed (c)%, since in the body usually alternative contacts are mentioned.
+                // banPremanentlyInDB(ref report, ref newBansAdded, emailFromBody, "Delivery failed (v2 .net6 c) "); <== //todo: restore all %Delivery failed (c)%, since in the body usually alternative contacts are mentioned.
 
                 if (_db.Emails.Find(emailFromBody) == null)
                 {

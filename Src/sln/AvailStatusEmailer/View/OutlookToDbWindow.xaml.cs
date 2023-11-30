@@ -292,7 +292,7 @@ namespace OutlookToDbWpfApp
                 }
                 else
                 {
-                  banPremanentlyInDB(ref report, ref newBansAdded, senderEmail, "Delivery failed (a) ");
+                  banPremanentlyInDB(ref report, ref newBansAdded, senderEmail, "Delivery failed (v1 .net4 a) ");
                 }
 
                 OutlookHelper.moveIt(failsDoneFolder, reportItem);
@@ -308,12 +308,12 @@ namespace OutlookToDbWpfApp
                 }
                 else
                 {
-                  banPremanentlyInDB(ref report, ref newBansAdded, senderEmail, "Delivery failed (b) ");
+                  banPremanentlyInDB(ref report, ref newBansAdded, senderEmail, "Delivery failed (v1 .net4 b) ");
                 }
 
                 foreach (var emailFromBody in OutlookHelper.FindEmails(mailItem.Body))
                 {
-                  // banPremanentlyInDB(ref report, ref newBansAdded, emailFromBody, "Delivery failed (c) "); <== //todo: restore all %Delivery failed (c)%, since in the body usually alternative contacts are mentioned.
+                  // banPremanentlyInDB(ref report, ref newBansAdded, emailFromBody, "Delivery failed (v1 .net4 c) "); <== //todo: restore all %Delivery failed (c)%, since in the body usually alternative contacts are mentioned.
 
                   var emr2 = _db.EMails.Find(emailFromBody);
                   if (emr2 == null)
