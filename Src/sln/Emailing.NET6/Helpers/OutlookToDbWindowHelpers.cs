@@ -1,4 +1,5 @@
 ﻿using GigaHunt.AsLink;
+using static Azure.Core.HttpHeader;
 
 namespace Emailing.NET6.Helpers;
 
@@ -6,18 +7,18 @@ public static class OutlookToDbWindowHelpers
 {
   static readonly DateTime _batchNow = DateTime.Now;
 
-  public static async Task<bool> CheckInsert_EMail_EHist_Async(QstatsRlsContext dbq, string email, string firstName, string lastName, string? subject, string? body, DateTime? sentOn, DateTime? timeRecdSent, string isRcvd, string RS)
+  public static async Task<bool> CheckInsert_EMail_EHist_Async(QstatsRlsContext dbq, string email, string firstName, string lastName, string? subject, string? body, DateTime? sentOn, DateTime? timeRecdSent, string isRcvd, string RS, string? notes = null)
   {
-    var em = await CheckInsertEMailAsync(dbq, email, firstName, lastName, isRcvd);
+    var em = await CheckInsertEMailAsync(dbq, email, firstName, lastName, isRcvd, notes);
     if (em == null) return false;
 
-    await EHistInsUpdSaveAsync(dbq, subject, body, sentOn, timeRecdSent ?? DateTime.Now, RS, em);
+    await EHistInsUpdSaveAsync(dbq, subject, body, sentOn, timeRecdSent ?? DateTime.Now, RS, em, notes);
 
     var isNew = em?.AddedAt == _batchNow; //todo: revisit this logic as it is not correct. 2023-11-26
     return isNew;
   }
 
-  public static async Task<Email?> CheckInsertEMailAsync(QstatsRlsContext dbq, string email, string firstName, string lastName, string notes)
+  public static async Task<Email?> CheckInsertEMailAsync(QstatsRlsContext dbq, string email, string firstName, string lastName, string isRcvd, string? notes = null)
   {
     const int maxLen = 256;
 
@@ -28,7 +29,15 @@ public static class OutlookToDbWindowHelpers
       email = email.Substring(email.Length - maxLen, maxLen);
 
     var em = dbq.Emails.Find(email);
-    if (em == null)
+    if (em != null)
+    {
+      if (notes is not null)
+      { 
+        em.Notes = $"{DateTime.Now:yyMMdd}: {notes} | {em.Notes}";
+        _ = await dbq.TrySaveReportAsync("checkInsertEMail");
+      }
+    }
+    else
     {
       var agency = OutlookHelper6.GetCompanyName(email);
 
@@ -64,25 +73,26 @@ public static class OutlookToDbWindowHelpers
     return em;
   }
 
-  public static async Task EHistInsUpdSaveAsync(QstatsRlsContext dbq, string? subject, string? body, DateTime? sentOn, DateTime timeRecdSent, string rs, Email email)
+  public static async Task EHistInsUpdSaveAsync(QstatsRlsContext dbq, string? subject, string? body, DateTime? sentOn, DateTime timeRecdSent, string rs, Email email, string? notes = null)
   {
     //insertEMailEHistItem(isRcvd, timeRecdSent, email, subject, body);		}		void insertEMailEHistItem(bool isRcvd, DateTime timeRecdSent, Email email, string subject, string body)		{
     try
     {
-      var gt = timeRecdSent.AddMinutes(-5);
-      var lt = timeRecdSent.AddMinutes(+5);         //var ch = isRcvd ? ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.Id) : ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.Id); if (ch.Count() < 1)
+      var gt = timeRecdSent.AddMinutes(-1);
+      var lt = timeRecdSent.AddMinutes(+1);         //var ch = isRcvd ? ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.Id) : ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.Id); if (ch.Count() < 1)
       var eh = dbq.Ehists.FirstOrDefault(p => p.RecivedOrSent == rs && p.EmailId == email.Id && gt < p.EmailedAt && p.EmailedAt < lt);
       if (eh is not null)
       {
         _ = await PhoneNumbersGetInsSave(dbq, timeRecdSent, email, eh);
 
-        if (eh.SentOn != sentOn)
+        if (eh.SentOn != sentOn || notes != null)
         {
           eh.SentOn = sentOn;
+          eh.Notes = notes ?? "";
           _ = await dbq.TrySaveReportAsync("checkInsertEHist SentOn update");
         }
 
-        _ = new Exception().Log("??? No EHist added: There is already the same record in DB within the +-5min range ???");
+        _ = new Exception().Log("??? No EHist added: There is already the same record in DB within the +-1min range ???");
       }
       else
       {
@@ -93,7 +103,7 @@ public static class OutlookToDbWindowHelpers
           LetterBody = string.IsNullOrEmpty(body) ? "" : body.Replace("\n\n\n", "\n\n").Replace("\n\n", "\n").Replace("\r\n\r\n\r\n", "\n\n").Replace("\r\n\r\n", "\n"),
           LetterSubject = subject,
           AddedAt = DateTime.Now,
-          Notes = "",
+          Notes = notes ?? "",
           SentOn = sentOn,
           EmailedAt = timeRecdSent
         };

@@ -10,14 +10,14 @@ public static class QStatusBroadcaster
     var (success, report) = await SendLetter(email, firstName, isAvailable, timestamp);
     if (success)
     {
-      _ = await DbActor.InsertContactHistoryItem(false, timestamp, timestamp, email, firstName, "std .net8", isAvailable ? "ASU - 4 CVs - 2023-11" : "Std Busy");
+      _ = await DbActor.InsertContactHistoryItem(false, timestamp, timestamp, email, firstName, "asu .net 8.0 a", isAvailable ? "ASU - 4 CVs - 2023-11" : "Std Busy");
       return true;
     }
 
     _ = await DbActor.MarkAsNotUsable(email, report);
     return false;
   }
-  public static async Task<(bool success, string report)> SendLetter(string emailAddress, string firstName, bool isAvailable, DateTime timestamp)
+  public static async Task<(bool success, string report)> SendLetter(string emailAddress, string firstName, bool isAvailable, DateTime timestamp) // called by MVVM
   {
     try
     {

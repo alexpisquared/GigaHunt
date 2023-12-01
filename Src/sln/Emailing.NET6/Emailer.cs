@@ -1,5 +1,7 @@
 #define REALREADY			//uncomment only when ready:
+using System.Net;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 
 namespace Emailing.NET6;
 public class Emailer
@@ -9,6 +11,7 @@ public class Emailer
   {
     var sw = Stopwatch.StartNew();
     var report = "";
+
     try
     {
       using (var mailMessage = new MailMessage(cFrom, trgEmailAdrs, msgSubject, msgBody))
@@ -50,11 +53,21 @@ public class Emailer
         //message.Attachments.Add(new Attachment("""C:\Documents and Settings\Grandma\Application Data\Microsoft\Signatures\QStatusUpdate(Wrd)_files\image001.png"""));
 
         var appPassword = new ConfigurationBuilder().AddUserSecrets<Emailer>().Build()["AppPassword"] ?? "no key"; //tu: adhoc usersecrets
+        var credentials = new System.Net.NetworkCredential(GetMicrosoftAccountName(), appPassword);
+        using var client = new SmtpClient        // see readme # 8979 !!!!
+        {
+          Host = "smtp.office365.com",
+          Port = 587,
+          EnableSsl = true,
+          DeliveryMethod = SmtpDeliveryMethod.Network,
+          UseDefaultCredentials = false,
+          Credentials = credentials
+        };
 
-        using var client = new SmtpClient("smtp.office365.com", 587) { EnableSsl = true, Credentials = new System.Net.NetworkCredential(GetMicrosoftAccountName(), appPassword) }; // see readme # 8979 !!!!
-        try { await client.SendMailAsync(mailMessage); }
-        catch (SmtpException ex) { report = ex.Log($"Error emailing to: {trgEmailAdrs}"); throw; }
-        catch (Exception ex) { report = ex.Log($"Error emailing to: {trgEmailAdrs}"); throw; }           //tu: add to Chronoer.cfg: <system.net><mailSettings><smtp deliveryMethod="Network" from="test@foo.com"><!--userName="pigida@aei.ca" password=""--><!--port="25"--><network host="mail.aei.ca" defaultCredentials="true"/></smtp></mailSettings></system.net>
+        if (DateTime.Now == DateTime.Today)
+          await client.SendMailAsync(mailMessage); //todo: this fails for MinNavTmp only!!!  Why??????????????????????????
+        else
+          client.Send(mailMessage);
       }
 
       var logMsg = string.Format("{0} ({3}.{4})   sent to:  {1,-49} Subj: {2} \t (took {5:m\\:ss\\.f}){6}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), trgEmailAdrs, msgSubject, Environment.MachineName, Environment.UserName, sw.Elapsed, Environment.NewLine);

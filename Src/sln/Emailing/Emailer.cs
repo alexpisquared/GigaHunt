@@ -67,10 +67,10 @@ namespace Emailing
           //message.Attachments.Add(new Attachment(@"C:\Documents and Settings\Grandma\Application Data\Microsoft\Signatures\QStatusUpdate(Wrd)_files\image001.png"));
 
           var appCode = new SecretsReader().ReadAppPassword(); // 2023-11-23
-          using (var client = new SmtpClient("smtp.office365.com", 587) { EnableSsl = true, Credentials = new System.Net.NetworkCredential(GetMicrosoftAccountName(), appCode) }) // https://account.live.com/proofs/Manage/additional?mkt=en-us - App passwords   Some apps ... don't support security codes for two-step verification. In these cases, you need to create an app password to sign in. Learn more about app passwords.   Create a new app password
+          using (var client = new SmtpClient(host: "smtp.office365.com", port: 587) { EnableSsl = true, Credentials = new System.Net.NetworkCredential(GetMicrosoftAccountName(), appCode) }) // see readme # 8979 !!!! 
           {
-            try { await client.SendMailAsync(mailMessage); } // letter does not appear in the Outlook ==> use DB to track sent messages.
-            catch (Exception ex) { ex.Pop($"Error emailing to: {trgEmailAdrs}"); throw; }           //tu: add to App.cfg: <system.net><mailSettings><smtp deliveryMethod="Network" from="test@foo.com"><!--userName="pigida@aei.ca" password=""--><!--port="25"--><network host="mail.aei.ca" defaultCredentials="true"/></smtp></mailSettings></system.net>
+            try { await client.SendMailAsync(mailMessage); } 
+            catch (Exception ex) { ex.Pop($"Error emailing to: {trgEmailAdrs}"); throw; } //tu: add to App.cfg: <system.net><mailSettings><smtp deliveryMethod="Network" from="test@foo.com"><!--userName="pigida@aei.ca" password=""--><!--port="25"--><network host="mail.aei.ca" defaultCredentials="true"/></smtp></mailSettings></system.net>
           }
         }
 

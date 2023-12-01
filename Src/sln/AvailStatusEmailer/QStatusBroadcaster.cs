@@ -20,7 +20,7 @@ public static class QStatusBroadcaster
     var (success, report) = await sendLetter(email, firstName, isAvailable, timestamp);
     if (success)
     {
-      _ = await DbActor.InsertContactHistoryItem(false, timestamp, email, firstName, "std .net4", isAvailable ? "ASU - 4 CVs - 2023-11" : "Std Busy");
+      _ = await DbActor.InsertContactHistoryItem(false, timestamp, email, firstName, "asu .net 4.8", isAvailable ? "ASU - 4 CVs - 2023-11" : "Std Busy");
       return true;
     }
 
