@@ -258,7 +258,7 @@ public partial class EmailersendWindow : AAV.WPF.Base.WindowBase
 
         tbkTitle.Text = $"Done/Todo: {cntRO - cnt} / {--cnt}      msg/min so far: {(cntRO - cnt) / sw.Elapsed.TotalMinutes:N1}      Last one is:  {(scs ? "Success" : "Failure")}  sending to  {((vEMail_Avail_Prod)em).ID}";
 
-        Bpr.BeepFD(222, antiSpamBlockListPauseInMs); // blocking call.
+        await Task.Delay(antiSpamBlockListPauseInMs); //tmi: Bpr.BeepFD(222, antiSpamBlockListPauseInMs); // blocking call.
       }
 
       if (msg.Length > 12)
