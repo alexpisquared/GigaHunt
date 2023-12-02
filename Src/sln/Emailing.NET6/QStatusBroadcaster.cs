@@ -3,10 +3,11 @@ public static class QStatusBroadcaster
 {
   public const string Asu = "Availability Schedule Update - ";
 
+  [Obsolete]
   public static async Task<bool> SendLetter_UpdateDb(bool isAvailable, string email, string firstName)
   {
     var timestamp = DateTime.Now;
-    
+
     var (success, report) = await SendLetter(email, firstName, isAvailable, timestamp);
     if (success)
     {
@@ -17,7 +18,7 @@ public static class QStatusBroadcaster
     _ = await DbActor.MarkAsNotUsable(email, report);
     return false;
   }
-  public static async Task<(bool success, string report)> SendLetter(string emailAddress, string firstName, bool isAvailable, DateTime timestamp) // called by MVVM
+  public static async Task<(bool success, string report)> SendLetter(string emailAddress, string firstName, bool isAvailable, DateTime timestamp, Microsoft.Extensions.Logging.ILogger? lgr=null) // called by MVVM
   {
     try
     {
@@ -26,19 +27,20 @@ public static class QStatusBroadcaster
       var body = new StreamReader(html).ReadToEnd();
       var subj = /*isResumeFeatureUpdate*/false ? "resume feature update" : Asu + (isAvailable ? "Open for opportunities in Toronto++" : "Unavailable");
 
-      var attachment = isAvailable ? new string[] {
+      var attachment = isAvailable ? [
         """C:\c\docs\CV\ikmnet assessment - Alex Pigida - 95304315.pdf""",
         """C:\c\docs\CV\Resume - Alex Pigida - short summary.docx""",
         """C:\c\docs\CV\Resume - Alex Pigida - short summary.pdf""",
         """C:\c\docs\CV\Resume - Alex Pigida - long version.docx""",
         """C:\c\docs\CV\Resume - Alex Pigida - long version.pdf"""
-      } : new string[0];
+      ] : Array.Empty<string>();
+
       var avlbldate = DateTime.Today < new DateTime(2022, 10, 15) ? new DateTime(2022, 11, 1) : DateTime.Today.AddDays(14);
       var monthPart = avlbldate.Day < 10 ? "early" : avlbldate.Day > 20 ? "late" : "mid";
       var startDate = $"{monthPart} {avlbldate:MMMM yyyy}";
       var senttDate = $"{timestamp:yyMMddHHmmss}";
 
-      return await Emailer.Send(
+      return await new Emailer(lgr).Send(
         emailAddress,
         subj,
         body.Replace("{0}", nameCasing_Mc_only_so_far(firstName)).Replace("{1}", emailAddress).Replace("{2}", startDate).Replace("{3}", senttDate),

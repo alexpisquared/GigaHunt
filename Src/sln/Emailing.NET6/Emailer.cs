@@ -1,13 +1,12 @@
 #define REALREADY			//uncomment only when ready:
-using System.Net;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Emailing.NET6;
 public class Emailer
 {
-  public static async Task<(bool success, string report)> Send(string trgEmailAdrs, string msgSubject, string msgBody, string[]? attachedFilenames = null, string? signatureImage = null) => await Send(cFrom, trgEmailAdrs, msgSubject, msgBody, attachedFilenames, signatureImage);
-  public static async Task<(bool success, string report)> Send(string from, string trgEmailAdrs, string msgSubject, string msgBody, string[]? attachedFilenames = null, string? signatureImage = null)
+  public async Task<(bool success, string report)> Send(string trgEmailAdrs, string msgSubject, string msgBody, string[]? attachedFilenames = null, string? signatureImage = null) => await Send(cFrom, trgEmailAdrs, msgSubject, msgBody, attachedFilenames, signatureImage);
+  
+  async Task<(bool success, string report)> Send(string from, string trgEmailAdrs, string msgSubject, string msgBody, string[]? attachedFilenames = null, string? signatureImage = null)
   {
     var sw = Stopwatch.StartNew();
     var report = "";
@@ -78,13 +77,11 @@ public class Emailer
 
       return (true, report);
     }
-    catch (FormatException ex) { report = ex.Log(trgEmailAdrs); }
-    catch (SmtpException ex) { report = ex.Log(trgEmailAdrs); }
-    catch (Exception ex) { report = ex.Log(trgEmailAdrs); }
+    catch (Exception ex) { report = ex.Log(trgEmailAdrs); _lgr?.LogError(ex.Message); }
 
     return (false, report);
   }
-  public static string GetMicrosoftAccountName() //todo: move it to a proper place.
+  static string GetMicrosoftAccountName() //todo: move it to a proper place.
   {
     var wi = WindowsIdentity.GetCurrent();
 
@@ -100,7 +97,7 @@ public class Emailer
     return msAccount == null ? wi.Name : msAccount[@"MicrosoftAccount\".Length..];
   }
 
-  public static async Task SendPhoto(string photoFullPath, string trgEmailAdrs)
+  public async Task SendPhoto(string photoFullPath, string trgEmailAdrs)
   {
     var fi = new FileInfo(photoFullPath);
 
@@ -134,4 +131,7 @@ public class Emailer
   static string LogFile => """C:\temp\Logs\CV.Emailed.txt""";// Path.Combine(OneDrive.Folder(@"Public\Logs"), "CV.Emailed.txt");
   const string cFrom = "Alex.Pigida@outlook.com";
   static bool isFirst = true;
+  private Microsoft.Extensions.Logging.ILogger _lgr;
+
+  public Emailer(Microsoft.Extensions.Logging.ILogger lgr) => this._lgr = lgr;
 }

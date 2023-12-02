@@ -26,3 +26,6 @@ global using StandardLib.Extensions;
 global using System.Runtime.ConstrainedExecution;
 global using StandardLib.Consts;
 global using Emailing.NET6.Helpers;
+global using System.Net;
+global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.Hosting;
