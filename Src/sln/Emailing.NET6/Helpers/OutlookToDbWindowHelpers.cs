@@ -32,10 +32,10 @@ public static class OutlookToDbWindowHelpers
     if (em != null)
     {
       if (notes is not null)
-      { 
         em.Notes = $"{DateTime.Now:yyMMdd}: {notes} | {em.Notes}";
-        _ = await dbq.TrySaveReportAsync("checkInsertEMail");
-      }
+
+      em.LastAction = DateTime.Now;
+      _ = await dbq.TrySaveReportAsync("checkInsertEMail");
     }
     else
     {

@@ -102,6 +102,16 @@ AS
   -- ORDER BY NotifyPriority, AddedAt DESC -- !!! DOES NOT WORK !!! WHY ??? <= MUST sort in C#!!! 
 GO
 
+CREATE OR ALTER VIEW [dbo].[vEMailId_Avail_Prod]
+AS
+  SELECT ID FROM dbo.EMail AS em
+  WHERE 
+    ID NOT IN (SELECT * FROM BadEmails()) AND 
+    (dbo.CurrentCampaignID() <> ISNULL(DoNotNotifyOnAvailableForCampaignID, -1)) AND -- not banned for this campaign
+    (((SELECT MAX(EmailedAt) AS LastSent FROM dbo.EHist WHERE (RecivedOrSent = 'S') AND (EMailID = em.ID)) IS NULL) OR 
+     ((SELECT MAX(EmailedAt) AS LastSent FROM dbo.EHist WHERE (RecivedOrSent = 'S') AND (EMailID = em.ID)) < dbo.CurrentCampaignStart()))
+GO
+
 -- Broadcast Status/Progress:                     2023-11-23
 SELECT getdate() Date, 
   ( SELECT Count(*) FROM EMail                                                  )  AS [AllEmails =],
@@ -137,16 +147,13 @@ SET           NotifyPriority = isnull((
 	FROM        EHist
 	WHERE     (RecivedOrSent = 'R') AND (EMailID = EMail.ID)
 	GROUP BY EMailID
-), 11888111)
+), 11888112)
 WHERE     (Notes NOT LIKE '#TopPriority#%')
 -- */
 
 -- repeat the sort in C#!!! (2019-11):
-select top (100) * from [dbo].[vEMail_Avail_Prod] ORDER BY NotifyPriority
+select top (5) * from [dbo].[vEMail_Avail_Prod] ORDER BY NotifyPriority
+select top (5) * from [dbo].[vEMailId_Avail_Prod] 
 
-SELECT     EHist.EMailID, COUNT(*) AS Recieves, MAX(EHist.EmailedAt) AS LastTime
-FROM        EHist INNER JOIN EMail ON EHist.EMailID = EMail.ID
-WHERE     (EHist.RecivedOrSent = 'R') AND (EMail.PermBanReason IS NULL)
-GROUP BY EHist.EMailID
-
-
+-- review latest sends:
+SELECT TOP (20) EHist.*, EMail.PermBanReason, EMail.FName, EMail.Notes FROM EHist INNER JOIN EMail ON EHist.EMailID = EMail.ID ORDER BY EHist.EmailedAt DESC
