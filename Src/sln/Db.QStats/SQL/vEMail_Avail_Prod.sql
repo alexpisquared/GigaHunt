@@ -151,9 +151,5 @@ SET           NotifyPriority = isnull((
 WHERE     (Notes NOT LIKE '#TopPriority#%')
 -- */
 
--- repeat the sort in C#!!! (2019-11):
-select top (5) * from [dbo].[vEMail_Avail_Prod] ORDER BY NotifyPriority
-select top (5) * from [dbo].[vEMailId_Avail_Prod] 
-
 -- review latest sends:
 SELECT TOP (20) EHist.*, EMail.PermBanReason, EMail.FName, EMail.Notes FROM EHist INNER JOIN EMail ON EHist.EMailID = EMail.ID ORDER BY EHist.EmailedAt DESC
