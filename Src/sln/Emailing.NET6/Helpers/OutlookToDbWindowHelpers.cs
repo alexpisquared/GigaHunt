@@ -76,8 +76,9 @@ public static class OutlookToDbWindowHelpers
   {
     try
     {
-      var gt = timeRecdSent.AddMinutes(-1);
-      var lt = timeRecdSent.AddMinutes(+1);         //var ch = isRcvd ? ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.Id) : ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.Id); if (ch.Count() < 1)
+      const int dupeEntryPreventionInMin = 2;
+      var gt = timeRecdSent.AddMinutes(-dupeEntryPreventionInMin);
+      var lt = timeRecdSent.AddMinutes(+dupeEntryPreventionInMin);         //var ch = isRcvd ? ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.Id) : ctx.EHists.Where(p => p.EmailedAt.HasValue && gt < p.EmailedAt.Value && p.EmailedAt.Value < lt && p.EMailId == id.Id); if (ch.Count() < 1)
       var eh = dbq.Ehists.FirstOrDefault(p => p.RecivedOrSent == rs && p.EmailId == email.Id && gt < p.EmailedAt && p.EmailedAt < lt);
       if (eh is not null)
       {
@@ -90,7 +91,7 @@ public static class OutlookToDbWindowHelpers
           _ = await dbq.TrySaveReportAsync("checkInsertEHist SentOn update");
         }
 
-        _ = new Exception().Log("??? No EHist added: There is already the same record in DB within the +-1min range ???");
+        _ = new Exception().Log($"??? No EHist added: There is already the same record in DB within the +-{dupeEntryPreventionInMin} minute range ???  {email.Id}");
       }
       else
       {
