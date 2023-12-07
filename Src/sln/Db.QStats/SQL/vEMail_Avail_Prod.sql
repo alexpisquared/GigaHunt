@@ -141,15 +141,15 @@ WHERE     (ID LIKE '%=%@bullhorn.com%') AND (NOT EXISTS
                        WHERE     (ID = REPLACE(REPLACE(e1.ID, '@bullhorn.com', ''), '=', '@'))))
 
 -- run this periodically to update priorities and expedite email broadcast:
-UPDATE    EMail
-SET           NotifyPriority = isnull((
+UPDATE EMail SET NotifyPriority = isnull((
 	SELECT     1000 * DATEDIFF(day, MAX(EmailedAt), GETDATE()) / COUNT(*) AS Priority
 	FROM        EHist
 	WHERE     (RecivedOrSent = 'R') AND (EMailID = EMail.ID)
 	GROUP BY EMailID
-), 11888112)
-WHERE     (Notes NOT LIKE '#TopPriority#%')
+), 130000)
+WHERE    EMail.PermBanReason is null and (Notes NOT LIKE '#TopPriority#%')
 -- */
 
 -- review latest sends:
-SELECT TOP (20) EHist.*, EMail.PermBanReason, EMail.FName, EMail.Notes FROM EHist INNER JOIN EMail ON EHist.EMailID = EMail.ID ORDER BY EHist.EmailedAt DESC
+SELECT TOP (16) EHist.*, EMail.FName, EMail.Notes, EMail.NotifyPriority FROM EHist INNER JOIN EMail ON EHist.EMailID = EMail.ID where EMail.PermBanReason is null ORDER BY EHist.EmailedAt DESC
+SELECT TOP (16) *, (select count(*) from EHist where EHist.EMailID = EMail.ID ) as aa FROM EMail where EMail.PermBanReason is null ORDER BY aa
