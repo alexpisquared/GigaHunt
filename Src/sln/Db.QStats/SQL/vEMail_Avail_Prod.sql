@@ -146,7 +146,7 @@ UPDATE EMail SET NotifyPriority = isnull((
 	FROM        EHist
 	WHERE     (RecivedOrSent = 'R') AND (EMailID = EMail.ID)
 	GROUP BY EMailID
-), 130000)
+), 1000000)
 WHERE    EMail.PermBanReason is null and (Notes NOT LIKE '#TopPriority#%')
 -- */
 
