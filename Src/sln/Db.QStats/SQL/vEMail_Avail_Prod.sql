@@ -141,15 +141,19 @@ WHERE     (ID LIKE '%=%@bullhorn.com%') AND (NOT EXISTS
                        WHERE     (ID = REPLACE(REPLACE(e1.ID, '@bullhorn.com', ''), '=', '@'))))
 
 -- run this periodically to update priorities and expedite email broadcast:
-UPDATE EMail SET NotifyPriority = isnull((
-	SELECT     1000 * DATEDIFF(day, MAX(EmailedAt), GETDATE()) / COUNT(*) AS Priority
-	FROM        EHist
-	WHERE     (RecivedOrSent = 'R') AND (EMailID = EMail.ID)
-	GROUP BY EMailID
-), 1000000)
+UPDATE EMail SET NotifyPriority = 
+1000 * ISNULL ((SELECT (DATEDIFF(day, MAX(EmailedAt), GETDATE())) FROM EHist WHERE (RecivedOrSent = 'R') AND (EMailID = EMail.ID) GROUP BY EMailID), (DATEDIFF(day, AddedAt, GETDATE()))) /
+ ISNULL ((SELECT                                   (COUNT(*) + 1) FROM EHist WHERE (RecivedOrSent = 'R') AND (EMailID = EMail.ID) GROUP BY EMailID), 1) 
 WHERE    EMail.PermBanReason is null and (Notes NOT LIKE '#TopPriority#%')
--- */
+
+SELECT TOP (111)  
+ 1000 * ISNULL ((SELECT (DATEDIFF(day, MAX(EmailedAt), GETDATE())) FROM EHist WHERE (RecivedOrSent = 'R') AND (EMailID = EMail.ID) GROUP BY EMailID), (DATEDIFF(day, AddedAt, GETDATE()))) /
+ ISNULL ((SELECT                                    (COUNT(*) + 1) FROM EHist WHERE (RecivedOrSent = 'R') AND (EMailID = EMail.ID) GROUP BY EMailID), 1) AS NP3,  
+ *
+FROM EMail
+WHERE (PermBanReason IS NULL) AND (Notes NOT LIKE '#TopPriority#%')
+ORDER BY NotifyPriority DESC, AddedAt DESC-- */
 
 -- review latest sends:
-SELECT TOP (16) EHist.*, EMail.FName, EMail.Notes, EMail.NotifyPriority FROM EHist INNER JOIN EMail ON EHist.EMailID = EMail.ID where EMail.PermBanReason is null ORDER BY EHist.EmailedAt DESC
-SELECT TOP (16) *, (select count(*) from EHist where EHist.EMailID = EMail.ID ) as aa FROM EMail where EMail.PermBanReason is null ORDER BY aa
+ SELECT TOP (16) EHist.*, EMail.FName, EMail.Notes, EMail.NotifyPriority FROM EHist INNER JOIN EMail ON EHist.EMailID = EMail.ID where EMail.PermBanReason is null ORDER BY EHist.EmailedAt DESC
+ SELECT TOP (16) *, (select count(*) from EHist where EHist.EMailID = EMail.ID ) as aa FROM EMail where EMail.PermBanReason is null ORDER BY aa
