@@ -63,7 +63,7 @@ public static class OutlookToDbWindowHelpers
         Notes = notes,
         AddedAt = now,
         ReSendAfter = null,
-        NotifyPriority = 8765
+        NotifyPriority = 1000000
       }).Entity;
 
       _ = await dbq.TrySaveReportAsync("checkInsertEMail");
