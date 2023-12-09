@@ -5,3 +5,5 @@ Chronoer passwords   Some apps ... don't support security codes for two-step ver
 # 2023-11-16: downloadable ICONs: https://icon-icons.com/download/12566/ICO/512/
 
 # 2023-12-01: 
+  https://weblogs.asp.net/sreejukg/system-net-mail-smtpclient-is-not-recommended-anymore-what-is-the-alternative
+  https://github.com/jstedfast/MailKit
