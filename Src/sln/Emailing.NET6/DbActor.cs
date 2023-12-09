@@ -12,7 +12,7 @@ public class DbActor
       if (em != null)
         em.ReSendAfter = null;
 
-      _ = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(dbq, email, firstName, "", subject, body, sentOn, timeSent, "..from std broadcast send", isRcvd ? "R" : "S");
+      _ = await new OutlookToDbWindowHelpers(null).CheckInsert_EMail_EHist_Async(dbq, email, firstName, "", subject, body, sentOn, timeSent, "..from std broadcast send", isRcvd ? "R" : "S");
 
       return await dbq.SaveChangesAsync();
     }

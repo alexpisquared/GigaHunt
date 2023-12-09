@@ -131,7 +131,7 @@ public class Emailer
   static string LogFile => """C:\temp\Logs\CV.Emailed.txt""";// Path.Combine(OneDrive.Folder(@"Public\Logs"), "CV.Emailed.txt");
   const string cFrom = "Alex.Pigida@outlook.com";
   static bool isFirst = true;
-  private Microsoft.Extensions.Logging.ILogger _lgr;
+  Microsoft.Extensions.Logging.ILogger _lgr;
 
   public Emailer(Microsoft.Extensions.Logging.ILogger lgr) => this._lgr = lgr;
 }

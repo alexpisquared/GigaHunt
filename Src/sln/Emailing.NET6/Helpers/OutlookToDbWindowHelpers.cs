@@ -1,16 +1,20 @@
 ﻿using GigaHunt.AsLink;
+using Microsoft.Extensions.Logging;
 using static Azure.Core.HttpHeader;
 
 namespace Emailing.NET6.Helpers;
 
-public static class OutlookToDbWindowHelpers
+public class OutlookToDbWindowHelpers
 {
-  static readonly DateTime _batchNow = DateTime.Now;
+  readonly DateTime _batchNow = DateTime.Now;
+  Microsoft.Extensions.Logging.ILogger ?_lgr;
 
-  public static async Task<bool> CheckInsert_EMail_EHist_Async(QstatsRlsContext dbq, string email, string firstName, string lastName, string? subject, string? body, DateTime? sentOn, DateTime? timeRecdSent, string isRcvd, string RS, string? notes = null)
+  public OutlookToDbWindowHelpers(Microsoft.Extensions.Logging.ILogger? lgr) => _lgr = lgr;
+
+  public async Task<bool> CheckInsert_EMail_EHist_Async(QstatsRlsContext dbq, string email, string firstName, string lastName, string? subject, string? body, DateTime? sentOn, DateTime? timeRecdSent, string isRcvd, string RS, string? notes = null)
   {
     var now = DateTime.Now;
-    var em = await CheckInsertEMailAsync(dbq, email, firstName, lastName,  notes, now);
+    var em = await CheckInsertEMailAsync(dbq, email, firstName, lastName, notes, now);
     if (em == null) return false;
 
     await EHistInsUpdSaveAsync(dbq, subject, body, sentOn ?? now, timeRecdSent ?? now, RS, em, notes, now);
@@ -19,7 +23,7 @@ public static class OutlookToDbWindowHelpers
     return isNew;
   }
 
-  public static async Task<Email?> CheckInsertEMailAsync(QstatsRlsContext dbq, string email, string firstName, string lastName, string? notes, DateTime now )
+  public async Task<Email?> CheckInsertEMailAsync(QstatsRlsContext dbq, string email, string firstName, string lastName, string? notes, DateTime now)
   {
     const int maxLen = 256;
 
@@ -72,7 +76,7 @@ public static class OutlookToDbWindowHelpers
     return em;
   }
 
-  public static async Task EHistInsUpdSaveAsync(QstatsRlsContext dbq, string? subject, string? body, DateTime? sentOn, DateTime timeRecdSent, string rs, Email email, string? notes, DateTime now)
+  public async Task EHistInsUpdSaveAsync(QstatsRlsContext dbq, string? subject, string? body, DateTime? sentOn, DateTime timeRecdSent, string rs, Email email, string? notes, DateTime now)
   {
     try
     {
@@ -91,7 +95,7 @@ public static class OutlookToDbWindowHelpers
           _ = await dbq.TrySaveReportAsync("checkInsertEHist SentOn update");
         }
 
-        _ = new Exception().Log($"??? No EHist added: There is already the same record in DB within the +-{dupeEntryPreventionInMin} minute range ???  {email.Id}");
+        _lgr?.LogWarning($"│   No EHist added: There is already the same record in DB within the +-{dupeEntryPreventionInMin} minute range: {(timeRecdSent - eh.EmailedAt).TotalSeconds,4:N1} sec apart.   {email.Id}");
       }
       else
       {
@@ -116,7 +120,7 @@ public static class OutlookToDbWindowHelpers
     catch (Exception ex) { _ = ex.Log(); throw; }
   }
 
-  static async Task<string> PhoneNumbersGetInsSave(QstatsRlsContext dbq, DateTime timeRecdSent, Email email, Ehist newEH, DateTime now)
+  async Task<string> PhoneNumbersGetInsSave(QstatsRlsContext dbq, DateTime timeRecdSent, Email email, Ehist newEH, DateTime now)
   {
     var phones = RegexHelper.GetUniquePhoneNumbersFromLetter(newEH);
     phones.ToList().ForEach(pn => QStatsDbHelper.InsertPhoneNumberIntoDB(dbq, email.Id, timeRecdSent, now, pn));
