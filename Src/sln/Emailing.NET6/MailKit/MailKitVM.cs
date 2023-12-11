@@ -10,25 +10,7 @@ internal class MailKitVM
   public string? Message { get; private set; }
   public string? ResponseMessage { get; private set; }
 
-  public void OnPost()
-  {
-    var email = new MimeMessage();
-    email.From.Add(new MailboxAddress(_cfg["EmailSettings:FromName"], _cfg["EmailSettings:FromEmail"]));
-    email.To.Add(new MailboxAddress(_cfg["EmailSettings:ToName"], _cfg["EmailSettings:ToEmail"]));
-    email.Subject = _cfg["EmailSettings:Subject"];
-    email.Body = new TextPart(MimeKit.Text.TextFormat.Html)
-    {
-      Text = Message
-    };
-
-    //MimeMessage is ready, now send the Email.
-    using var client = new SmtpClient();
-    client.Connect(_cfg["EmailSettings:Host"], int.Parse(_cfg["EmailSettings:Port"]), false);
-    client.Authenticate(_cfg["EmailSettings:Username"], _cfg["EmailSettings:Password"]);
-    ResponseMessage += client.Send(email);
-    client.Disconnect(true);
-  }
-
+  public void ProtoTest() { OnPost(); }
   public void OnPost(
     string fromName = "Oleksa",
     string fromEmail = "alex.pigida@outlook.com",
@@ -53,6 +35,25 @@ internal class MailKitVM
     using var client = new SmtpClient();
     client.Connect(host, port, false);
     client.Authenticate(credentials); // client.Authenticate(username, password);
+    ResponseMessage += client.Send(email);
+    client.Disconnect(true);
+  }
+
+  public void OnPost()
+  {
+    var email = new MimeMessage();
+    email.From.Add(new MailboxAddress(_cfg["EmailSettings:FromName"], _cfg["EmailSettings:FromEmail"]));
+    email.To.Add(new MailboxAddress(_cfg["EmailSettings:ToName"], _cfg["EmailSettings:ToEmail"]));
+    email.Subject = _cfg["EmailSettings:Subject"];
+    email.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+    {
+      Text = Message
+    };
+
+    //MimeMessage is ready, now send the Email.
+    using var client = new SmtpClient();
+    client.Connect(_cfg["EmailSettings:Host"], int.Parse(_cfg["EmailSettings:Port"]), false);
+    client.Authenticate(_cfg["EmailSettings:Username"], _cfg["EmailSettings:Password"]);
     ResponseMessage += client.Send(email);
     client.Disconnect(true);
   }
