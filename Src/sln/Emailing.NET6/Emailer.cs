@@ -1,11 +1,10 @@
 #define REALREADY			//uncomment only when ready:
-using Microsoft.Extensions.Logging;
 
 namespace Emailing.NET6;
 public class Emailer
 {
   public async Task<(bool success, string report)> Send(string trgEmailAdrs, string msgSubject, string msgBody, string[]? attachedFilenames = null, string? signatureImage = null) => await Send(cFrom, trgEmailAdrs, msgSubject, msgBody, attachedFilenames, signatureImage);
-  
+
   async Task<(bool success, string report)> Send(string from, string trgEmailAdrs, string msgSubject, string msgBody, string[]? attachedFilenames = null, string? signatureImage = null)
   {
     var sw = Stopwatch.StartNew();
@@ -51,9 +50,9 @@ public class Emailer
         //message.Attachments.Add(new Attachment("""C:\Documents and Settings\Grandma\Application Data\Microsoft\Signatures\QStatusUpdate(Wrd)_files\image002.jpg"""));
         //message.Attachments.Add(new Attachment("""C:\Documents and Settings\Grandma\Application Data\Microsoft\Signatures\QStatusUpdate(Wrd)_files\image001.png"""));
 
-        var appPassword = new ConfigurationBuilder().AddUserSecrets<Emailer>().Build()["AppPassword"] ?? "no key"; //tu: adhoc usersecrets
-        var credentials = new System.Net.NetworkCredential(GetMicrosoftAccountName(), appPassword);
-        using var client = new SmtpClient        // see readme # 8979 !!!!
+        var appPassword = new ConfigurationBuilder().AddUserSecrets<Emailer>().Build()["AppPassword"] ?? throw new ArgumentNullException("#323 no key"); //tu: ad hoc user secrets
+        var credentials = new NetworkCredential(EmailerHelpers.GetMicrosoftAccountName(), appPassword);
+        using var client = new SmtpClient // see readme # 8979 !!!!
         {
           Host = "smtp.office365.com",
           Port = 587,
@@ -76,25 +75,9 @@ public class Emailer
       File.AppendAllText(LogFile, logMsg);
 
       return (true, report);
-    }
-    catch (Exception ex) { report = ex.Log(trgEmailAdrs); _lgr?.LogError(ex.Message); }
+    } catch (Exception ex) { report = ex.Log(trgEmailAdrs); _lgr?.LogError(ex.Message); }
 
     return (false, report);
-  }
-  static string GetMicrosoftAccountName() //todo: move it to a proper place.
-  {
-    var wi = WindowsIdentity.GetCurrent();
-
-    ArgumentNullException.ThrowIfNull(wi.Groups);
-    var groups = from g in wi.Groups
-                 select new SecurityIdentifier(g.Value)
-                 .Translate(typeof(NTAccount)).Value;
-
-    var msAccount = (from g in groups
-                     where g.StartsWith(@"MicrosoftAccount\")
-                     select g).FirstOrDefault();
-
-    return msAccount == null ? wi.Name : msAccount[@"MicrosoftAccount\".Length..];
   }
 
   public async Task SendPhoto(string photoFullPath, string trgEmailAdrs)
@@ -131,7 +114,7 @@ public class Emailer
   static string LogFile => """C:\temp\Logs\CV.Emailed.txt""";// Path.Combine(OneDrive.Folder(@"Public\Logs"), "CV.Emailed.txt");
   const string cFrom = "Alex.Pigida@outlook.com";
   static bool isFirst = true;
-  Microsoft.Extensions.Logging.ILogger _lgr;
+  readonly Microsoft.Extensions.Logging.ILogger _lgr;
 
   public Emailer(Microsoft.Extensions.Logging.ILogger lgr) => this._lgr = lgr;
 }

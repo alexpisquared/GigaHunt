@@ -4,16 +4,18 @@ using SmtpClient = MailKit.Net.Smtp.SmtpClient;
 namespace Emailing.NET6.MailKit;
 internal class MailKitVM
 {
+  readonly IConfigurationRoot _cfg;
+  public MailKitVM(IConfigurationRoot cfg) => _cfg = cfg;
+
   public string? Message { get; private set; }
   public string? ResponseMessage { get; private set; }
 
-  public void OnPost(IConfigurationRoot cfg)
+  public void OnPost()
   {
-    //Create a MimeMessage            
     var email = new MimeMessage();
-    email.From.Add(new MailboxAddress(cfg["EmailSettings:FromName"], cfg["EmailSettings:FromEmail"]));
-    email.To.Add(new MailboxAddress(cfg["EmailSettings:ToName"], cfg["EmailSettings:ToEmail"]));
-    email.Subject = cfg["EmailSettings:Subject"];
+    email.From.Add(new MailboxAddress(_cfg["EmailSettings:FromName"], _cfg["EmailSettings:FromEmail"]));
+    email.To.Add(new MailboxAddress(_cfg["EmailSettings:ToName"], _cfg["EmailSettings:ToEmail"]));
+    email.Subject = _cfg["EmailSettings:Subject"];
     email.Body = new TextPart(MimeKit.Text.TextFormat.Html)
     {
       Text = Message
@@ -21,8 +23,36 @@ internal class MailKitVM
 
     //MimeMessage is ready, now send the Email.
     using var client = new SmtpClient();
-    client.Connect(cfg["EmailSettings:Host"], int.Parse(cfg["EmailSettings:Port"]), false);
-    client.Authenticate(cfg["EmailSettings:Username"], cfg["EmailSettings:Password"]);
+    client.Connect(_cfg["EmailSettings:Host"], int.Parse(_cfg["EmailSettings:Port"]), false);
+    client.Authenticate(_cfg["EmailSettings:Username"], _cfg["EmailSettings:Password"]);
+    ResponseMessage += client.Send(email);
+    client.Disconnect(true);
+  }
+
+  public void OnPost(
+    string fromName = "Oleksa",
+    string fromEmail = "alex.pigida@outlook.com",
+    string toName = "Alex",
+    string toEmail = "pigida@gmail.com",
+    string subject = "Test subject",
+    string message = "Test body",
+    string host = "smtp.office365.com",
+    int port = 587 //, string username = "username", string password = "password"
+    )
+  {
+    var email = new MimeMessage();
+    email.From.Add(new MailboxAddress(fromName, fromEmail));
+    email.To.Add(new MailboxAddress(toName, toEmail));
+    email.Subject = subject;
+    email.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = message };
+
+    var appPassword = new ConfigurationBuilder().AddUserSecrets<Emailer>().Build()["AppPassword"] ?? throw new ArgumentNullException("#32 no key"); //tu: ad hoc user secrets
+    var credentials = new NetworkCredential(EmailerHelpers.GetMicrosoftAccountName(), appPassword);
+
+    //MimeMessage is ready, now send the Email.
+    using var client = new SmtpClient();
+    client.Connect(host, port, false);
+    client.Authenticate(credentials); // client.Authenticate(username, password);
     ResponseMessage += client.Send(email);
     client.Disconnect(true);
   }
