@@ -39,7 +39,7 @@ internal class MailKitVM
     client.Disconnect(true);
   }
 
-  public void OnPost()
+  public void OnPost() // https://github.com/sreejukg/SendEmail/blob/415a83cc915f4a755d106a8d2154c503c35fd15d/SendMailProject/SendMailProject/Pages/Index.cshtml.cs#L29
   {
     var email = new MimeMessage();
     email.From.Add(new MailboxAddress(_cfg["EmailSettings:FromName"], _cfg["EmailSettings:FromEmail"]));
