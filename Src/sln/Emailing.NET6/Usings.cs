@@ -17,7 +17,6 @@ global using System.Threading.Tasks;
 global using DB.QStats.Std.Models;
 global using EF.DbHelper.Lib;
 global using Emailing.NET6.Helpers;
-global using GigaHunt.Helpers;
 global using GigaHunt.View;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.Configuration;

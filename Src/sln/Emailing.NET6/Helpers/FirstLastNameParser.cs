@@ -1,68 +1,63 @@
-﻿namespace GigaHunt.Helpers
+﻿namespace Emailing.NET6.Helpers;
+
+public class FirstLastNameParser
 {
-  public class FirstLastNameParser
+  public static string? ExtractFirstNameFromEmail(string emailAddress) // 2023-11
   {
-    public static string? ExtractFirstNameFromEmail(string emailAddress) // 2023-11
+    try
     {
-      try
-      {
-        if (!emailAddress.Contains('@'))
-        {
-          return null;
-        }
+      if (!emailAddress.Contains('@'))
+        return null;
 
-        var lowercase = emailAddress[..emailAddress.IndexOf('@')].Trim('\'').Replace("_", " ").Replace(".", " ").Split(' ', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault()?.ToLower();
-        if (lowercase is null)
-        {
-          return null;
-        }
+      var fName = emailAddress[..emailAddress.IndexOf('@')].Trim('\'').Replace("_", " ").Replace(".", " ").Split(' ', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
+      if (fName is null)
+        return null;
 
-        var firstName = Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(lowercase);
-        if (firstName.StartsWith("Mc") && firstName.Length > 3)
-        {
-          return firstName[..2] + char.ToUpper(firstName[2]) + firstName[3..];                // make sure the third letter is is capitalized:
-        }
+      var firstName = ToTitleCase(fName);
 
-        return firstName;
-      }
-      catch
-      {
-        return new GigaHunt.Helpers.FirstLastNameParser("").FirstName;
-      }
-    }
-
-    public FirstLastNameParser(string emailAddress) // old
+      return firstName;
+    } catch
     {
-      try
-      {
-        emailAddress = emailAddress.Replace("'", "");
-        if (emailAddress.IndexOf('@') > 0)
-          emailAddress = emailAddress.Substring(0, emailAddress.IndexOf('@'));
-
-        emailAddress = emailAddress.Replace("_", " ");
-        emailAddress = emailAddress.Replace(".", " ");
-
-        if (emailAddress.IndexOf(',') > 0)
-        {
-          _firstName = emailAddress.Split(',')[1].Trim();
-          _lastName = emailAddress.Split(',')[0].Trim();
-        }
-        else if (emailAddress.IndexOf(' ') > 0)
-        {
-          _firstName = emailAddress.Split(' ')[0].Trim();
-          _lastName = emailAddress.Split(' ')[1].Trim();
-        }
-        else
-          _firstName = _lastName = emailAddress.Trim();
-      }
-      catch
-      {
-        _firstName = _lastName = emailAddress.Trim();
-      }
+      return new FirstLastNameParser("").FirstName;
     }
-
-    readonly string _firstName, _lastName;
-    public string FirstName => _firstName;
-    public string LastName => _lastName;
   }
+
+  public static string ToTitleCase(string rawName)
+  {
+    var firstName = Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(rawName.ToLower());
+    if (firstName.StartsWith("Mc") && firstName.Length > 3)
+      return firstName[..2] + char.ToUpper(firstName[2]) + firstName[3..];                // make sure the third letter is is capitalized:
+
+    return firstName;
+  }
+
+  public FirstLastNameParser(string emailAddress) // old
+  {
+    try
+    {
+      emailAddress = emailAddress.Replace("'", "");
+      if (emailAddress.IndexOf('@') > 0)
+        emailAddress = emailAddress[..emailAddress.IndexOf('@')];
+
+      emailAddress = emailAddress.Replace("_", " ");
+      emailAddress = emailAddress.Replace(".", " ");
+
+      if (emailAddress.IndexOf(',') > 0)
+      {
+        FirstName = emailAddress.Split(',')[1].Trim();
+        LastName = emailAddress.Split(',')[0].Trim();
+      } else if (emailAddress.IndexOf(' ') > 0)
+      {
+        FirstName = emailAddress.Split(' ')[0].Trim();
+        LastName = emailAddress.Split(' ')[1].Trim();
+      } else
+        FirstName = LastName = emailAddress.Trim();
+    } catch
+    {
+      FirstName = LastName = emailAddress.Trim();
+    }
+  }
+
+  public string FirstName { get; }
+  public string LastName { get; }
 }
