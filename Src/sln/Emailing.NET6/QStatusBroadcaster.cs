@@ -35,9 +35,7 @@ public static class QStatusBroadcaster
         """C:\c\docs\CV\Resume - Alex Pigida - long version.pdf"""
       ] : Array.Empty<string>();
 
-      var avlbldate = DateTime.Today < new DateTime(2022, 10, 15) ? new DateTime(2022, 11, 1) : DateTime.Today.AddDays(14);
-      var monthPart = avlbldate.Day < 10 ? "early" : avlbldate.Day > 20 ? "late" : "mid";
-      var startDate = $"{monthPart} {avlbldate:MMMM yyyy}";
+      var startDate = CalculateStartDate();
       var senttDate = $"{timestamp:yyMMddHHmmss}";
 
       return await new Emailer(lgr).Send(
@@ -45,8 +43,16 @@ public static class QStatusBroadcaster
         subj,
         body.Replace("{0}", nameCasing_Mc_only_so_far(firstName)).Replace("{1}", emailAddress).Replace("{2}", startDate).Replace("{3}", senttDate),
         attachment, """C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AlexTiny_LinkedIn.png""");//@"C:\g\GigaHunt\Src\sln\GigaHunt\Assets\MCSD Logo - Latest as of 2009.gif|C:\g\GigaHunt\Src\sln\GigaHunt\Assets\linkedIn66x16.png|C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AlexTiny_LinkedIn.png");
-    }
-    catch (Exception ex) { var report = ex.Log($"{emailAddress}"); return (false, report); }
+    } catch (Exception ex) { var report = ex.Log($"{emailAddress}"); return (false, report); }
+  }
+
+  static string CalculateStartDate()
+  {
+    var eoContract = new DateTime(2023, 12, 5);
+    var avlbldate = DateTime.Today < eoContract ? eoContract : DateTime.Today.AddDays(14);
+    var monthPart = avlbldate.Day < 10 ? "early" : avlbldate.Day > 20 ? "late" : "mid";
+    var startDate = $"{monthPart} {avlbldate:MMMM yyyy}";
+    return startDate;
   }
 
   static string nameCasing_Mc_only_so_far(string fname)
