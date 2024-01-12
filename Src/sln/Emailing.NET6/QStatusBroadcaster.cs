@@ -18,7 +18,7 @@ public static class QStatusBroadcaster
     _ = await DbActor.MarkAsNotUsable(email, report);
     return false;
   }
-  public static async Task<(bool success, string report)> SendLetter(string emailAddress, string firstName, bool isAvailable, DateTime timestamp, Microsoft.Extensions.Logging.ILogger? lgr=null) // called by MVVM
+  public static async Task<(bool success, string report)> SendLetter(string emailAddress, string firstName, bool isAvailable, DateTime timestamp, Microsoft.Extensions.Logging.ILogger? lgr = null) // called by MVVM
   {
     try
     {
@@ -28,11 +28,11 @@ public static class QStatusBroadcaster
       var subj = /*isResumeFeatureUpdate*/false ? "resume feature update" : Asu + (isAvailable ? "Open for opportunities in Toronto++" : "Unavailable");
 
       var attachment = isAvailable ? [
-        """C:\c\docs\CV\ikmnet assessment - Alex Pigida - 95304315.pdf""",
-        """C:\c\docs\CV\Resume - Alex Pigida - short summary.docx""",
-        """C:\c\docs\CV\Resume - Alex Pigida - short summary.pdf""",
-        """C:\c\docs\CV\Resume - Alex Pigida - long version.docx""",
-        """C:\c\docs\CV\Resume - Alex Pigida - long version.pdf"""
+        """C:\g\GigaHunt\docs\CV\Resume - Alex Pigida - long version.docx""",
+        """C:\g\GigaHunt\docs\CV\Resume - Alex Pigida - long version.pdf""",
+        """C:\g\GigaHunt\docs\CV\Resume - Alex Pigida - short summary.docx""",
+        """C:\g\GigaHunt\docs\CV\Resume - Alex Pigida - short summary.pdf""",
+        """C:\g\GigaHunt\docs\CV\ikmnet assessment - Alex Pigida - 95304315.pdf"""
       ] : Array.Empty<string>();
 
       var startDate = CalculateStartDate();
@@ -43,7 +43,8 @@ public static class QStatusBroadcaster
         subj,
         body.Replace("{0}", nameCasing_Mc_only_so_far(firstName)).Replace("{1}", emailAddress).Replace("{2}", startDate).Replace("{3}", senttDate),
         attachment, """C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AlexTiny_LinkedIn.png""");//@"C:\g\GigaHunt\Src\sln\GigaHunt\Assets\MCSD Logo - Latest as of 2009.gif|C:\g\GigaHunt\Src\sln\GigaHunt\Assets\linkedIn66x16.png|C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AlexTiny_LinkedIn.png");
-    } catch (Exception ex) { var report = ex.Log($"{emailAddress}"); return (false, report); }
+    }
+    catch (Exception ex) { var report = ex.Log($"{emailAddress}"); return (false, report); }
   }
 
   static string CalculateStartDate()

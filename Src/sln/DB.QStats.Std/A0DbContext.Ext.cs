@@ -2,7 +2,7 @@
 
 public partial class Lead
 {
-  [NotMapped] public double? RealRate => HourlyRate * HourPerDay / 8.0;
+  [NotMapped] public double? RealRate => HourlyRate * HourPerDay;
 }
 public partial class Email : INotifyPropertyChanged
 {
