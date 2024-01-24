@@ -7,3 +7,4 @@ global using Microsoft.EntityFrameworkCore.ChangeTracking;
 global using System.ComponentModel;
 global using System.Runtime.CompilerServices;
 global using Microsoft.Data.SqlClient;
+global using CommunityToolkit.Mvvm.ComponentModel;
