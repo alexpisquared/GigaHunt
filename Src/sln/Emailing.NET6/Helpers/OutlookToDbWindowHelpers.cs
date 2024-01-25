@@ -7,7 +7,7 @@ namespace Emailing.NET6.Helpers;
 public class OutlookToDbWindowHelpers
 {
   readonly DateTime _batchNow = DateTime.Now;
-  Microsoft.Extensions.Logging.ILogger ?_lgr;
+  Microsoft.Extensions.Logging.ILogger? _lgr;
 
   public OutlookToDbWindowHelpers(Microsoft.Extensions.Logging.ILogger? lgr) => _lgr = lgr;
 
@@ -36,9 +36,12 @@ public class OutlookToDbWindowHelpers
     var em = dbq.Emails.Find(email);
     if (em != null)
     {
-      em.Notes = $"{now:yyMMdd}: {notes ?? "?!?!"} | {em.Notes}";
-      em.LastAction = now;
-      _ = await dbq.TrySaveReportAsync("checkInsertEMail");
+      if (!string.IsNullOrEmpty(notes))
+      {
+        em.Notes = $"{now:yy.MM.dd}  {notes}\n{em.Notes}";
+        em.LastAction = now;
+        _ = await dbq.TrySaveReportAsync("checkInsertEMail");
+      }
     }
     else
     {
@@ -67,7 +70,7 @@ public class OutlookToDbWindowHelpers
         Notes = notes,
         AddedAt = now,
         ReSendAfter = null,
-        NotifyPriority = 1000000
+        NotifyPriority = -123 // let's bring it up for the immediate attention an potential manual reevaluation/action, since it is mostly coming from the alternative address of the undeliverable email.
       }).Entity;
 
       _ = await dbq.TrySaveReportAsync("checkInsertEMail");
