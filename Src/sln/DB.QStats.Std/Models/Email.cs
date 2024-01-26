@@ -1,6 +1,6 @@
 ﻿namespace DB.QStats.Std.Models;
 
-public partial class Email : ObservableValidator
+public partial class Email
 {
   public string Id { get; set; } = null!;
 
@@ -10,7 +10,7 @@ public partial class Email : ObservableValidator
 
   public string? Company { get; set; }
 
-  [ObservableProperty] string? country; // poc 2024-01-24 //todo: datagrid column does not get updated until out/in viewport???
+  public string? Country { get; set; }
 
   public string? Phone { get; set; }
 
