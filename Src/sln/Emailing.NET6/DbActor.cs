@@ -25,7 +25,10 @@ public class DbActor
       using var dbq = QstatsRlsContext.Create();
       var em = dbq.Emails.FirstOrDefault(r => r.Id == email);
       if (em != null)
+      {
         em.PermBanReason = $"Err: {exceptionMessage}   {em.PermBanReason}";
+        em.ModifiedAt = DateTime.Now;
+      }
 
       return await dbq.SaveChangesAsync();
     }
