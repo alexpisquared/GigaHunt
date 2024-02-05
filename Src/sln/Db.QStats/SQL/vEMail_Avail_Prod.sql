@@ -12,11 +12,11 @@ ALTER FUNCTION [dbo].[BadEmails] () RETURNS TABLE AS                   -- last e
 	  'ca', 'canadapost', 'canadarunningseries', 'carbonite', 'chatrwireless', 'cloud', 'commmunity neighbors', 'cooler', 
 		'dock', 'docusign', 'e-mail', 'eteaminc', 'example', 'facebookappmail', 'garmin', 'github', 'goodtimesrunning', 
 	  'idctechnologies', 'imax', 'indeed', 'indeedemail', 'intel', 'invalidemail', 'iRun', 
-		'jazz', 'kijiji', 'lexisnexis', 'linkedin', 'news', 'nityo', 'nokia', 'nymi', 'quantumworld', 
+		'jazz', 'jobleads', 'kijiji', 'lexisnexis', 'linkedin', 'news', 'nityo', 'nokia', 'nymi', 'quantumworld', 
 		'ramac', 'resource-logistics', 'richmondhilltoyota', 'runningroom', 'shatny', 'sleepcountry', 'stackoverflow', 'torontopolice', 
 	  'twitter', 'ukr', 'umca', 'vbuzzer', 'wietzestoyota', 'here'
-	  , 'botsford'   -- temp: remove after a talk or after Dec 3, 2023
-	  , 'botsfordit' -- temp: remove after a talk or after Dec 3, 2023
+	  -- , 'botsford'   -- temp: remove after a talk or after Dec 3, 2023
+	  -- , 'botsfordit' -- temp: remove after a talk or after Dec 3, 2023
 	  )) OR
 	  (ID LIKE '%unsubscribe%') OR
 	  (ID LIKE '%no-reply%') OR
