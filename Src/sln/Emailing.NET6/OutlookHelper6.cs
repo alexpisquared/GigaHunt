@@ -6,7 +6,7 @@ public partial class OutlookHelper6
   readonly OL.MAPIFolder? _contactsFolder;
   readonly int _customLetersSentThreshold = 3; // to become an Outlook contact, must have at least 3 letters sent.
   static readonly char[] _delim = new[] { ' ', '.', ',', ':', ';', '\r', '\n', '\'', '"', '_' };
-  int _updatedCount, _addedCount;
+  int _updatedCount, _addedCount, _currentSectionCuount;
 
   public OutlookHelper6()
   {
@@ -488,9 +488,11 @@ public partial class OutlookHelper6
     var hlp = new FirstLastNameParser(email);
     return (hlp.FirstName, hlp.LastName);
   }
-  public static string ReportLine(string folder, string senderEmail, bool isNew) => $"{folder,-15}{(isNew ? "*" : " ")} {senderEmail,-48}{GetCompanyName(senderEmail),-48}\n";
+  
+  public string ReportLine(string folder, string senderEmail, bool isNew) => $"{folder,-15}{(isNew ? "*" : " ")}{++_currentSectionCuount,4} {senderEmail,-48}\n";
   public static string ReportSectionTtl(string folder, int ttls, int news)      /**/ => $"{folder,-13}=>  total/new:        {ttls,3} / {news} \n\n";
   public static string ReportSectionTtl(string folder, int ttls, int bans, int news) => $"{folder,-13}=>  total/new/banned: {ttls,3} / {news} / {bans} \n\n";
+  
   public static string RemoveBadEmailParts(string emailAddress)
   {
     emailAddress = emailAddress.Trim(_delim); //  new[] { ' ', '\'', '`', ';', ':' });
@@ -557,4 +559,6 @@ public partial class OutlookHelper6
 
     WriteLine($"^^^^^^^^^^^^^^^^^^^^^^^^^");
   }
+
+  public void ResetCurrentSectionCuount() => _currentSectionCuount = 0;
 }
