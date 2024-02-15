@@ -98,7 +98,7 @@ public class OutlookToDbWindowHelpers
           _ = await dbq.TrySaveReportAsync("checkInsertEHist SentOn update");
         }
 
-        _lgr?.LogWarning($"│   No EHist added: There is already the same record in DB within the +-{dupeEntryPreventionInMin} minute range: {(timeRecdSent - eh.EmailedAt).TotalSeconds,4:N1} sec apart.   {email.Id}");
+        _lgr?.LogTrace($"│   No EHist added: There is already the same record in DB within the +-{dupeEntryPreventionInMin} minute range: {(timeRecdSent - eh.EmailedAt).TotalSeconds,4:N1} sec apart.   {email.Id}");
       }
       else
       {
@@ -115,7 +115,8 @@ public class OutlookToDbWindowHelpers
         };
         var newCH2 = dbq.Ehists.Add(newEH);
 
-        _ = await dbq.TrySaveReportAsync("checkInsertEHist New letter");
+        var dbReport = await dbq.TrySaveReportAsync("checkInsertEHist New letter");
+        _lgr?.LogTrace($"│   EHist added for  {email.Id,-50} {dbReport.report}");
 
         _ = await PhoneNumbersGetInsSave(dbq, timeRecdSent, email, newEH, now);
       }
