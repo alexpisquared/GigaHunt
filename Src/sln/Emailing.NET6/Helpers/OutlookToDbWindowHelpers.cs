@@ -106,7 +106,7 @@ public class OutlookToDbWindowHelpers
         {
           RecivedOrSent = rs,
           Email = email,
-          LetterBody = string.IsNullOrEmpty(body) ? "" : body.Replace("\n\n\n", "\n\n").Replace("\n\n", "\n").Replace("\r\n\r\n\r\n", "\n\n").Replace("\r\n\r\n", "\n"),
+          LetterBody = string.IsNullOrEmpty(body) ? "" : body.Replace("\n\n\n", "\n\n").Replace("\n\n", "\n").Replace("\n\n\n", "\n\n").Replace("\n\n", "\n"),
           LetterSubject = subject,
           AddedAt = now,
           Notes = notes ?? "",

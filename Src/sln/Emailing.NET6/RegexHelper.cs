@@ -23,9 +23,9 @@ public partial class RegexHelper
 
   public static string[] FindEmails__OLD(string body)
   {
-    var email = GetStringBetween(body, "Recipient(s):\r\n\t<", ">\r\n");
-    email ??= GetStringBetween(body, "Recipient(s):\r\n\t", "\r\n");
-    email ??= GetStringBetween(body, "To: ", "\r\n");
+    var email = GetStringBetween(body, "Recipient(s):\n\t<", ">\n");
+    email ??= GetStringBetween(body, "Recipient(s):\n\t", "\n");
+    email ??= GetStringBetween(body, "To: ", "\n");
     email ??= GetStringBetween(body, "<", ">");
     //if (email == null) email = item.SentOnBehalfOfName;
     //if (email == null) continue;
