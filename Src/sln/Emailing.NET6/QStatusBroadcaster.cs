@@ -27,13 +27,7 @@ public static class QStatusBroadcaster
       var body = new StreamReader(html).ReadToEnd();
       var subj = /*isResumeFeatureUpdate*/false ? "resume feature update" : Asu + (isAvailable ? "Open for opportunities in Toronto++" : "Unavailable");
 
-      var attachment = isAvailable ? [
-        """C:\g\GigaHunt\docs\CV\Resume - Alex Pigida - long version.docx""",
-        """C:\g\GigaHunt\docs\CV\Resume - Alex Pigida - long version.pdf""",
-        """C:\g\GigaHunt\docs\CV\Resume - Alex Pigida - short summary.docx""",
-        """C:\g\GigaHunt\docs\CV\Resume - Alex Pigida - short summary.pdf""",
-        """C:\g\GigaHunt\docs\CV\ikmnet assessment - Alex Pigida - 95304315.pdf"""
-      ] : Array.Empty<string>();
+      var attachment = isAvailable ? Directory.GetFiles(@"C:\g\GigaHunt\docs\CV\AsuBroadcastPackage") : Array.Empty<string>();
 
       var startDate = CalculateStartDate();
       var senttDate = $"{timestamp:MMddHHmmss}";
