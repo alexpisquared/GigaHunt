@@ -402,18 +402,28 @@ public partial class OutlookHelper6
       return false;
     }
   }
-  public static string FigureOutSenderEmail(OL.MailItem mailItem) => !string.IsNullOrEmpty(mailItem.Sender?.Address) && mailItem.Sender.Address.Contains('@') ? mailItem.Sender.Address :
-                      !string.IsNullOrEmpty(mailItem.SenderEmailAddress) && mailItem.SenderEmailAddress.Contains('=') && mailItem.SenderEmailAddress.Contains('@') ? RemoveBadEmailParts(mailItem.SenderEmailAddress) :
-                      !string.IsNullOrEmpty(mailItem.SenderEmailAddress) && mailItem.SenderEmailAddress.Contains('@') ? mailItem.SenderEmailAddress :
-                      !string.IsNullOrEmpty(mailItem.SentOnBehalfOfName) && mailItem.SentOnBehalfOfName.Contains('@') ? mailItem.SentOnBehalfOfName :
-                      mailItem.SenderEmailAddress;
+  public static string FigureOutSenderEmail(OL.MailItem mailItem) =>
+    !string.IsNullOrEmpty(mailItem.Sender?.Address) && mailItem.Sender.Address.Contains('@') ? mailItem.Sender.Address :
+    !string.IsNullOrEmpty(mailItem.SenderEmailAddress) && mailItem.SenderEmailAddress.Contains('=') && mailItem.SenderEmailAddress.Contains('@') ? RemoveBadEmailParts(mailItem.SenderEmailAddress) :
+    !string.IsNullOrEmpty(mailItem.SenderEmailAddress) && mailItem.SenderEmailAddress.Contains('@') ? mailItem.SenderEmailAddress :
+    !string.IsNullOrEmpty(mailItem.SentOnBehalfOfName) && mailItem.SentOnBehalfOfName.Contains('@') ? mailItem.SentOnBehalfOfName :
+    mailItem.SenderEmailAddress;
+  public static string FigureOutSenderEmail(OL.MeetingItem mailItem) =>
+    !string.IsNullOrEmpty(mailItem.SenderEmailAddress) && mailItem.SenderEmailAddress.Contains('=') && mailItem.SenderEmailAddress.Contains('@') ? RemoveBadEmailParts(mailItem.SenderEmailAddress) :
+    !string.IsNullOrEmpty(mailItem.SenderEmailAddress) && mailItem.SenderEmailAddress.Contains('@') ? mailItem.SenderEmailAddress :
+    mailItem.SenderEmailAddress;
+  public static (string first, string last) FigureOutSenderFLName(OL.MeetingItem mailItem, string email)
+  {
+    var fln = !string.IsNullOrEmpty(mailItem.SenderName) && mailItem.SenderName.Contains(' ') ? mailItem.SenderName : "Sirs";
+    return FigureOutSenderFLName(fln, email);
+  }
   public static (string first, string last) FigureOutSenderFLName(OL.MailItem mailItem, string email)
   {
     var fln =
       !string.IsNullOrEmpty(mailItem.Sender?.Name) && mailItem.Sender.Name.Contains(' ') ? mailItem.Sender.Name :
       !string.IsNullOrEmpty(mailItem.SentOnBehalfOfName) && mailItem.SentOnBehalfOfName.Contains(' ') ? mailItem.SentOnBehalfOfName :
       !string.IsNullOrEmpty(mailItem.Sender?.Name) ? mailItem.Sender.Name :
-      !string.IsNullOrEmpty(mailItem.SentOnBehalfOfName) ? mailItem.SentOnBehalfOfName :      "Sirs";
+      !string.IsNullOrEmpty(mailItem.SentOnBehalfOfName) ? mailItem.SentOnBehalfOfName : "Sirs";
 
     return FigureOutSenderFLName(fln, email);
   }
@@ -488,11 +498,11 @@ public partial class OutlookHelper6
     var hlp = new FirstLastNameParser(email);
     return (hlp.FirstName, hlp.LastName);
   }
-  
+
   public string ReportLine(string folder, string senderEmail, bool isNew) => $"{folder,-15}{(isNew ? "*" : " ")}{++_currentSectionCuount,4} {senderEmail,-48}\n";
   public static string ReportSectionTtl(string folder, int ttls, int news)      /**/ => $"{folder,-13}=>  total/new:        {ttls,3} / {news} \n\n";
   public static string ReportSectionTtl(string folder, int ttls, int bans, int news) => $"{folder,-13}=>  total/new/banned: {ttls,3} / {news} / {bans} \n\n";
-  
+
   public static string RemoveBadEmailParts(string emailAddress)
   {
     emailAddress = emailAddress.Trim(_delim); //  new[] { ' ', '\'', '`', ';', ':' });
@@ -518,6 +528,13 @@ public partial class OutlookHelper6
       var c = emailAddress[..a];
       return c;
     }
+  }
+  public static void MoveIt(OL.MAPIFolder targetFolder, OL.MeetingItem ol_item)
+  {
+#if DEBUG
+#else
+      ol_item.Move(targetFolder); ;
+#endif
   }
   public static void MoveIt(OL.MAPIFolder targetFolder, OL.MailItem ol_item)
   {
