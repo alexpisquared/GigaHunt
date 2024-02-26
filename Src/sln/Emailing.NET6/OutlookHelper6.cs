@@ -57,16 +57,6 @@ public partial class OutlookHelper6
     }
     catch (Exception ex) { ex.Log(@"Q\Fails"); throw; }
   }
-  public OL.Items? GetToResendItems()
-  {
-    try
-    {
-      var folder = MyStore?.GetRootFolder().Folders[OuFolder.qRcvd].Folders["ToReSend"] as OL.Folder;
-      var itemss = folder?.Items.Restrict("[MessageClass] = 'IPM.Note'");
-      return itemss;
-    }
-    catch (Exception ex) { ex.Log(@"Q\ToReSend"); throw; }
-  }
   public OL.MAPIFolder? GetMapiFOlder(string folderPath)
   {
     var folderParts = folderPath.Split(new char[] { '\\', '/' }, StringSplitOptions.RemoveEmptyEntries);
