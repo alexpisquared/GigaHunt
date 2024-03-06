@@ -11,72 +11,71 @@ public class OutlookToDbWindowHelpers
 
   public OutlookToDbWindowHelpers(Microsoft.Extensions.Logging.ILogger? lgr) => _lgr = lgr;
 
-  public async Task<bool> CheckInsert_EMail_EHist_Async(QstatsRlsContext dbq, string email, string firstName, string lastName, string? subject, string? body, DateTime? sentOn, DateTime? timeRecdSent, string isRcvd, string RS, string? notes = null)
+  public async Task<bool?> CheckInsert_EMail_EHist_Async(QstatsRlsContext dbq, string email, string firstName, string lastName, string? subject, string? body, DateTime? sentOn, DateTime? timeRecdSent, string isRcvd, string RS, string? notes = null)
   {
     var now = DateTime.Now;
     var em = await CheckInsertEMailAsync(dbq, email, firstName, lastName, notes, now);
-    if (em == null) return false;
+    if (em.email1 == null) 
+      return null;
 
-    await EHistInsUpdSaveAsync(dbq, subject, body, sentOn ?? now, timeRecdSent ?? now, RS, em, notes, now);
+    await EHistInsUpdSaveAsync(dbq, subject, body, sentOn ?? now, timeRecdSent ?? now, RS, em.email1, notes, now);
 
-    var isNew = em?.AddedAt == _batchNow; //todo: revisit this logic as it is not correct. 2023-11-26
-    return isNew;
+    return em.isNew;
   }
 
-  public async Task<Email?> CheckInsertEMailAsync(QstatsRlsContext dbq, string email, string firstName, string lastName, string? notes, DateTime now)
+  public async Task<(Email? email1, bool? isNew)> CheckInsertEMailAsync(QstatsRlsContext dbq, string emailAddress, string firstName, string lastName, string? notes, DateTime now)
   {
     const int maxLen = 256;
 
-    if (email.EndsWith("@msg.monster.com") && email.Length > 46) // ~ 3212846259f94b158701020f5ca8ac4e@msg.monster.com
-      return null;
+    if (emailAddress.EndsWith("@msg.monster.com") && emailAddress.Length > 46) // ~ 3212846259f94b158701020f5ca8ac4e@msg.monster.com
+      return (null, null);
 
-    if (email.Length > maxLen)
-      email = email.Substring(email.Length - maxLen, maxLen);
+    if (emailAddress.Length > maxLen)
+      emailAddress = emailAddress.Substring(emailAddress.Length - maxLen, maxLen);
 
-    var em = dbq.Emails.Find(email);
-    if (em != null)
+    var emailExisting = dbq.Emails.Find(emailAddress);
+    if (emailExisting != null)
     {
       if (!string.IsNullOrEmpty(notes))
       {
-        em.Notes = $"{now:yy.MM.dd}  {notes}\n{em.Notes}";
-        em.LastAction = now;
+        emailExisting.Notes = $"{now:yy.MM.dd}  {notes}\n{emailExisting.Notes}";
+        emailExisting.LastAction = now;
         _ = await dbq.TrySaveReportAsync("checkInsertEMail");
       }
+      return (emailExisting, false);
     }
-    else
+
+    var agency = OutlookHelper6.GetCompanyName(emailAddress);
+
+    try
     {
-      var agency = OutlookHelper6.GetCompanyName(email);
+      var r2 = dbq.Agencies.Any(r => r.Id.Equals(agency.ToLower()));
+      var r3 = dbq.Agencies.Any(r => r.Id.Equals(agency.ToUpper()));
 
-      try
-      {
-        var r2 = dbq.Agencies.Any(r => r.Id.Equals(agency.ToLower()));
-        var r3 = dbq.Agencies.Any(r => r.Id.Equals(agency.ToUpper()));
-
-        if (!dbq.Agencies.Any(r => r.Id.Equals(agency))) //i think db is set to be case ignore:  , StringComparison.InvariantCultureIgnoreCase)) )
-          _ = dbq.Agencies.Add(new Agency
-          {
-            Id = agency.Length > maxLen ? agency.Substring(agency.Length - maxLen, maxLen) : agency,
-            AddedAt = now
-          });
-      }
-      catch (Exception ex) { _ = ex.Log("."); throw; }
-
-      em = dbq.Emails.Add(new Email
-      {
-        Id = email.Length > maxLen ? email.Substring(email.Length - maxLen, maxLen) : email,
-        Company = agency,
-        Fname = firstName,
-        Lname = lastName,
-        Notes = notes,
-        AddedAt = now,
-        ReSendAfter = null,
-        NotifyPriority = -123 // let's bring it up for the immediate attention an potential manual reevaluation/action, since it is mostly coming from the alternative address of the undeliverable email.
-      }).Entity;
-
-      _ = await dbq.TrySaveReportAsync("checkInsertEMail");
+      if (!dbq.Agencies.Any(r => r.Id.Equals(agency))) //i think db is set to be case ignore:  , StringComparison.InvariantCultureIgnoreCase)) )
+        _ = dbq.Agencies.Add(new Agency
+        {
+          Id = agency.Length > maxLen ? agency.Substring(agency.Length - maxLen, maxLen) : agency,
+          AddedAt = now
+        });
     }
+    catch (Exception ex) { _ = ex.Log("."); throw; }
 
-    return em;
+    var emailNew = dbq.Emails.Add(new Email
+    {
+      Id = emailAddress.Length > maxLen ? emailAddress.Substring(emailAddress.Length - maxLen, maxLen) : emailAddress,
+      Company = agency,
+      Fname = firstName,
+      Lname = lastName,
+      Notes = notes,
+      AddedAt = now,
+      ReSendAfter = null,
+      NotifyPriority = -123 // let's bring it up for the immediate attention an potential manual reevaluation/action, since it is mostly coming from the alternative address of the undeliverable email.
+    }).Entity;
+
+    _ = await dbq.TrySaveReportAsync("checkInsertEMail");
+
+    return (emailNew, true);
   }
 
   public async Task EHistInsUpdSaveAsync(QstatsRlsContext dbq, string? subject, string? body, DateTime? sentOn, DateTime timeRecdSent, string rs, Email email, string? notes, DateTime now)
