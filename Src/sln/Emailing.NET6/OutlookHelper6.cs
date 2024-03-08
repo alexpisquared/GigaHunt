@@ -489,9 +489,9 @@ public partial class OutlookHelper6
     return (hlp.FirstName, hlp.LastName);
   }
 
-  public string ReportLine(string folder, string senderEmail, bool isNew) => $"{folder,-15}{(isNew ? "*" : " ")}{++_currentSectionCuount,4} {senderEmail,-48}\n";
-  public static string ReportSectionTtl(string folder, int ttls, int news)      /**/ => $"{folder,-13}=>  total/new:        {ttls,3} / {news} \n\n";
-  public static string ReportSectionTtl(string folder, int ttls, int bans, int news) => $"{folder,-13}=>  total/new/banned: {ttls,3} / {news} / {bans} \n\n";
+  public string ReportLine(string folder, string senderEmail, bool isNew)       /**/ => $"{folder,-18}{(isNew ? "■" : "   ")}\t{++_currentSectionCuount,2}   {senderEmail,-48}\n";
+  public static string ReportSectionTtl(string folder, int ttls, int news)      /**/ => $"{folder,-18}=>  total/new:        {ttls,3} / {news} \n\n";
+  public static string ReportSectionTtl(string folder, int ttls, int bans, int news) => $"{folder,-18}=>  total/new/banned: {ttls,3} / {news} / {bans} \n\n";
 
   public static string RemoveBadEmailParts(string emailAddress)
   {
