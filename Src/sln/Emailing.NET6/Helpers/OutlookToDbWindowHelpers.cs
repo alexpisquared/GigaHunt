@@ -38,7 +38,7 @@ public class OutlookToDbWindowHelpers
     {
       if (!string.IsNullOrEmpty(notes))
       {
-        emailExisting.Notes = $"{now:yy.MM.dd}  {notes}\n{emailExisting.Notes}";
+        emailExisting.Notes = $"{now:yy.MM.dd HH:mm}  {notes}\n{emailExisting.Notes}";
         emailExisting.LastAction = now;
         _ = await dbq.TrySaveReportAsync("checkInsertEMail");
       }
