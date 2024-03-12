@@ -21,7 +21,7 @@ global using GigaHunt.View;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.Logging;
-global using StandardLib.Consts;
+global using PhoneAreaCoder;
 global using StandardLib.Extensions;
 global using static System.Diagnostics.Trace;
 global using OL = Microsoft.Office.Interop.Outlook;
