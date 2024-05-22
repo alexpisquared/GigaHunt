@@ -10,7 +10,7 @@ internal class MailKitVM
   public string? Message { get; private set; }
   public string? ResponseMessage { get; private set; }
 
-  public void ProtoTest() { OnPost(); }
+  public void ProtoTest() => OnPost();
   public void OnPost(
     string fromName = "Oleksa",
     string fromEmail = "alex.pigida@outlook.com",
@@ -52,7 +52,7 @@ internal class MailKitVM
 
     //MimeMessage is ready, now send the Email.
     using var client = new SmtpClient();
-    client.Connect(_cfg["EmailSettings:Host"], int.Parse(_cfg["EmailSettings:Port"]), false);
+    client.Connect(_cfg["EmailSettings:Host"], int.Parse(_cfg["EmailSettings:Port"] ?? throw new ArgumentNullException("#######LKJLKJ 132")), false);
     client.Authenticate(_cfg["EmailSettings:Username"], _cfg["EmailSettings:Password"]);
     ResponseMessage += client.Send(email);
     client.Disconnect(true);
