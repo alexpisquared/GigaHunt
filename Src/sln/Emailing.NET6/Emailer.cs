@@ -75,8 +75,8 @@ public class Emailer
       File.AppendAllText(LogFile, logMsg);
 
       return (true, report);
-    } 
-    catch (IOException ex) { report = ex.Message; _lgr?.LogWarning(ex.Message); }
+    }
+    catch (IOException ex) { report = ex.Message; _lgr?.LogWarning(ex.Message); Console.Beep(3333, 3333); }
     catch (Exception ex) { report = ex.Log(trgEmailAdrs); _lgr?.LogError(ex.Message); }
 
     return (false, report);
