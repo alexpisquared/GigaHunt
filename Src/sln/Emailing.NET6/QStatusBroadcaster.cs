@@ -3,7 +3,7 @@ public static class QStatusBroadcaster
 {
   public const string Asu = "Availability Schedule Update - ";
 
-  [Obsolete]
+  // [Obsolete] :why Copilot decides to mark it such?
   public static async Task<bool> SendLetter_UpdateDb(bool isAvailable, string email, string firstName)
   {
     var timestamp = DateTime.Now;

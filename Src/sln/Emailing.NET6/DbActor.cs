@@ -1,6 +1,6 @@
 ﻿namespace Emailing.NET6;
 
-[Obsolete]
+// [Obsolete] :why Copilot decides to mark it such?
 public class DbActor
 {
   public static async Task<int> InsertContactHistoryItem(bool isRcvd, DateTime? sentOn, DateTime timeSent, string email, string firstName, string subject, string body)
