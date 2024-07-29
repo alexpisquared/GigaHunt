@@ -1,0 +1,297 @@
+Alex Pigida    
+Full-Stack Software Engineer 
+
+Discover the craftsmanship of Alex, Full-Stack Maestro, with 20+ years of proven success in entire SDLC and developing great UI/UX for desktop, web, and mobile applications. Tech enthusiast and skilled developer, I deliver cutting-edge, user-friendly enterprise applications that cater to diverse needs. With a flair for intuitive, responsive design, I enhance accessibility and functionality, ensuring a frictionless user experience. Known for problem-solving and client-focused solutions, I push technology to its limits to ensure demonstrable impact... 
+Also, avid professional hobbyist with passion for developing practical daily-use applications, including apps for revenue/time tracking, taxes, crowd control, weather-based planning, and tutorial games for kids, transforming chores into enjoyable experiences (sampled at www.alexPi.ca).
+
+Objective 
+Aiming to secure a hands-on role, leveraging my expertise in crafting impactful applications and sophisticated solutions that exceed business requirements at hand, while significantly enhancing the user experience.
+
+Technical Proficiencies
+.NET, WPF, UWP, Blazor, MAUI, ASP.NET, MVC, Razor, MVVM, C#, C/C++, XAML, GPT-4, T-SQL, Microsoft Visual Studio, WWF, WCF, Web Services, RESTful API, RIA Services, WinForms, WebForms, Silverlight, Entity Framework (EF), ORM, NHibernate, JSON, AJAX, HTML, CSS, JS, Angular, ReactJS, jQuery, Google Earth, Microsoft Virtual Earth, PL SQL, DTS, ADO.NET, IIS, VB.NET, VB6, UML, Visio, SharePoint, TDD, DDD, TPL, XML, SOAP, WSDL, Win32, ATL, MFC, VBScript, JavaScript, COM/DCOM, COM+, MTS, OOP, PowerShell, Crystal Reports, MS Office Automation, Git, GitHub, VSS, TFS, SVN, Bitbucket, Windows Service, Azure Cognitive Services, Azure CI/CD, DevOps, Azure SQL DB, Azure Key Vault, Azure Web Hosting, MS SQL, ODBC, Oracle, SQLite, MongoDB, MS Access, SSMS, SSRS, SSIS, ETL, JIRA, Confluence.  
+
+Projects & Consulting Experience
+
+PwC	Full-stack Developer	2024/03 - 2024/06
+Contributed to the development of a .NET Web API application originally architected prior to joining the project, translating complex income tax calculations from Excel specifications into optimized and clear C# code, increasing computation efficiency and accuracy.
+* Enhanced Code Quality: Identified and rectified design pattern violations and other architectural flaws within the project, improving overall code stability and maintainability. 
+* Innovated Tools: Created a standalone WPF desktop application as a license-free alternative to Postman, significantly speeding up integration testing of Web APIs currently in development. 
+* Rapid Bug Resolution: Expertly diagnosed and resolved bugs, identifying root causes with efficiency and applying solutions that adhered to established architectural and design patterns, ensuring the seamless functionality of the application.
+* Creative Use of Skills: Developed a mobile app to organize table tennis enthusiasts into self-managing teams. Initially a WPF desktop app, it was later ported to UWP, MAUI, Angular, and Blazor, hosted on Azure for cross-platform access.
+Skills:    .NET 8.0, C#, Azure, MS SQL, UWP, Angular, MAUI, Blazor, WPF/XAML, EF Core.
+
+RBC CM	Full-stack Developer	2022/12 - 2023/12
+Refined the company's core trade application by adding advanced business logic and redesigning a more efficient user permissions management system. 
+* Demonstrated surgical precision in bug fixing and new business logic implementation to ensure the smooth functioning of the flagship application that manages trade processes in the backbone servers of RBC.
+* Streamlined various in-house chores by developing original standalone applications, incorporating modern UX styles and leveraging the latest advancements of the .NET platform.
+* Recognized for my innovative approach in designing a one-click symmetrical permission editor, as well as for enhancing the user experience of widely-used in-house applications.
+* Transformed disarrayed table tennis enthusiasts into self-organizing teams with a side project application. Expanded its accessibility by porting it from a WPF desktop app to cross-platform availability, including UWP, MAUI, Angular, and Blazor for hosting on Azure.
+* Ported my Microsoft Teams ChatGPT bot into a standalone automated WebEx client.
+Skills:    WPF/XAML, .NET 8.0, C#, TDD, TPL, UWP, Angular 16, MAUI, Blazor, Azure, XML, XSLT, MS SQL, EF Core, ETL, GPT-4.
+
+CI Financial	Full-stack Developer	2021/01 - 2022/10
+Led the design and development of new applications and refined existing ones, bolstering team productivity with innovative tools. 
+* Expertly utilized .NET 6.0 (XAML, C#) / MS SQL stack for designing and implementing two big green-field desktop applications: 
+ - RIF-LIF Payment Calculator/Scheduler - 100x accelerator/replacer of the old Excel-based solution,
+ - Database Process Launcher/Manager - innovation in action. 
+* Automated local code repository deliveries with a brand-new Azure's CI/CD pipeline. 
+* Boosted team efficiency by developing operational support apps, leveraging ChatGPT's conversational AI for real-time log analysis and a Microsoft Teams bot integration.
+* Assisted in resolving bugs within the existing suite of local enterprise back-end applications.
+Skills:    WPF/XAML, .NET 6.0, C#, TDD, DDD, TPL, Java, MS SQL, EF Core, ETL, Azure CI/CD, DevOps, GPT-3.5.
+
+Iress	Full-stack Developer	2019/11 - 2020/11
+Diligently maintained and enhanced Iress Pro, the company's premier professional trading platform, with a focus on resolving bugs and developing critical improvements. 
+* Streamlined data flow between Iress and external clients by developing rich-UI and headless backend apps.
+* Resolved highly contested RDP server access with a clever software solution (WPF + Named Pipes).
+* Engineered a real-time system for monitoring logs and alerting on critical backbone process activities.
+Skills:    ReactJS, .NET Core, .NET 5.0, WPF, TDD, TPL, WCP, C#, MS SQL, EF Core, ETL, GitHub, HTML, CSS, JS, TS.
+
+RBC	Full-stack Developer	2019/04 - 2019/07
+Crafted and integrated www.MoveSnap.com's full-stack features using Angular, .NET Core, Repository and Unit of Work design patterns. Designed the underlying PostgreSQL database schema. 
+* Improved MoveSnap's backend by designing and adding the relevant CRUD RESTful API end points. 
+* Revamped the MoveSnap.com landing page with fresh branding and better scalability.
+* Developed an adaptive design feature that dynamically adjusts the layout to accommodate all display sizes, ranging from large desktop monitors to small mobile devices. 
+Skills:    Angular, ASP.NET Core, C#, MVC, Razor, DDD, TPL, RESTful API, PostgreSQL, GitHub, CSS, HTML, TS.
+
+Nymi	Full-stack Developer	 2016/11 - 2019/02
+Led and engaged in C# .NET app development in the predominantly embedded C/C++ shop, modernized client-facing tools by employing Windows 10 UI/UX best practices to address the dated "battleship grey" style. Streamlined cross-platform communication protocols for improved interoperability. 
+* Designed and kickstarted development for a range of web, desktop, and mobile apps, along with user-centric services for always-on-authentication devices. 
+* Engineered a counterintuitive two-way communication method between devices, connecting managed C# and unmanaged embedded C/C++ without polling, thereby conserving battery and CPU resources.
+* Prototyped, implemented, and brought to production multiple mobile, desktop and web apps (WPF, UWP, PWA, ASP.NET MVC and Angular, etc.) and services (RESTful API) representing the user-facing functionality for managing all aspects of the company's unique always-on-authentication devices.
+Skills:	.NET, C#, C/C++, XAML, MVVM, ASP.NET, MVC, Razor, TDD, DDD, TPL, RESTful API, Angular, UWP, PWA, SSMS, MS SQL, EF, HTML, CSS, JS, TS.
+
+Sciex	Front-end Developer	2016/03 - 2016/11
+Maintained, fixed, and evolved company's flagship WPF application for mass spectroscopy research, securing the progress with extensive unit and UI automated testing for enhanced stability.
+* Customized Framework for Integrated Testing (FIT) fixtures to manipulate controls and allow UI automation HTML scripts in applications.
+* Surrounded my code with the safety net of the elaborate unit as well as UI automation tests.
+* Enhanced the efficiency of the local QA team by developing several QA automation/helper applications.
+Skills:     .NET, C#, WPF, XAML, MVVM, WCF, VS2015, SQLite, MongoDB, SVN, JIRA, TeamCity, FIT White.
+
+AAVpro Ltd	Mobile Developer	2016/01 - 2016/02
+Completed a course on Universal Windows Platform (UWP) design and development. Developed multiple mobile apps, many of which are now certified and available on the Windows App Store, providing real-time updates (e.g., bus arrivals, weather) to both mobile and desktop devices. 
+Architected, designed, implemented, and published to Azure web application www.alexPi.ca featuring:
+* Angular front end with custom theming and animated transitions,
+* RESTful Web services layer on top of Azure SQL Database for usage tracking of the website,
+* Azure CI/CD pipeline automating builds and deployments off every merge-in to the main branch of the repo,
+* OCR POC based on Azure Computer Vision cognitive services (www.alexPi.ca/#/ocrpoc).
+Skills:    Azure SQL DB, Azure CI/CD, Azure Computer Vision, Azure Web Hosting, Azure Key Vault, Angular, .NET Core, C#, EF6, RESTful API, WCF, UWP, XAML, MVVM, WCF, TFS.
+
+BMO	Full-stack Developer	2014/02 - 2015/12
+Developed rich client and web applications for the Obligor Linking Project (OLP) project, including a datalink console and multi-stream data acquisition tool (DAQ) with an intuitive orchestration UI. Significantly contributed to the evolution of EP-Catalyst, a Silverlight-based platform widely used within the bank.
+* Served as Development Lead guiding the creation of advanced applications for the OLP project. 
+* Creatively applied DNA sequencing algorithms, specifically the Levenshtein Distance and Jaccard Similarity Coefficient, to streamline data cleaning procedures resulting in an astounding 85% decrease in manual tasks.
+* Implemented a WCF REST service layer to meet OLP project's distributed application needs. 
+* Streamlined interdepartmental approvals with a ASP.NET MVC web app that expedited To-do list processing. 
+* Developed a custom reporting system that delivers daily DAQ run updates via email and web-client notifications. 
+* On top of my daily developer's duties, I administered Microsoft Windows Server. 
+Skills:     .NET, C#, WPF, MVVM, MVC, Razor, ASP.NET, JSON, HTML, CSS, JS, Silverlight, VS2015, SSMS, T- SQL, EF, MS SQL, Oracle, ADO.NET, Windows Service, Agile Methodology, SVN, TFS.
+
+mobileLIVE	Full-stack Developer	2013/10 - 2013/12
+Lead design and implementation of a Microsoft Lync messenger extension - a model application serving as a proof of concept demonstrating aggregate capabilities spanning several mobile technologies:
+* Created responsive UI/UX relying on async and await keywords as well as the TPL constructs. 
+* Coded comprehensive C# API layer to the Unmanaged C++ assembly.
+* Introduced smooth transitions and animations to the application's UI. Seamlessly embedded all graphical assets representing the product's brand into the otherwise bare controls and backgrounds.
+* Increased fidelity and coding speed for MVVM design pattern by using Visual Studio code snippets.
+Skills:     VS2012, .NET 4.5, C#, C++, WPF, MVVM, LINQ, Agile Methodology.
+
+Livingston International 	Full-stack Developer	2013/02 - 2013/09
+Worked on design and implementation of a rich client application using latest advances in the WPF/WCF/MVVM technologies and frameworks.
+* Drastically improved the application's UI templates; reduced to the minimum the efforts of the end users in their daily use of the application.
+* Aggregated multi-screen/multi-step laborious business processes into an efficient and streamlined single-page experiences with clean intuitive designs, smooth animated transitions, rich custom tooltips/mouse-overs and such.
+* Reduced development time for the existing data access layer as well as streamlined data flow to/from the back-end databases without disrupting the current architecture of the application.
+* Cleaned up the MS SQL databases from obvious (and not) design imperfections. 
+* Designed sophisticated reports using Microsoft SSRS as well as in-house developed custom tools.
+* Designed and implemented an Event Subscription Management system featuring single page design manipulating a complex multi-level hierarchy of entities.
+Skills:     .NET, C#, MS SQL, EF, SSMS, T-SQL, WPF, MVVM, LINQ, Entity Framework, Agile Methodology.
+
+Citi	Full-stack Developer	2012/10 - 2012/12
+As a part of an intercontinental (Toronto-London-New York) team, worked on a high-performance/high-throughput trading platform - a WPF application based on a MVVM design pattern, with highly configurable/customizable plug-in architecture. 
+* Worked on implementation of a real-time reporting system aimed at sub-second delivery and highlighting of different parameters of trading analytics data torrents: color/style-coded alerts, custom filtering, data driven triggers of action logic, etc.
+* Engaged TPL (Task Parallel Library) to keep the UI/UX alive and responsive.
+* Developed custom-tailored configuration infrastructure, targeted at dynamic reflection-based type instantiation and at integration with the end user preferences and corresponding clever defaults. Designed UI components providing the best user experience manipulating and fine-tuning the user preferences.
+* Tamed idiosyncrasies of the third-party components irrevocably integrated into the application.
+Skills:     .NET, C#, WPF, MVVM, LINQ, Entity Framework, SVN, Infragistics, Agile Methodology.
+
+
+Global Financial	Full-stack Developer	2011/11 - 2012/08
+* Designed and implemented several LOB applications: 
+ - Electronic RESP Enroller: 
+* A daring replacement for the traditional paper-based enrollment process with the modern mobile Android tablet-based approach to register new applicants faster and with fewer errors.
+ - Mobile RESP Calculator: 
+* A tool to support the previous app by providing a quick and easy way to establish the right financial strategy for achieving the best results, facilitating quick navigation through a complex set of rules, regulations, starting conditions and ultimate goals,
+* Engaged ubiquitous modern mobile computing revolution to serve business needs,
+* Enabled touch friendly features using Android's built-in HTML5 support,
+* Designed unique and appealing look and feel for the front end of the app with rich and intuitive functionality at one's fingertips (sampled at linkedin.com/in/alexpigida),
+* While the analyst team had been busy with specs gathering, created the app's prototype on 4 platforms: WPF, Silverlight, native Android and MVS, targeting mobile as well as desktop hardware.
+* "Outsourced" time-consuming complex computations to the non-UI threads using TPL (Task Parallel Library).
+* Facilitating globalization and multi culture support in the MVC apps, created a tool automating translation of the whole UI to a language of choice using Microsoft Translator API. Also, added a feature automating the process of manual error correction by the non-developer language experts.
+* Took ownership over the lack of a suitable task tracking tool problem and created a system featuring:
+ - Creation, assignment, progress tracking and lifecycle management of the projects and tasks of the IT shop (TPM - Task/ Project Manager),
+ - Mission Control Center: a UI featuring an executive view which with a single glance reflects the overall health of all the projects at hand as well as real-time delivery date forecasting component,
+ - Multi-tasking component: facility for fast switching between tasks with automatic real-time time tracking,
+ - Integration with the local TFS: establishing a link between jobs submitted to TFS and corresponding tasks for documenting, invoicing and accountability purposes.
+* Designed and implemented a corporate screen saver featuring:
+ - Animated gauges presenting corporate performance counters,
+ - Unread email notifier/counter,
+ - Integration with the task tracking system,
+ - Optional local traffic and weather gadgets.
+Skills:     VS2010, .NET 4.0, C#, VB.NET, WPF, Silverlight, WCF, ASP.NET, MVC, Razor, HTML5, JavaScript, jQuery, HTML, CSS, JS, MS Access, T-SQL, SSMS, LINQ to SQL, EF, AJAX, TFS.
+
+
+Toromont	Full-stack Developer	2010/06 - 2011/11
+Back to Toromont to continue working on a vast code base of the existing corporate apps ranging from the classic ASP to the latest advances in dev technologies, including ASP.NET 4.0, Silverlight and WPF, reinforced with hardcore T-SQL and third-party components.
+* Designed and implemented a rich client application (WPF) for a quick and highly automated entry into the local time tracking system, integrated with TFS as well as click-once timesheet/invoice creation, review and printing. Introduced pleasing looks as well as innovative and productive experience to the otherwise tedious drudgery of keeping track of one's work (sampled at www.linkedin.com/in/alexpigida). Result: 10 man-hour daily saving for the team.
+* "Gamed" several aspects of the existing time tracking process, turning the drudgery into a fun activity which resulted in a significant financial data latency reduction. This approach also led to a significant reduction in financial data latency and resulted in a daily savings of about 5 man-hours for the entire department.
+* Designed sophisticated reports using Microsoft SSRS.
+* With extreme care and surgical precision extended the intricate and complex codebase of existing classic ASP as well as the latest ASP.NET applications along with the enormous T-SQL scripts. 
+* Ported existing classic ASP applications into ASP.NET 4.0 web form as well as Silverlight apps.
+Skills:     VS2010, .NET 4.0, C#, WPF, WCF, Silverlight, RIA, ASP.NET, ASP, jQuery, HTML, CSS, JS, SSRS, SSMS, T-SQL, LINQ to SQL, EF, AJAX, TFS.
+
+
+CWB Group	Full-stack Developer	2009/10 - 2010/05
+Implemented rich client application front end (WPF) as well as plumbing to and design of the back-end SQL server databases.
+* Ported a set of legacy applications to the latest platforms: WPF and .NET 4.0.
+* Used early Beta bits of TPL (Task Parallel Library) to "defreeze" the application during long and lengthy SQL queries and server calls. 
+* Mitigated risks to both present and future code updates by providing a safety net of comprehensive unit tests for the logic at hand.
+Skills:     VS2010, .NET 4.0, C#, WPF, MS Access, T-SQL, SSMS, Citrix, TFS.
+
+
+Green Shield Canada    	Consultant	2008/12 - 2009/08
+Participated in an effort of bringing current corporate code base of numerous web applications to the latest versions of core software libraries and contemporary security standards.
+* Carried out functional refactoring of common assemblies used by multiple corporate web applications for the purpose of utilizing the latest secure technologies (SSO by AD FS and Code Access Security).
+* Introduced latest coding effort-saving trends in software development, such as Dependency Injection and Unity Application Block of Microsoft Enterprise library.
+* For the purpose of smoothing out the current and future software enhancements, implemented a safety net of numerous unit tests for the existing corporate applications.
+Skills:     VS2008, .NET 3.5, C#, ASP.NET, HTML, CSS, JS, WebForms, XML.
+
+
+Toromont	Full-stack Developer	2008/02 - 2008/11
+* Using emerging geo-coding technologies (Microsoft Virtual Earth and Google Earth) prototyped a GPS-based asset tracking demo application facilitating comparison of fuel expenses between different equipment delivery scenarios.
+* Capitalizing on extremely advanced user base, created a prototype of a WebParts-based dashboard application in which users can tailor layout and functionality of web pages in accordance to their unique needs, thus saving the development team from creating, maintain and supporting numerous flavors of essentially the same application.
+* Introduced and prototyped an idea of a visual aggregation custom web control: graphically compacting more relevant information into a common chart using latest advances in web presentation technology (Silverlight).
+* Designed and implemented a new internal web application, extending the internal corporate application framework with the latest web technologies.
+Skills:     VS2008, .NET 3.5, C#, VB.NET, WinForms, WebForms, ASP.NET, HTML, CSS, JS, classic ASP, AJAX, WPF, Silverlight, Web Services, XML, T-SQL, OOP, ORM, NHibernate, MS Virtual Earth, Google Earth, TFS.
+
+
+Systemgroup	Full-stack Developer	2007/02 - 2008/01
+Participated in a full development life cycle of Mutual Funds Connect application for the Meridian Credit Union - a centralized information management tool that facilitates financial planning lifecycle administration and provides a seamless interface to the Wealth Management service delivery framework.
+* Worked on the front end of the application - a rich smart client using the latest advances in UI development - Windows Presentation Foundation (WPF).
+* Prototyped business process flow between front and back offices using Widows Workflow Foundation (WF).
+* Designed and implemented a custom business rule engine - a web service application providing metadata dependent on multidimensional set of incoming conditions pertaining the financial transaction at hand.
+* Came up with an idea and implemented an application loading up the business rule engine with thousands of combinations translated from free form documentation describing the business process.
+Skills:     VS2008, .NET 3.5, C#, WPF, WF, WCF, VB.NET, WinForms, Smart Client, Web Services, XML, XPATH, T-SQL, WSDL, OOP, TFS.
+
+
+Direct Energy	Full-stack Developer	2006/09 - 2007/02
+* Using SharePoint Server 2007 and WebParts of ASP.NET, devised a way to separate business logic development from graphic design and multilingual content support.
+* Designed and developed a series of custom components for customers* sign up and sign in to the corporate website.
+* Enhanced existing customer enrollment web application (a part of www.directenergy.com site) by introducing mid-tier components reflecting new business rules added to the process.
+* Implemented an assembly of components with WinForm .NET 2.0 front end responsible for staging data of various formats from company's legacy systems to MS SQL Server databases.
+* Implemented an internal support application for simple and efficient bulk editing of highly volatile data associated with company's market penetration.
+Skills:     VS2005, ASP.NET 2.0, C#, VB.NET, WinForms, WebForms, Web Services, T-SQL, DTS, SharePoint Server, SOA, WSDL, OOP.
+
+
+Magna International	Full-stack Developer	2005/11 - 2006/07
+* Took technical lead on late stages of a project of conversion from Lotus Notes to a modern ASP.NET 2.0 business workflow application. 
+* Designed and implemented rich, responsive and intuitive UI using ASP.NET WebForms, AJAX technology and third-party web control libraries (Infragistics, Skelta, etc.)
+* Refactored the existing complex business tier into OO hierarchy of reusable and extensible types.
+* Redesigned existing disparate data code pieces into a flexible and reusable data access component.
+* Developed a WinForm .NET 2.0 application for fast and efficient bug tracking, featuring automated email-based notification of assignees and real-time progress reporting capabilities.
+* Automated process of converting business process specs into executable business logic by writing software capable of processing company's documentation.
+* Optimized T-SQL code to outperform existing means of data handling by two orders of magnitude.
+Skills:     VS2005, ASP.NET 2.0(1.1), C#, VB.NET, WinForms, WebForms, Web Services, T-SQL, ORM, NHibernate, SSMS, DTS, Excel, SOA, WSDL, OOP, IIS.
+
+
+Thoughtcorp	Full-stack Developer	2005/04 - 2005/10
+In a capacity of a senior .NET developer, participated in several projects concerned with high volume customer billing and payment systems for Bell Canada.
+* Designed and implemented numerous ASP.NET WebForms with underlying middle tier C#-based business objects as well as data processing scripts for Oracle database using PL SQL.
+* Exposed business logic and data to the non-.NET clients in a platform neutral manner using Web Services.
+* Provided real-time bug fixing of the existing code with surgical precision, which reduced to minimum need for regression testing.
+* Stepped up with the initiatives of providing a set of WinForm-based tools for code generation and code conditioning which saved hundreds of man-hours for the team at the crunch time; as well as redesigned the existing middle-tier code to a better performing and easier to maintain components using OOP methodology.
+* Managed to satisfy simultaneously 3 managers on 3 concurring projects.
+* Regularly completed my assignments in a fraction of the time allocated for the tasks.
+Skills:     ASP.NET 1.1, C#, VB.NET, WinForms, WebForms, Web Services, PL SQL, Oracle, Excel, SOA, WSDL, OOP, IIS.
+
+
+Arbor	Full-stack Developer	2004/08 - 2005/04
+Designed and implemented a standalone multithreaded .NET WinForm application which asynchronously decoded instructions from MS Word documents and performed scheduled de-normalization and data transfer from a production OLTP SQL server to various reporting non-SQL clients based on the decoded instructions.
+* Helped to roll out a multimillion project on time by implementing various ASP.NET WebForms, providing quick bug fixes and careful bug-free implementation of the last minute modifications.
+* Refactored and optimized poorly performing middle-tier components as well as improved existing design and reduced amount of code by employing OOP methodology.
+Skills:    .NET, C#, WinForms, WebForms, MS Office Automation, T-SQL, DTS, FoxPro, MS Access, ASP.NET, IIS, MS SQL Server, OOP.
+
+
+BMO	Full-stack Developer	2003/04 - 2004/07
+Participated in one of the largest .Net project: $25,000,000 budget, several million lines of code, and at the same time record-breaking completion time.
+* Rendered numerous specs and design documents into tens of thousands lines of code.
+* Designed and implemented several key components of the application: a reflection-based attribute driven cross-tier dataflow and mapping system, which reduced tenfold amount of code to write, test and maintain; jet form printing components; numerous WinForms and business tier components.
+* Employed several key aspects of extreme programming and OOP methodologies, which helped speed up development process and reduced time of consequent regression testing to a minimum. 
+Skills:    .NET, C#, WinForm, XML, WSDL, SOA, OOP.
+
+
+CSG	Full-stack Developer	2003/02 - 2003/04
+Participated in developing a LAN-based security system aimed at fast and fault tolerant notification of various external events to designated monitoring stations on the network.
+* Designed and implemented a .NET-based WinForm application - an administrative tool for setting up variety of interconnected RF and IR devices and orchestrating their activity. 
+* Employed object-oriented methodology to resolve complexity of the task; applied the Memento software pattern to capture and externalize the objects* internal states without violating encapsulation. 
+Skills:    .NET, C#, VB.NET, WinForm, T-SQL, MS Access, OOP.
+
+
+Arbor	Full-stack Developer	2002/03 - 2003/01
+Provided with .NET expertise as well as participated in implementation of a large-scale WebForm based contract management and accounts receivable system.
+* Seized the initiative to introduce Microsoft-recommended coding standards along with .NET best coding practices to the team of developers from IBM.
+* Employing OOP methodology enhanced the application design which reduced coding volumes by one order of magnitude as well as improved maintainability and extensibility.
+* Designed and implemented a .NET-based WinForm solution to stage data of enormous size and inexplicable complexity from legacy data systems to MS SQL database as well as performed various tasks of fixing and upgrading company*s existing software, designed various helper WinForm utilities for everyday accounting needs of the office. 
+Skills:    .NET, ASP.NET, C#, COM+, XML, T-SQL, DTS, FoxPro, MS Access, MS SQL, IIS, OOP.
+
+Experience Other
+
+Cetaris	Full-stack Developer	1995/05 - 2002/02
+* Implemented a real-time car auction web application www.CARbid.ca using the latest Microsoft technologies before their official release (ASP.NET WebForms).
+* Lead a development team in evolving existing project into a dynamic, scalable, and better UX WebForm application with SQL Sever-based state management.
+* Implemented client-side VC ATL-based IE aggregation UI components as well as server-side mid-tier business objects for the Parts Assistant - transportation industry's premier web-based automotive parts catalog solution.
+* Prototyped pre-caching multithreaded application that significantly increased scalability of .NET apps by eliminating an inherent .NET Remoting's bottleneck caused by persisting configuration info into the file system. Used Visio UML to architect the application.
+Worked on proprietary Information Operating System for a courier company, Inplex, responsible for all aspects of business operations including order entry, reporting, invoicing, and all administrative functions: 
+* Designed and implemented VB-based original GUI for the numerous front-end client applications.
+* Implemented distributed OLE client/server data processing (VB Automation).
+* Designed and implemented various reports using VB, MS Access, T-SQL, and Crystal Reports.
+Member of a team that designed The PayPro Network for CIBC, the first Internet payment system to meet financial industry's security standards:
+* Generated thread safe code for handling data flow to and from MS SQL server.
+* Designed and implemented HTML-based UI using ActiveX technology.
+* Provided assistance in design, optimization and administration of back end SQL server database.
+Designed and implemented countless smaller projects mostly of R&D/prototype nature targeting different flavors of Microsoft Windows platform, including (but not limited to) WinCE, Pocket PC, Handheld PC, Palm Size PC devices.
+Skills:    .NET, ASP.NET, IIS, .NET Remoting, C#, VB.NET, WinForms, WebForms, Web Services, MS Office Automation, T-SQL, DTS, FoxPro, MS Access, MS SQL, HTML, ASP, XML-XSLT, XPath, XQuery, VB, VC, ATL, COM/DCOM, COM+, MTS, Crystal Reports, C++, VC, MFC, OOP, UML, SOA, SOAP, Windows Service.
+
+
+AAVpro Ltd	Mobile Developer		1996/04 - 2014/03
+Architected, designed, implemented, and published to the app stores several applications:
+* Swim Race Viewer (Azure Web Application)
+- A quick and fun way to maximize your chances for a podium by visually estimating the stats from the numerous swim races, presented in single customizable view, and selecting the race entries where your performance is comparable or better than the immediate competition.
+* Radar Lock Screen (Windows Phone 8)
+ - Never have rain to ruin your outdoor activity! Just a quick glance at your phone and you are good to go (...or not) - no fumbling with the weather apps, no awkward searches, no bookmarking required: the most current radar picture zoomed and centered to your current/chosen location is already there at your lock screen.
+* Split Hit Timer (Windows Phone 8)
+ - A typical stopwatch with split lap timer capability and one-page-has-it-all design, accommodating the results from multiple events with several splits in each and featuring a bar-chart-like representation of the split times requiring only a quick glance for an immediate take-in of the performance.
+* BusCatch (Universal Windows Platform - UWP)
+ - Friction free visual and audible next bus tracking to the nearest of the pre-set bus stops ...Or a new take on the old puzzle of simultaneous passenger-bus arrival to a stop with the least amount of ceremony possible. Plus, several attempts to auto-correct often stale predictions provided by the NextBus service itself.
+
+UkrAlko	UkrAlko	Head of IT 		1992/04 - 1994/11
+* Lead a team in design and implementation of a LAN-based perpetual-inventory system (the first really working in the city) using early OOP capabilities of C++.
+* Set up, administered and troubleshoot 20 workstation Novell LAN.
+* Using C on CPM and MS DOS platforms, developed numerous accounting applications/utilities (inventory systems, personnel databases, quick price calculators, receipt, report builders, etc.)
+* Designed extremely user-friendly user interfaces which eliminated training expenses for the personnel without computer background (C/C++).
+Ukrainian Academy of Sciences	Staff Scientist		1987/06 - 1992/05
+Participated in projects: "Noncooled Infrared Magneto-Injection Emitters Based on CdHgTe", "Holographic Correction of Distortions of Acousto-Optical Modulator in Photorefractive Crystals":
+* Conducted experiments in the fields of Laser Optics and Infrared Spectroscopy.
+* Developed C programs for numerical analysis of the data and graphical representation of the results.
+* Published the achievements in scientific periodicals worldwide.
+
+        
+
+Education
+
+Microsoft Official Curriculum courses, Developmentor"s advanced classes	2001/05
+* Microsoft Certified Professional (MCP) 
+* Microsoft Certified Solution Developer (MCSD), Visual C++ and SQL Server tracks
+
+Taras Shevchenko National University of Kyiv, UA	
+* Master of Science in Quantum Radiophysics and Electronics
+Alex Pigida
+alex.pigida@outlook.com - (416) 262-0960
+LinkedIn - Concord, Ontario

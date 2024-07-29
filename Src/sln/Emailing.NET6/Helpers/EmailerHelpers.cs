@@ -4,7 +4,7 @@ internal static class EmailerHelpers
 {
   public static string GetMicrosoftAccountName() //todo: move it to a proper place.
   {
-    var wi = WindowsIdentity.GetCurrent();
+    using var wi = WindowsIdentity.GetCurrent();
 
     ArgumentNullException.ThrowIfNull(wi.Groups);
     var groups = from g in wi.Groups

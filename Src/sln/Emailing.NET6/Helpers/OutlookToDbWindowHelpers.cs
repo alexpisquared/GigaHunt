@@ -14,8 +14,8 @@ public class OutlookToDbWindowHelpers
   public async Task<bool?> CheckInsert_EMail_EHist_Async(QstatsRlsContext dbq, string email, string firstName, string lastName, string? subject, string? body, DateTime? sentOn, DateTime? timeRecdSent, string isRcvd, string RS, string? notes = null)
   {
     var now = DateTime.Now;
-    var em = await CheckInsertEMailAsync(dbq, email, firstName, lastName, notes, now);
-    if (em.email1 == null) 
+    var em = await CheckInsertEMailAsync(dbq, email, firstName, lastName, notes, now, RS == "S");
+    if (em.email1 == null)
       return null;
 
     await EHistInsUpdSaveAsync(dbq, subject, body, sentOn ?? now, timeRecdSent ?? now, RS, em.email1, notes, now);
@@ -23,7 +23,7 @@ public class OutlookToDbWindowHelpers
     return em.isNew;
   }
 
-  public async Task<(Email? email1, bool? isNew)> CheckInsertEMailAsync(QstatsRlsContext dbq, string emailAddress, string firstName, string lastName, string? notes, DateTime now)
+  public async Task<(Email? email1, bool? isNew)> CheckInsertEMailAsync(QstatsRlsContext dbq, string emailAddress, string firstName, string lastName, string? notes, DateTime now, bool addToTheEndOfBroadcastQueue = true)
   {
     const int maxLen = 256;
 
@@ -70,7 +70,7 @@ public class OutlookToDbWindowHelpers
       Notes = notes,
       AddedAt = now,
       ReSendAfter = null,
-      NotifyPriority = -123 // let's bring it up for the immediate attention an potential manual reevaluation/action, since it is mostly coming from the alternative address of the undeliverable email.
+      NotifyPriority = addToTheEndOfBroadcastQueue ? int.Parse($"{now:yyMMdd}") : -333
     }).Entity;
 
     _ = await dbq.TrySaveReportAsync("checkInsertEMail");

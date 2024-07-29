@@ -1,9 +1,12 @@
-﻿namespace GigaHunt.AsLink;
+﻿using GigaHunt.AsLink;
+
+namespace Emailing.NET6;
 
 public partial class OutlookHelper6
 {
-  readonly OL.Application? _olApp;
-  readonly OL.MAPIFolder? _contactsFolder;
+  readonly OL.Application _olApp;
+  readonly OL.MAPIFolder _contactsFolder;
+  readonly OL.Store _olStore;
   readonly int _customLetersSentThreshold = 3; // to become an Outlook contact, must have at least 3 letters sent.
   static readonly char[] _delim = new[] { ' ', '.', ',', ':', ';', '\r', '\n', '\'', '"', '_' };
   int _updatedCount, _addedCount, _currentSectionCuount;
@@ -12,36 +15,42 @@ public partial class OutlookHelper6
   {
     try
     {
-      _olApp = new OL.Application();
+      var outlookProcesses = Process.GetProcessesByName("OUTLOOK");
+      if (outlookProcesses.Length <= 0)
+      {
+        var process = Process.Start(@"C:\Program Files\Microsoft Office\root\Office16\OUTLOOK.EXE");
+        _ = process.WaitForExit(2500); // give it 2.5 seconds to start
+      }
 
-      MyStore = _olApp.Session.Stores["alex.pigida@outlook.com"];
-      _contactsFolder = MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderContacts);        // this.Application.GetNamespace("MAPI").GetDefaultFolder(OL.OlDefaultFolders.olFolderContacts);                //_deletedsFolder = _store.GetDefaultFolder(OL.OlDefaultFolders.olFolderDeletedItems);
+      _olApp = new OL.Application(); //!!: Old outlook must be running: "C:\Program Files\Microsoft Office\root\Office16\OUTLOOK.EXE"
+
+      _olStore = _olApp.Session.Stores["alex.pigida@outlook.com"];
+      _contactsFolder = _olStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderContacts);        // this.Application.GetNamespace("MAPI").GetDefaultFolder(OL.OlDefaultFolders.olFolderContacts);                //_deletedsFolder = _store.GetDefaultFolder(OL.OlDefaultFolders.olFolderDeletedItems);
     }
-    catch (COMException ex) { ex.Log("I think this is it... (ap: Jun`20)"); throw; }
-    catch (Exception ex) { ex.Log(); throw; }
+    catch (COMException ex) { _ = ex.Log("I think this is it... (ap: Jun`20)"); throw; }
+    catch (Exception ex) { _ = ex.Log(); throw; }
   }
 
-  public OL.Store? MyStore { get; }
   public OL.Items? GetItemsFromFolder(string folder, int old)
   {
     try
     {
-      var folder0 = MyStore?.GetRootFolder().Folders[folder] as OL.Folder;
+      var folder0 = _olStore?.GetRootFolder().Folders[folder] as OL.Folder;
       var items = folder0?.Items.Restrict("[MessageClass] = 'IPM.Note'");
       return items;
     }
-    catch (Exception ex) { ex.Log(folder); throw; }
+    catch (Exception ex) { _ = ex.Log(folder); throw; }
   }
   public OL.Items? GetDeliveryFailedItems()
   {
     try
     {
-      var folder = MyStore?.GetRootFolder().Folders[OuFolder.qRcvd].Folders["Fails"] as OL.Folder;
+      var folder = _olStore?.GetRootFolder().Folders[OuFolder.qRcvd].Folders["Fails"] as OL.Folder;
       var itemss = folder?.Items.Restrict("[MessageClass] = 'REPORT.IPM.Note.NDR'");
       WriteLine($"***        Fails: {itemss?.Count}");
       return itemss;
     }
-    catch (Exception ex) { ex.Log(@"Q\Fails"); throw; }
+    catch (Exception ex) { _ = ex.Log(@"Q\Fails"); throw; }
   }
   public OL.Items GetItemsFromFolder(string folderPath, string? messageClass = null) // IPM.Note, REPORT.IPM.Note.NDR
   {
@@ -55,12 +64,12 @@ public partial class OutlookHelper6
 
       return itemss;
     }
-    catch (Exception ex) { ex.Log(@"Q\Fails"); throw; }
+    catch (Exception ex) { _ = ex.Log(@"Q\Fails"); throw; }
   }
   public OL.MAPIFolder? GetMapiFOlder(string folderPath)
   {
     var folderParts = folderPath.Split(new char[] { '\\', '/' }, StringSplitOptions.RemoveEmptyEntries);
-    var folder = MyStore?.GetRootFolder();
+    var folder = _olStore?.GetRootFolder();
     for (var i = 0; i < folderParts.Length; i++)
       folder = folder?.Folders[folderParts[i]] as OL.Folder;
 
@@ -69,19 +78,19 @@ public partial class OutlookHelper6
 
   public async Task<string> OutlookUndeleteContactsAsync(QstatsRlsContext db)
   {
-    Trace.WriteLine("Synchronous action... usually takes 5 minutes.");
+    WriteLine("Synchronous action... usually takes 5 minutes.");
 
     var sw = Stopwatch.StartNew();
 
     db.Emails.Load();
     db.Agencies.Load();
 
-    ArgumentNullException.ThrowIfNull(MyStore, "MyStore is nul @@@@@@@@@@@@@@@-");
+    ArgumentNullException.ThrowIfNull(_olStore, "MyStore is nul @@@@@@@@@@@@@@@-");
 
-    UndeleteContacts(MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderContacts), db, "Contacts");
-    UndeleteContacts(MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderDeletedItems), db, "Deleted Items");
+    UndeleteContacts(_olStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderContacts), db, "Contacts");
+    UndeleteContacts(_olStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderDeletedItems), db, "Deleted Items");
 
-    Trace.WriteLine($"All done. Took {sw.Elapsed.TotalMinutes:N1} minutes.");
+    WriteLine($"All done. Took {sw.Elapsed.TotalMinutes:N1} minutes.");
 
     var rep =      //db.TrySaveReport(); // 
       db.GetDbChangesReport();
@@ -109,7 +118,7 @@ public partial class OutlookHelper6
         i = (OL.ContactItem)_contactsFolder.Items.FindNext();
       }
     }
-    catch (Exception ex) { ex.Log(lastName); throw; }
+    catch (Exception ex) { _ = ex.Log(lastName); throw; }
   }
   public void FindContactByEmail(string email)
   {
@@ -122,12 +131,12 @@ public partial class OutlookHelper6
       //  contact = contactsFolder.Items.FindNext();
       //}
 
-      ArgumentNullException.ThrowIfNull(MyStore, "MyStore is nul @@@@@@@@@@@@@@@-");
+      ArgumentNullException.ThrowIfNull(_olStore, "MyStore is nul @@@@@@@@@@@@@@@-");
 
-      DbgListAllCOntacts(MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderContacts));
-      DbgListAllCOntacts(MyStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderDeletedItems));
+      DbgListAllCOntacts(_olStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderContacts));
+      DbgListAllCOntacts(_olStore.GetDefaultFolder(OL.OlDefaultFolders.olFolderDeletedItems));
     }
-    catch (Exception ex) { ex.Log("!!! MUST RUN OUTLOOK TO WORK !!!"); throw; }
+    catch (Exception ex) { _ = ex.Log("!!! MUST RUN OUTLOOK TO WORK !!!"); throw; }
   }
   public string SyncDbToOutlook(QstatsRlsContext db)
   {
@@ -172,7 +181,7 @@ public partial class OutlookHelper6
 
       CreateFromDbOutlookContact(em);
     }
-    catch (Exception ex) { ex.Log("!!! MUST RUN OUTLOOK TO WORK !!!"); throw; }
+    catch (Exception ex) { _ = ex.Log("!!! MUST RUN OUTLOOK TO WORK !!!"); throw; }
   }
 
   void MergeDbDataToOutlookContact(Email em, ref OL.ContactItem i, string msg)
@@ -441,10 +450,7 @@ public partial class OutlookHelper6
       return (flnArray[0], "");
 
     if (flnArray.Length >= 2)
-      if (fln.Contains(','))
-        return (flnArray[1], flnArray[0]);
-      else
-        return (flnArray[0], flnArray[1]);
+      return fln.Contains(',') ? ((string first, string last))(flnArray[1], flnArray[0]) : ((string first, string last))(flnArray[0], flnArray[1]);
 
     return ("Sirs", "");
   }
