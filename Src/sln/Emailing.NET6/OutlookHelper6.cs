@@ -12,15 +12,14 @@ public partial class OutlookHelper6
   static readonly char[] _delim = new[] { ' ', '.', ',', ':', ';', '\r', '\n', '\'', '"', '_' };
   int _updatedCount, _addedCount, _currentSectionCuount;
 
-  public OutlookHelper6()
+  public OutlookHelper6(bool checkRunOutlook = false)
   {
     try
     {
-      var outlookProcesses = Process.GetProcessesByName("OUTLOOK");
-      if (outlookProcesses.Length <= 0)
+      if (checkRunOutlook && Process.GetProcessesByName("OUTLOOK").Length <= 0)
       {
         var process = Process.Start(@"C:\Program Files\Microsoft Office\root\Office16\OUTLOOK.EXE");
-        _ = process.WaitForExit(2500); // give it 2.5 seconds to start
+        _ = process.WaitForExit(2500); // give it 2.5 seconds to start.
       }
 
       _olApp = new OL.Application(); //!!: Old outlook must be running: "C:\Program Files\Microsoft Office\root\Office16\OUTLOOK.EXE"
