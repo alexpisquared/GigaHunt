@@ -14,13 +14,13 @@ public class OutlookToDbWindowHelpers
   public async Task<bool?> CheckInsert_EMail_EHist_Async(QstatsRlsContext dbq, string email, string firstName, string lastName, string? subject, string? body, DateTime? sentOn, DateTime? timeRecdSent, string isRcvd, string RS, string? notes = null)
   {
     var now = DateTime.Now;
-    var em = await CheckInsertEMailAsync(dbq, email, firstName, lastName, notes, now, RS == "S");
-    if (em.email1 == null)
+    var (email1, isNew) = await CheckInsertEMailAsync(dbq, email, firstName, lastName, notes, now, RS == "S");
+    if (email1 == null)
       return null;
 
-    await EHistInsUpdSaveAsync(dbq, subject, body, sentOn ?? now, timeRecdSent ?? now, RS, em.email1, notes, now);
+    await EHistInsUpdSaveAsync(dbq, subject, body, sentOn ?? now, timeRecdSent ?? now, RS, email1, notes, now);
 
-    return em.isNew;
+    return isNew;
   }
 
   public async Task<(Email? email1, bool? isNew)> CheckInsertEMailAsync(QstatsRlsContext dbq, string emailAddress, string firstName, string lastName, string? notes, DateTime now, bool addToTheEndOfBroadcastQueue = true)
