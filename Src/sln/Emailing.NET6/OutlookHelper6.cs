@@ -1,5 +1,4 @@
 ﻿using GigaHunt.AsLink;
-using StandardLib.Helpers;
 
 namespace Emailing.NET6;
 
@@ -449,10 +448,9 @@ public partial class OutlookHelper6
     if (flnArray.Length == 1)
       return (flnArray[0], "");
 
-    if (flnArray.Length >= 2)
-      return fln.Contains(',') ? ((string first, string last))(flnArray[1], flnArray[0]) : ((string first, string last))(flnArray[0], flnArray[1]);
-
-    return ("Sirs", "");
+    return flnArray.Length >= 2
+      ? fln.Contains(',') ? ((string first, string last))(flnArray[1], flnArray[0]) : ((string first, string last))(flnArray[0], flnArray[1])
+      : ((string first, string last))("Sirs", "");
   }
   public static (string first, string last) FigureOutFLNameFromBody(string body, string email)
   {
