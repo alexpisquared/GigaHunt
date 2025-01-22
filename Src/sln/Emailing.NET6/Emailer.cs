@@ -76,6 +76,16 @@ public class Emailer
 
       return (true, report);
     }
+    catch (System.Net.Mail.SmtpException ex)
+    {/*
+      As of 2025-01-21 22:07:00 started getting this error:
+      The SMTP server requires a secure connection or the client was not authenticated. The server response was: 5.7.57 Client not authenticated to send mail. Error: 535 5.7.139 Authentication unsuccessful, basic authentication is disabled. [YT3PR01CA0122.CANPRD01.PROD.OUTLOOK.COM 2025-01-22T03:07:00.315Z 08DD393115E98C2B]
+      Going to this link           go to https://account.live.com/proofs/Manage/additional?mkt=en-us 
+      and clicking on "Create new app password" and using the created password did not help.
+      How to fix that?
+      */
+      report = ex.Message; _lgr?.LogWarning(ex.Message); Console.Beep(3333, 333);
+    }
     catch (IOException ex) { report = ex.Message; _lgr?.LogWarning(ex.Message); Console.Beep(3333, 3333); }
     catch (Exception ex) { report = ex.Log(trgEmailAdrs); _lgr?.LogError(ex.Message); }
 

@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using System.Windows;
-using GigaHunt.AsLink;
+using Emailing.NET6;
 
 namespace GigaHunt.View;
 
