@@ -28,7 +28,7 @@ internal class MailKitVM
     email.Subject = subject;
     email.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = message };
 
-    var appPassword = new ConfigurationBuilder().AddUserSecrets<Emailer>().Build()["AppPassword"] ?? throw new ArgumentNullException("#32 no key"); //tu: ad hoc user secrets
+    var appPassword = new ConfigurationBuilder().AddUserSecrets<Emailer2025>().Build()["AppPassword"] ?? throw new ArgumentNullException("#32 no key"); //tu: ad hoc user secrets
     var credentials = new NetworkCredential(EmailerHelpers.GetMicrosoftAccountName(), appPassword);
 
     //MimeMessage is ready, now send the Email.

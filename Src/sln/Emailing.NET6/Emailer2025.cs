@@ -1,8 +1,37 @@
-#define REALREADY			//uncomment only when ready:
+//using EnvDTE;
+//using Microsoft.Office.Interop.Outlook;
+using Azure.Identity;
+using Microsoft.Graph;
+using Microsoft.Graph.Models;
+using Microsoft.Identity.Client;
+using System.Net.Mime;
 
 namespace Emailing.NET6;
-public class Emailer
+public class Emailer2025
 {
+  static string LogFile => """C:\temp\Logs\CV.Emailed.txt""";// Path.Combine(OneDrive.Folder(@"Public\Logs"), "CV.Emailed.txt");
+  const string cFrom = "Alex.Pigida@outlook.com", appReg = "AppIdNew2025_8821bef3"; // AppIdNew2025_3936846f"; // AppIdOld2024_af27ddbb"; // 
+  static bool isFirst = true;
+  readonly ILogger _lgr;
+  readonly IConfiguration _configuration;
+  readonly GraphServiceClient graphClient;
+
+  public Emailer2025(ILogger lgr)
+  {
+    _lgr = lgr;
+    _configuration = new ConfigurationBuilder().AddUserSecrets<Emailer2025>().Build();
+
+    var options = new InteractiveBrowserCredentialOptions
+    {
+      TenantId = "consumers", // Important: Use "consumers" for personal accounts
+      ClientId = _configuration[$"{appReg}:ClientId"],
+      RedirectUri = new Uri("http://localhost")
+    };
+
+    var credential = new InteractiveBrowserCredential(options);
+    graphClient = new GraphServiceClient(credential, ["Mail.Send", "Mail.Send.Shared", "User.Read"]);
+  }
+
   public async Task<(bool success, string report)> Send(string trgEmailAdrs, string msgSubject, string msgBody, string[]? attachedFilenames = null, string? signatureImage = null) => await Send(cFrom, trgEmailAdrs, msgSubject, msgBody, attachedFilenames, signatureImage);
 
   async Task<(bool success, string report)> Send(string from, string trgEmailAdrs, string msgSubject, string msgBody, string[]? attachedFilenames = null, string? signatureImage = null)
@@ -12,6 +41,24 @@ public class Emailer
 
     try
     {
+      await graphClient.Me.SendMail.PostAsync(new Microsoft.Graph.Me.SendMail.SendMailPostRequestBody       //await graphClient.Users["alex.pigida@outlook.com"].SendMail.PostAsync(new Microsoft.Graph.Users.Item.SendMail.SendMailPostRequestBody
+      {
+        Message = new Message
+        {
+          Subject = msgSubject,
+          Body = new ItemBody { Content = msgBody, ContentType = BodyType.Html },
+          ToRecipients = [new Recipient { EmailAddress = new EmailAddress { Address = trgEmailAdrs } }],
+          Attachments = attachedFilenames?.Select(file => new FileAttachment
+          {
+            Name = Path.GetFileName(file),
+            ContentBytes = File.ReadAllBytes(file),
+            OdataType = "#microsoft.graph.fileAttachment"
+          }).Cast<Microsoft.Graph.Models.Attachment>().ToList()
+        },
+        SaveToSentItems = true
+      });
+
+      /*
       using (var mailMessage = new MailMessage(cFrom, trgEmailAdrs, msgSubject, msgBody))
       {
         if (!string.IsNullOrEmpty(signatureImage))
@@ -25,7 +72,7 @@ public class Emailer
 
             //AlternateView plainView = AlternateView.CreateAlternateViewFromString(msgBody, null, "text/plain");
 
-            var imageResource = new LinkedResource(f, new ContentType(MediaTypeNames.Image.Jpeg))
+            var imageResource = new System.Net.Mail.LinkedResource(f, new System.Net.Mime.ContentType(MediaTypeNames.Image.Jpeg))
             {
               ContentId = contentId
             };
@@ -45,13 +92,46 @@ public class Emailer
               if (!File.Exists(fnm))
                 throw new FileNotFoundException(fnm);
               else
-                mailMessage.Attachments.Add(new Attachment(fnm));
+                mailMessage.Attachments.Add(new System.Net.Mail.Attachment(fnm));
 
         //message.Attachments.Add(new Attachment("""C:\Documents and Settings\Grandma\Application Data\Microsoft\Signatures\QStatusUpdate(Wrd)_files\image002.jpg"""));
         //message.Attachments.Add(new Attachment("""C:\Documents and Settings\Grandma\Application Data\Microsoft\Signatures\QStatusUpdate(Wrd)_files\image001.png"""));
 
-        var appPassword = new ConfigurationBuilder().AddUserSecrets<Emailer>().Build()["AppPassword"] ?? throw new ArgumentNullException("#323 no key"); //tu: ad hoc user secrets
+#if true
+        /* The app password approach you tried isn't working because Microsoft is moving away from this authentication method.
+        To fix this, you'll need to:
+        1.	Use OAuth 2.0 authentication instead of basic authentication
+        2.	Register your application in Azure AD by following answer to "What are the steps to register my application in Azure AD for OAuth 2.0 authentication?"
+        3.	Update your code to use Microsoft.Graph or Microsoft.Identity.Client for authentication
+        Here's a high-level example of what needs to change: * /
+
+        // Get OAuth 2.0 token
+        var scopes = new[] { "https://graph.microsoft.com/.default" };
+
+        var _confidentialClientApplication = ConfidentialClientApplicationBuilder
+    .Create(_configuration[$"{appReg}:ClientId"])
+    .WithClientSecret(_configuration[$"{appReg}:ClientSecret"])
+    .WithTenantId(_configuration["TenantId"])
+    .Build();
+
+
+        var authResult = await _confidentialClientApplication
+            .AcquireTokenForClient(scopes)
+            .ExecuteAsync();
+
+        using var client = new SmtpClient
+        {
+          Host = "smtp.office365.com",
+          Port = 587,
+          EnableSsl = true,
+          DeliveryMethod = SmtpDeliveryMethod.Network,
+          UseDefaultCredentials = false,
+          Credentials = new OAuth2Credentials(authResult.AccessToken)
+        };
+#else
+        var appPassword = _configuration["AppPassword"] ?? throw new ArgumentNullException("#323 no key"); //tu: ad hoc user secrets
         var credentials = new NetworkCredential(EmailerHelpers.GetMicrosoftAccountName(), appPassword);
+       
         using var client = new SmtpClient // see readme # 8979 !!!!
         {
           Host = "smtp.office365.com",
@@ -61,17 +141,18 @@ public class Emailer
           UseDefaultCredentials = false,
           Credentials = credentials
         };
+#endif
 
         if (DateTime.Now == DateTime.Today)
           await client.SendMailAsync(mailMessage); //todo: this fails for MinNavTmp only!!!  Why??????????????????????????
         else
           client.Send(mailMessage);
       }
+*/
 
       var logMsg = string.Format("{0} ({3}.{4})   sent to:  {1,-49} Subj: {2} \t (took {5:m\\:ss\\.f}){6}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), trgEmailAdrs, msgSubject, Environment.MachineName, Environment.UserName, sw.Elapsed, Environment.NewLine);
       Write(logMsg);
       if (isFirst) { isFirst = false; File.AppendAllText(LogFile, Environment.NewLine); }
-
       File.AppendAllText(LogFile, logMsg);
 
       return (true, report);
@@ -122,11 +203,14 @@ public class Emailer
        new string[] { photoFullPath }, @"C:\g\GigaHunt\Src\sln\AvailStatusEmailer\Assets\MCSD Logo - Latest as of 2009.gif");
     Thread.Sleep(1000);
   }
+}
 
-  static string LogFile => """C:\temp\Logs\CV.Emailed.txt""";// Path.Combine(OneDrive.Folder(@"Public\Logs"), "CV.Emailed.txt");
-  const string cFrom = "Alex.Pigida@outlook.com";
-  static bool isFirst = true;
-  readonly Microsoft.Extensions.Logging.ILogger _lgr;
+// Custom OAuth2 credentials class
+public class OAuth2Credentials : ICredentialsByHost
+{
+  private readonly string _accessToken;
 
-  public Emailer(Microsoft.Extensions.Logging.ILogger lgr) => this._lgr = lgr;
+  public OAuth2Credentials(string accessToken) => _accessToken = accessToken;
+
+  public NetworkCredential GetCredential(string host, int port, string authType) => new("", _accessToken);
 }

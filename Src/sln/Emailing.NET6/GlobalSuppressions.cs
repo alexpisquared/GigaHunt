@@ -5,5 +5,5 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>", Scope = "member", Target = "~M:Emailing.NET6.Emailer.Send(System.String,System.String,System.String,System.String,System.String[],System.String)~System.Threading.Tasks.Task{System.ValueTuple{System.Boolean,System.String}}")]
+[assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>", Scope = "member", Target = "~M:Emailing.NET6.Emailer2025.Send(System.String,System.String,System.String,System.String,System.String[],System.String)~System.Threading.Tasks.Task{System.ValueTuple{System.Boolean,System.String}}")]
 [assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>", Scope = "member", Target = "~M:Emailing.NET6.Helpers.EmailerHelpers.GetMicrosoftAccountName~System.String")]

@@ -31,7 +31,7 @@ public static class QStatusBroadcaster
       var startDate = CalculateStartDate();
       var senttDate = $"{timestamp:MMddHHmmss}";
 
-      return await new Emailer(lgr).Send(
+      return await new Emailer2025(lgr).Send(
         emailAddress,
         subj,
         body.Replace("{0}", nameCasing_Mc_only_so_far(firstName)).Replace("{1}", emailAddress).Replace("{2}", startDate).Replace("{3}", senttDate),
