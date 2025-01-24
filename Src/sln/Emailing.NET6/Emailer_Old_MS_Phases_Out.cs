@@ -5,7 +5,7 @@ public class Emailer_Old_MS_Phases_Out
 {
   public async Task<(bool success, string report)> Send(string trgEmailAdrs, string msgSubject, string msgBody, string[]? attachedFilenames = null, string? signatureImage = null) => await Send(cFrom, trgEmailAdrs, msgSubject, msgBody, attachedFilenames, signatureImage);
 
-  async Task<(bool success, string report)> Send(string from, string trgEmailAdrs, string msgSubject, string msgBody, string[]? attachedFilenames = null, string? signatureImage = null)
+  async Task<(bool success, string report)> Send(string from, string trgEmailAdrs, string msgSubject, string msgBody, string[]? attachedFilenames = null, string? signatureImagePsv = null)
   {
     var sw = Stopwatch.StartNew();
     var report = "";
@@ -14,9 +14,8 @@ public class Emailer_Old_MS_Phases_Out
     {
       using (var mailMessage = new MailMessage(cFrom, trgEmailAdrs, msgSubject, msgBody))
       {
-        if (!string.IsNullOrEmpty(signatureImage))
-          //int i = 0;
-          foreach (var f in signatureImage.Split('|'))
+        if (!string.IsNullOrEmpty(signatureImagePsv))
+          foreach (var image in signatureImagePsv.Split('|'))
           {
             var contentId = Guid.NewGuid().ToString();
 
@@ -25,7 +24,7 @@ public class Emailer_Old_MS_Phases_Out
 
             //AlternateView plainView = AlternateView.CreateAlternateViewFromString(msgBody, null, "text/plain");
 
-            var imageResource = new LinkedResource(f, new ContentType(MediaTypeNames.Image.Jpeg))
+            var imageResource = new LinkedResource(image, new ContentType(MediaTypeNames.Image.Jpeg))
             {
               ContentId = contentId
             };
