@@ -6,26 +6,20 @@ namespace Emailing.NET6;
 public class Emailer2025
 {
   static string LogFile => """C:\temp\Logs\CV.Emailed.txt""";// Path.Combine(OneDrive.Folder(@"Public\Logs"), "CV.Emailed.txt");
-  const string appReg = "AppIdNew2025_8821bef3"; // AppIdNew2025_3936846f"; // AppIdOld2024_af27ddbb"; // 
+  const string appReg = "EmailAssistantAnyAndPersonal2_2024"; 
   static bool isFirst = true;
   readonly ILogger _lgr;
   readonly IConfiguration _configuration;
-  readonly GraphServiceClient graphClient;
+  readonly GraphServiceClient _graphClient;
 
   public Emailer2025(ILogger lgr)
   {
     _lgr = lgr;
     _configuration = new ConfigurationBuilder().AddUserSecrets<Emailer2025>().Build();
 
-    var options = new InteractiveBrowserCredentialOptions
-    {
-      TenantId = "consumers", // Important: Use "consumers" for personal accounts
-      ClientId = _configuration[$"{appReg}:ClientId"],
-      RedirectUri = new Uri("http://localhost")
-    };
+    var clientId = _configuration[$"{appReg}:ClientId"] ?? throw new InvalidOperationException("¦·MicrosoftGraphClientId is missing in configuration");
 
-    var credential = new InteractiveBrowserCredential(options);
-    graphClient = new GraphServiceClient(credential, ["Mail.Send", "Mail.Send.Shared", "User.Read"]);
+    _graphClient = new MsGraphLibVer1.MyGraphDriveServiceClient(clientId).DriveClient;       //new GraphServiceClient(new InteractiveBrowserCredential(new InteractiveBrowserCredentialOptions { TenantId = "consumers", ClientId = clientId, RedirectUri = new Uri("http://localhost") }), ["Mail.Send", "Mail.Send.Shared", "User.Read"]); // Important: Use "consumers" for personal accounts //tu: this one keeps being INTERACTIVE!!! ASKS FOR LOGIN EVERY TIME!!! even on OLD GOOD ONE: EmailAssistantAnyAndPersonal2.
   }
 
   public async Task<(bool success, string report)> Send(string trgEmailAdrs, string msgSubject, string msgBody, string[]? attachedFilenames = null, string? signatureImage = null)
@@ -35,19 +29,14 @@ public class Emailer2025
 
     try
     {
-      await graphClient.Me.SendMail.PostAsync(new Microsoft.Graph.Me.SendMail.SendMailPostRequestBody       //await graphClient.Users["alex.pigida@outlook.com"].SendMail.PostAsync(new Microsoft.Graph.Users.Item.SendMail.SendMailPostRequestBody
+      await _graphClient.Me.SendMail.PostAsync(new Microsoft.Graph.Me.SendMail.SendMailPostRequestBody       //await graphClient.Users["alex.pigida@outlook.com"].SendMail.PostAsync(new Microsoft.Graph.Users.Item.SendMail.SendMailPostRequestBody
       {
         Message = new Message
         {
           Subject = msgSubject,
           Body = new ItemBody { Content = msgBody, ContentType = BodyType.Html },
           ToRecipients = [new Recipient { EmailAddress = new EmailAddress { Address = trgEmailAdrs } }],
-          Attachments = attachedFilenames?.Select(file => new FileAttachment
-          {
-            Name = Path.GetFileName(file),
-            ContentBytes = File.ReadAllBytes(file),
-            OdataType = "#microsoft.graph.fileAttachment"
-          }).Cast<Microsoft.Graph.Models.Attachment>().ToList()
+          Attachments = attachedFilenames?.Select(file => new FileAttachment { Name = Path.GetFileName(file), ContentBytes = File.ReadAllBytes(file), OdataType = "#microsoft.graph.fileAttachment" }).Cast<Microsoft.Graph.Models.Attachment>().ToList()
         },
         SaveToSentItems = true
       });

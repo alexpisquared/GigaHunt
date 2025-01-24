@@ -1,3 +1,7 @@
+using Azure.Identity;
+using Microsoft.Graph;
+using MsGraphLibVer1.Ver1Only;
+
 namespace Emailing.NET6;
 public static class QStatusBroadcaster
 {
@@ -23,19 +27,29 @@ public static class QStatusBroadcaster
     try
     {
       var html = """C:\g\GigaHunt\Src\sln\AvailStatusEmailer\Assets\AvailabilityStatus_AvailableNow.htm""";//isResumeFeatureUpdate ? $"C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AvailabilityStatus_AvailableNow_FreshCV.htm" : $"""C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AvailabilityStatus_{(isAvailable ? "AvailableNow" : "Unavailable")}.htm """;
-      var body = new StreamReader(html).ReadToEnd();
-      var subj = /*isResumeFeatureUpdate*/false ? "resume feature update" : Asu + (isAvailable ? "Open for opportunities in Toronto++" : "Unavailable");
+      var body = await File.ReadAllTextAsync(html);
+      var subj = Asu + "Open for opportunities in Toronto++";
 
-      var attachment = isAvailable ? Directory.GetFiles(@"C:\g\GigaHunt\docs\CV\AsuBroadcastPackage") : Array.Empty<string>();
+      var attachments = isAvailable ? Directory.GetFiles(@"C:\g\GigaHunt\docs\CV\AsuBroadcastPackage") : Array.Empty<string>();
 
       var startDate = CalculateStartDate();
       var senttDate = $"{timestamp:MMddHHmmss}";
+      var clientId = new ConfigurationBuilder().AddUserSecrets<QStatusBroadcaster_>().Build()["AppConfig:MicrosoftGraphClientId"] ?? throw new InvalidOperationException("¦·MicrosoftGraphClientId is missing in configuration");
+
+#if DEBUG__
+      await GraphExplorer.ExploreGraph_SendEmailHtml(
+        new MsGraphLibVer1.MyGraphDriveServiceClient(clientId).DriveClient,
+        emailAddress,
+        subj,
+        body.Replace("{0}", nameCasing_Mc_only_so_far(firstName)).Replace("{1}", emailAddress).Replace("{2}", startDate).Replace("{3}", senttDate),
+        attachments, """C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AlexTiny_LinkedIn.png""");
+#endif
 
       return await new Emailer2025(lgr).Send(
         emailAddress,
         subj,
         body.Replace("{0}", nameCasing_Mc_only_so_far(firstName)).Replace("{1}", emailAddress).Replace("{2}", startDate).Replace("{3}", senttDate),
-        attachment, """C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AlexTiny_LinkedIn.png""");//@"C:\g\GigaHunt\Src\sln\GigaHunt\Assets\MCSD Logo - Latest as of 2009.gif|C:\g\GigaHunt\Src\sln\GigaHunt\Assets\linkedIn66x16.png|C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AlexTiny_LinkedIn.png");
+        attachments, """C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AlexTiny_LinkedIn.png""");//@"C:\g\GigaHunt\Src\sln\GigaHunt\Assets\MCSD Logo - Latest as of 2009.gif|C:\g\GigaHunt\Src\sln\GigaHunt\Assets\linkedIn66x16.png|C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AlexTiny_LinkedIn.png");
     }
     catch (Exception ex) { var report = ex.Log($"{emailAddress}"); return (false, report); }
   }
@@ -60,3 +74,5 @@ public static class QStatusBroadcaster
     return fName;
   }
 }
+
+public class QStatusBroadcaster_ { }
