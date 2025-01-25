@@ -56,7 +56,7 @@ public static class QStatusBroadcaster
 
   static string CalculateStartDate()
   {
-    var eoContract = new DateTime(2023, 12, 5);
+    var eoContract = new DateTime(2025, 2, 28).AddDays(2);
     var avlbldate = DateTime.Today < eoContract ? eoContract : DateTime.Today.AddDays(14);
     var monthPart = avlbldate.Day < 10 ? "early" : avlbldate.Day > 20 ? "late" : "mid";
     var startDate = $"{monthPart} {avlbldate:MMMM yyyy}";

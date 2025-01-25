@@ -65,8 +65,10 @@ public class Emailer2025
 
       return (true, "Success sending email.");
     }
-    catch (Exception ex) { _lgr.LogError(ex, ex.Log(emailAddress)); }
-
-    return (false, "No idea././.?");
+    catch (Exception ex)
+    {
+      _lgr.LogError(ex, ex.Log(emailAddress));
+      return (false, ex.Log(emailAddress));
+    }
   }
 }
