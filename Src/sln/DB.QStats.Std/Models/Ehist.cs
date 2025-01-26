@@ -15,7 +15,7 @@ public partial class Ehist
 
     public DateTime EmailedAt { get; set; }
 
-    public string LetterSubject { get; set; }
+    public string? LetterSubject { get; set; }
 
     public string LetterBody { get; set; }
 
