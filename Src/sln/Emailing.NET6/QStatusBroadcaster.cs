@@ -5,7 +5,7 @@ using MsGraphLibVer1.Ver1Only;
 namespace Emailing.NET6;
 public static class QStatusBroadcaster
 {
-  public const string Asu = "Availability Schedule Update - ";
+  public const string Asu = "Full-Stack .NET/SQL/Azure Expert Developer Available - Toronto/Remote - "; // former "Availability Schedule Update" //todo: replace everywhere [SQL, ] with the current Asu
 
   // [Obsolete] :why Copilot decides to mark it such?
   public static async Task<bool> SendLetter_UpdateDb(bool isAvailable, string email, string firstName)
@@ -26,9 +26,8 @@ public static class QStatusBroadcaster
   {
     try
     {
-      var html = """C:\g\GigaHunt\Src\sln\AvailStatusEmailer\Assets\AvailabilityStatus_AvailableNow.htm""";//isResumeFeatureUpdate ? $"C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AvailabilityStatus_AvailableNow_FreshCV.htm" : $"""C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AvailabilityStatus_{(isAvailable ? "AvailableNow" : "Unavailable")}.htm """;
+      var html = """C:\g\GigaHunt\Src\sln\Emailing.NET6\Assets\AvailabilityStatus_AvailableNow.htm""";//isResumeFeatureUpdate ? $"C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AvailabilityStatus_AvailableNow_FreshCV.htm" : $"""C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AvailabilityStatus_{(isAvailable ? "AvailableNow" : "Unavailable")}.htm """;
       var body = await File.ReadAllTextAsync(html);
-      var subj = Asu + "Open for opportunities in Toronto++";
 
       var attachments = isAvailable ? Directory.GetFiles(@"C:\g\GigaHunt\docs\CV\AsuBroadcastPackage") : Array.Empty<string>();
 
@@ -40,14 +39,14 @@ public static class QStatusBroadcaster
       await GraphExplorer.ExploreGraph_SendEmailHtml(
         new MsGraphLibVer1.MyGraphDriveServiceClient(clientId).DriveClient,
         emailAddress,
-        subj,
+        $"{Asu}{startDate}",
         body.Replace("{0}", nameCasing_Mc_only_so_far(firstName)).Replace("{1}", emailAddress).Replace("{2}", startDate).Replace("{3}", senttDate),
         attachments, """C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AlexTiny_LinkedIn.png""");
 #endif
 
       return await new Emailer2025(lgr).Send(
         emailAddress,
-        subj,
+        $"{Asu}{startDate}",
         body.Replace("{0}", nameCasing_Mc_only_so_far(firstName)).Replace("{1}", emailAddress).Replace("{2}", startDate).Replace("{3}", senttDate),
         attachments, """C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AlexTiny_LinkedIn.png""");//@"C:\g\GigaHunt\Src\sln\GigaHunt\Assets\MCSD Logo - Latest as of 2009.gif|C:\g\GigaHunt\Src\sln\GigaHunt\Assets\linkedIn66x16.png|C:\g\GigaHunt\Src\sln\GigaHunt\Assets\AlexTiny_LinkedIn.png");
     }

@@ -106,7 +106,7 @@ public class Emailer_Old_MS_Phases_Out
           DateTime.Now.AddDays(1).ToLongDateString(),
           DateTime.Now.AddDays(1).ToLongTimeString(),
           fi.Length / 1000),
-       Array.Empty<string>(), @"C:\g\GigaHunt\Src\sln\AvailStatusEmailer\Assets\MCSD Logo - Latest as of 2009.gif");
+       Array.Empty<string>(), @"C:\g\GigaHunt\Src\sln\Emailing.NET6\Assets\MCSD Logo - Latest as of 2009.gif");
     Thread.Sleep(1000);
 
     _ = await Send(trgEmailAdrs,
@@ -118,7 +118,7 @@ public class Emailer_Old_MS_Phases_Out
           Path.GetFileName(photoFullPath),
           DateTime.Now.ToLongDateString(),
           DateTime.Now.ToLongTimeString()),
-       new string[] { photoFullPath }, @"C:\g\GigaHunt\Src\sln\AvailStatusEmailer\Assets\MCSD Logo - Latest as of 2009.gif");
+       new string[] { photoFullPath }, @"C:\g\GigaHunt\Src\sln\Emailing.NET6\Assets\MCSD Logo - Latest as of 2009.gif");
     Thread.Sleep(1000);
   }
 
