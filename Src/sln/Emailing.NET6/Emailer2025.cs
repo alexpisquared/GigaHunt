@@ -1,11 +1,9 @@
 using Microsoft.Graph;
 using Microsoft.Graph.Models;
-
 namespace Emailing.NET6;
 public class Emailer2025
 {
   const string appReg = "EmailAssistantAnyAndPersonal2_2024";
-  static readonly bool isFirst = true;
   readonly ILogger _lgr;
   readonly IConfiguration _configuration;
   readonly GraphServiceClient _graphClient;
@@ -70,5 +68,10 @@ public class Emailer2025
       _lgr.LogError(ex, ex.Log(emailAddress));
       return (false, ex.Log(emailAddress));
     }
+  }
+
+  public async Task<(bool success, string report)> ListInboxItemsMatchingEnailAddress(string emailAddress)
+  {
+     
   }
 }

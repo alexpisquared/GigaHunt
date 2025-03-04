@@ -1,7 +1,3 @@
-using Azure.Identity;
-using Microsoft.Graph;
-using MsGraphLibVer1.Ver1Only;
-
 namespace Emailing.NET6;
 public static class QStatusBroadcaster
 {
