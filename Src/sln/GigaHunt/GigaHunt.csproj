@@ -48,7 +48,7 @@
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\EfDbHelperLib\EfDbHelperLib.csproj" />
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\WpfUserControlLib\WpfUserControlLib.csproj" />
     <ProjectReference Include="..\..\..\..\Util\Src\GenderApiLib\GenderApiLib.csproj" />
-    <ProjectReference Include="..\DB.QStats.Std\DB.QStats.Std.csproj" />
+    <ProjectReference Include="..\DB.QStats.PwrT\DB.QStats.PwrT.csproj" />
     <ProjectReference Include="..\Emailing.NET6\Emailing.NET6.csproj" />
   </ItemGroup>
 

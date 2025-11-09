@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace DB.QStats.PwrT.Models
 {
-    public partial class QStatsRlsContext
+    public partial class QstatsRlsContext
     {
         private IQStatsRlsContextProcedures _procedures;
 
@@ -36,9 +36,9 @@ namespace DB.QStats.PwrT.Models
 
     public partial class QStatsRlsContextProcedures : IQStatsRlsContextProcedures
     {
-        private readonly QStatsRlsContext _context;
+        private readonly QstatsRlsContext _context;
 
-        public QStatsRlsContextProcedures(QStatsRlsContext context)
+        public QStatsRlsContextProcedures(QstatsRlsContext context)
         {
             _context = context;
         }

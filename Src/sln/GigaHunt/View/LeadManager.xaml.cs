@@ -56,22 +56,22 @@ public partial class LeadManagerWindow : SaveableWindow
     dynamic lead = _leadViewSource.View.CurrentItem;
     if (lead == null) return;
 
-    //dynamic agent = ((DB.QStats.Std.Models.Email)(((object[])(e.AddedItems))[0]));
+    //dynamic agent = ((DB.QStats.PwrT.Models.Email)(((object[])(e.AddedItems))[0]));
 
-    var c = ((DB.QStats.Std.Models.Email)((object[])e.AddedItems)[0]).Company;
+    var c = ((DB.QStats.PwrT.Models.Email)((object[])e.AddedItems)[0]).Company;
     if (!string.IsNullOrEmpty(c) && lead.Agency != c) (lead ?? throw new ArgumentNullException("@@@####@@@")).Agency = c;
 
-    var n = ((DB.QStats.Std.Models.Email)((object[])e.AddedItems)[0]).Fname;
+    var n = ((DB.QStats.PwrT.Models.Email)((object[])e.AddedItems)[0]).Fname;
     if (!string.IsNullOrEmpty(n) && lead.AgentName != n) (lead ?? throw new ArgumentNullException("@@@####@@@")).AgentName = n;
   }
   void onFilter(object s, RoutedEventArgs e) => filterLeads(tbFilter.Text, cbInclAll.IsChecked == true);
   void onCloseTheLead(object s, RoutedEventArgs e)
   {
-    WriteLine($"{((DB.QStats.Std.Models.Lead)dgLeads.SelectedItem).AgentName} _{((DB.QStats.Std.Models.Lead)dgLeads.SelectedItem).Status}");
+    WriteLine($"{((DB.QStats.PwrT.Models.Lead)dgLeads.SelectedItem).AgentName} _{((DB.QStats.PwrT.Models.Lead)dgLeads.SelectedItem).Status}");
 
-    ((DB.QStats.Std.Models.Lead)dgLeads.SelectedItem).Status = "Closed";
+    ((DB.QStats.PwrT.Models.Lead)dgLeads.SelectedItem).Status = "Closed";
 
-    WriteLine($"{((DB.QStats.Std.Models.Lead)dgLeads.SelectedItem).AgentName} _{((DB.QStats.Std.Models.Lead)dgLeads.SelectedItem).Status} \n");
+    WriteLine($"{((DB.QStats.PwrT.Models.Lead)dgLeads.SelectedItem).AgentName} _{((DB.QStats.PwrT.Models.Lead)dgLeads.SelectedItem).Status} \n");
   }
   void onAddNewLead(object s, RoutedEventArgs e)
   {

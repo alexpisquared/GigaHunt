@@ -816,7 +816,7 @@ public partial class QstatsRlsContext : DbContext
         modelBuilder.Entity<VEmailAvailProd>(entity =>
         {
             entity
-                //.HasNoKey() ▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄
+                //.HasNoKey() ▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄ //tu: no key in viewa; The invoked method cannot be used for the entity type 'VEmailAvailProd' because it does not have a primary key. For more information on keyless entity types, see https://go.microsoft.com/fwlink/?linkid=2141943.
                 .ToView("vEMail_Avail_Prod");
 
             entity.Property(e => e.AddedAt).HasColumnType("datetime");

@@ -14,7 +14,7 @@ global using System.Windows.Controls.Primitives;
 global using System.Windows.Data;
 global using System.Xml.Serialization;
 global using AmbienceLib;
-global using DB.QStats.Std.Models;
+global using DB.QStats.PwrT.Models;
 global using EF.DbHelper.Lib;
 global using GigaHunt;
 global using GigaHunt.AsLink;

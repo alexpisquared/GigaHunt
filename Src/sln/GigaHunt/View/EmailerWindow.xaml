@@ -1,5 +1,5 @@
 ﻿<lnk:WindowBase xmlns:lnk="clr-namespace:WpfUserControlLib.Base;assembly=WpfUserControlLib" x:Name="wnd" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-                xmlns:Models="clr-namespace:DB.QStats.Std.Models;assembly=DB.QStats.Std" mc:Ignorable="d"  x:Class="GigaHunt.View.EmailersendWindow" Title="EmailerWindow" Height="250" Width="1525" Loaded="onLoaded" 
+                xmlns:Models="clr-namespace:DB.QStats.PwrT.Models;assembly=DB.QStats.PwrT" mc:Ignorable="d"  x:Class="GigaHunt.View.EmailersendWindow" Title="EmailerWindow" Height="250" Width="1525" Loaded="onLoaded" 
                 xmlns:View="clr-namespace:GigaHunt.View" 
                 xmlns:cmn="clr-namespace:GigaHunt"
                 xmlns:AavWpfVw="clr-namespace:WpfUserControlLib.Views;assembly=WpfUserControlLib"

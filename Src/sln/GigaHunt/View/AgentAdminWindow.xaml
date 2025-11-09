@@ -3,7 +3,7 @@
                 xmlns:cmn="clr-namespace:GigaHunt"
                 xmlns:View="clr-namespace:GigaHunt.View" 
                 xmlns:View1="clr-namespace:WpfUserControlLib.Views;assembly=WpfUserControlLib" 
-                xmlns:Models="clr-namespace:DB.QStats.Std.Models;assembly=DB.QStats.Std"
+                xmlns:Models="clr-namespace:DB.QStats.PwrT.Models;assembly=DB.QStats.PwrT"
                 xmlns:cnv="clr-namespace:WpfUserControlLib.Converters;assembly=WpfUserControlLib"
                 Style="{StaticResource WindowStyle_Aav0}" Title="AgentAdminWindow" Height="450" Width="2000" Loaded="OnLoaded">
   <WindowChrome.WindowChrome>

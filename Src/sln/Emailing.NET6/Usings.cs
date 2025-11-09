@@ -1,4 +1,4 @@
-﻿global using DB.QStats.Std.Models;
+﻿global using DB.QStats.PwrT.Models;
 global using EF.DbHelper.Lib;
 global using Emailing.NET6.Helpers;
 global using GigaHunt.View;

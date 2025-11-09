@@ -29,7 +29,7 @@
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\PhoneAreaCoder\PhoneAreaCoder.csproj" />
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\StandardLib\StandardLib.csproj" />
     <ProjectReference Include="..\..\..\..\MiniScaffold\Src\MinNavTpl\MsGraph.Email\MsGraph.Email.csproj" />
-    <ProjectReference Include="..\DB.QStats.Std\DB.QStats.Std.csproj" />
+    <ProjectReference Include="..\DB.QStats.PwrT\DB.QStats.PwrT.csproj" />
   </ItemGroup>
 
 </Project>

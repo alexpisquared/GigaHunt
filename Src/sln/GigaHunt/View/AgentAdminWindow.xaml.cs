@@ -1,4 +1,5 @@
-﻿using Emailing.NET6;
+﻿using DB.QStats.PwrT.Models;
+using Emailing.NET6;
 using GenderApiLib;
 using Microsoft.Extensions.Configuration;
 using static AmbienceLib.SpeechSynth;
@@ -88,12 +89,12 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     {
       //await _db.Emails.OrderByDescending(r => r.AddedAt).OrderBy(r => r.Notes).LoadAsync(); /**/  WriteLine($">>> Loaded  Emails   {lsw.ElapsedMilliseconds,6:N0} ms    {_db.Database.GetConnectionString()}");
       //await _db.Ehists.OrderByDescending(r => r.EmailedAt).LoadAsync();                     /**/  WriteLine($">>> Loaded  Ehists   {lsw.ElapsedMilliseconds,6:N0} ms"); //tu: that seems to order results in the secondary table where there is no control of roder available. Jul-2019
-      await _db.Emails.LoadAsync();                                                         /**/  WriteLine($">>> Loaded  Emails   {lsw.ElapsedMilliseconds,6:N0} ms    {_db.Database.GetConnectionString()}");
-      await _db.Ehists.LoadAsync();                                                         /**/  WriteLine($">>> Loaded  Ehists   {lsw.ElapsedMilliseconds,6:N0} ms"); //tu: that seems to order results in the secondary table where there is no control of roder available. Jul-2019
-      await _db.Leads.OrderByDescending(r => r.AddedAt).LoadAsync();                        /**/  WriteLine($">>> Loaded   Leads   {lsw.ElapsedMilliseconds,6:N0} ms");
-      _leadEmails = _db.Leads.Local.Select(r => r.AgentEmailId ?? "").Distinct();           /**/  WriteLine($">>> Loaded  LeadEm   {lsw.ElapsedMilliseconds,6:N0} ms");
-      _leadCompns = _db.Leads.Local.Select(r => r.Agency ?? "").Distinct();                 /**/  WriteLine($">>> Loaded  LeadCo   {lsw.ElapsedMilliseconds,6:N0} ms");
-      _badEmails = await DB.QStats.Std.Models.MiscEfDb.GetBadEmails("Select Id from [dbo].[BadEmails]()", _db.Database.GetConnectionString() ?? "??");
+      await _db.Emails.LoadAsync();                                                         /**/  WriteLine($">>> Loaded  Emails  {_db.Emails.Local.Count,6:N0}  {lsw.ElapsedMilliseconds,6:N0} ms    {_db.Database.GetConnectionString()}");
+      await _db.Ehists.LoadAsync();                                                         /**/  WriteLine($">>> Loaded  Ehists  {_db.Ehists.Local.Count,6:N0}  {lsw.ElapsedMilliseconds,6:N0} ms"); //tu: that seems to order results in the secondary table where there is no control of roder available. Jul-2019
+      await _db.Leads.OrderByDescending(r => r.AddedAt).LoadAsync();                        /**/  WriteLine($">>> Loaded   Leads  {_db.Leads.Local.Count,6:N0}   {lsw.ElapsedMilliseconds,5:N0} ms");
+      _leadEmails = _db.Leads.Local.Select(r => r.AgentEmailId ?? "").Distinct();           /**/  WriteLine($">>> Loaded  LeadEm  {_db.Emails.Local.Count,6:N0}  {lsw.ElapsedMilliseconds,6:N0} ms");
+      _leadCompns = _db.Leads.Local.Select(r => r.Agency ?? "").Distinct();                 /**/  WriteLine($">>> Loaded  LeadCo  {_db.Emails.Local.Count,6:N0}  {lsw.ElapsedMilliseconds,6:N0} ms");
+      _badEmails = await MiscEfDb.GetBadEmails("Select Id from [dbo].[BadEmails]()", _db.Database.GetConnectionString() ?? "??");
       _isLoaded = true;
       var fsw = SrchFilter();                                                               /**/  WriteLine($">>> Loaded  Filter   {lsw.ElapsedMilliseconds,6:N0} ms  ({fsw.TotalMilliseconds:N0})");
     }

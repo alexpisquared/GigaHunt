@@ -8,7 +8,7 @@ using DB.QStats.PwrT.Models;
 
 namespace DB.QStats.PwrT.Models
 {
-    public partial class QStatsRlsContext
+    public partial class QstatsRlsContext
     {
 
         [DbFunction("BadEmails", "dbo")]
