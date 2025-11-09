@@ -1,4 +1,6 @@
 ﻿using Emailing.NET6;
+using Microsoft.Extensions.Configuration;
+using static AmbienceLib.SpeechSynth;
 
 namespace GigaHunt.View;
 public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
@@ -9,9 +11,13 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
   IEnumerable<string>? _leadEmails, _leadCompns;
   string _firstName = "Sirs";
   bool _isLoaded = false;
+  SpeechSynth SpeechSynth;
   public EmailersendWindow()
   {
     InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme; tbver.Text = $".NET 8    Db: ~QStats        Ver: {VersionHelper.CurVer}  {(DevOps.IsDbg ? @"DBG" : "rls")}";
+
+    var key = new ConfigurationBuilder().AddUserSecrets<App>().Build()["AppSecrets:MagicSpeech"] ?? "no key"; //tu: adhoc usersecrets for Console app :: program!!!
+    SpeechSynth = new SpeechSynth(key, useCached: true, voice: CC.Xiaomo);
 
     _db = QstatsRlsContext.Create();
 
@@ -306,7 +312,7 @@ public partial class EmailersendWindow : WpfUserControlLib.Base.WindowBase
     if (btMax != null && int.TryParse(tbMax?.Text, out _))
       btMax.Content = $"Top {tbMax.Text} rows";
   }
-  void OnGetNameFromEmail(object s, RoutedEventArgs e) => tbName.Text = new Helpers.FirstLastNameParser(((TextBox)s).Text).FirstName;
+  void OnGetNameFromEmail(object s, RoutedEventArgs e) => tbName.Text = new Emailing.NET6.Helpers.FirstLastNameParser(((TextBox)s).Text).FirstName;
   void onFilter(object sender, RoutedEventArgs e) => SrchFilter();
   void cbMail_SelectionChanged(object s, SelectionChangedEventArgs e)
   {

@@ -1,4 +1,5 @@
-﻿using Outlook = Microsoft.Office.Interop.Outlook;
+﻿using Emailing.NET6.Helpers;
+using Outlook = Microsoft.Office.Interop.Outlook;
 
 namespace GigaHunt.View
 {

@@ -11,13 +11,13 @@
 
   <ItemGroup>
     <PackageReference Include="MailKit" Version="4.10.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.6" />
     <PackageReference Include="Microsoft.Office.Interop.Outlook" Version="15.0.4797.1004" />
     <PackageReference Include="System.Private.Uri" Version="4.3.2" />
-    <PackageReference Include="System.Text.Json" Version="9.0.2" />
+    <PackageReference Include="System.Text.Json" Version="9.0.10" />
 
-    <PackageReference Include="Microsoft.Graph" Version="5.71.0" />
-    <PackageReference Include="Azure.Identity" Version="1.13.2" />
+    <PackageReference Include="Microsoft.Graph" Version="5.95.0" />
+    <PackageReference Include="Azure.Identity" Version="1.17.0" />
     <!--
     <PackageReference Include="MicrosoftOfficeCore"   Version="15.0.0" />
     <PackageReference Include="Microsoft.Office.Core" Version="12.0.0" />-->

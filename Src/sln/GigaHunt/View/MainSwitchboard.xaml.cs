@@ -1,4 +1,6 @@
-﻿namespace GigaHunt.View;
+﻿using Emailing.NET6;
+
+namespace GigaHunt.View;
 public partial class MainSwitchboard : WpfUserControlLib.Base.WindowBase
 {
   public MainSwitchboard() { InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme; tbver.Text = VersionHelper.CurVerStr; }

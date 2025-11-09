@@ -1,3 +1,5 @@
+using MsGraph.Email;
+
 namespace Emailing.NET6;
 public static class QStatusBroadcaster
 {

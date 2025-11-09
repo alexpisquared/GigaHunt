@@ -8,7 +8,7 @@ public partial class App : Application
   protected override void OnStartup(StartupEventArgs sea)
   {
     base.OnStartup(sea);
-    Current.DispatcherUnhandledException += UnhandledExceptionHndlr.OnCurrentDispatcherUnhandledException;
+    //Current.DispatcherUnhandledException += UnhandledExceptionHndlr.OnCurrentDispatcherUnhandledException;
     EventManager.RegisterClassHandler(typeof(TextBox), TextBox.GotFocusEvent, new RoutedEventHandler((s, re) => { (s as TextBox)?.SelectAll(); })); //tu: TextBox
 #if !EmergencyTroubleshooting
         Listeners.Add(new TextWriterTraceListener(@$"C:\temp\Logs\{Assembly.GetExecutingAssembly().GetName().Name}.log"));

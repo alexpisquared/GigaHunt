@@ -1,4 +1,5 @@
 ﻿using MimeKit;
+using MsGraph.Email;
 using SmtpClient = MailKit.Net.Smtp.SmtpClient;
 
 namespace Emailing.NET6.MailKit;

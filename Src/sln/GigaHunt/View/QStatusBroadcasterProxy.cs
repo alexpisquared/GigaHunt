@@ -13,7 +13,7 @@ internal class QStatusBroadcasterProxy
     if (!DevOps.IsDbg)
       return await QStatusBroadcaster.SendLetter_UpdateDb(v, senderEmailAddress, fnm);
 
-    await SpeechSynth.SpeakFreeAsync("No sending no db updates in Debug mode.");
+    //await new SpeechSynth().SpeakFreeAsync("No sending no db updates in Debug mode.");
 
     return true;
   }

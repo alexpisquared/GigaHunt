@@ -34,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.10" />
     <!-- Gives project triangle WARNING - do we need it?  
     2023-01-04     Compiles ...but not tested yet
     2023-11-04     YES, IT IS NEEDED: does not email without it!!!
@@ -47,7 +47,6 @@
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\Ambience\AmbienceLib.csproj" />
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\EfDbHelperLib\EfDbHelperLib.csproj" />
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\WpfUserControlLib\WpfUserControlLib.csproj" />
-    <ProjectReference Include="..\..\..\..\CI\Src\CI\GenderApiLib\GenderApiLib.csproj" />
     <ProjectReference Include="..\..\..\..\Util\Src\GenderApiLib\GenderApiLib.csproj" />
     <ProjectReference Include="..\DB.QStats.Std\DB.QStats.Std.csproj" />
     <ProjectReference Include="..\Emailing.NET6\Emailing.NET6.csproj" />

@@ -18,7 +18,7 @@ global using DB.QStats.Std.Models;
 global using EF.DbHelper.Lib;
 global using GigaHunt;
 global using GigaHunt.AsLink;
-global using GigaHunt.Helpers;
+//global using GigaHunt.Helpers;
 global using GigaHunt.Properties;
 global using GigaHunt.View;
 global using Microsoft.Data.SqlClient;

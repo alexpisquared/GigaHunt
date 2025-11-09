@@ -1,5 +1,7 @@
-﻿using GenderApiLib;
+﻿using Emailing.NET6;
+using GenderApiLib;
 using Microsoft.Extensions.Configuration;
+using static AmbienceLib.SpeechSynth;
 
 namespace GigaHunt.View;
 public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
@@ -10,9 +12,13 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
   IEnumerable<string>? _leadEmails, _leadCompns;
   List<string>? _badEmails;
   bool _isLoaded = false;
+  SpeechSynth SpeechSynth;
   public AgentAdminnWindow()
   {
     InitializeComponent(); themeSelector1.ThemeApplier = ApplyTheme; tbver.Text = $".NET 8    Db: ~QStats        Ver: {VersionHelper.CurVer}  {(DevOps.IsDbg ? @"DBG" : "rls")}";
+
+    var key = new ConfigurationBuilder().AddUserSecrets<App>().Build()["AppSecrets:MagicSpeech"] ?? "no key"; //tu: adhoc usersecrets for Console app :: program!!!
+    SpeechSynth = new SpeechSynth(key, useCached: true, voice: CC.Xiaomo);
 
     //tbver.Text = $"Db: {QstatsRlsContext.DbNameOnly}        Ver: ???";
     //tbver.Text = $"Db: {_db.ServerDatabase()}        Ver: ???";
@@ -193,12 +199,13 @@ public partial class AgentAdminnWindow : WpfUserControlLib.Base.WindowBase
     {
       BPR.BeepClk();
       var si = eMailDataGrid.SelectedIndex;
-      foreach (Email em in eMailDataGrid.SelectedItems)
-        if (em.Fname is not null)
-        {
-          var (ts, _, root) = await GenderApi.CallOpenAI(new ConfigurationBuilder().AddUserSecrets<App>().Build(), em.Fname);
-          em.Country = root?.country_of_origin.FirstOrDefault()?.country_name ?? "??";
-        }
+      //todo: Nov 8, 2025
+      //foreach (Email em in eMailDataGrid.SelectedItems)
+      //  if (em.Fname is not null)
+      //  {
+      //    var (ts, _, root) = await GenderApi.CallOpenAI(new ConfigurationBuilder().AddUserSecrets<App>().Build(), em.Fname);
+      //    em.Country = root?.country_of_origin.FirstOrDefault()?.country_name ?? "??";
+      //  }
 
       CollectionViewSource.GetDefaultView(eMailDataGrid.ItemsSource).Refresh(); //tu: refresh bound datagrid
       DoInfoPendingSave();

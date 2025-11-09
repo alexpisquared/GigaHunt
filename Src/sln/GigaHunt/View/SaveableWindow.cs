@@ -9,12 +9,12 @@ public abstract class SaveableWindow : WpfUserControlLib.Base.WindowBase//, ISav
   public abstract void setProperValuesToNewRecords();
   public async Task<string> saveAsync()
   {
-    await SpeechSynth.SpeakFreeAsync("DB Saving..."); await Task.Delay(333);
+    //await SpeechSynth.SpeakFreeAsync("DB Saving..."); await Task.Delay(333);
 
     setProperValuesToNewRecords();
     var (_, _, report) = await _db.TrySaveReportAsync("LeadManager.cs");
     Title = report;
-    await SpeechSynth.SpeakFreeAsync(report); await Task.Delay(333);
+    //await SpeechSynth.SpeakFreeAsync(report); await Task.Delay(333);
     return Title;
   }
 }

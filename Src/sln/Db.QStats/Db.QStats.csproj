@@ -130,9 +130,9 @@
     <Content Include="SQL\vEMail_Avail_Prod.sql" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\C\AAV\AAV.Sys\AAV.Sys.csproj">
-      <Project>{60bb75f4-e913-40f9-be60-d5e408f24751}</Project>
-      <Name>AAV.Sys</Name>
+    <ProjectReference Include="..\..\..\..\..\C\AAV\AAV.Sys\AAV.Sys.4.8.csproj">
+      <Project>{568cb356-c28d-4d97-b595-d1dda2b6ed89}</Project>
+      <Name>AAV.Sys.4.8</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

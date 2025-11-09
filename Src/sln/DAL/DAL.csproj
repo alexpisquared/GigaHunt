@@ -141,9 +141,9 @@
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net6.0\AAV.Sys\AAV.Sys.csproj">
-      <Project>{7139da94-b8f6-45a2-a292-319c5dd1f66c}</Project>
-      <Name>AAV.Sys</Name>
+    <ProjectReference Include="..\..\..\..\..\C\AAV\AAV.Sys\AAV.Sys.4.8.csproj">
+      <Project>{568cb356-c28d-4d97-b595-d1dda2b6ed89}</Project>
+      <Name>AAV.Sys.4.8</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
