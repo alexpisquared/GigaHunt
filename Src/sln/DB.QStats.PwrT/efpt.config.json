@@ -1,0 +1,202 @@
+﻿{
+   "CodeGenerationMode": 5,
+   "ContextClassName": "QStatsRlsContext",
+   "ContextNamespace": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "MinimumProductVersion": "2.6.1186",
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Models",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "DB.QStats.PwrT",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 2,
+   "SelectedToBeGenerated": 0,
+   "T4TemplatePath": null,
+   "Tables": [
+      {
+         "Name": "[dbo].[Agency]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AgencyOrg]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Campaign]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Country_Of_Origin]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CVWatchLog.old]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CVWatchNormal]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[EHist]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[EMail]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FirstnameCountryXRef]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FirstnameRootObject]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Lead]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LeadEmail]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[lkuLeadStatus]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[OBSOLETE Contact - Use EMail]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[OBSOLETE ContactHistory - Use EHist]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[OBSOLETE Interview]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[OBSOLETE Opportunity ]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Phone]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PhoneAgencyXRef]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PhoneEmailXRef]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AgentOfInterestBySentQntView]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[dbo].[Contact_RecentActivity_View]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[dbo].[ContactForBroadcast_View]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[dbo].[CVWatchLogView]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[dbo].[OppContactFor]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[dbo].[OppContactView]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[dbo].[vEMail_Avail_Dev]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[dbo].[vEMail_Avail_Prod]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[dbo].[vEMail_UnAvl_Dev]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[dbo].[vEMail_UnAvl_Prod]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[dbo].[vEMailId_Avail_Prod]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[dbo].[vPartiesISentMyFreeStatusSinceLastCampaignStart]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[dbo].[vwAgencyRate]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[dbo].[GetTotalViewsForThePeriod]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[BadEmails]",
+         "ObjectType": 2
+      },
+      {
+         "Name": "[dbo].[CurrentCampaignID]",
+         "ObjectType": 2
+      },
+      {
+         "Name": "[dbo].[CurrentCampaignStart]",
+         "ObjectType": 2
+      },
+      {
+         "Name": "[dbo].[DateToYYMMDD]",
+         "ObjectType": 2
+      },
+      {
+         "Name": "[dbo].[IsNotifiedForCurCmpgn]",
+         "ObjectType": 2
+      }
+   ],
+   "UiHint": null,
+   "UncountableWords": null,
+   "UseAsyncStoredProcedureCalls": true,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDatabaseNamesForRoutines": true,
+   "UseDateOnlyTimeOnly": true,
+   "UseDbContextSplitting": false,
+   "UseDecimalDataAnnotationForSprocResult": true,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": true,
+   "UseInternalAccessModifiersForSprocsAndFunctions": false,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UsePrefixNavigationNaming": false,
+   "UseSchemaFolders": false,
+   "UseSchemaNamespaces": false,
+   "UseSpatial": false,
+   "UseT4": false,
+   "UseT4Split": false
+}
