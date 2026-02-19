@@ -1,13 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net9.0-windows8.0</TargetFramework>
+    <TargetFramework>net10.0-windows8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
-
   <ItemGroup>
     <None Remove="Assets\AlexTiny_LinkedIn.png" />
     <None Remove="Assets\Attach.Detach.sql" />
@@ -20,7 +18,6 @@
     <None Remove="Assets\MCSD Logo - Latest as of 2009.gif" />
     <None Remove="Assets\WaterDroplet.wav" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Include="..\..\..\..\..\c\AsLink\DB\DbSaveMsgBox.cs" Link="AsLink\DbSaveMsgBox.cs" />
     <Compile Include="..\..\..\..\..\C\AsLink\Mail\OutlookHelper.cs" Link="AsLink\OutlookHelper.cs" />
@@ -28,7 +25,6 @@
     <Compile Include="..\..\..\..\..\c\AsLink\Serializer.String.cs" Link="Serializer.String.cs" />
     <Compile Include="..\..\..\..\..\C\AsLink\Win32\Ext.DbContext.cs" Link="AsLink\Ext.DbContext.cs" />
   </ItemGroup>
-
   <ItemGroup>
     <Content Include="Assets\Attach.Detach.sql" />
     <Content Include="Assets\AvailabilityStatus_AvailableNow.htm" />
@@ -36,22 +32,18 @@
     <Content Include="Assets\AvailabilityStatus_Unavailable.htm" />
     <Content Include="Assets\WaterDroplet.wav" />
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.10">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\DB.QStats.Std\DB.QStats.Std.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="AsLink\" />
   </ItemGroup>
-
   <ItemGroup>
     <Resource Include="Assets\AlexTiny_LinkedIn.png" />
     <Resource Include="Assets\Icon1.ico" />
@@ -59,13 +51,11 @@
     <Resource Include="Assets\MailBroadCast.ico" />
     <Resource Include="Assets\MCSD Logo - Latest as of 2009.gif" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Update="View\EmailerWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
-
   <ItemGroup>
     <Page Update="View\AgentAdminWindow.xaml">
       <SubType>Designer</SubType>
@@ -89,5 +79,4 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-
 </Project>

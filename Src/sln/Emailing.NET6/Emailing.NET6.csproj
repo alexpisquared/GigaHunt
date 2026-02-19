@@ -1,28 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <Platforms>AnyCPU;x64</Platforms>
     <UserSecretsId>798e2991-62a6-41f2-8e74-7c9deb71514a</UserSecretsId>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="MailKit" Version="4.10.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.6" />
+    <PackageReference Include="MailKit" Version="4.15.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="10.0.3" />
     <PackageReference Include="Microsoft.Office.Interop.Outlook" Version="15.0.4797.1004" />
     <PackageReference Include="System.Private.Uri" Version="4.3.2" />
-    <PackageReference Include="System.Text.Json" Version="9.0.10" />
-
-    <PackageReference Include="Microsoft.Graph" Version="5.95.0" />
-    <PackageReference Include="Azure.Identity" Version="1.17.0" />
+    <PackageReference Include="System.Text.Json" Version="10.0.3" />
+    <PackageReference Include="Microsoft.Graph" Version="5.102.0" />
+    <PackageReference Include="Azure.Identity" Version="1.17.1" />
     <!--
     <PackageReference Include="MicrosoftOfficeCore"   Version="15.0.0" />
     <PackageReference Include="Microsoft.Office.Core" Version="12.0.0" />-->
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\EfDbHelperLib\EfDbHelperLib.csproj" />
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\MsGraphLib\MsGraphLibVer1.csproj" />
@@ -31,5 +27,4 @@
     <ProjectReference Include="..\..\..\..\MiniScaffold\Src\MinNavTpl\MsGraph.Email\MsGraph.Email.csproj" />
     <ProjectReference Include="..\DB.QStats.PwrT\DB.QStats.PwrT.csproj" />
   </ItemGroup>
-
 </Project>

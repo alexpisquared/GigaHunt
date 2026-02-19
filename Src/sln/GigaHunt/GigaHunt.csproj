@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net9.0-windows8.0</TargetFramework>
+    <TargetFramework>net10.0-windows8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <Platforms>AnyCPU;x64</Platforms>
@@ -10,7 +9,6 @@
     <ApplicationIcon>MailBroadCast.DeliveryFailed.ico</ApplicationIcon>
     <UserSecretsId>511f17da-8dcd-4ce1-96dd-a8c403f79f89</UserSecretsId>
   </PropertyGroup>
-
   <ItemGroup>
     <None Remove="Assets\AlexTiny_LinkedIn.png" />
     <None Remove="Assets\Attach.Detach.sql" />
@@ -23,7 +21,6 @@
     <None Remove="Assets\MCSD Logo - Latest as of 2009.gif" />
     <None Remove="Assets\WaterDroplet.wav" />
   </ItemGroup>
-
   <ItemGroup>
     <Content Include="Assets\Attach.Detach.sql" />
     <Content Include="Assets\AvailabilityStatus_AvailableNow.htm" />
@@ -32,9 +29,8 @@
     <Content Include="Assets\WaterDroplet.wav" />
     <Content Include="MailBroadCast.DeliveryFailed.ico" />
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="10.0.3" />
     <!-- Gives project triangle WARNING - do we need it?  
     2023-01-04     Compiles ...but not tested yet
     2023-11-04     YES, IT IS NEEDED: does not email without it!!!
@@ -42,7 +38,6 @@
     <PackageReference Include="MicrosoftOfficeCore" Version="15.0.0" />
     <PackageReference Include="Microsoft.Office.Core" Version="12.0.0" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\Ambience\AmbienceLib.csproj" />
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\EfDbHelperLib\EfDbHelperLib.csproj" />
@@ -51,14 +46,12 @@
     <ProjectReference Include="..\DB.QStats.PwrT\DB.QStats.PwrT.csproj" />
     <ProjectReference Include="..\Emailing.NET6\Emailing.NET6.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <Resource Include="Assets\AlexTiny_LinkedIn.png" />
     <Resource Include="Assets\MailBroadCast.DeliveryFailed.ico" />
     <Resource Include="Assets\MailBroadCast.ico" />
     <Resource Include="Assets\MCSD Logo - Latest as of 2009.gif" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -69,14 +62,12 @@
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
-
   <ItemGroup>
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-
   <ItemGroup>
     <Page Update="View\AgentAdminWindow.xaml">
       <SubType>Designer</SubType>
@@ -100,5 +91,4 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-
 </Project>
