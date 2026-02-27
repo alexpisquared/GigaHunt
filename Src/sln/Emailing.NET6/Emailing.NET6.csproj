@@ -14,7 +14,7 @@
     <PackageReference Include="System.Private.Uri" Version="4.3.2" />
     <PackageReference Include="System.Text.Json" Version="10.0.3" />
     <PackageReference Include="Microsoft.Graph" Version="5.103.0" />
-    <PackageReference Include="Azure.Identity" Version="1.17.1" />
+    <PackageReference Include="Azure.Identity" Version="1.18.0" />
     <!--
     <PackageReference Include="MicrosoftOfficeCore"   Version="15.0.0" />
     <PackageReference Include="Microsoft.Office.Core" Version="12.0.0" />-->
