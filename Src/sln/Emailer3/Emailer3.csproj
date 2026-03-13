@@ -22,11 +22,11 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Dna.Framework" Version="1.0.7.19" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.4" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.4" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.4" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.4" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.4" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="10.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.5" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="10.0.5" />
   </ItemGroup>
 </Project>
