@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net11.0-windows8.0</TargetFramework>
@@ -30,13 +30,13 @@
     <Content Include="MailBroadCast.DeliveryFailed.ico" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="10.0.14" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" />
     <!-- Gives project triangle WARNING - do we need it?  
     2023-01-04     Compiles ...but not tested yet
     2023-11-04     YES, IT IS NEEDED: does not email without it!!!
     -->
-    <PackageReference Include="MicrosoftOfficeCore" Version="15.0.0" />
-    <PackageReference Include="Microsoft.Office.Core" Version="12.0.0" />
+    <PackageReference Include="MicrosoftOfficeCore" />
+    <PackageReference Include="Microsoft.Office.Core" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\Ambience\AmbienceLib.csproj" />
